@@ -1,6 +1,6 @@
 # CodeSmithy UMLWebWidget
 
-The UMLWebWidget is a jQuery widget to display UML diagrams in a web page.
+The UMLWebWidget project provides a jQuery widget to display UML diagrams in a web page.
 
 ## License
 
