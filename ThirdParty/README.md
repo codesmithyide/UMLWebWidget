@@ -7,3 +7,4 @@ your own projects. We aim to always support the latest versions of the dependenc
 ## Licenses
 
 - [jQuery license (https://github.com/jquery/jquery/blob/master/LICENSE.txt)](https://github.com/jquery/jquery/blob/master/LICENSE.txt)
+- [svg.js license (https://github.com/svgdotjs/svg.js/blob/master/LICENSE.txt)](https://github.com/svgdotjs/svg.js/blob/master/LICENSE.txt)
