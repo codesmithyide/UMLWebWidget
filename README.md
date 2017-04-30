@@ -28,4 +28,4 @@ IN THE SOFTWARE.
 
 We do include a few of the dependencies in the ThirdParty directory. Check out
 the https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/ThirdParty/README.md
-for the relevant license.
+for the relevant licenses.
