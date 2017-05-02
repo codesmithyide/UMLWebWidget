@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Class Diagram 1</title>
+
+    <script src="../../ThirdParty/jquery-3.2.1.min.js"></script>
+    <script src="../../ThirdParty/svg.min.js"></script>
+    <script src="../../Source/CodeSmithyUMLWebWidget.js"></script>
+
+    <link rel="stylesheet" href="../../StyleSheets/CodeSmithyUMLWebWidget.css">
+  </head>
+  <body>
+    <p>The following diagram is a class diagram with one class with various attributes and operations.</p>
+    <div id="diagram1" class="CodeSmithyUMLWebWidget">
+      { 
+        "classdiagram":
+          [
+            { 
+              "class":
+                {
+                  "name": "MyClass",
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr1", "visibility": "public" 
+                      },
+                      {
+                        "name": "m_attr2", "visibility": "protected" 
+                      },
+                      {
+                        "name": "m_attr3", "visibility": "private" 
+                      }
+                    ],
+                    "operations":
+                    [
+                      { 
+                        "name": "method1()", "visibility": "public" 
+                      },
+                      { 
+                        "name": "method2()", "visibility": "protected" 
+                      },
+                      { 
+                        "name": "method3()", "visibility": "private" 
+                      }
+
+                  ]
+                }
+            }
+          ]
+      }
+    </div>
+    <script>
+      var obj = JSON.parse($('#diagram1').text())
+      $('#diagram1').empty()
+      var draw = SVG('diagram1').size(300, 300)
+      var defs = draw.defs()
+      var style = { 
+        "classbox": {
+          "margin-left":7,
+          "margin-right": 7,
+          "margin-top": 5,
+          "margin-bottom": 5
+        }
+      }
+      if (obj.classdiagram) {
+        var classDiagram = obj.classdiagram
+        for (var i = 0; i < classDiagram.length; i++) {
+          var item = classDiagram[i];
+          if (item.class) {
+            var classDef = addClassDef(defs, item.class, style.classbox)
+            draw.use(classDef)
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
