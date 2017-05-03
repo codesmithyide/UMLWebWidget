@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Class Diagram 2</title>
+    <title>Interactive Class Diagram 1</title>
 
     <script src="../../ThirdParty/jquery-3.2.1.min.js"></script>
     <script src="../../ThirdParty/svg.min.js"></script>
@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../StyleSheets/CodeSmithyUMLWebWidget.css">
   </head>
   <body>
-    <p>The following diagram is a class diagram showing inheritance and composition relationships.</p>
+    <p>The following diagram is a class diagram that can be edited online by the user.</p>
     <div id="diagram1" class="CodeSmithyUMLWebWidget">
       { 
         "classdiagram":
@@ -84,7 +84,7 @@
       }
     </div>
     <script>
-      var classDiagram = new UMLDiagram()
+      var classDiagram = new UMLDiagram(true)
 
       var layout = {
         "positions": {

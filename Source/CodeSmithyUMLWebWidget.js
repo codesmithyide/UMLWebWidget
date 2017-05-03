@@ -1,18 +1,25 @@
 // The constructor for the UMLDiagram object. This
 // the entry point for all the functionality provided
 // by the CodeSmithy UMLWebWidget.
-function UMLDiagram() {
+// - interactive: true if the user can edit the diagram online,
+//   false otherwise. Considered false if not provided.
+function UMLDiagram(interactive) {
+  if (interactive) {
+    this.interactive = true
+  } else {
+    this.interactive = false
+  }
 
   // Create a diagram from a div element in the HTML document.
   // The div element must contain a JSON object with the UML
   // diagram information. The contents of the div will be replaced
   // by the diagram.
-  // - divId is the id of the div element to use, it should be the id
+  // - divId: this is the id of the div element to use, it should be the id
   //   without any '#' prefix.
   this.createFromDiv = function(divId, layout) {
-    var obj = JSON.parse($('#' + divId).text())
+    var diagramDescription = JSON.parse($('#' + divId).text())
     $('#' + divId).empty()
-    var draw1 = SVG(divId).size(400, 300)
+    var svg = SVG(divId).size(400, 300)
     var style = { 
       "classbox": {
         "margin-left":7,
@@ -21,14 +28,14 @@ function UMLDiagram() {
         "margin-bottom": 5
       }
     }
-    if (obj.classdiagram) {
-      drawClassDiagram(draw1, obj.classdiagram, style, layout)
+    if (diagramDescription.classdiagram) {
+      drawClassDiagram(svg, diagramDescription.classdiagram, this.interactive, style, layout)
     }
   }
 
 }
 
-function drawClassDiagram(svg, classDiagram, style, layout) {
+function drawClassDiagram(svg, classDiagram, interactive, style, layout) {
   if (layout == null) {
     layout = { }
   }
@@ -41,7 +48,7 @@ function drawClassDiagram(svg, classDiagram, style, layout) {
   for (var i = 0; i < classDiagram.length; i++) {
     var item = classDiagram[i];
     if (item.class) {
-      var classDef = addClassDef(defs, item.class, style.classbox)
+      var classDef = addClassDef(defs, item.class, interactive, style.classbox)
       if (layout.positions[item.class.name]) {
         classDef.move(layout.positions[item.class.name].x, layout.positions[item.class.name].y)
       }
@@ -56,8 +63,14 @@ function drawClassDiagram(svg, classDiagram, style, layout) {
   }
 }
 
-function addClassDef(defs, classInfo, style) {
+function addClassDef(defs, classInfo, interactive, style) {
   var classGroup = defs.group().addClass("UMLClass")
+  
+  if (interactive) {
+    classGroup.click(function() {
+      this.text("hhe")
+    })
+  }
 
   var classBoxWidth = 0
   var classBoxHeight = style["margin-top"]
@@ -165,4 +178,7 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
   g.polygon(t1)
               
   g.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
+}
+
+function ClassBox() {
 }
