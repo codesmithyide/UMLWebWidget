@@ -61,21 +61,6 @@ function UMLDiagram(interactive) {
 
 }
 
-// Converts the visibility from the user string provided
-// in the input to the appropriate UML symbol for
-// visibility
-function visibilityStringToSymbol(visibility) {
-  var symbol = ""
-  if (visibility == "public") {
-    symbol = "+ "
-  } else if (visibility == "protected") {
-    symbol = "# "
-  } else if (visibility == "private") {
-    symbol = "- "
-  }
-  return symbol
-}
-
 function drawInheritanceRelationship(svg, classboxes, baseclass, derivedclass) {
   var g = svg.group().addClass("UMLInheritanceRelationship")
   var bbox1 = classboxes[baseclass].svg.bbox();
@@ -184,4 +169,19 @@ function addClassDef(defs, classInfo, interactive, style) {
   }
 
   return classGroup
+}
+
+// Converts the visibility from the user string provided
+// in the input to the appropriate UML symbol for
+// visibility
+function visibilityStringToSymbol(visibility) {
+  var symbol = ""
+  if (visibility == "public") {
+    symbol = "+ "
+  } else if (visibility == "protected") {
+    symbol = "# "
+  } else if (visibility == "private") {
+    symbol = "- "
+  }
+  return symbol
 }
