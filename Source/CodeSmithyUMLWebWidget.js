@@ -10,6 +10,10 @@ function UMLDiagram(interactive) {
     this.interactive = false
   }
 
+  // The list of all UML class boxes present on the
+  // diagram
+  this.classboxes = { }
+
   // Create a diagram from a div element in the HTML document.
   // The div element must contain a JSON object with the UML
   // diagram information. The contents of the div will be replaced
@@ -29,38 +33,39 @@ function UMLDiagram(interactive) {
       }
     }
     if (diagramDescription.classdiagram) {
-      drawClassDiagram(svg, diagramDescription.classdiagram, this.interactive, style, layout)
+      this.drawClassDiagram(svg, diagramDescription.classdiagram, style, layout)
     }
   }
 
-}
+  this.drawClassDiagram = function(svg, classDiagram, style, layout) {
+    if (layout == null) {
+      layout = { }
+    }
+    if (layout.positions == null) {
+      layout.positions = { }
+    }
 
-function drawClassDiagram(svg, classDiagram, interactive, style, layout) {
-  if (layout == null) {
-    layout = { }
-  }
-  if (layout.positions == null) {
-    layout.positions = { }
-  }
-
-  var defs = svg.defs()
-  var classboxes = {}
-  for (var i = 0; i < classDiagram.length; i++) {
-    var item = classDiagram[i];
-    if (item.class) {
-      var classDef = addClassDef(defs, item.class, interactive, style.classbox)
-      if (layout.positions[item.class.name]) {
-        classDef.move(layout.positions[item.class.name].x, layout.positions[item.class.name].y)
-      }
-      classboxes[item.class.name] = svg.use(classDef)
-    } else if (item.relationship) {
-      if (item.relationship.type == "inheritance") {
-        drawInheritanceRelationship(svg, classboxes, item.relationship.baseclass, item.relationship.derivedclass)
-      } else if (item.relationship.type == "composition") {
-        drawCompositionRelationship(svg, classboxes, item.relationship.containingclass, item.relationship.containedclass)
+    var defs = svg.defs()
+    for (var i = 0; i < classDiagram.length; i++) {
+      var item = classDiagram[i];
+      if (item.class) {
+        var newClassBox = new ClassBox(item.class, this.interactive)
+        var classDef = addClassDef(defs, item.class, this.interactive, style.classbox)
+        if (layout.positions[item.class.name]) {
+          classDef.move(layout.positions[item.class.name].x, layout.positions[item.class.name].y)
+        }
+        newClassBox.svg = svg.use(classDef)
+        this.classboxes[item.class.name] = newClassBox
+      } else if (item.relationship) {
+        if (item.relationship.type == "inheritance") {
+          drawInheritanceRelationship(svg, this.classboxes, item.relationship.baseclass, item.relationship.derivedclass)
+        } else if (item.relationship.type == "composition") {
+          drawCompositionRelationship(svg, this.classboxes, item.relationship.containingclass, item.relationship.containedclass)
+        }
       }
     }
   }
+
 }
 
 function addClassDef(defs, classInfo, interactive, style) {
@@ -155,8 +160,8 @@ function visibilityStringToSymbol(visibility) {
 
 function drawInheritanceRelationship(svg, classboxes, baseclass, derivedclass) {
   var g = svg.group().addClass("UMLInheritanceRelationship")
-  var bbox1 = classboxes[baseclass].bbox();
-  var bbox2 = classboxes[derivedclass].bbox();
+  var bbox1 = classboxes[baseclass].svg.bbox();
+  var bbox2 = classboxes[derivedclass].svg.bbox();
 
   var t1 = "" + bbox1.cx + "," + (bbox1.y + bbox1.height) + " " +
     (bbox1.cx - 10) + "," + (bbox1.y + bbox1.height + 12) + " " +
@@ -168,8 +173,8 @@ function drawInheritanceRelationship(svg, classboxes, baseclass, derivedclass) {
 
 function drawCompositionRelationship(svg, classboxes, containingclass, containedclass) {
   var g = svg.group().addClass("UMLCompositionRelationship")
-  var bbox1 = classboxes[containingclass].bbox();
-  var bbox2 = classboxes[containedclass].bbox();
+  var bbox1 = classboxes[containingclass].svg.bbox();
+  var bbox2 = classboxes[containedclass].svg.bbox();
 
   var t1 = "" + (bbox1.x + bbox1.width) + "," + bbox1.cy + " " +
     (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy - 8) + " " +
@@ -180,5 +185,6 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
   g.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
 }
 
-function ClassBox() {
+function ClassBox(classDescription, interactive, classboxStyle) {
+  this.svg = null
 }
