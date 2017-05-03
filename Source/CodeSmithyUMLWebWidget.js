@@ -45,17 +45,10 @@ function UMLDiagram(interactive) {
       layout.positions = { }
     }
 
-    var defs = svg.defs()
     for (var i = 0; i < classDiagram.length; i++) {
       var item = classDiagram[i];
       if (item.class) {
-        var newClassBox = new ClassBox(item.class, this.interactive)
-        var classDef = addClassDef(defs, item.class, this.interactive, style.classbox)
-        if (layout.positions[item.class.name]) {
-          classDef.move(layout.positions[item.class.name].x, layout.positions[item.class.name].y)
-        }
-        newClassBox.svg = svg.use(classDef)
-        this.classboxes[item.class.name] = newClassBox
+        this.classboxes[item.class.name] = new ClassBox(svg, item.class, this.interactive, style.classbox, layout)
       } else if (item.relationship) {
         if (item.relationship.type == "inheritance") {
           drawInheritanceRelationship(svg, this.classboxes, item.relationship.baseclass, item.relationship.derivedclass)
@@ -185,6 +178,10 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
   g.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
 }
 
-function ClassBox(classDescription, interactive, classboxStyle) {
-  this.svg = null
+function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
+  this.def = addClassDef(svg.defs(), classDescription, interactive, classboxStyle)
+  if (layout.positions[classDescription.name]) {
+    this.def.move(layout.positions[classDescription.name].x, layout.positions[classDescription.name].y)
+  }
+  this.svg = svg.use(this.def)
 }
