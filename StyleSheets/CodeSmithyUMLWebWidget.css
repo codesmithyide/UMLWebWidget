@@ -30,3 +30,36 @@
    stroke-width: 2;
    fill: black;
 }
+
+.CodeSmithyUMLWebWidget .StandardStyle .UMLClass rect {
+   stroke: black;
+   stroke-width: 2;
+   fill: white;
+}
+
+.CodeSmithyUMLWebWidget .StandardStyle .UMLClass line {
+   stroke: black;
+   stroke-width: 2;
+}
+
+.CodeSmithyUMLWebWidget .StandardStyle .UMLInheritanceRelationship line {
+   stroke: black;
+   stroke-width: 2;
+}
+
+.CodeSmithyUMLWebWidget .StandardStyle .UMLInheritanceRelationship polygon {
+   stroke: black;
+   stroke-width: 2;
+   fill: white;
+}
+
+.CodeSmithyUMLWebWidget .StandardStyle .UMLCompositionRelationship line {
+   stroke: black;
+   stroke-width: 2;
+}
+
+.CodeSmithyUMLWebWidget .StandardStyle .UMLCompositionRelationship polygon {
+   stroke: black;
+   stroke-width: 2;
+   fill: black;
+}

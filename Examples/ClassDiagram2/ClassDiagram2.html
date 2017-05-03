@@ -86,8 +86,8 @@
     <script>
       var obj = JSON.parse($('#diagram1').text())
       $('#diagram1').empty()
-      var draw = SVG('diagram1').size(400, 300)
-      var defs = draw.defs()
+      var draw1 = SVG('diagram1').size(400, 300)
+      var defs = draw1.defs()
       var style = { 
         "classbox": {
           "margin-left":7,
@@ -113,31 +113,12 @@
             if (layout.positions[item.class.name]) {
               classDef.move(layout.positions[item.class.name].x, layout.positions[item.class.name].y)
             }
-            classboxes[item.class.name] = draw.use(classDef)
+            classboxes[item.class.name] = draw1.use(classDef)
           } else if (item.relationship) {
             if (item.relationship.type == "inheritance") {
-              var g = draw.group().addClass("UMLInheritanceRelationship")
-              var bbox1 = classboxes[item.relationship.baseclass].bbox();
-              var bbox2 = classboxes[item.relationship.derivedclass].bbox();
-
-              var t1 = "" + bbox1.cx + "," + (bbox1.y + bbox1.height) + " " +
-                (bbox1.cx - 10) + "," + (bbox1.y + bbox1.height + 12) + " " +
-                (bbox1.cx + 10) + "," + (bbox1.y + bbox1.height + 12)                
-              g.polygon(t1)
-
-              g.line(bbox1.cx, bbox1.y + bbox1.height + 12, bbox2.cx, bbox2.y)
+              drawInheritanceRelationship(draw1, classboxes, item.relationship.baseclass, item.relationship.derivedclass)
             } else if (item.relationship.type == "composition") {
-              var g = draw.group().addClass("UMLCompositionRelationship")
-              var bbox1 = classboxes[item.relationship.containingclass].bbox();
-              var bbox2 = classboxes[item.relationship.containedclass].bbox();
-
-              var t1 = "" + (bbox1.x + bbox1.width) + "," + bbox1.cy + " " +
-                (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy - 8) + " " +
-                (bbox1.x + bbox1.width + 20) + "," + bbox1.cy + " " +
-                (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy + 8)
-              g.polygon(t1)
-              
-              g.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
+              drawCompositionRelationship(draw1, classboxes, item.relationship.containingclass, item.relationship.containedclass)
             }
           }
         }
