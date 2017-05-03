@@ -61,6 +61,56 @@ function UMLDiagram(interactive) {
 
 }
 
+// Converts the visibility from the user string provided
+// in the input to the appropriate UML symbol for
+// visibility
+function visibilityStringToSymbol(visibility) {
+  var symbol = ""
+  if (visibility == "public") {
+    symbol = "+ "
+  } else if (visibility == "protected") {
+    symbol = "# "
+  } else if (visibility == "private") {
+    symbol = "- "
+  }
+  return symbol
+}
+
+function drawInheritanceRelationship(svg, classboxes, baseclass, derivedclass) {
+  var g = svg.group().addClass("UMLInheritanceRelationship")
+  var bbox1 = classboxes[baseclass].svg.bbox();
+  var bbox2 = classboxes[derivedclass].svg.bbox();
+
+  var t1 = "" + bbox1.cx + "," + (bbox1.y + bbox1.height) + " " +
+    (bbox1.cx - 10) + "," + (bbox1.y + bbox1.height + 12) + " " +
+    (bbox1.cx + 10) + "," + (bbox1.y + bbox1.height + 12)                
+  g.polygon(t1)
+
+  g.line(bbox1.cx, bbox1.y + bbox1.height + 12, bbox2.cx, bbox2.y)
+}
+
+function drawCompositionRelationship(svg, classboxes, containingclass, containedclass) {
+  var g = svg.group().addClass("UMLCompositionRelationship")
+  var bbox1 = classboxes[containingclass].svg.bbox();
+  var bbox2 = classboxes[containedclass].svg.bbox();
+
+  var t1 = "" + (bbox1.x + bbox1.width) + "," + bbox1.cy + " " +
+    (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy - 8) + " " +
+    (bbox1.x + bbox1.width + 20) + "," + bbox1.cy + " " +
+    (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy + 8)
+  g.polygon(t1)
+              
+  g.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
+}
+
+function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
+  this.def = addClassDef(svg.defs(), classDescription, interactive, classboxStyle)
+  if (layout.positions[classDescription.name]) {
+    this.def.move(layout.positions[classDescription.name].x, layout.positions[classDescription.name].y)
+  }
+  this.svg = svg.use(this.def)
+}
+
 function addClassDef(defs, classInfo, interactive, style) {
   var classGroup = defs.group().addClass("UMLClass")
   
@@ -134,54 +184,4 @@ function addClassDef(defs, classInfo, interactive, style) {
   }
 
   return classGroup
-}
-
-// Converts the visibility from the user string provided
-// in the input to the appropriate UML symbol for
-// visibility
-function visibilityStringToSymbol(visibility) {
-  var symbol = ""
-  if (visibility == "public") {
-    symbol = "+ "
-  } else if (visibility == "protected") {
-    symbol = "# "
-  } else if (visibility == "private") {
-    symbol = "- "
-  }
-  return symbol
-}
-
-function drawInheritanceRelationship(svg, classboxes, baseclass, derivedclass) {
-  var g = svg.group().addClass("UMLInheritanceRelationship")
-  var bbox1 = classboxes[baseclass].svg.bbox();
-  var bbox2 = classboxes[derivedclass].svg.bbox();
-
-  var t1 = "" + bbox1.cx + "," + (bbox1.y + bbox1.height) + " " +
-    (bbox1.cx - 10) + "," + (bbox1.y + bbox1.height + 12) + " " +
-    (bbox1.cx + 10) + "," + (bbox1.y + bbox1.height + 12)                
-  g.polygon(t1)
-
-  g.line(bbox1.cx, bbox1.y + bbox1.height + 12, bbox2.cx, bbox2.y)
-}
-
-function drawCompositionRelationship(svg, classboxes, containingclass, containedclass) {
-  var g = svg.group().addClass("UMLCompositionRelationship")
-  var bbox1 = classboxes[containingclass].svg.bbox();
-  var bbox2 = classboxes[containedclass].svg.bbox();
-
-  var t1 = "" + (bbox1.x + bbox1.width) + "," + bbox1.cy + " " +
-    (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy - 8) + " " +
-    (bbox1.x + bbox1.width + 20) + "," + bbox1.cy + " " +
-    (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy + 8)
-  g.polygon(t1)
-              
-  g.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
-}
-
-function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
-  this.def = addClassDef(svg.defs(), classDescription, interactive, classboxStyle)
-  if (layout.positions[classDescription.name]) {
-    this.def.move(layout.positions[classDescription.name].x, layout.positions[classDescription.name].y)
-  }
-  this.svg = svg.use(this.def)
 }
