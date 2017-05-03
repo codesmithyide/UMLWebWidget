@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Class Diagram 2</title>
+
+    <script src="../../ThirdParty/jquery-3.2.1.min.js"></script>
+    <script src="../../ThirdParty/svg.min.js"></script>
+    <script src="../../Source/CodeSmithyUMLWebWidget.js"></script>
+
+    <link rel="stylesheet" href="../../StyleSheets/CodeSmithyUMLWebWidget.css">
+  </head>
+  <body>
+    <p>The following diagram is a class diagram with one class with various attributes and operations.</p>
+    <div id="diagram1" class="CodeSmithyUMLWebWidget">
+      { 
+        "classdiagram":
+          [
+            { 
+              "class":
+                {
+                  "name": "MyBaseClass",
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr1", "visibility": "protected" 
+                      }
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "MyDerivedClass",
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr2", "visibility": "private" 
+                      }
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "MyContainedClass",
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr3", "visibility": "private" 
+                      }
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "inheritance",
+                  "baseclass": "MyBaseClass",
+                  "derivedclass": "MyDerivedClass"
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "composition",
+                  "containingclass": "MyDerivedClass",
+                  "containedclass": "MyContainedClass"
+                }
+            }
+          ]
+      }
+    </div>
+    <script>
+      var obj = JSON.parse($('#diagram1').text())
+      $('#diagram1').empty()
+      var draw = SVG('diagram1').size(400, 300)
+      var defs = draw.defs()
+      var style = { 
+        "classbox": {
+          "margin-left":7,
+          "margin-right": 7,
+          "margin-top": 5,
+          "margin-bottom": 5
+        }
+      }
+      var layout = {
+        "positions": {
+          "MyBaseClass": { "x": 10, "y": 1 },
+          "MyDerivedClass": { "x": 1, "y": 125 },
+          "MyContainedClass": { "x": 220, "y": 125 },
+        }
+      }
+      if (obj.classdiagram) {
+        var classDiagram = obj.classdiagram
+        var classboxes = {}
+        for (var i = 0; i < classDiagram.length; i++) {
+          var item = classDiagram[i];
+          if (item.class) {
+            var classDef = addClassDef(defs, item.class, style.classbox)
+            if (layout.positions[item.class.name]) {
+              classDef.move(layout.positions[item.class.name].x, layout.positions[item.class.name].y)
+            }
+            classboxes[item.class.name] = draw.use(classDef)
+          } else if (item.relationship) {
+            if (item.relationship.type == "inheritance") {
+              var g = draw.group().addClass("UMLInheritanceRelationship")
+              var bbox1 = classboxes[item.relationship.baseclass].bbox();
+              var bbox2 = classboxes[item.relationship.derivedclass].bbox();
+
+              var t1 = "" + bbox1.cx + "," + (bbox1.y + bbox1.height) + " " +
+                (bbox1.cx - 10) + "," + (bbox1.y + bbox1.height + 12) + " " +
+                (bbox1.cx + 10) + "," + (bbox1.y + bbox1.height + 12)                
+              g.polygon(t1)
+
+              g.line(bbox1.cx, bbox1.y + bbox1.height + 12, bbox2.cx, bbox2.y)
+            } else if (item.relationship.type == "composition") {
+              var g = draw.group().addClass("UMLCompositionRelationship")
+              var bbox1 = classboxes[item.relationship.containingclass].bbox();
+              var bbox2 = classboxes[item.relationship.containedclass].bbox();
+
+              var t1 = "" + (bbox1.x + bbox1.width) + "," + bbox1.cy + " " +
+                (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy - 8) + " " +
+                (bbox1.x + bbox1.width + 20) + "," + bbox1.cy + " " +
+                (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy + 8)
+              g.polygon(t1)
+              
+              g.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
+            }
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -8,3 +8,25 @@
    stroke: black;
    stroke-width: 2;
 }
+
+.CodeSmithyUMLWebWidget .UMLInheritanceRelationship line {
+   stroke: black;
+   stroke-width: 2;
+}
+
+.CodeSmithyUMLWebWidget .UMLInheritanceRelationship polygon {
+   stroke: black;
+   stroke-width: 2;
+   fill: white;
+}
+
+.CodeSmithyUMLWebWidget .UMLCompositionRelationship line {
+   stroke: black;
+   stroke-width: 2;
+}
+
+.CodeSmithyUMLWebWidget .UMLCompositionRelationship polygon {
+   stroke: black;
+   stroke-width: 2;
+   fill: black;
+}

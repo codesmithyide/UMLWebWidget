@@ -38,6 +38,8 @@ function addClassDef(defs, classInfo, style) {
     classBoxHeight += operationDef.bbox().height;
   }
 
+  // According to the UML standard the class name must be
+  // centered so center it
   if (classBoxWidth > classNameDef.bbox().width) {
     classNameDef.dx((classBoxWidth - classNameDef.bbox().width)/2)
   }
@@ -65,6 +67,9 @@ function addClassDef(defs, classInfo, style) {
   return classGroup
 }
 
+// Converts the visibility from the user string provided
+// in the input to the appropriate UML symbol for
+// visibility
 function visibilityStringToSymbol(visibility) {
   var symbol = ""
   if (visibility == "public") {
