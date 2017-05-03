@@ -50,20 +50,8 @@
       }
     </div>
     <script>
-      var obj = JSON.parse($('#diagram1').text())
-      $('#diagram1').empty()
-      var draw = SVG('diagram1').size(300, 300)
-      var style = { 
-        "classbox": {
-          "margin-left":7,
-          "margin-right": 7,
-          "margin-top": 5,
-          "margin-bottom": 5
-        }
-      }
-      if (obj.classdiagram) {
-        drawClassDiagram(draw, obj.classdiagram, style)
-      }
+      var classDiagram = new UMLDiagram()
+      classDiagram.createFromDiv("diagram1")
     </script>
   </body>
 </html>

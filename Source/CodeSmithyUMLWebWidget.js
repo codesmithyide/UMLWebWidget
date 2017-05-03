@@ -1,3 +1,33 @@
+// The constructor for the UMLDiagram object. This
+// the entry point for all the functionality provided
+// by the CodeSmithy UMLWebWidget.
+function UMLDiagram() {
+
+  // Create a diagram from a div element in the HTML document.
+  // The div element must contain a JSON object with the UML
+  // diagram information. The contents of the div will be replaced
+  // by the diagram.
+  // - divId is the id of the div element to use, it should be the id
+  //   without any '#' prefix.
+  this.createFromDiv = function(divId, layout) {
+    var obj = JSON.parse($('#' + divId).text())
+    $('#' + divId).empty()
+    var draw1 = SVG(divId).size(400, 300)
+    var style = { 
+      "classbox": {
+        "margin-left":7,
+        "margin-right": 7,
+        "margin-top": 5,
+        "margin-bottom": 5
+      }
+    }
+    if (obj.classdiagram) {
+      drawClassDiagram(draw1, obj.classdiagram, style, layout)
+    }
+  }
+
+}
+
 function drawClassDiagram(svg, classDiagram, style, layout) {
   if (layout == null) {
     layout = { }

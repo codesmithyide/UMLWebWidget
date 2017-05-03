@@ -84,17 +84,8 @@
       }
     </div>
     <script>
-      var obj = JSON.parse($('#diagram1').text())
-      $('#diagram1').empty()
-      var draw1 = SVG('diagram1').size(400, 300)
-      var style = { 
-        "classbox": {
-          "margin-left":7,
-          "margin-right": 7,
-          "margin-top": 5,
-          "margin-bottom": 5
-        }
-      }
+      var classDiagram = new UMLDiagram()
+
       var layout = {
         "positions": {
           "MyBaseClass": { "x": 10, "y": 1 },
@@ -102,9 +93,8 @@
           "MyContainedClass": { "x": 220, "y": 125 },
         }
       }
-      if (obj.classdiagram) {
-        drawClassDiagram(draw1, obj.classdiagram, style, layout)
-      }
+
+      classDiagram.createFromDiv("diagram1", layout)
     </script>
   </body>
 </html>
