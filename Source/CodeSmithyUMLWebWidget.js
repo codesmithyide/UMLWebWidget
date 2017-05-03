@@ -1,3 +1,31 @@
+function drawClassDiagram(svg, classDiagram, style, layout) {
+  if (layout == null) {
+    layout = { }
+  }
+  if (layout.positions == null) {
+    layout.positions = { }
+  }
+
+  var defs = svg.defs()
+  var classboxes = {}
+  for (var i = 0; i < classDiagram.length; i++) {
+    var item = classDiagram[i];
+    if (item.class) {
+      var classDef = addClassDef(defs, item.class, style.classbox)
+      if (layout.positions[item.class.name]) {
+        classDef.move(layout.positions[item.class.name].x, layout.positions[item.class.name].y)
+      }
+      classboxes[item.class.name] = svg.use(classDef)
+    } else if (item.relationship) {
+      if (item.relationship.type == "inheritance") {
+        drawInheritanceRelationship(svg, classboxes, item.relationship.baseclass, item.relationship.derivedclass)
+      } else if (item.relationship.type == "composition") {
+        drawCompositionRelationship(svg, classboxes, item.relationship.containingclass, item.relationship.containedclass)
+      }
+    }
+  }
+}
+
 function addClassDef(defs, classInfo, style) {
   var classGroup = defs.group().addClass("UMLClass")
 
@@ -97,8 +125,8 @@ function drawInheritanceRelationship(svg, classboxes, baseclass, derivedclass) {
 
 function drawCompositionRelationship(svg, classboxes, containingclass, containedclass) {
   var g = svg.group().addClass("UMLCompositionRelationship")
-  var bbox1 = classboxes[item.relationship.containingclass].bbox();
-  var bbox2 = classboxes[item.relationship.containedclass].bbox();
+  var bbox1 = classboxes[containingclass].bbox();
+  var bbox2 = classboxes[containedclass].bbox();
 
   var t1 = "" + (bbox1.x + bbox1.width) + "," + bbox1.cy + " " +
     (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy - 8) + " " +

@@ -53,7 +53,6 @@
       var obj = JSON.parse($('#diagram1').text())
       $('#diagram1').empty()
       var draw = SVG('diagram1').size(300, 300)
-      var defs = draw.defs()
       var style = { 
         "classbox": {
           "margin-left":7,
@@ -63,14 +62,7 @@
         }
       }
       if (obj.classdiagram) {
-        var classDiagram = obj.classdiagram
-        for (var i = 0; i < classDiagram.length; i++) {
-          var item = classDiagram[i];
-          if (item.class) {
-            var classDef = addClassDef(defs, item.class, style.classbox)
-            draw.use(classDef)
-          }
-        }
+        drawClassDiagram(draw, obj.classdiagram, style)
       }
     </script>
   </body>

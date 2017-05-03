@@ -87,7 +87,6 @@
       var obj = JSON.parse($('#diagram1').text())
       $('#diagram1').empty()
       var draw1 = SVG('diagram1').size(400, 300)
-      var defs = draw1.defs()
       var style = { 
         "classbox": {
           "margin-left":7,
@@ -104,24 +103,7 @@
         }
       }
       if (obj.classdiagram) {
-        var classDiagram = obj.classdiagram
-        var classboxes = {}
-        for (var i = 0; i < classDiagram.length; i++) {
-          var item = classDiagram[i];
-          if (item.class) {
-            var classDef = addClassDef(defs, item.class, style.classbox)
-            if (layout.positions[item.class.name]) {
-              classDef.move(layout.positions[item.class.name].x, layout.positions[item.class.name].y)
-            }
-            classboxes[item.class.name] = draw1.use(classDef)
-          } else if (item.relationship) {
-            if (item.relationship.type == "inheritance") {
-              drawInheritanceRelationship(draw1, classboxes, item.relationship.baseclass, item.relationship.derivedclass)
-            } else if (item.relationship.type == "composition") {
-              drawCompositionRelationship(draw1, classboxes, item.relationship.containingclass, item.relationship.containedclass)
-            }
-          }
-        }
+        drawClassDiagram(draw1, obj.classdiagram, style, layout)
       }
     </script>
   </body>
