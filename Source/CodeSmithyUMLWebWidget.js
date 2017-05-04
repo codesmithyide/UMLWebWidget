@@ -91,11 +91,13 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
 function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
 
   this.createDef = function(defs, classInfo, interactive, style) {
+    var self = this
+
     var classGroup = defs.group().addClass("UMLClass")
-  
+    
     if (interactive) {
       classGroup.click(function() {
-        this.text("hhe")
+        self.toggle(this)
       })
     }
 
@@ -145,7 +147,16 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
     classBoxWidth += (style["margin-left"] + style["margin-right"])
     classBoxHeight += style["margin-bottom"]
 
-    var classBoxRect = classGroup.rect(classBoxWidth, classBoxHeight).move(0,0)
+    var unselectedClassBoxBorder = classGroup.rect(classBoxWidth, classBoxHeight).move(0,0)
+    this.selectedClassBoxBorder = classGroup.group().hide()
+    this.selectedClassBoxBorder.rect(10, 10).move(-5,-5)
+    this.selectedClassBoxBorder.rect(10, 10).move((classBoxWidth/2) - 5, -5)
+    this.selectedClassBoxBorder.rect(10, 10).move(classBoxWidth - 5, -5)
+    this.selectedClassBoxBorder.rect(10, 10).move(classBoxWidth - 5, (classBoxHeight/2) - 5)
+    this.selectedClassBoxBorder.rect(10, 10).move(classBoxWidth - 5, classBoxHeight - 5)
+    this.selectedClassBoxBorder.rect(10, 10).move((classBoxWidth/2) - 5, classBoxHeight - 5)
+    this.selectedClassBoxBorder.rect(10, 10).move(-5, classBoxHeight - 5)
+    this.selectedClassBoxBorder.rect(10, 10).move(-5, (classBoxHeight/2) - 5)
 
     classGroup.use(classNameDef)
     classGroup.move(1,1)
@@ -169,7 +180,21 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
   if (layout.positions[classDescription.name]) {
     this.def.move(layout.positions[classDescription.name].x, layout.positions[classDescription.name].y)
   }
+
   this.svg = svg.use(this.def)
+
+  this.selected = false
+
+  this.toggle = function(el) {
+    if (this.selected) {
+      this.selectedClassBoxBorder.hide()
+      this.selected = false
+    } else {
+      this.selectedClassBoxBorder.show()
+      this.selected = true
+    }
+  }
+
 }
 
 // Converts the visibility from the user string provided
