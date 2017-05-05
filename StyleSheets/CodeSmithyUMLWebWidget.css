@@ -1,65 +1,85 @@
 .CodeSmithyUMLWebWidget .UMLClass rect {
-   stroke: black;
+   stroke: #595959;
    stroke-width: 2;
-   fill: white;
+   fill: #f1f4ff;
+   opacity: 0.75;
 }
 
 .CodeSmithyUMLWebWidget .UMLClass line {
-   stroke: black;
-   stroke-width: 2;
+   stroke: #595959;
+   stroke-width: 1;
+}
+
+.CodeSmithyUMLWebWidget .UMLClassName {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: normal;
+   fill: #404040;
+}
+
+.CodeSmithyUMLWebWidget .UMLAttribute {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: normal;
+   fill: #404040;
+}
+
+.CodeSmithyUMLWebWidget .UMLOperation {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: normal;
+   fill: #404040;
 }
 
 .CodeSmithyUMLWebWidget .UMLInheritanceRelationship line {
-   stroke: black;
+   stroke: #454545;
    stroke-width: 2;
 }
 
 .CodeSmithyUMLWebWidget .UMLInheritanceRelationship polygon {
-   stroke: black;
+   stroke: #454545;
    stroke-width: 2;
    fill: white;
 }
 
 .CodeSmithyUMLWebWidget .UMLCompositionRelationship line {
-   stroke: black;
+   stroke: #454545;
    stroke-width: 2;
 }
 
 .CodeSmithyUMLWebWidget .UMLCompositionRelationship polygon {
-   stroke: black;
+   stroke: #454545;
    stroke-width: 2;
-   fill: black;
+   fill: #454545;
 }
 
-.CodeSmithyUMLWebWidget .StandardStyle .UMLClass rect {
+.CodeSmithyUMLWebWidget.StandardStyle .UMLClass rect {
    stroke: black;
-   stroke-width: 2;
    fill: white;
 }
 
-.CodeSmithyUMLWebWidget .StandardStyle .UMLClass line {
+.CodeSmithyUMLWebWidget.StandardStyle .UMLClass line {
    stroke: black;
-   stroke-width: 2;
+   stroke-width: 1;
 }
 
-.CodeSmithyUMLWebWidget .StandardStyle .UMLInheritanceRelationship line {
-   stroke: black;
-   stroke-width: 2;
+.CodeSmithyUMLWebWidget .UMLClassName {
+   font-weight: bold;
 }
 
-.CodeSmithyUMLWebWidget .StandardStyle .UMLInheritanceRelationship polygon {
+.CodeSmithyUMLWebWidget.StandardStyle .UMLInheritanceRelationship line {
    stroke: black;
-   stroke-width: 2;
-   fill: white;
 }
 
-.CodeSmithyUMLWebWidget .StandardStyle .UMLCompositionRelationship line {
+.CodeSmithyUMLWebWidget.StandardStyle .UMLInheritanceRelationship polygon {
    stroke: black;
-   stroke-width: 2;
 }
 
-.CodeSmithyUMLWebWidget .StandardStyle .UMLCompositionRelationship polygon {
+.CodeSmithyUMLWebWidget.StandardStyle .UMLCompositionRelationship line {
    stroke: black;
-   stroke-width: 2;
+}
+
+.CodeSmithyUMLWebWidget.StandardStyle .UMLCompositionRelationship polygon {
+   stroke: black;
    fill: black;
 }

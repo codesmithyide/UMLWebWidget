@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Standard Style Class Diagram 1</title>
+
+    <script src="../../ThirdParty/jquery-3.2.1.min.js"></script>
+    <script src="../../ThirdParty/svg.min.js"></script>
+    <script src="../../Source/CodeSmithyUMLWebWidget.js"></script>
+
+    <link rel="stylesheet" href="../../StyleSheets/CodeSmithyUMLWebWidget.css">
+  </head>
+  <body>
+    <p>The following diagram is a class diagram with one class with various attributes and operations.</p>
+    <div id="diagram1" class="CodeSmithyUMLWebWidget StandardStyle">
+      { 
+        "classdiagram":
+          [
+            { 
+              "class":
+                {
+                  "name": "MyBaseClass",
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr1", "visibility": "public" 
+                      },
+                      {
+                        "name": "m_attr2", "visibility": "protected" 
+                      },
+                      {
+                        "name": "m_attr3", "visibility": "private" 
+                      }
+                    ],
+                  "operations":
+                    [
+                      { 
+                        "name": "method1()", "visibility": "public" 
+                      },
+                      { 
+                        "name": "method2()", "visibility": "protected" 
+                      },
+                      { 
+                        "name": "method3()", "visibility": "private" 
+                      }
+
+                  ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "MyDerivedClass",
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr4", "visibility": "private" 
+                      }
+                    ],
+                  "operations" : [ ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "MyContainedClass",
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr5", "visibility": "private" 
+                      }
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "inheritance",
+                  "baseclass": "MyBaseClass",
+                  "derivedclass": "MyDerivedClass"
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "composition",
+                  "containingclass": "MyDerivedClass",
+                  "containedclass": "MyContainedClass"
+                }
+            }
+          ]
+      }
+    </div>
+    <script>
+      var classDiagram = new UMLDiagram()
+
+      var layout = {
+        "positions": {
+          "MyBaseClass": { "x": 14, "y": 1 },
+          "MyDerivedClass": { "x": 3, "y": 220 },
+          "MyContainedClass": { "x": 200, "y": 220 }
+        }
+      }
+
+      classDiagram.createFromDiv("diagram1", layout)
+    </script>
+  </body>
+</html>
