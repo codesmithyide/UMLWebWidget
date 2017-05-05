@@ -23,13 +23,13 @@ function UMLDiagram(interactive) {
   this.createFromDiv = function(divId, layout) {
     var diagramDescription = JSON.parse($('#' + divId).text())
     $('#' + divId).empty()
-    var svg = SVG(divId).size(400, 300)
+    var svg = SVG(divId).size(400, 400)
     var style = { 
       "classbox": {
-        "margin-left":7,
-        "margin-right": 7,
-        "margin-top": 5,
-        "margin-bottom": 5
+        "margin-left": 12,
+        "margin-right": 12,
+        "margin-top": 9,
+        "margin-bottom": 9
       }
     }
     if (diagramDescription.classdiagram) {
@@ -104,7 +104,7 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
     var classBoxWidth = 0
     var classBoxHeight = style["margin-top"]
 
-    var classNameDef = defs.text(classInfo.name).move(style["margin-left"], classBoxHeight)
+    var classNameDef = defs.text(classInfo.name).addClass("UMLClassName").move(style["margin-left"], classBoxHeight)
     classBoxWidth = Math.max(classBoxWidth, classNameDef.bbox().width)
     classBoxHeight += (classNameDef.bbox().height + style["margin-bottom"])
 
@@ -116,7 +116,7 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
     for (var i = 0; i < classInfo.attributes.length; i++) {
       var attrItem = classInfo.attributes[i]
       var attrText = visibilityStringToSymbol(attrItem.visibility) + attrItem.name
-      var attributeDef = defs.text(attrText).move(style["margin-left"], classBoxHeight)
+      var attributeDef = defs.text(attrText).addClass("UMLAttribute").move(style["margin-left"], classBoxHeight)
       attributeDefs.push(attributeDef)
       classBoxWidth = Math.max(classBoxWidth, attributeDef.bbox().width)
       classBoxHeight += attributeDef.bbox().height;
@@ -132,7 +132,7 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
     for (var i = 0; i < classInfo.operations.length; i++) {
       var opItem = classInfo.operations[i]
       var opText = visibilityStringToSymbol(opItem.visibility) + opItem.name
-      var operationDef = defs.text(opText).move(style["margin-left"], classBoxHeight)
+      var operationDef = defs.text(opText).addClass("UMLOperation").move(style["margin-left"], classBoxHeight)
       operationDefs.push(operationDef)
       classBoxWidth = Math.max(classBoxWidth, operationDef.bbox().width)
       classBoxHeight += operationDef.bbox().height;
