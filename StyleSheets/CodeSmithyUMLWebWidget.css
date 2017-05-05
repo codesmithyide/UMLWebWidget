@@ -13,7 +13,7 @@
 .CodeSmithyUMLWebWidget .UMLClassName {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
-   font-weight: normal;
+   font-weight: bold;
    fill: #404040;
 }
 
@@ -60,11 +60,6 @@
 
 .CodeSmithyUMLWebWidget.StandardStyle .UMLClass line {
    stroke: black;
-   stroke-width: 1;
-}
-
-.CodeSmithyUMLWebWidget .UMLClassName {
-   font-weight: bold;
 }
 
 .CodeSmithyUMLWebWidget.StandardStyle .UMLInheritanceRelationship line {
