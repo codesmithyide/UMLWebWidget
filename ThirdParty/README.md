@@ -8,3 +8,4 @@ your own projects. We aim to always support the latest versions of the dependenc
 
 - [jQuery license (https://github.com/jquery/jquery/blob/master/LICENSE.txt)](https://github.com/jquery/jquery/blob/master/LICENSE.txt)
 - [svg.js license (https://github.com/svgdotjs/svg.js/blob/master/LICENSE.txt)](https://github.com/svgdotjs/svg.js/blob/master/LICENSE.txt)
+- [svg.draggable.js license (https://github.com/svgdotjs/svg.draggable.js/blob/master/LICENSE)](https://github.com/svgdotjs/svg.draggable.js/blob/master/LICENSE)
