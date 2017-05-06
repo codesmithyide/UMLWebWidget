@@ -97,6 +97,9 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
 (function(ns) {
     ns.Diagram = UMLDiagram
 
+    /////
+    // Start of the CodeSmithy.UMLWebWidget.ClassBox class definition
+    //
     ns.ClassBox = function(svg, classDescription, interactive, classboxStyle, layout) {
 
         this.createDef = function(defs, classInfo, interactive, style) {
@@ -122,10 +125,10 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
             currentDimensions.height += (classNameDef.bbox().height + style["margin-bottom"])
 
             var line1YPos = currentDimensions.height
-            let attributeGroupDef = CodeSmithy.UMLWebWidget.addCompartment(defs, currentDimensions, style, classInfo.attributes, "UMLAttribute")
+            let attributeGroupDef = addCompartment(defs, currentDimensions, style, classInfo.attributes, "UMLAttribute")
  
             var line2YPos = currentDimensions.height
-            let operationGroupDef = CodeSmithy.UMLWebWidget.addCompartment(defs, currentDimensions, style, classInfo.operations, "UMLOperation")
+            let operationGroupDef = addCompartment(defs, currentDimensions, style, classInfo.operations, "UMLOperation")
 
             // According to the UML standard the class name must be
             // centered so center it
@@ -167,9 +170,7 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
             }
         }
 
-    }
-
-        ns.addCompartment = function(svg, currentDimensions, style, items, cssClass) {
+        function addCompartment(svg, currentDimensions, style, items, cssClass) {
             currentDimensions.height += style["margin-top"]
             let compartmentDef = createAttributeOrOperationGroupDef(svg, items, cssClass)
             compartmentDef.dmove(style["margin-left"], currentDimensions.height)
@@ -208,5 +209,10 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
             }
             return stringToSymbolMap[visibility]
         }
+
+    }
+    //
+    // End of the CodeSmithy.UMLWebWidget.ClassBox class definition
+    /////
 
 })(CodeSmithy.UMLWebWidget)
