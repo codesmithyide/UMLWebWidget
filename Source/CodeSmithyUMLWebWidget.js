@@ -12,10 +12,6 @@ CodeSmithy.UMLWebWidget = { }
 function UMLDiagram(settings) {
   this.settings = new CodeSmithy.UMLWebWidget.Settings(settings)
 
-  // The list of all UML class boxes present on the
-  // diagram
-  this.classboxes = { }
-
   // Create a diagram from a div element in the HTML document.
   // The div element must contain a JSON object with the UML
   // diagram information. The contents of the div will be replaced
@@ -35,32 +31,12 @@ function UMLDiagram(settings) {
       }
     }
     if (diagramDescription.classdiagram) {
-      new CodeSmithy.UMLWebWidget.ClassDiagram()
-      this.drawClassDiagram(svg, diagramDescription.classdiagram, style, layout)
+      let classDiagram = new CodeSmithy.UMLWebWidget.ClassDiagram(this.settings)
+      classDiagram.draw(svg, diagramDescription.classdiagram, style, layout)
     }
   }
 
-  this.drawClassDiagram = function(svg, classDiagram, style, layout) {
-    if (layout == null) {
-      layout = { }
-    }
-    if (layout.positions == null) {
-      layout.positions = { }
-    }
 
-    for (var i = 0; i < classDiagram.length; i++) {
-      var item = classDiagram[i]
-      if (item.class) {
-        this.classboxes[item.class.name] = new CodeSmithy.UMLWebWidget.ClassBox(svg, item.class, this.settings.interactive, style.classbox, layout)
-      } else if (item.relationship) {
-        if (item.relationship.type == "inheritance") {
-          CodeSmithy.UMLWebWidget.drawInheritanceRelationship(svg, this.classboxes, item.relationship.baseclass, item.relationship.derivedclass)
-        } else if (item.relationship.type == "composition") {
-          CodeSmithy.UMLWebWidget.drawCompositionRelationship(svg, this.classboxes, item.relationship.containingclass, item.relationship.containedclass)
-        }
-      }
-    }
-  }
 
 }
 
@@ -75,10 +51,39 @@ function UMLDiagram(settings) {
         }
     }
 
-    ns.ClassDiagram = function() {
+    ns.ClassDiagram = function(settings) {
+
+        this.settings = settings
+
+        // The list of all UML class boxes present on the
+        // diagram
+        this.classboxes = { }
+
+        this.draw = function(svg, classDiagram, style, layout) {
+            if (layout == null) {
+                layout = { }
+            }
+            if (layout.positions == null) {
+                layout.positions = { }
+            }
+
+            for (var i = 0; i < classDiagram.length; i++) {
+                 var item = classDiagram[i]
+                 if (item.class) {
+                     this.classboxes[item.class.name] = new ns.ClassBox(svg, item.class, this.settings.interactive, style.classbox, layout)
+                 } else if (item.relationship) {
+                     if (item.relationship.type == "inheritance") {
+                         drawInheritanceRelationship(svg, this.classboxes, item.relationship.baseclass, item.relationship.derivedclass)
+                     } else if (item.relationship.type == "composition") {
+                         drawCompositionRelationship(svg, this.classboxes, item.relationship.containingclass, item.relationship.containedclass)
+                     }
+                 }
+             }
+        }
+
     }
 
-    ns.drawInheritanceRelationship = function(svg, classboxes, baseclass, derivedclass) {
+    function drawInheritanceRelationship (svg, classboxes, baseclass, derivedclass) {
         let relationshipGroup = svg.group().addClass("UMLInheritanceRelationship")
         
         let bbox1 = classboxes[baseclass].svg.bbox()
@@ -92,7 +97,7 @@ function UMLDiagram(settings) {
         relationshipGroup.line(bbox1.cx, bbox1.y + bbox1.height + 12, bbox2.cx, bbox2.y)
     }
 
-    ns.drawCompositionRelationship = function(svg, classboxes, containingclass, containedclass) {
+    function drawCompositionRelationship(svg, classboxes, containingclass, containedclass) {
         let relationshipGroup = svg.group().addClass("UMLCompositionRelationship")
 
         let bbox1 = classboxes[containingclass].svg.bbox()
