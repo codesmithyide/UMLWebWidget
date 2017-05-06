@@ -61,15 +61,17 @@ CodeSmithy.UMLWebWidget = { }
             }
 
             for (var i = 0; i < classDiagram.length; i++) {
-                 var item = classDiagram[i]
+                 let item = classDiagram[i]
                  if (item.class) {
                      this.classboxes[item.class.name] = new ns.ClassBox(svg, item.class, this.settings.interactive, style.classbox, layout)
                  } else if (item.relationship) {
+                     let newConnector;
                      if (item.relationship.type == "inheritance") {
-                         new ns.Connector(svg, item.relationship.type, this.classboxes[item.relationship.baseclass], this.classboxes[item.relationship.derivedclass])
+                         newConnector = new ns.Connector(svg, item.relationship.type, this.classboxes[item.relationship.baseclass], this.classboxes[item.relationship.derivedclass])
                      } else if (item.relationship.type == "composition") {
-                         new ns.Connector(svg, item.relationship.type, this.classboxes[item.relationship.containingclass], this.classboxes[item.relationship.containedclass])
+                         newConnector = new ns.Connector(svg, item.relationship.type, this.classboxes[item.relationship.containingclass], this.classboxes[item.relationship.containedclass])
                      }
+                     newConnector.draw(svg)
                  }
              }
         }
@@ -195,10 +197,16 @@ CodeSmithy.UMLWebWidget = { }
     //
     ns.Connector = function(svg, type, classbox1, classbox2) {
 
-        if (type == "inheritance") {
-            drawInheritanceRelationship(svg, classbox1, classbox2)
-        } else if (type == "composition") {
-            drawCompositionRelationship(svg, classbox1, classbox2)
+        this.type = type
+        this.classbox1 = classbox1
+        this.classbox2 = classbox2
+
+        this.draw = function(svg) {
+            if (this.type == "inheritance") {
+                drawInheritanceRelationship(svg, this.classbox1, this.classbox2)
+            } else if (this.type == "composition") {
+                drawCompositionRelationship(svg, this.classbox1, this.classbox2)
+            }
         }
 
         // Draws an inheritance connector between two classes
