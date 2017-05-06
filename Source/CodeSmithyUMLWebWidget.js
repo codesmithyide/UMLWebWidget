@@ -9,7 +9,7 @@ CodeSmithy.UMLWebWidget = { }
 // by the CodeSmithy UMLWebWidget.
 // - interactive: true if the user can edit the diagram online,
 //   false otherwise. Considered false if not provided.
-CodeSmithy.UMLWebWidget.Diagram = function(interactive) {
+function UMLDiagram(interactive) {
   if (interactive) {
     this.interactive = true
   } else {
@@ -218,3 +218,6 @@ function visibilityStringToSymbol(visibility) {
   return symbol
 }
 
+(function(ns) {
+    ns.Diagram = UMLDiagram
+})(CodeSmithy.UMLWebWidget)
