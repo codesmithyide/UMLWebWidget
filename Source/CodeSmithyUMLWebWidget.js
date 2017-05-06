@@ -121,7 +121,7 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
     var attributeDefs = []
     for (var i = 0; i < classInfo.attributes.length; i++) {
       var attrItem = classInfo.attributes[i]
-      var attrText = visibilityStringToSymbol(attrItem.visibility) + attrItem.name
+      var attrText = CodeSmithy.UMLWebWidget.visibilityStringToSymbol(attrItem.visibility) + attrItem.name
       var attributeDef = defs.text(attrText).addClass("UMLAttribute").move(style["margin-left"], classBoxHeight)
       attributeDefs.push(attributeDef)
       classBoxWidth = Math.max(classBoxWidth, attributeDef.bbox().width)
@@ -203,21 +203,19 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
 
 }
 
-// Converts the visibility from the user string provided
-// in the input to the appropriate UML symbol for
-// visibility
-function visibilityStringToSymbol(visibility) {
-  var symbol = ""
-  if (visibility == "public") {
-    symbol = "+ "
-  } else if (visibility == "protected") {
-    symbol = "# "
-  } else if (visibility == "private") {
-    symbol = "- "
-  }
-  return symbol
-}
-
 (function(ns) {
     ns.Diagram = UMLDiagram
+
+    // Converts the visibility from the user string provided
+    // in the input to the appropriate UML symbol for
+    // visibility
+    ns.visibilityStringToSymbol = function(visibility) {
+        let stringToSymbolMap = {
+            "public": "+ ",
+            "protected": "# ",
+            "private": "- "
+        }
+        return stringToSymbolMap[visibility]
+    }
+
 })(CodeSmithy.UMLWebWidget)
