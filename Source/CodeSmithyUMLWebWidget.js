@@ -4,44 +4,7 @@ var CodeSmithy = CodeSmithy || { }
 // The namespace for the UMLWebWidget application
 CodeSmithy.UMLWebWidget = { }
 
-// The constructor for the Diagram object. This
-// the entry point for all the functionality provided
-// by the CodeSmithy UMLWebWidget.
-// - interactive: true if the user can edit the diagram online,
-//   false otherwise. Considered false if not provided.
-function UMLDiagram(settings) {
-  this.settings = new CodeSmithy.UMLWebWidget.Settings(settings)
-
-  // Create a diagram from a div element in the HTML document.
-  // The div element must contain a JSON object with the UML
-  // diagram information. The contents of the div will be replaced
-  // by the diagram.
-  // - divId: this is the id of the div element to use, it should be the id
-  //   without any '#' prefix.
-  this.createFromDiv = function(divId, layout) {
-    var diagramDescription = JSON.parse($('#' + divId).text())
-    $('#' + divId).empty()
-    var svg = SVG(divId).size(400, 400)
-    var style = { 
-      "classbox": {
-        "margin-left": 12,
-        "margin-right": 12,
-        "margin-top": 9,
-        "margin-bottom": 9
-      }
-    }
-    if (diagramDescription.classdiagram) {
-      let classDiagram = new CodeSmithy.UMLWebWidget.ClassDiagram(this.settings)
-      classDiagram.draw(svg, diagramDescription.classdiagram, style, layout)
-    }
-  }
-
-
-
-}
-
-(function(ns) {
-    ns.Diagram = UMLDiagram
+;(function(ns) {
 
     ns.Settings = function(settings) {
         if (settings) {
@@ -51,15 +14,42 @@ function UMLDiagram(settings) {
         }
     }
 
-    ns.ClassDiagram = function(settings) {
+    // The constructor for the Diagram object. This
+    // the entry point for all the functionality provided
+    // by the CodeSmithy UMLWebWidget.
+    // - interactive: true if the user can edit the diagram online,
+    //   false otherwise. Considered false if not provided.
+    ns.Diagram = function(settings) {
+        this.settings = new ns.Settings(settings)
 
-        this.settings = settings
+        // Create a diagram from a div element in the HTML document.
+        // The div element must contain a JSON object with the UML
+        // diagram information. The contents of the div will be replaced
+        // by the diagram.
+        // - divId: this is the id of the div element to use, it should be the id
+        //   without any '#' prefix.
+        this.createFromDiv = function(divId, layout) {
+            var diagramDescription = JSON.parse($('#' + divId).text())
+            $('#' + divId).empty()
+            var svg = SVG(divId).size(400, 400)
+            var style = { 
+                "classbox": {
+                    "margin-left": 12,
+                    "margin-right": 12,
+                    "margin-top": 9,
+                    "margin-bottom": 9
+                }
+            }
+            if (diagramDescription.classdiagram) {
+                this.drawClassDiagram(svg, diagramDescription.classdiagram, style, layout)
+            }
+        }
 
         // The list of all UML class boxes present on the
         // diagram
         this.classboxes = { }
 
-        this.draw = function(svg, classDiagram, style, layout) {
+        this.drawClassDiagram = function(svg, classDiagram, style, layout) {
             if (layout == null) {
                 layout = { }
             }
@@ -80,8 +70,6 @@ function UMLDiagram(settings) {
                  }
              }
         }
-
-    }
 
         // Draws an inheritance connector between two classes
         function drawInheritanceRelationship (svg, classboxes, baseclass, derivedclass) {
@@ -113,6 +101,8 @@ function UMLDiagram(settings) {
               
             relationshipGroup.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
         }
+
+    }
 
     /////
     // Start of the CodeSmithy.UMLWebWidget.ClassBox class definition
