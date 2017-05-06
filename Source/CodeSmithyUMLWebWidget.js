@@ -52,7 +52,7 @@ function UMLDiagram(interactive) {
     }
 
     for (var i = 0; i < classDiagram.length; i++) {
-      var item = classDiagram[i];
+      var item = classDiagram[i]
       if (item.class) {
         this.classboxes[item.class.name] = new ClassBox(svg, item.class, this.interactive, style.classbox, layout)
       } else if (item.relationship) {
@@ -69,8 +69,8 @@ function UMLDiagram(interactive) {
 
 function drawInheritanceRelationship(svg, classboxes, baseclass, derivedclass) {
   var g = svg.group().addClass("UMLInheritanceRelationship")
-  var bbox1 = classboxes[baseclass].svg.bbox();
-  var bbox2 = classboxes[derivedclass].svg.bbox();
+  var bbox1 = classboxes[baseclass].svg.bbox()
+  var bbox2 = classboxes[derivedclass].svg.bbox()
 
   var t1 = "" + bbox1.cx + "," + (bbox1.y + bbox1.height) + " " +
     (bbox1.cx - 10) + "," + (bbox1.y + bbox1.height + 12) + " " +
@@ -82,8 +82,8 @@ function drawInheritanceRelationship(svg, classboxes, baseclass, derivedclass) {
 
 function drawCompositionRelationship(svg, classboxes, containingclass, containedclass) {
   var g = svg.group().addClass("UMLCompositionRelationship")
-  var bbox1 = classboxes[containingclass].svg.bbox();
-  var bbox2 = classboxes[containedclass].svg.bbox();
+  var bbox1 = classboxes[containingclass].svg.bbox()
+  var bbox2 = classboxes[containedclass].svg.bbox()
 
   var t1 = "" + (bbox1.x + bbox1.width) + "," + bbox1.cy + " " +
     (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy - 8) + " " +
@@ -107,62 +107,50 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
       })
     }
 
-    var classBoxWidth = 0
-    var classBoxHeight = style["margin-top"]
+    let currentDimensions = { 
+      width: 0,
+      height: 0
+    }
+    
+    currentDimensions.height = style["margin-top"]
 
-    var classNameDef = defs.text(classInfo.name).addClass("UMLClassName").move(style["margin-left"], classBoxHeight)
-    classBoxWidth = Math.max(classBoxWidth, classNameDef.bbox().width)
-    classBoxHeight += (classNameDef.bbox().height + style["margin-bottom"])
+    var classNameDef = defs.text(classInfo.name).addClass("UMLClassName").move(style["margin-left"], currentDimensions.height)
+    currentDimensions.width = Math.max(currentDimensions.width, classNameDef.bbox().width)
+    currentDimensions.height += (classNameDef.bbox().height + style["margin-bottom"])
 
-    var line1YPos = classBoxHeight;
+    var line1YPos = currentDimensions.height
+    let attributeGroupDef = CodeSmithy.UMLWebWidget.addCompartment(defs, currentDimensions, style, classInfo.attributes, "UMLAttribute")
  
-    classBoxHeight += style["margin-top"]
-
-    let attributeGroupDef = CodeSmithy.UMLWebWidget.createAttributeOrOperationGroupDef(defs, classInfo.attributes, "UMLAttribute")
-    attributeGroupDef.dmove(style["margin-left"], classBoxHeight)
-
-    classBoxWidth = Math.max(classBoxWidth, attributeGroupDef.bbox().width)
-    classBoxHeight += attributeGroupDef.bbox().height
-    classBoxHeight += style["margin-bottom"]
-
-    var line2YPos = classBoxHeight;
-
-    classBoxHeight += style["margin-top"]
-
-    let operationGroupDef = CodeSmithy.UMLWebWidget.createAttributeOrOperationGroupDef(defs, classInfo.operations, "UMLOperation")
-    operationGroupDef.dmove(style["margin-left"], classBoxHeight)
-
-    classBoxWidth = Math.max(classBoxWidth, operationGroupDef.bbox().width)
-    classBoxHeight += operationGroupDef.bbox().height
-    classBoxHeight += style["margin-bottom"]
+    var line2YPos = currentDimensions.height
+    let operationGroupDef = CodeSmithy.UMLWebWidget.addCompartment(defs, currentDimensions, style, classInfo.operations, "UMLOperation")
 
     // According to the UML standard the class name must be
     // centered so center it
-    if (classBoxWidth > classNameDef.bbox().width) {
-      classNameDef.dx((classBoxWidth - classNameDef.bbox().width)/2)
+    if (currentDimensions.width > classNameDef.bbox().width) {
+      classNameDef.dx((currentDimensions.width - classNameDef.bbox().width)/2)
     }
 
-    classBoxWidth += (style["margin-left"] + style["margin-right"])
+    currentDimensions.width += (style["margin-left"] + style["margin-right"])
     
-    var unselectedClassBoxBorder = classGroup.rect(classBoxWidth, classBoxHeight).move(0,0)
+    var unselectedClassBoxBorder = classGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
     this.selectedClassBoxBorder = classGroup.group().hide()
     this.selectedClassBoxBorder.rect(10, 10).move(-5,-5)
-    this.selectedClassBoxBorder.rect(10, 10).move((classBoxWidth/2) - 5, -5)
-    this.selectedClassBoxBorder.rect(10, 10).move(classBoxWidth - 5, -5)
-    this.selectedClassBoxBorder.rect(10, 10).move(classBoxWidth - 5, (classBoxHeight/2) - 5)
-    this.selectedClassBoxBorder.rect(10, 10).move(classBoxWidth - 5, classBoxHeight - 5)
-    this.selectedClassBoxBorder.rect(10, 10).move((classBoxWidth/2) - 5, classBoxHeight - 5)
-    this.selectedClassBoxBorder.rect(10, 10).move(-5, classBoxHeight - 5)
-    this.selectedClassBoxBorder.rect(10, 10).move(-5, (classBoxHeight/2) - 5)
+    this.selectedClassBoxBorder.rect(10, 10).move((currentDimensions.width/2) - 5, -5)
+    this.selectedClassBoxBorder.rect(10, 10).move(currentDimensions.width - 5, -5)
+    this.selectedClassBoxBorder.rect(10, 10).move(currentDimensions.width - 5, (currentDimensions.height/2) - 5)
+    this.selectedClassBoxBorder.rect(10, 10).move(currentDimensions.width - 5, currentDimensions.height - 5)
+    this.selectedClassBoxBorder.rect(10, 10).move((currentDimensions.width/2) - 5, currentDimensions.height - 5)
+    this.selectedClassBoxBorder.rect(10, 10).move(-5, currentDimensions.height - 5)
+    this.selectedClassBoxBorder.rect(10, 10).move(-5, (currentDimensions.height/2) - 5)
 
     classGroup.use(classNameDef)
     classGroup.move(1,1)
 
-    classGroup.line(0, line1YPos, classBoxWidth, line1YPos)
+    classGroup.line(0, line1YPos, currentDimensions.width, line1YPos)
 
     classGroup.use(attributeGroupDef)
     
-    classGroup.line(0, line2YPos, classBoxWidth, line2YPos)
+    classGroup.line(0, line2YPos, currentDimensions.width, line2YPos)
 
     classGroup.use(operationGroupDef)
     
@@ -193,7 +181,18 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
 (function(ns) {
     ns.Diagram = UMLDiagram
 
-    ns.createAttributeOrOperationGroupDef = function(svg, items, cssClass) {
+    ns.addCompartment = function(svg, currentDimensions, style, items, cssClass) {
+        currentDimensions.height += style["margin-top"]
+        let compartmentDef = createAttributeOrOperationGroupDef(svg, items, cssClass)
+        compartmentDef.dmove(style["margin-left"], currentDimensions.height)
+        currentDimensions.width = Math.max(currentDimensions.width, compartmentDef.bbox().width)
+        currentDimensions.height += compartmentDef.bbox().height
+        currentDimensions.height += style["margin-bottom"]
+        return compartmentDef
+    }
+
+    // Creates a group with all the attributes or operations
+    function createAttributeOrOperationGroupDef(svg, items, cssClass) {
         let itemGroupDef = svg.group()
         let currentHeight = 0
         for (var i = 0; i < items.length; i++) {
@@ -204,8 +203,7 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
         return itemGroupDef
     }
 
-    // Creates a single attribute or operation line in the corresponding
-    // compartment
+    // Creates a single attribute or operation line
     function createAttributeOrOperationDef(svg, item, cssClass) {
         let text = visibilityStringToSymbol(item.visibility) + item.name
         return svg.text(text).addClass(cssClass)
