@@ -198,6 +198,9 @@ CodeSmithy.UMLWebWidget = { }
         // Creates a single attribute or operation line
         function createAttributeOrOperationDef(svg, item, cssClass) {
             let text = visibilityStringToSymbol(item.visibility) + item.name
+            if (item.return) {
+                text += " : " + item.return
+            }
             return svg.text(text).addClass(cssClass)
         }
 
