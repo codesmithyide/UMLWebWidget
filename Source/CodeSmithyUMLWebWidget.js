@@ -83,34 +83,36 @@ function UMLDiagram(settings) {
 
     }
 
-    function drawInheritanceRelationship (svg, classboxes, baseclass, derivedclass) {
-        let relationshipGroup = svg.group().addClass("UMLInheritanceRelationship")
+        // Draws an inheritance connector between two classes
+        function drawInheritanceRelationship (svg, classboxes, baseclass, derivedclass) {
+            let relationshipGroup = svg.group().addClass("UMLInheritanceRelationship")
         
-        let bbox1 = classboxes[baseclass].svg.bbox()
-        let bbox2 = classboxes[derivedclass].svg.bbox()
+            let bbox1 = classboxes[baseclass].svg.bbox()
+            let bbox2 = classboxes[derivedclass].svg.bbox()
 
-        let polygonDescription = "" + bbox1.cx + "," + (bbox1.y + bbox1.height) + " " +
-            (bbox1.cx - 10) + "," + (bbox1.y + bbox1.height + 12) + " " +
-            (bbox1.cx + 10) + "," + (bbox1.y + bbox1.height + 12)                
-        relationshipGroup.polygon(polygonDescription)
+            let polygonDescription = "" + bbox1.cx + "," + (bbox1.y + bbox1.height) + " " +
+                (bbox1.cx - 10) + "," + (bbox1.y + bbox1.height + 12) + " " +
+                (bbox1.cx + 10) + "," + (bbox1.y + bbox1.height + 12)                
+            relationshipGroup.polygon(polygonDescription)
 
-        relationshipGroup.line(bbox1.cx, bbox1.y + bbox1.height + 12, bbox2.cx, bbox2.y)
-    }
+            relationshipGroup.line(bbox1.cx, bbox1.y + bbox1.height + 12, bbox2.cx, bbox2.y)
+        }
 
-    function drawCompositionRelationship(svg, classboxes, containingclass, containedclass) {
-        let relationshipGroup = svg.group().addClass("UMLCompositionRelationship")
+        // Draws a composition connector between two classes
+        function drawCompositionRelationship(svg, classboxes, containingclass, containedclass) {
+            let relationshipGroup = svg.group().addClass("UMLCompositionRelationship")
 
-        let bbox1 = classboxes[containingclass].svg.bbox()
-        let bbox2 = classboxes[containedclass].svg.bbox()
+            let bbox1 = classboxes[containingclass].svg.bbox()
+            let bbox2 = classboxes[containedclass].svg.bbox()
 
-        let polygonDescription = "" + (bbox1.x + bbox1.width) + "," + bbox1.cy + " " +
-            (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy - 8) + " " +
-            (bbox1.x + bbox1.width + 20) + "," + bbox1.cy + " " +
-            (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy + 8)
-        relationshipGroup.polygon(polygonDescription)
+            let polygonDescription = "" + (bbox1.x + bbox1.width) + "," + bbox1.cy + " " +
+                (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy - 8) + " " +
+                (bbox1.x + bbox1.width + 20) + "," + bbox1.cy + " " +
+                (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy + 8)
+            relationshipGroup.polygon(polygonDescription)
               
-        relationshipGroup.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
-    }
+            relationshipGroup.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
+        }
 
     /////
     // Start of the CodeSmithy.UMLWebWidget.ClassBox class definition
