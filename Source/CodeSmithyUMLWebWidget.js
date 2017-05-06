@@ -120,9 +120,8 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
 
     var attributeDefs = []
     for (var i = 0; i < classInfo.attributes.length; i++) {
-      var attrItem = classInfo.attributes[i]
-      var attrText = CodeSmithy.UMLWebWidget.visibilityStringToSymbol(attrItem.visibility) + attrItem.name
-      var attributeDef = defs.text(attrText).addClass("UMLAttribute").move(style["margin-left"], classBoxHeight)
+      let attributeDef = CodeSmithy.UMLWebWidget.createAttributeOrOperationDef(defs, classInfo.attributes[i], "UMLAttribute")
+      attributeDef.move(style["margin-left"], classBoxHeight)
       attributeDefs.push(attributeDef)
       classBoxWidth = Math.max(classBoxWidth, attributeDef.bbox().width)
       classBoxHeight += attributeDef.bbox().height;
@@ -136,9 +135,8 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
 
     var operationDefs = []
     for (var i = 0; i < classInfo.operations.length; i++) {
-      var opItem = classInfo.operations[i]
-      var opText = visibilityStringToSymbol(opItem.visibility) + opItem.name
-      var operationDef = defs.text(opText).addClass("UMLOperation").move(style["margin-left"], classBoxHeight)
+      let operationDef = CodeSmithy.UMLWebWidget.createAttributeOrOperationDef(defs, classInfo.operations[i], "UMLOperation")
+      operationDef .move(style["margin-left"], classBoxHeight)
       operationDefs.push(operationDef)
       classBoxWidth = Math.max(classBoxWidth, operationDef.bbox().width)
       classBoxHeight += operationDef.bbox().height;
@@ -206,10 +204,15 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
 (function(ns) {
     ns.Diagram = UMLDiagram
 
+    ns.createAttributeOrOperationDef = function(defs, item, cssClass) {
+        let text = visibilityStringToSymbol(item.visibility) + item.name
+        return defs.text(text).addClass(cssClass)
+    }
+
     // Converts the visibility from the user string provided
     // in the input to the appropriate UML symbol for
     // visibility
-    ns.visibilityStringToSymbol = function(visibility) {
+    function visibilityStringToSymbol(visibility) {
         let stringToSymbolMap = {
             "public": "+ ",
             "protected": "# ",
