@@ -1,9 +1,15 @@
-// The constructor for the UMLDiagram object. This
+// Global namespace for CodeSmithy applications
+var CodeSmithy = CodeSmithy || { }
+
+// The namespace for the UMLWebWidget application
+CodeSmithy.UMLWebWidget = { }
+
+// The constructor for the Diagram object. This
 // the entry point for all the functionality provided
 // by the CodeSmithy UMLWebWidget.
 // - interactive: true if the user can edit the diagram online,
 //   false otherwise. Considered false if not provided.
-function UMLDiagram(interactive) {
+CodeSmithy.UMLWebWidget.Diagram = function(interactive) {
   if (interactive) {
     this.interactive = true
   } else {
@@ -211,3 +217,4 @@ function visibilityStringToSymbol(visibility) {
   }
   return symbol
 }
+
