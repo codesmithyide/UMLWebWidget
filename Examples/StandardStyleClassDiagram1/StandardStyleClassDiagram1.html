@@ -22,7 +22,7 @@
                   "attributes":
                     [
                       {
-                        "name": "m_attr1", "visibility": "public" 
+                        "name": "m_attr1", "visibility": "public"
                       },
                       {
                         "name": "m_attr2", "visibility": "protected" 
@@ -34,13 +34,13 @@
                   "operations":
                     [
                       { 
-                        "name": "method1()", "visibility": "public" 
+                        "name": "method1()", "visibility": "public", "return": "int"
                       },
                       { 
-                        "name": "method2()", "visibility": "protected" 
+                        "name": "method2()", "visibility": "protected", "return": "void"
                       },
                       { 
-                        "name": "method3()", "visibility": "private" 
+                        "name": "method3()", "visibility": "private", "return": "std::string"
                       }
 
                   ]
@@ -98,13 +98,13 @@
       }
     </div>
     <script>
-      var classDiagram = new UMLDiagram()
+      var classDiagram = new CodeSmithy.UMLWebWidget.Diagram()
 
       var layout = {
         "positions": {
           "MyBaseClass": { "x": 14, "y": 1 },
-          "MyDerivedClass": { "x": 3, "y": 220 },
-          "MyContainedClass": { "x": 200, "y": 220 }
+          "MyDerivedClass": { "x": 39, "y": 220 },
+          "MyContainedClass": { "x": 240, "y": 220 }
         }
       }
 
