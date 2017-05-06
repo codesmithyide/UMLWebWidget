@@ -101,8 +101,14 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
     // Start of the CodeSmithy.UMLWebWidget.ClassBox class definition
     //
     ns.ClassBox = function(svg, classDescription, interactive, classboxStyle, layout) {
+        
+        this.def = createDef(svg.defs(), classDescription, interactive, classboxStyle)
+        if (layout.positions[classDescription.name]) {
+            this.def.move(layout.positions[classDescription.name].x, layout.positions[classDescription.name].y)
+        }
+        this.svg = svg.use(this.def)
 
-        this.createDef = function(defs, classInfo, interactive, style) {
+        function createDef(defs, classInfo, interactive, style) {
             var self = this
 
             var classGroup = defs.group().addClass("UMLClass")
@@ -115,7 +121,7 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
 
             let currentDimensions = { 
                 width: 0,
-               height: 0
+                height: 0
             }
     
             currentDimensions.height = style["margin-top"]
@@ -149,25 +155,6 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
             classGroup.move(1,1)
 
             return classGroup
-        }
-
-        this.def = this.createDef(svg.defs(), classDescription, interactive, classboxStyle)
-        if (layout.positions[classDescription.name]) {
-            this.def.move(layout.positions[classDescription.name].x, layout.positions[classDescription.name].y)
-        }
-
-        this.svg = svg.use(this.def)
-
-        this.selected = false
-
-        this.toggle = function(el) {
-            if (this.selected) {
-                this.selectedClassBoxBorder.hide()
-                this.selected = false
-            } else {
-                this.selectedClassBoxBorder.show()
-                this.selected = true
-            }
         }
 
         function addCompartment(svg, currentDimensions, style, items, cssClass) {
