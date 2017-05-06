@@ -11,15 +11,17 @@ CodeSmithy.UMLWebWidget = { }
     //
     // This class is the entry point for all the functionality provided
     // by the CodeSmithy UMLWebWidget.
-    // - interactive: true if the user can edit the diagram online,
-    //   false otherwise. Considered false if not provided.
     ns.Diagram = function(settings) {
 
         this.Settings = function(settings) {
-            if (settings) {
-                this.interactive = true
-            } else {
-                this.interactive = false
+
+            this.canMove = false
+            this.canResive = false
+
+            if (settings.interactive) {
+                if (settings.interactive.canMove) {
+                  this.canMove = settings.interactive.canMove
+                }
             }
         }
 
@@ -29,6 +31,10 @@ CodeSmithy.UMLWebWidget = { }
         // format. This will then be parsed to create
         // the graphical form.
         this.diagramDescription = { }
+
+        // The list of all UML class boxes present on the
+        // diagram
+        this.classboxes = { }
 
         // Create a diagram from a div element in the HTML document.
         // The div element must contain a JSON object with the UML
@@ -53,10 +59,6 @@ CodeSmithy.UMLWebWidget = { }
             }
         }
 
-        // The list of all UML class boxes present on the
-        // diagram
-        this.classboxes = { }
-
         this.drawClassDiagram = function(svg, classDiagram, style, layout) {
             if (layout == null) {
                 layout = { }
@@ -68,7 +70,7 @@ CodeSmithy.UMLWebWidget = { }
             for (var i = 0; i < classDiagram.length; i++) {
                  let item = classDiagram[i]
                  if (item.class) {
-                     this.classboxes[item.class.name] = new ns.ClassBox(svg, item.class, this.settings.interactive, style.classbox, layout)
+                     this.classboxes[item.class.name] = new ns.ClassBox(svg, item.class, this.settings.canMove, style.classbox, layout)
                  } else if (item.relationship) {
                      let classbox1
                      let classbox2
@@ -95,25 +97,19 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.ClassBox class definition
     //
-    ns.ClassBox = function(svg, classDescription, interactive, classboxStyle, layout) {
+    ns.ClassBox = function(svg, classDescription, canMove, classboxStyle, layout) {
         
-        this.def = createDef(svg.defs(), classDescription, interactive, classboxStyle, layout)
+        this.def = createDef(svg.defs(), classDescription, canMove, classboxStyle, layout)
         this.svg = svg.use(this.def)
 
         // List of connectors that are connected to this class box
         this.connectors = [ ]
         
-        function createDef(defs, classInfo, interactive, style, layout) {
+        function createDef(defs, classInfo, canMove, style, layout) {
             var self = this
 
             var classGroup = defs.group().addClass("UMLClass")
     
-            if (interactive) {
-                classGroup.click(function() {
-                    self.toggle(this)
-                })
-            }
-
             let currentDimensions = { 
                 width: 0,
                 height: 0
@@ -151,6 +147,10 @@ CodeSmithy.UMLWebWidget = { }
 
             if (layout.positions[classDescription.name]) {
                 classGroup.move(layout.positions[classDescription.name].x, layout.positions[classDescription.name].y)
+            }
+
+            if (canMove) {
+                classGroup.draggable(true)
             }
 
             return classGroup
