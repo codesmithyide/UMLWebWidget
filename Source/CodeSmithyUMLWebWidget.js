@@ -132,28 +132,16 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
 
     currentDimensions.width += (style["margin-left"] + style["margin-right"])
     
-    var unselectedClassBoxBorder = classGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
-    this.selectedClassBoxBorder = classGroup.group().hide()
-    this.selectedClassBoxBorder.rect(10, 10).move(-5,-5)
-    this.selectedClassBoxBorder.rect(10, 10).move((currentDimensions.width/2) - 5, -5)
-    this.selectedClassBoxBorder.rect(10, 10).move(currentDimensions.width - 5, -5)
-    this.selectedClassBoxBorder.rect(10, 10).move(currentDimensions.width - 5, (currentDimensions.height/2) - 5)
-    this.selectedClassBoxBorder.rect(10, 10).move(currentDimensions.width - 5, currentDimensions.height - 5)
-    this.selectedClassBoxBorder.rect(10, 10).move((currentDimensions.width/2) - 5, currentDimensions.height - 5)
-    this.selectedClassBoxBorder.rect(10, 10).move(-5, currentDimensions.height - 5)
-    this.selectedClassBoxBorder.rect(10, 10).move(-5, (currentDimensions.height/2) - 5)
-
+    classGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
     classGroup.use(classNameDef)
+    classGroup.line(0, line1YPos, currentDimensions.width, line1YPos)
+    classGroup.use(attributeGroupDef)
+    classGroup.line(0, line2YPos, currentDimensions.width, line2YPos)
+    classGroup.use(operationGroupDef)
+
+    // Offset by 1 to leave some space because the border stroke width is 2
     classGroup.move(1,1)
 
-    classGroup.line(0, line1YPos, currentDimensions.width, line1YPos)
-
-    classGroup.use(attributeGroupDef)
-    
-    classGroup.line(0, line2YPos, currentDimensions.width, line2YPos)
-
-    classGroup.use(operationGroupDef)
-    
     return classGroup
   }
 
