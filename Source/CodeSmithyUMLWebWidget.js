@@ -118,15 +118,11 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
  
     classBoxHeight += style["margin-top"]
 
-    var attributeDefs = []
-    for (var i = 0; i < classInfo.attributes.length; i++) {
-      let attributeDef = CodeSmithy.UMLWebWidget.createAttributeOrOperationDef(defs, classInfo.attributes[i], "UMLAttribute")
-      attributeDef.move(style["margin-left"], classBoxHeight)
-      attributeDefs.push(attributeDef)
-      classBoxWidth = Math.max(classBoxWidth, attributeDef.bbox().width)
-      classBoxHeight += attributeDef.bbox().height;
-    }
+    let attributeGroupDef = CodeSmithy.UMLWebWidget.createAttributeOrOperationGroupDef(defs, classInfo.attributes, "UMLAttribute")
+    attributeGroupDef.dmove(style["margin-left"], classBoxHeight)
 
+    classBoxWidth = Math.max(classBoxWidth, attributeGroupDef.bbox().width)
+    classBoxHeight += attributeGroupDef.bbox().height
     classBoxHeight += style["margin-bottom"]
 
     var line2YPos = classBoxHeight;
@@ -167,10 +163,8 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
 
     classGroup.line(0, line1YPos, classBoxWidth, line1YPos)
 
-    for (var i = 0; i < attributeDefs.length; i++) {
-      classGroup.use(attributeDefs[i])
-    }
-
+    classGroup.use(attributeGroupDef)
+    
     classGroup.line(0, line2YPos, classBoxWidth, line2YPos)
 
     for (var i = 0; i < operationDefs.length; i++) {
@@ -204,9 +198,20 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
 (function(ns) {
     ns.Diagram = UMLDiagram
 
-    ns.createAttributeOrOperationDef = function(defs, item, cssClass) {
+    ns.createAttributeOrOperationGroupDef = function(svg, items, cssClass) {
+        let itemGroupDef = svg.group()
+        let currentHeight = 0
+        for (var i = 0; i < items.length; i++) {
+            let itemDef = this.createAttributeOrOperationDef(itemGroupDef, items[i], cssClass)
+            itemDef.move(0, currentHeight)
+            currentHeight += itemDef.bbox().height
+        }
+        return itemGroupDef
+    }
+
+    ns.createAttributeOrOperationDef = function(svg, item, cssClass) {
         let text = visibilityStringToSymbol(item.visibility) + item.name
-        return defs.text(text).addClass(cssClass)
+        return svg.text(text).addClass(cssClass)
     }
 
     // Converts the visibility from the user string provided
