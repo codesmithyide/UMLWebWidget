@@ -70,12 +70,18 @@ CodeSmithy.UMLWebWidget = { }
                  if (item.class) {
                      this.classboxes[item.class.name] = new ns.ClassBox(svg, item.class, this.settings.interactive, style.classbox, layout)
                  } else if (item.relationship) {
-                     let newConnector;
+                     let classbox1
+                     let classbox2
                      if (item.relationship.type == "inheritance") {
-                         newConnector = new ns.Connector(svg, item.relationship.type, this.classboxes[item.relationship.baseclass], this.classboxes[item.relationship.derivedclass])
+                         classbox1 = this.classboxes[item.relationship.baseclass]
+                         classbox2 = this.classboxes[item.relationship.derivedclass] 
                      } else if (item.relationship.type == "composition") {
-                         newConnector = new ns.Connector(svg, item.relationship.type, this.classboxes[item.relationship.containingclass], this.classboxes[item.relationship.containedclass])
+                         classbox1 = this.classboxes[item.relationship.containingclass]
+                         classbox2 = this.classboxes[item.relationship.containedclass]
                      }
+                     let newConnector = new ns.Connector(svg, item.relationship.type, classbox1, classbox2)
+                     classbox1.connectors.push(newConnector)
+                     classbox2.connectors.push(newConnector)
                      newConnector.draw(svg)
                  }
              }
@@ -94,6 +100,9 @@ CodeSmithy.UMLWebWidget = { }
         this.def = createDef(svg.defs(), classDescription, interactive, classboxStyle, layout)
         this.svg = svg.use(this.def)
 
+        // List of connectors that are connected to this class box
+        this.connectors = [ ]
+        
         function createDef(defs, classInfo, interactive, style, layout) {
             var self = this
 
