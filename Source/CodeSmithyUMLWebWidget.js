@@ -9,12 +9,8 @@ CodeSmithy.UMLWebWidget = { }
 // by the CodeSmithy UMLWebWidget.
 // - interactive: true if the user can edit the diagram online,
 //   false otherwise. Considered false if not provided.
-function UMLDiagram(interactive) {
-  if (interactive) {
-    this.interactive = true
-  } else {
-    this.interactive = false
-  }
+function UMLDiagram(settings) {
+  this.settings = new CodeSmithy.UMLWebWidget.Settings(settings)
 
   // The list of all UML class boxes present on the
   // diagram
@@ -39,6 +35,7 @@ function UMLDiagram(interactive) {
       }
     }
     if (diagramDescription.classdiagram) {
+      new CodeSmithy.UMLWebWidget.ClassDiagram()
       this.drawClassDiagram(svg, diagramDescription.classdiagram, style, layout)
     }
   }
@@ -54,7 +51,7 @@ function UMLDiagram(interactive) {
     for (var i = 0; i < classDiagram.length; i++) {
       var item = classDiagram[i]
       if (item.class) {
-        this.classboxes[item.class.name] = new CodeSmithy.UMLWebWidget.ClassBox(svg, item.class, this.interactive, style.classbox, layout)
+        this.classboxes[item.class.name] = new CodeSmithy.UMLWebWidget.ClassBox(svg, item.class, this.settings.interactive, style.classbox, layout)
       } else if (item.relationship) {
         if (item.relationship.type == "inheritance") {
           CodeSmithy.UMLWebWidget.drawInheritanceRelationship(svg, this.classboxes, item.relationship.baseclass, item.relationship.derivedclass)
@@ -69,6 +66,17 @@ function UMLDiagram(interactive) {
 
 (function(ns) {
     ns.Diagram = UMLDiagram
+
+    ns.Settings = function(settings) {
+        if (settings) {
+            this.interactive = true
+        } else {
+            this.interactive = false
+        }
+    }
+
+    ns.ClassDiagram = function() {
+    }
 
     ns.drawInheritanceRelationship = function(svg, classboxes, baseclass, derivedclass) {
         let relationshipGroup = svg.group().addClass("UMLInheritanceRelationship")
