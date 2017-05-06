@@ -102,13 +102,10 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
     //
     ns.ClassBox = function(svg, classDescription, interactive, classboxStyle, layout) {
         
-        this.def = createDef(svg.defs(), classDescription, interactive, classboxStyle)
-        if (layout.positions[classDescription.name]) {
-            this.def.move(layout.positions[classDescription.name].x, layout.positions[classDescription.name].y)
-        }
+        this.def = createDef(svg.defs(), classDescription, interactive, classboxStyle, layout)
         this.svg = svg.use(this.def)
 
-        function createDef(defs, classInfo, interactive, style) {
+        function createDef(defs, classInfo, interactive, style, layout) {
             var self = this
 
             var classGroup = defs.group().addClass("UMLClass")
@@ -153,6 +150,10 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
 
             // Offset by 1 to leave some space because the border stroke width is 2
             classGroup.move(1,1)
+
+            if (layout.positions[classDescription.name]) {
+                classGroup.move(layout.positions[classDescription.name].x, layout.positions[classDescription.name].y)
+            }
 
             return classGroup
         }
