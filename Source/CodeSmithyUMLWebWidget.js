@@ -99,75 +99,75 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
 
     ns.ClassBox = function(svg, classDescription, interactive, classboxStyle, layout) {
 
-  this.createDef = function(defs, classInfo, interactive, style) {
-    var self = this
+        this.createDef = function(defs, classInfo, interactive, style) {
+            var self = this
 
-    var classGroup = defs.group().addClass("UMLClass")
+            var classGroup = defs.group().addClass("UMLClass")
     
-    if (interactive) {
-      classGroup.click(function() {
-        self.toggle(this)
-      })
-    }
+            if (interactive) {
+                classGroup.click(function() {
+                    self.toggle(this)
+                })
+            }
 
-    let currentDimensions = { 
-      width: 0,
-      height: 0
-    }
+            let currentDimensions = { 
+                width: 0,
+               height: 0
+            }
     
-    currentDimensions.height = style["margin-top"]
+            currentDimensions.height = style["margin-top"]
 
-    var classNameDef = defs.text(classInfo.name).addClass("UMLClassName").move(style["margin-left"], currentDimensions.height)
-    currentDimensions.width = Math.max(currentDimensions.width, classNameDef.bbox().width)
-    currentDimensions.height += (classNameDef.bbox().height + style["margin-bottom"])
+            var classNameDef = defs.text(classInfo.name).addClass("UMLClassName").move(style["margin-left"], currentDimensions.height)
+            currentDimensions.width = Math.max(currentDimensions.width, classNameDef.bbox().width)
+            currentDimensions.height += (classNameDef.bbox().height + style["margin-bottom"])
 
-    var line1YPos = currentDimensions.height
-    let attributeGroupDef = CodeSmithy.UMLWebWidget.addCompartment(defs, currentDimensions, style, classInfo.attributes, "UMLAttribute")
+            var line1YPos = currentDimensions.height
+            let attributeGroupDef = CodeSmithy.UMLWebWidget.addCompartment(defs, currentDimensions, style, classInfo.attributes, "UMLAttribute")
  
-    var line2YPos = currentDimensions.height
-    let operationGroupDef = CodeSmithy.UMLWebWidget.addCompartment(defs, currentDimensions, style, classInfo.operations, "UMLOperation")
+            var line2YPos = currentDimensions.height
+            let operationGroupDef = CodeSmithy.UMLWebWidget.addCompartment(defs, currentDimensions, style, classInfo.operations, "UMLOperation")
 
-    // According to the UML standard the class name must be
-    // centered so center it
-    if (currentDimensions.width > classNameDef.bbox().width) {
-      classNameDef.dx((currentDimensions.width - classNameDef.bbox().width)/2)
-    }
+            // According to the UML standard the class name must be
+            // centered so center it
+            if (currentDimensions.width > classNameDef.bbox().width) {
+                classNameDef.dx((currentDimensions.width - classNameDef.bbox().width)/2)
+            }
 
-    currentDimensions.width += (style["margin-left"] + style["margin-right"])
+            currentDimensions.width += (style["margin-left"] + style["margin-right"])
     
-    classGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
-    classGroup.use(classNameDef)
-    classGroup.line(0, line1YPos, currentDimensions.width, line1YPos)
-    classGroup.use(attributeGroupDef)
-    classGroup.line(0, line2YPos, currentDimensions.width, line2YPos)
-    classGroup.use(operationGroupDef)
+            classGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
+            classGroup.use(classNameDef)
+            classGroup.line(0, line1YPos, currentDimensions.width, line1YPos)
+            classGroup.use(attributeGroupDef)
+            classGroup.line(0, line2YPos, currentDimensions.width, line2YPos)
+            classGroup.use(operationGroupDef)
 
-    // Offset by 1 to leave some space because the border stroke width is 2
-    classGroup.move(1,1)
+            // Offset by 1 to leave some space because the border stroke width is 2
+            classGroup.move(1,1)
 
-    return classGroup
-  }
+            return classGroup
+        }
 
-  this.def = this.createDef(svg.defs(), classDescription, interactive, classboxStyle)
-  if (layout.positions[classDescription.name]) {
-    this.def.move(layout.positions[classDescription.name].x, layout.positions[classDescription.name].y)
-  }
+        this.def = this.createDef(svg.defs(), classDescription, interactive, classboxStyle)
+        if (layout.positions[classDescription.name]) {
+            this.def.move(layout.positions[classDescription.name].x, layout.positions[classDescription.name].y)
+        }
 
-  this.svg = svg.use(this.def)
+        this.svg = svg.use(this.def)
 
-  this.selected = false
+        this.selected = false
 
-  this.toggle = function(el) {
-    if (this.selected) {
-      this.selectedClassBoxBorder.hide()
-      this.selected = false
-    } else {
-      this.selectedClassBoxBorder.show()
-      this.selected = true
+        this.toggle = function(el) {
+            if (this.selected) {
+                this.selectedClassBoxBorder.hide()
+                this.selected = false
+            } else {
+                this.selectedClassBoxBorder.show()
+                this.selected = true
+            }
+        }
+
     }
-  }
-
-}
 
     ns.addCompartment = function(svg, currentDimensions, style, items, cssClass) {
         currentDimensions.height += style["margin-top"]
