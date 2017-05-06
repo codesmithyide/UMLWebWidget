@@ -283,6 +283,8 @@ CodeSmithy.UMLWebWidget = { }
             let endPoint = getConnectionPoint(connectionPositions.end, bbox1)
 
             let polygonDescription
+            let middleX = 0
+            let middleY = 0
             switch (connectionPositions.end) {
                 case ConnectorPosition.TopCenter:
                     polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
@@ -290,7 +292,14 @@ CodeSmithy.UMLWebWidget = { }
                         endPoint.x + "," + (endPoint.y - 20) + " " +
                         (endPoint.x + 8) + "," + (endPoint.y - 10)
                     svg.polygon(polygonDescription)
-                    svg.line(endPoint.x, endPoint.y - 20, startPoint.x, startPoint.y)
+                    if (endPoint.x == startPoint.x) {
+                        svg.line(endPoint.x, endPoint.y - 20, startPoint.x, startPoint.y)
+                    } else {
+                        middleY = (endPoint.y - 20 + ((startPoint.y - endPoint.y + 20)/2))
+                        svg.line(endPoint.x, endPoint.y - 20, endPoint.x, middleY)
+                        svg.line(endPoint.x, middleY, startPoint.x, middleY)
+                        svg.line(startPoint.x, middleY, startPoint.x, startPoint.y)
+                    }
                     break
 
                 case ConnectorPosition.RightCenter:
@@ -299,7 +308,14 @@ CodeSmithy.UMLWebWidget = { }
                         (endPoint.x + 20) + "," + endPoint.y + " " +
                         (endPoint.x + 10) + "," + (endPoint.y + 8)
                     svg.polygon(polygonDescription)
-                    svg.line(endPoint.x + 20, endPoint.y, startPoint.x, startPoint.y)
+                    if (endPoint.y == startPoint.y) {
+                        svg.line(endPoint.x + 20, endPoint.y, startPoint.x, startPoint.y)
+                    } else {
+                        middleX = (endPoint.x + 20 + ((startPoint.x - endPoint.x - 20)/2))
+                        svg.line(endPoint.x + 20, endPoint.y, middleX, endPoint.y)
+                        svg.line(middleX, endPoint.y, middleX, startPoint.y)
+                        svg.line(middleX, startPoint.y, startPoint.x, startPoint.y)
+                    }
                     break
 
                 case ConnectorPosition.BottomCenter:
@@ -308,7 +324,14 @@ CodeSmithy.UMLWebWidget = { }
                         endPoint.x + "," + (endPoint.y + 20) + " " +
                         (endPoint.x + 8) + "," + (endPoint.y + 10)
                     svg.polygon(polygonDescription)
-                    svg.line(endPoint.x, endPoint.y + 20, startPoint.x, startPoint.y)
+                    if (endPoint.x == startPoint.x) {
+                        svg.line(endPoint.x, endPoint.y + 20, startPoint.x, startPoint.y)
+                    } else {
+                        middleY = (endPoint.y + 20 + ((startPoint.y - endPoint.y - 20)/2))
+                        svg.line(endPoint.x, endPoint.y + 20, endPoint.x, middleY)
+                        svg.line(endPoint.x, middleY, startPoint.x, middleY)
+                        svg.line(startPoint.x, middleY, startPoint.x, startPoint.y)
+                    }
                     break
 
                 case ConnectorPosition.LeftCenter:
@@ -317,7 +340,14 @@ CodeSmithy.UMLWebWidget = { }
                         (endPoint.x - 20) + "," + endPoint.y + " " +
                         (endPoint.x - 10) + "," + (endPoint.y + 8)
                     svg.polygon(polygonDescription)
-                    svg.line(endPoint.x - 20, endPoint.y, startPoint.x, startPoint.y)
+                    if (endPoint.y == startPoint.y) {
+                        svg.line(endPoint.x - 20, endPoint.y, startPoint.x, startPoint.y)
+                    } else {
+                        middleX = (endPoint.x - 20 - ((endPoint.x - 20 - startPoint.x)/2))
+                        svg.line(endPoint.x - 20, endPoint.y, middleX, endPoint.y)
+                        svg.line(middleX, endPoint.y, middleX, startPoint.y)
+                        svg.line(middleX, startPoint.y, startPoint.x, startPoint.y)
+                    }
                     break
             }
         }
