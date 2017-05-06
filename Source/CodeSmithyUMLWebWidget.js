@@ -71,31 +71,33 @@ function UMLDiagram(interactive) {
     ns.Diagram = UMLDiagram
 
     ns.drawInheritanceRelationship = function(svg, classboxes, baseclass, derivedclass) {
-  var g = svg.group().addClass("UMLInheritanceRelationship")
-  var bbox1 = classboxes[baseclass].svg.bbox()
-  var bbox2 = classboxes[derivedclass].svg.bbox()
+        let relationshipGroup = svg.group().addClass("UMLInheritanceRelationship")
+        
+        let bbox1 = classboxes[baseclass].svg.bbox()
+        let bbox2 = classboxes[derivedclass].svg.bbox()
 
-  var t1 = "" + bbox1.cx + "," + (bbox1.y + bbox1.height) + " " +
-    (bbox1.cx - 10) + "," + (bbox1.y + bbox1.height + 12) + " " +
-    (bbox1.cx + 10) + "," + (bbox1.y + bbox1.height + 12)                
-  g.polygon(t1)
+        let polygonDescription = "" + bbox1.cx + "," + (bbox1.y + bbox1.height) + " " +
+            (bbox1.cx - 10) + "," + (bbox1.y + bbox1.height + 12) + " " +
+            (bbox1.cx + 10) + "," + (bbox1.y + bbox1.height + 12)                
+        relationshipGroup.polygon(polygonDescription)
 
-  g.line(bbox1.cx, bbox1.y + bbox1.height + 12, bbox2.cx, bbox2.y)
-}
+        relationshipGroup.line(bbox1.cx, bbox1.y + bbox1.height + 12, bbox2.cx, bbox2.y)
+    }
 
-  ns.drawCompositionRelationship = function(svg, classboxes, containingclass, containedclass) {
-  var g = svg.group().addClass("UMLCompositionRelationship")
-  var bbox1 = classboxes[containingclass].svg.bbox()
-  var bbox2 = classboxes[containedclass].svg.bbox()
+    ns.drawCompositionRelationship = function(svg, classboxes, containingclass, containedclass) {
+        let relationshipGroup = svg.group().addClass("UMLCompositionRelationship")
 
-  var t1 = "" + (bbox1.x + bbox1.width) + "," + bbox1.cy + " " +
-    (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy - 8) + " " +
-    (bbox1.x + bbox1.width + 20) + "," + bbox1.cy + " " +
-    (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy + 8)
-  g.polygon(t1)
+        let bbox1 = classboxes[containingclass].svg.bbox()
+        let bbox2 = classboxes[containedclass].svg.bbox()
+
+        let polygonDescription = "" + (bbox1.x + bbox1.width) + "," + bbox1.cy + " " +
+            (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy - 8) + " " +
+            (bbox1.x + bbox1.width + 20) + "," + bbox1.cy + " " +
+            (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy + 8)
+        relationshipGroup.polygon(polygonDescription)
               
-  g.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
-}
+        relationshipGroup.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
+    }
 
     /////
     // Start of the CodeSmithy.UMLWebWidget.ClassBox class definition
@@ -158,6 +160,8 @@ function UMLDiagram(interactive) {
             return classGroup
         }
 
+        // Add an attribute or operation compartment and updates the current dimensions
+        // of the class box
         function addCompartment(svg, currentDimensions, style, items, cssClass) {
             currentDimensions.height += style["margin-top"]
             let compartmentDef = createAttributeOrOperationGroupDef(svg, items, cssClass)
