@@ -57,9 +57,9 @@ function UMLDiagram(interactive) {
         this.classboxes[item.class.name] = new CodeSmithy.UMLWebWidget.ClassBox(svg, item.class, this.interactive, style.classbox, layout)
       } else if (item.relationship) {
         if (item.relationship.type == "inheritance") {
-          drawInheritanceRelationship(svg, this.classboxes, item.relationship.baseclass, item.relationship.derivedclass)
+          CodeSmithy.UMLWebWidget.drawInheritanceRelationship(svg, this.classboxes, item.relationship.baseclass, item.relationship.derivedclass)
         } else if (item.relationship.type == "composition") {
-          drawCompositionRelationship(svg, this.classboxes, item.relationship.containingclass, item.relationship.containedclass)
+          CodeSmithy.UMLWebWidget.drawCompositionRelationship(svg, this.classboxes, item.relationship.containingclass, item.relationship.containedclass)
         }
       }
     }
@@ -67,7 +67,10 @@ function UMLDiagram(interactive) {
 
 }
 
-function drawInheritanceRelationship(svg, classboxes, baseclass, derivedclass) {
+(function(ns) {
+    ns.Diagram = UMLDiagram
+
+    ns.drawInheritanceRelationship = function(svg, classboxes, baseclass, derivedclass) {
   var g = svg.group().addClass("UMLInheritanceRelationship")
   var bbox1 = classboxes[baseclass].svg.bbox()
   var bbox2 = classboxes[derivedclass].svg.bbox()
@@ -80,7 +83,7 @@ function drawInheritanceRelationship(svg, classboxes, baseclass, derivedclass) {
   g.line(bbox1.cx, bbox1.y + bbox1.height + 12, bbox2.cx, bbox2.y)
 }
 
-function drawCompositionRelationship(svg, classboxes, containingclass, containedclass) {
+  ns.drawCompositionRelationship = function(svg, classboxes, containingclass, containedclass) {
   var g = svg.group().addClass("UMLCompositionRelationship")
   var bbox1 = classboxes[containingclass].svg.bbox()
   var bbox2 = classboxes[containedclass].svg.bbox()
@@ -93,9 +96,6 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
               
   g.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
 }
-
-(function(ns) {
-    ns.Diagram = UMLDiagram
 
     /////
     // Start of the CodeSmithy.UMLWebWidget.ClassBox class definition
