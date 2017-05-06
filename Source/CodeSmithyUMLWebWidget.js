@@ -6,21 +6,24 @@ CodeSmithy.UMLWebWidget = { }
 
 ;(function(ns) {
 
-    ns.Settings = function(settings) {
-        if (settings) {
-            this.interactive = true
-        } else {
-            this.interactive = false
-        }
-    }
-
-    // The constructor for the Diagram object. This
-    // the entry point for all the functionality provided
+    /////
+    // Start of the CodeSmithy.UMLWebWidget.Diagram class definition
+    //
+    // This class is the entry point for all the functionality provided
     // by the CodeSmithy UMLWebWidget.
     // - interactive: true if the user can edit the diagram online,
     //   false otherwise. Considered false if not provided.
     ns.Diagram = function(settings) {
-        this.settings = new ns.Settings(settings)
+
+        this.Settings = function(settings) {
+            if (settings) {
+                this.interactive = true
+            } else {
+                this.interactive = false
+            }
+        }
+
+        this.settings = new this.Settings(settings)
 
         // Create a diagram from a div element in the HTML document.
         // The div element must contain a JSON object with the UML
@@ -103,6 +106,9 @@ CodeSmithy.UMLWebWidget = { }
         }
 
     }
+    //
+    // End of the CodeSmithy.UMLWebWidget.Diagram class definition
+    /////
 
     /////
     // Start of the CodeSmithy.UMLWebWidget.ClassBox class definition
