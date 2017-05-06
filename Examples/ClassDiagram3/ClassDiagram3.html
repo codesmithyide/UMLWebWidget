@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Class Diagram 2</title>
+
+    <script src="../../ThirdParty/jquery-3.2.1.min.js"></script>
+    <script src="../../ThirdParty/svg.min.js"></script>
+    <script src="../../Source/CodeSmithyUMLWebWidget.js"></script>
+
+    <link rel="stylesheet" href="../../StyleSheets/CodeSmithyUMLWebWidget.css">
+  </head>
+  <body>
+    <p>The following diagram is a class diagram showing inheritance and composition relationships.</p>
+    <div id="diagram1" class="CodeSmithyUMLWebWidget">
+      { 
+        "classdiagram":
+          [
+            { 
+              "class":
+                {
+                  "name": "MyBaseClass",
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr1", "visibility": "protected" 
+                      }
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "MyDerivedClass",
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr2", "visibility": "private" 
+                      },
+                      {
+                        "name": "m_attr3", "visibility": "private" 
+                      }
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "MyContainedClass1",
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr4", "visibility": "private" 
+                      }
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "MyContainedClass2",
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr5", "visibility": "public" 
+                      }
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "inheritance",
+                  "baseclass": "MyBaseClass",
+                  "derivedclass": "MyDerivedClass"
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "composition",
+                  "containingclass": "MyDerivedClass",
+                  "containedclass": "MyContainedClass1"
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "composition",
+                  "containingclass": "MyDerivedClass",
+                  "containedclass": "MyContainedClass2"
+                }
+            }
+          ]
+      }
+    </div>
+    <script>
+      var classDiagram = new CodeSmithy.UMLWebWidget.Diagram({ height: 400 })
+
+      var layout = {
+        "positions": {
+          "MyBaseClass": { "x": 12, "y": 1 },
+          "MyDerivedClass": { "x": 220, "y": 1 },
+          "MyContainedClass1": { "x": 100, "y": 160 },
+          "MyContainedClass2": { "x": 313, "y": 160 },
+        }
+      }
+
+      classDiagram.createFromDiv("diagram1", layout)
+    </script>
+  </body>
+</html>

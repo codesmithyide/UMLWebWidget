@@ -265,12 +265,40 @@ CodeSmithy.UMLWebWidget = { }
             let startPoint = getConnectionPoint(connectionPositions.start, bbox2)
             let endPoint = getConnectionPoint(connectionPositions.end, bbox1)
 
-            let polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
-                (endPoint.x - 10) + "," + (endPoint.y + 12) + " " +
-                (endPoint.x + 10) + "," + (endPoint.y + 12)                
-            svg.polygon(polygonDescription)
+            let polygonDescription
+            switch (connectionPositions.end) {
+                case ConnectorPosition.TopCenter:
+                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
+                        (endPoint.x - 10) + "," + (endPoint.y - 12) + " " +
+                        (endPoint.x + 10) + "," + (endPoint.y - 12)                
+                    svg.polygon(polygonDescription)
+                    svg.line(endPoint.x, endPoint.y - 12, startPoint.x, startPoint.y)
+                    break
 
-            svg.line(endPoint.x, endPoint.y + 12, startPoint.x, startPoint.y)
+                case ConnectorPosition.RightCenter:
+                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
+                        (endPoint.x + 12) + "," + (endPoint.y - 10) + " " +
+                        (endPoint.x + 12) + "," + (endPoint.y + 10)                
+                    svg.polygon(polygonDescription)
+                    svg.line(endPoint.x + 12, endPoint.y, startPoint.x, startPoint.y)
+                    break
+
+                case ConnectorPosition.BottomCenter:
+                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
+                        (endPoint.x - 10) + "," + (endPoint.y + 12) + " " +
+                        (endPoint.x + 10) + "," + (endPoint.y + 12)                
+                    svg.polygon(polygonDescription)
+                    svg.line(endPoint.x, endPoint.y + 12, startPoint.x, startPoint.y)
+                    break
+
+                case ConnectorPosition.LeftCenter:
+                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
+                        (endPoint.x - 12) + "," + (endPoint.y - 10) + " " +
+                        (endPoint.x - 12) + "," + (endPoint.y + 10)                
+                    svg.polygon(polygonDescription)
+                    svg.line(endPoint.x - 12, endPoint.y, startPoint.x, startPoint.y)
+                    break
+            }
         }
 
         // Draws a composition connector between two classes
