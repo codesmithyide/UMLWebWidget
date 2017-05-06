@@ -78,25 +78,25 @@ CodeSmithy.UMLWebWidget = { }
             }
 
             for (var i = 0; i < classDiagram.length; i++) {
-                 let item = classDiagram[i]
-                 if (item.class) {
-                     this.classboxes[item.class.name] = new ns.ClassBox(svg, item.class, this.settings.canMove, style.classbox, layout)
-                 } else if (item.relationship) {
-                     let classbox1
-                     let classbox2
-                     if (item.relationship.type == "inheritance") {
-                         classbox1 = this.classboxes[item.relationship.baseclass]
-                         classbox2 = this.classboxes[item.relationship.derivedclass] 
-                     } else if (item.relationship.type == "composition") {
-                         classbox1 = this.classboxes[item.relationship.containingclass]
-                         classbox2 = this.classboxes[item.relationship.containedclass]
-                     }
-                     let newConnector = new ns.Connector(svg, item.relationship.type, classbox1, classbox2)
-                     classbox1.connectors.push(newConnector)
-                     classbox2.connectors.push(newConnector)
-                     newConnector.draw()
-                 }
-             }
+                let item = classDiagram[i]
+                if (item.class) {
+                    this.classboxes[item.class.name] = new ns.ClassBox(svg, item.class, this.settings.canMove, style.classbox, layout)
+                } else if (item.relationship) {
+                    let classbox1
+                    let classbox2
+                    if (item.relationship.type == "inheritance") {
+                        classbox1 = this.classboxes[item.relationship.baseclass]
+                        classbox2 = this.classboxes[item.relationship.derivedclass] 
+                    } else if (item.relationship.type == "composition") {
+                        classbox1 = this.classboxes[item.relationship.containingclass]
+                        classbox2 = this.classboxes[item.relationship.containedclass]
+                    }
+                    let newConnector = new ns.Connector(svg, item.relationship.type, classbox1, classbox2)
+                    classbox1.connectors.push(newConnector)
+                    classbox2.connectors.push(newConnector)
+                    newConnector.draw()
+                }
+            }
         }
 
     }
@@ -167,6 +167,9 @@ CodeSmithy.UMLWebWidget = { }
 
             if (canMove) {
                 classGroup.draggable(true)
+                classGroup.on('dragmove.namespace', function(evt) {
+                    self.fire('positionchanged')
+                })
                 classGroup.on('dragend.namespace', function(evt) {
                     self.fire('positionchanged')
                 })
@@ -258,12 +261,16 @@ CodeSmithy.UMLWebWidget = { }
             let bbox1 = baseclassbox.svg.bbox()
             let bbox2 = derivedclassbox.svg.bbox()
 
-            let polygonDescription = "" + bbox1.cx + "," + (bbox1.y + bbox1.height) + " " +
-                (bbox1.cx - 10) + "," + (bbox1.y + bbox1.height + 12) + " " +
-                (bbox1.cx + 10) + "," + (bbox1.y + bbox1.height + 12)                
+            let connectionPositions = getConnectionPositions(bbox1, bbox2)
+            let startPoint = getConnectionPoint(connectionPositions.start, bbox2)
+            let endPoint = getConnectionPoint(connectionPositions.end, bbox1)
+
+            let polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
+                (endPoint.x - 10) + "," + (endPoint.y + 12) + " " +
+                (endPoint.x + 10) + "," + (endPoint.y + 12)                
             svg.polygon(polygonDescription)
 
-            svg.line(bbox1.cx, bbox1.y + bbox1.height + 12, bbox2.cx, bbox2.y)
+            svg.line(endPoint.x, endPoint.y + 12, startPoint.x, startPoint.y)
         }
 
         // Draws a composition connector between two classes
@@ -271,13 +278,110 @@ CodeSmithy.UMLWebWidget = { }
             let bbox1 = containingclassbox.svg.bbox()
             let bbox2 = containedclassbox.svg.bbox()
 
-            let polygonDescription = "" + (bbox1.x + bbox1.width) + "," + bbox1.cy + " " +
-                (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy - 8) + " " +
-                (bbox1.x + bbox1.width + 20) + "," + bbox1.cy + " " +
-                (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy + 8)
-            svg.polygon(polygonDescription)
-              
-            svg.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
+            let connectionPositions = getConnectionPositions(bbox1, bbox2)
+            let startPoint = getConnectionPoint(connectionPositions.start, bbox2)
+            let endPoint = getConnectionPoint(connectionPositions.end, bbox1)
+
+            let polygonDescription
+            switch (connectionPositions.end) {
+                case ConnectorPosition.TopCenter:
+                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
+                        (endPoint.x - 8) + "," + (endPoint.y - 10) + " " +
+                        endPoint.x + "," + (endPoint.y - 20) + " " +
+                        (endPoint.x + 8) + "," + (endPoint.y - 10)
+                    svg.polygon(polygonDescription)
+                    svg.line(endPoint.x, endPoint.y - 20, startPoint.x, startPoint.y)
+                    break
+
+                case ConnectorPosition.RightCenter:
+                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
+                        (endPoint.x + 10) + "," + (endPoint.y - 8) + " " +
+                        (endPoint.x + 20) + "," + endPoint.y + " " +
+                        (endPoint.x + 10) + "," + (endPoint.y + 8)
+                    svg.polygon(polygonDescription)
+                    svg.line(endPoint.x + 20, endPoint.y, startPoint.x, startPoint.y)
+                    break
+
+                case ConnectorPosition.BottomCenter:
+                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
+                        (endPoint.x - 8) + "," + (endPoint.y + 10) + " " +
+                        endPoint.x + "," + (endPoint.y + 20) + " " +
+                        (endPoint.x + 8) + "," + (endPoint.y + 10)
+                    svg.polygon(polygonDescription)
+                    svg.line(endPoint.x, endPoint.y + 20, startPoint.x, startPoint.y)
+                    break
+
+                case ConnectorPosition.LeftCenter:
+                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
+                        (endPoint.x - 10) + "," + (endPoint.y - 8) + " " +
+                        (endPoint.x - 20) + "," + endPoint.y + " " +
+                        (endPoint.x - 10) + "," + (endPoint.y + 8)
+                    svg.polygon(polygonDescription)
+                    svg.line(endPoint.x - 20, endPoint.y, startPoint.x, startPoint.y)
+                    break
+            }
+        }
+
+        var ConnectorPosition = {
+            TopCenter: 0,
+            TopRight: 1,
+            RightCenter: 2,
+            BottomRight: 3,
+            BottomCenter: 4,
+            BottomLeft: 5,
+            LeftCenter: 6,
+            TopLeft: 7
+        }
+
+        function getConnectionPositions(boundingbox1, boundingbox2) {
+            let result = { 
+                start: ConnectorPosition.TopCenter,
+                end: ConnectorPosition.TopCenter
+            }
+
+            if ((boundingbox1.y + boundingbox1.height) < boundingbox2.y) {
+                result.start = ConnectorPosition.TopCenter
+                result.end = ConnectorPosition.BottomCenter
+            } else if ((boundingbox2.y + boundingbox2.height) < boundingbox1.y) {
+                result.start = ConnectorPosition.BottomCenter
+                result.end = ConnectorPosition.TopCenter
+            } else if ((boundingbox1.x + boundingbox1.width) < boundingbox2.x) {
+                result.start = ConnectorPosition.LeftCenter
+                result.end = ConnectorPosition.RightCenter
+            } else if ((boundingbox2.x + boundingbox2.width) < boundingbox1.x) {
+                result.start = ConnectorPosition.RightCenter
+                result.end = ConnectorPosition.LeftCenter
+            }
+
+            return result
+        }
+
+        // Gets one of the predefined positions for connection
+        // points on a bounding box.
+        function getConnectionPoint(position, boundingbox) {
+            let result = { x: 0, y: 0 }
+            switch (position) {
+                case ConnectorPosition.TopCenter:
+                    result.x = boundingbox.cx
+                    result.y = boundingbox.y
+                    break
+
+                case ConnectorPosition.RightCenter:
+                    result.x = (boundingbox.x + boundingbox.width)
+                    result.y = boundingbox.cy
+                    break
+
+                case ConnectorPosition.BottomCenter:
+                    result.x = boundingbox.cx
+                    result.y = (boundingbox.y + boundingbox.height)
+                    break
+
+                case ConnectorPosition.LeftCenter:
+                    result.x = boundingbox.x
+                    result.y = boundingbox.cy
+                    break
+            }
+            return result
         }
 
     }
