@@ -54,7 +54,7 @@ function UMLDiagram(interactive) {
     for (var i = 0; i < classDiagram.length; i++) {
       var item = classDiagram[i]
       if (item.class) {
-        this.classboxes[item.class.name] = new ClassBox(svg, item.class, this.interactive, style.classbox, layout)
+        this.classboxes[item.class.name] = new CodeSmithy.UMLWebWidget.ClassBox(svg, item.class, this.interactive, style.classbox, layout)
       } else if (item.relationship) {
         if (item.relationship.type == "inheritance") {
           drawInheritanceRelationship(svg, this.classboxes, item.relationship.baseclass, item.relationship.derivedclass)
@@ -94,7 +94,10 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
   g.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
 }
 
-function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
+(function(ns) {
+    ns.Diagram = UMLDiagram
+
+    ns.ClassBox = function(svg, classDescription, interactive, classboxStyle, layout) {
 
   this.createDef = function(defs, classInfo, interactive, style) {
     var self = this
@@ -165,9 +168,6 @@ function ClassBox(svg, classDescription, interactive, classboxStyle, layout) {
   }
 
 }
-
-(function(ns) {
-    ns.Diagram = UMLDiagram
 
     ns.addCompartment = function(svg, currentDimensions, style, items, cssClass) {
         currentDimensions.height += style["margin-top"]
