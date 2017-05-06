@@ -15,10 +15,18 @@ CodeSmithy.UMLWebWidget = { }
 
         this.Settings = function(settings) {
 
+            this.width = 600
+            this.height = 200
             this.canMove = false
             this.canResive = false
 
             if (settings) {
+                if (settings.width) {
+                    this.width = settings.width
+                }
+                if (settings.height) {
+                    this.height = settings.height
+                }
                 if (settings.interactive) {
                     if (settings.interactive.canMove) {
                         this.canMove = settings.interactive.canMove
@@ -47,7 +55,7 @@ CodeSmithy.UMLWebWidget = { }
         this.createFromDiv = function(divId, layout) {
             this.diagramDescription = JSON.parse($('#' + divId).text())
             $('#' + divId).empty()
-            var svg = SVG(divId).size(400, 400)
+            var svg = SVG(divId).size(this.settings.width, this.settings.height)
             var style = { 
                 "classbox": {
                     "margin-left": 12,
