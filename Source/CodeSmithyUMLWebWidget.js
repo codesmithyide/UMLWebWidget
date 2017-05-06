@@ -66,45 +66,12 @@ CodeSmithy.UMLWebWidget = { }
                      this.classboxes[item.class.name] = new ns.ClassBox(svg, item.class, this.settings.interactive, style.classbox, layout)
                  } else if (item.relationship) {
                      if (item.relationship.type == "inheritance") {
-                         new ns.Connector(svg, item.relationship.type)
-                         drawInheritanceRelationship(svg, this.classboxes[item.relationship.baseclass], this.classboxes[item.relationship.derivedclass])
+                         new ns.Connector(svg, item.relationship.type, this.classboxes[item.relationship.baseclass], this.classboxes[item.relationship.derivedclass])
                      } else if (item.relationship.type == "composition") {
-                         new ns.Connector(svg, item.relationship.type)
-                         drawCompositionRelationship(svg, this.classboxes[item.relationship.containingclass], this.classboxes[item.relationship.containedclass])
+                         new ns.Connector(svg, item.relationship.type, this.classboxes[item.relationship.containingclass], this.classboxes[item.relationship.containedclass])
                      }
                  }
              }
-        }
-
-        // Draws an inheritance connector between two classes
-        function drawInheritanceRelationship (svg, baseclassbox, derivedclassbox) {
-            let relationshipGroup = svg.group().addClass("UMLInheritanceRelationship")
-        
-            let bbox1 = baseclassbox.svg.bbox()
-            let bbox2 = derivedclassbox.svg.bbox()
-
-            let polygonDescription = "" + bbox1.cx + "," + (bbox1.y + bbox1.height) + " " +
-                (bbox1.cx - 10) + "," + (bbox1.y + bbox1.height + 12) + " " +
-                (bbox1.cx + 10) + "," + (bbox1.y + bbox1.height + 12)                
-            relationshipGroup.polygon(polygonDescription)
-
-            relationshipGroup.line(bbox1.cx, bbox1.y + bbox1.height + 12, bbox2.cx, bbox2.y)
-        }
-
-        // Draws a composition connector between two classes
-        function drawCompositionRelationship(svg, containingclassbox, containedclassbox) {
-            let relationshipGroup = svg.group().addClass("UMLCompositionRelationship")
-
-            let bbox1 = containingclassbox.svg.bbox()
-            let bbox2 = containedclassbox.svg.bbox()
-
-            let polygonDescription = "" + (bbox1.x + bbox1.width) + "," + bbox1.cy + " " +
-                (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy - 8) + " " +
-                (bbox1.x + bbox1.width + 20) + "," + bbox1.cy + " " +
-                (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy + 8)
-            relationshipGroup.polygon(polygonDescription)
-              
-            relationshipGroup.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
         }
 
     }
@@ -226,7 +193,45 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.Connector class definition
     //
-    ns.Connector = function(svg, type) {
+    ns.Connector = function(svg, type, classbox1, classbox2) {
+
+        if (type == "inheritance") {
+            drawInheritanceRelationship(svg, classbox1, classbox2)
+        } else if (type == "composition") {
+            drawCompositionRelationship(svg, classbox1, classbox2)
+        }
+
+        // Draws an inheritance connector between two classes
+        function drawInheritanceRelationship(svg, baseclassbox, derivedclassbox) {
+            let relationshipGroup = svg.group().addClass("UMLInheritanceRelationship")
+        
+            let bbox1 = baseclassbox.svg.bbox()
+            let bbox2 = derivedclassbox.svg.bbox()
+
+            let polygonDescription = "" + bbox1.cx + "," + (bbox1.y + bbox1.height) + " " +
+                (bbox1.cx - 10) + "," + (bbox1.y + bbox1.height + 12) + " " +
+                (bbox1.cx + 10) + "," + (bbox1.y + bbox1.height + 12)                
+            relationshipGroup.polygon(polygonDescription)
+
+            relationshipGroup.line(bbox1.cx, bbox1.y + bbox1.height + 12, bbox2.cx, bbox2.y)
+        }
+
+        // Draws a composition connector between two classes
+        function drawCompositionRelationship(svg, containingclassbox, containedclassbox) {
+            let relationshipGroup = svg.group().addClass("UMLCompositionRelationship")
+
+            let bbox1 = containingclassbox.svg.bbox()
+            let bbox2 = containedclassbox.svg.bbox()
+
+            let polygonDescription = "" + (bbox1.x + bbox1.width) + "," + bbox1.cy + " " +
+                (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy - 8) + " " +
+                (bbox1.x + bbox1.width + 20) + "," + bbox1.cy + " " +
+                (bbox1.x + bbox1.width + 10) + "," + (bbox1.cy + 8)
+            relationshipGroup.polygon(polygonDescription)
+              
+            relationshipGroup.line(bbox1.x + bbox1.width + 20, bbox1.cy, bbox2.x, bbox2.cy)
+        }
+
     }
     //
     // End of the CodeSmithy.UMLWebWidget.Connector class definition
