@@ -5,6 +5,7 @@
 
     <script src="../../ThirdParty/jquery-3.2.1.min.js"></script>
     <script src="../../ThirdParty/svg.min.js"></script>
+    <script src="../../ThirdParty/svg.draggable.js"></script>
     <script src="../../Source/CodeSmithyUMLWebWidget.js"></script>
 
     <link rel="stylesheet" href="../../StyleSheets/CodeSmithyUMLWebWidget.css">
@@ -84,11 +85,11 @@
       }
     </div>
     <script>
-      var classDiagram = new UMLDiagram(true)
+      var classDiagram = new CodeSmithy.UMLWebWidget.Diagram({ width: 800, height: 400, interactive: { canMove: true } })
 
       var layout = {
         "positions": {
-          "MyBaseClass": { "x": 19, "y": 10 },
+          "MyBaseClass": { "x": 21, "y": 10 },
           "MyDerivedClass": { "x": 10, "y": 125 },
           "MyContainedClass": { "x": 220, "y": 125 },
         }
