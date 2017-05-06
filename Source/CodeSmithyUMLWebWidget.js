@@ -169,44 +169,44 @@ function drawCompositionRelationship(svg, classboxes, containingclass, contained
 
     }
 
-    ns.addCompartment = function(svg, currentDimensions, style, items, cssClass) {
-        currentDimensions.height += style["margin-top"]
-        let compartmentDef = createAttributeOrOperationGroupDef(svg, items, cssClass)
-        compartmentDef.dmove(style["margin-left"], currentDimensions.height)
-        currentDimensions.width = Math.max(currentDimensions.width, compartmentDef.bbox().width)
-        currentDimensions.height += compartmentDef.bbox().height
-        currentDimensions.height += style["margin-bottom"]
-        return compartmentDef
-    }
-
-    // Creates a group with all the attributes or operations
-    function createAttributeOrOperationGroupDef(svg, items, cssClass) {
-        let itemGroupDef = svg.group()
-        let currentHeight = 0
-        for (var i = 0; i < items.length; i++) {
-            let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i], cssClass)
-            itemDef.move(0, currentHeight)
-            currentHeight += itemDef.bbox().height
+        ns.addCompartment = function(svg, currentDimensions, style, items, cssClass) {
+            currentDimensions.height += style["margin-top"]
+            let compartmentDef = createAttributeOrOperationGroupDef(svg, items, cssClass)
+            compartmentDef.dmove(style["margin-left"], currentDimensions.height)
+            currentDimensions.width = Math.max(currentDimensions.width, compartmentDef.bbox().width)
+            currentDimensions.height += compartmentDef.bbox().height
+            currentDimensions.height += style["margin-bottom"]
+            return compartmentDef
         }
-        return itemGroupDef
-    }
 
-    // Creates a single attribute or operation line
-    function createAttributeOrOperationDef(svg, item, cssClass) {
-        let text = visibilityStringToSymbol(item.visibility) + item.name
-        return svg.text(text).addClass(cssClass)
-    }
-
-    // Converts the visibility from the user string provided
-    // in the input to the appropriate UML symbol for
-    // visibility
-    function visibilityStringToSymbol(visibility) {
-        let stringToSymbolMap = {
-            "public": "+ ",
-            "protected": "# ",
-            "private": "- "
+        // Creates a group with all the attributes or operations
+        function createAttributeOrOperationGroupDef(svg, items, cssClass) {
+            let itemGroupDef = svg.group()
+            let currentHeight = 0
+            for (var i = 0; i < items.length; i++) {
+                let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i], cssClass)
+                itemDef.move(0, currentHeight)
+                currentHeight += itemDef.bbox().height
+            }
+            return itemGroupDef
         }
-        return stringToSymbolMap[visibility]
-    }
+
+        // Creates a single attribute or operation line
+        function createAttributeOrOperationDef(svg, item, cssClass) {
+            let text = visibilityStringToSymbol(item.visibility) + item.name
+            return svg.text(text).addClass(cssClass)
+        }
+
+        // Converts the visibility from the user string provided
+        // in the input to the appropriate UML symbol for
+        // visibility
+        function visibilityStringToSymbol(visibility) {
+            let stringToSymbolMap = {
+                "public": "+ ",
+                "protected": "# ",
+                "private": "- "
+            }
+            return stringToSymbolMap[visibility]
+        }
 
 })(CodeSmithy.UMLWebWidget)
