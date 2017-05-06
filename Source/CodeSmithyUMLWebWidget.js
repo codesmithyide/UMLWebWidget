@@ -25,6 +25,11 @@ CodeSmithy.UMLWebWidget = { }
 
         this.settings = new this.Settings(settings)
 
+        // The description of the UML diagram in JSON
+        // format. This will then be parsed to create
+        // the graphical form.
+        this.diagramDescription = { }
+
         // Create a diagram from a div element in the HTML document.
         // The div element must contain a JSON object with the UML
         // diagram information. The contents of the div will be replaced
@@ -32,7 +37,7 @@ CodeSmithy.UMLWebWidget = { }
         // - divId: this is the id of the div element to use, it should be the id
         //   without any '#' prefix.
         this.createFromDiv = function(divId, layout) {
-            var diagramDescription = JSON.parse($('#' + divId).text())
+            this.diagramDescription = JSON.parse($('#' + divId).text())
             $('#' + divId).empty()
             var svg = SVG(divId).size(400, 400)
             var style = { 
@@ -43,8 +48,8 @@ CodeSmithy.UMLWebWidget = { }
                     "margin-bottom": 9
                 }
             }
-            if (diagramDescription.classdiagram) {
-                this.drawClassDiagram(svg, diagramDescription.classdiagram, style, layout)
+            if (this.diagramDescription.classdiagram) {
+                this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
             }
         }
 
