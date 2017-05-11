@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Class Diagram 4</title>
+
+    <script src="../../ThirdParty/jquery-3.2.1.min.js"></script>
+    <script src="../../ThirdParty/svg.min.js"></script>
+    <script src="../../Source/CodeSmithyUMLWebWidget.js"></script>
+
+    <link rel="stylesheet" href="../../StyleSheets/CodeSmithyUMLWebWidget.css">
+  </head>
+  <body>
+    <p>The following diagram is a class diagram showing inheritance and composition relationships.</p>
+    <div id="diagram1" class="CodeSmithyUMLWebWidget">
+      { 
+        "classdiagram":
+          [
+            { 
+              "class":
+                {
+                  "name": "Animal",
+                  "attributes":
+                    [
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "Cat",
+                  "attributes":
+                    [
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "SiameseCat",
+                  "attributes":
+                    [
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "PersianCat",
+                  "attributes":
+                    [
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "Dog",
+                  "attributes":
+                    [
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "IrishSetter",
+                  "attributes":
+                    [
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "GermanShepherd",
+                  "attributes":
+                    [
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "inheritance",
+                  "baseclass": "Animal",
+                  "derivedclass": "Cat"
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "inheritance",
+                  "baseclass": "Cat",
+                  "derivedclass": "SiameseCat"
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "inheritance",
+                  "baseclass": "Cat",
+                  "derivedclass": "PersianCat"
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "inheritance",
+                  "baseclass": "Animal",
+                  "derivedclass": "Dog"
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "inheritance",
+                  "baseclass": "Dog",
+                  "derivedclass": "IrishSetter"
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "inheritance",
+                  "baseclass": "Dog",
+                  "derivedclass": "GermanShepherd"
+                }
+            }
+          ]
+      }
+    </div>
+    <script>
+      var classDiagram = new CodeSmithy.UMLWebWidget.Diagram({ height: 300 })
+
+      var layout = {
+        "classboxpositions": {
+          "Animal": { "x": 192, "y": 1 },
+          "Cat": { "x": 160, "y": 125 },
+          "SiameseCat": { "x": 1, "y": 65 },
+          "PersianCat": { "x": 1, "y": 165 },
+          "Dog": { "x": 250, "y": 125 },
+          "IrishSetter": { "x": 360, "y": 65 },
+          "GermanShepherd": { "x": 360, "y": 165 },
+        }
+      }
+
+      classDiagram.createFromDiv("diagram1", layout)
+    </script>
+  </body>
+</html>
