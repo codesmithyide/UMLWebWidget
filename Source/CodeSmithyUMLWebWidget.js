@@ -73,8 +73,11 @@ CodeSmithy.UMLWebWidget = { }
             if (layout == null) {
                 layout = { }
             }
-            if (layout.positions == null) {
-                layout.positions = { }
+            if (layout.classboxpositions == null) {
+                layout.classboxpositions = { }
+            }
+            if (layout.connectorpositions == null) {
+                layout.connectorpositions = { }
             }
 
             for (var i = 0; i < classDiagram.length; i++) {
@@ -87,11 +90,11 @@ CodeSmithy.UMLWebWidget = { }
                     if (item.relationship.type == "inheritance") {
                         classbox1 = this.classboxes[item.relationship.baseclass]
                         classbox2 = this.classboxes[item.relationship.derivedclass] 
-                    } else if (item.relationship.type == "composition") {
+                    } else if ((item.relationship.type == "composition") || (item.relationship.type == "aggregation")) {
                         classbox1 = this.classboxes[item.relationship.containingclass]
                         classbox2 = this.classboxes[item.relationship.containedclass]
                     }
-                    let newConnector = new ns.Connector(svg, item.relationship.type, classbox1, classbox2)
+                    let newConnector = new ns.Connector(svg, item.relationship.type, classbox1, classbox2, layout)
                     classbox1.connectors.push(newConnector)
                     classbox2.connectors.push(newConnector)
                     newConnector.draw()
@@ -109,6 +112,7 @@ CodeSmithy.UMLWebWidget = { }
     //
     ns.ClassBox = function(svg, classDescription, canMove, classboxStyle, layout) {
         
+        this.classDescription = classDescription
         this.def = createDef(this, svg.defs(), classDescription, canMove, classboxStyle, layout)
         this.svg = svg.use(this.def)
 
@@ -161,8 +165,8 @@ CodeSmithy.UMLWebWidget = { }
             // Offset by 1 to leave some space because the border stroke width is 2
             classGroup.move(1,1)
 
-            if (layout.positions[classDescription.name]) {
-                classGroup.move(layout.positions[classDescription.name].x, layout.positions[classDescription.name].y)
+            if (layout.classboxpositions[classDescription.name]) {
+                classGroup.move(layout.classboxpositions[classDescription.name].x, layout.classboxpositions[classDescription.name].y)
             }
 
             if (canMove) {
@@ -231,24 +235,27 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.Connector class definition
     //
-    ns.Connector = function(svg, type, classbox1, classbox2) {
+    ns.Connector = function(svg, type, classbox1, classbox2, layout) {
 
         this.type = type
         this.classbox1 = classbox1
         this.classbox2 = classbox2
+        this.layout = layout
         this.svg = svg.group()
         if (this.type == "inheritance") {
             this.svg.addClass("UMLInheritanceRelationship")
         } else if (this.type == "composition") {
             this.svg.addClass("UMLCompositionRelationship")
+        } else if (this.type == "aggregation") {
+            this.svg.addClass("UMLAggregationRelationship")
         }
 
         this.draw = function() {
             this.svg.clear()
             if (this.type == "inheritance") {
-                drawInheritanceRelationship(this.svg, this.classbox1, this.classbox2)
-            } else if (this.type == "composition") {
-                drawCompositionRelationship(this.svg, this.classbox1, this.classbox2)
+                drawInheritanceRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
+            } else if ((this.type == "composition") || (this.type == "aggregation")) {
+                drawCompositionOrAggregationRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
             }
         }
 
@@ -257,7 +264,7 @@ CodeSmithy.UMLWebWidget = { }
         }
 
         // Draws an inheritance connector between two classes
-        function drawInheritanceRelationship(svg, baseclassbox, derivedclassbox) {
+        function drawInheritanceRelationship(svg, baseclassbox, derivedclassbox, layout) {
             let bbox1 = baseclassbox.svg.bbox()
             let bbox2 = derivedclassbox.svg.bbox()
 
@@ -280,7 +287,14 @@ CodeSmithy.UMLWebWidget = { }
                         (endPoint.x + 12) + "," + (endPoint.y - 10) + " " +
                         (endPoint.x + 12) + "," + (endPoint.y + 10)                
                     svg.polygon(polygonDescription)
-                    svg.line(endPoint.x + 12, endPoint.y, startPoint.x, startPoint.y)
+                    if (endPoint.y == startPoint.y) {
+                        svg.line(endPoint.x + 12, endPoint.y, startPoint.x, startPoint.y)
+                    } else {
+                        middleX = (endPoint.x + 12 + ((startPoint.x - endPoint.x - 12)/2))
+                        svg.line(endPoint.x + 12, endPoint.y, middleX, endPoint.y)
+                        svg.line(middleX, endPoint.y, middleX, startPoint.y)
+                        svg.line(middleX, startPoint.y, startPoint.x, startPoint.y)
+                    }
                     break
 
                 case ConnectorPosition.BottomCenter:
@@ -288,7 +302,14 @@ CodeSmithy.UMLWebWidget = { }
                         (endPoint.x - 10) + "," + (endPoint.y + 12) + " " +
                         (endPoint.x + 10) + "," + (endPoint.y + 12)                
                     svg.polygon(polygonDescription)
-                    svg.line(endPoint.x, endPoint.y + 12, startPoint.x, startPoint.y)
+                    if (endPoint.x == startPoint.x) {
+                        svg.line(endPoint.x, endPoint.y + 12, startPoint.x, startPoint.y)
+                    } else {
+                        middleY = (endPoint.y + 12 + ((startPoint.y - endPoint.y - 12)/2))
+                        svg.line(endPoint.x, endPoint.y + 12, endPoint.x, middleY)
+                        svg.line(endPoint.x, middleY, startPoint.x, middleY)
+                        svg.line(startPoint.x, middleY, startPoint.x, startPoint.y)
+                    }
                     break
 
                 case ConnectorPosition.LeftCenter:
@@ -296,17 +317,34 @@ CodeSmithy.UMLWebWidget = { }
                         (endPoint.x - 12) + "," + (endPoint.y - 10) + " " +
                         (endPoint.x - 12) + "," + (endPoint.y + 10)                
                     svg.polygon(polygonDescription)
-                    svg.line(endPoint.x - 12, endPoint.y, startPoint.x, startPoint.y)
+                    if (endPoint.y == startPoint.y) {
+                        svg.line(endPoint.x - 12, endPoint.y, startPoint.x, startPoint.y)
+                    } else {
+                        middleX = (endPoint.x - 12 - ((endPoint.x - 12 - startPoint.x)/2))
+                        svg.line(endPoint.x - 12, endPoint.y, middleX, endPoint.y)
+                        svg.line(middleX, endPoint.y, middleX, startPoint.y)
+                        svg.line(middleX, startPoint.y, startPoint.x, startPoint.y)
+                    }
                     break
             }
         }
 
         // Draws a composition connector between two classes
-        function drawCompositionRelationship(svg, containingclassbox, containedclassbox) {
+        function drawCompositionOrAggregationRelationship(svg, containingclassbox, containedclassbox, layout) {
             let bbox1 = containingclassbox.svg.bbox()
             let bbox2 = containedclassbox.svg.bbox()
 
             let connectionPositions = getConnectionPositions(bbox1, bbox2)
+
+            let layoutOverride = layout.connectorpositions[containedclassbox.classDescription.name + "-" + containingclassbox.classDescription.name + "-aggregation"];
+            if (layoutOverride) {
+                if (layoutOverride.end) {
+                    if (layoutOverride.end == "RightCenter") {
+                        connectionPositions.end = ConnectorPosition.RightCenter
+                     }
+                }
+            }
+
             let startPoint = getConnectionPoint(connectionPositions.start, bbox2)
             let endPoint = getConnectionPoint(connectionPositions.end, bbox1)
 
@@ -336,13 +374,18 @@ CodeSmithy.UMLWebWidget = { }
                         (endPoint.x + 20) + "," + endPoint.y + " " +
                         (endPoint.x + 10) + "," + (endPoint.y + 8)
                     svg.polygon(polygonDescription)
-                    if (endPoint.y == startPoint.y) {
-                        svg.line(endPoint.x + 20, endPoint.y, startPoint.x, startPoint.y)
+                    if (connectionPositions.start == ConnectorPosition.LeftCenter) {                        
+                        if (endPoint.y == startPoint.y) {
+                            svg.line(endPoint.x + 20, endPoint.y, startPoint.x, startPoint.y)
+                        } else {
+                            middleX = (endPoint.x + 20 + ((startPoint.x - endPoint.x - 20)/2))
+                            svg.line(endPoint.x + 20, endPoint.y, middleX, endPoint.y)
+                            svg.line(middleX, endPoint.y, middleX, startPoint.y)
+                            svg.line(middleX, startPoint.y, startPoint.x, startPoint.y)
+                        }
                     } else {
-                        middleX = (endPoint.x + 20 + ((startPoint.x - endPoint.x - 20)/2))
-                        svg.line(endPoint.x + 20, endPoint.y, middleX, endPoint.y)
-                        svg.line(middleX, endPoint.y, middleX, startPoint.y)
-                        svg.line(middleX, startPoint.y, startPoint.x, startPoint.y)
+                        svg.line(endPoint.x + 20, endPoint.y, startPoint.x, endPoint.y)
+                        svg.line(startPoint.x, endPoint.y, startPoint.x, startPoint.y)
                     }
                     break
 
