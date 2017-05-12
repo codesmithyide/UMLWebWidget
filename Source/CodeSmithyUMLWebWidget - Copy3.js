@@ -46,10 +46,6 @@ CodeSmithy.UMLWebWidget = { }
         // diagram
         this.classboxes = { }
 
-        // The list of all UML lifelines present on the
-        // diagram
-        this.lifelines = { }
-
         // Create a diagram from a div element in the HTML document.
         // The div element must contain a JSON object with the UML
         // diagram information. The contents of the div will be replaced
@@ -66,18 +62,12 @@ CodeSmithy.UMLWebWidget = { }
                     "margin-right": 12,
                     "margin-top": 9,
                     "margin-bottom": 9
-                },
-                "lifeline": {
-                    "margin-left": 12,
-                    "margin-right": 12,
-                    "margin-top": 9,
-                    "margin-bottom": 9
                 }
             }
             if (this.diagramDescription.classdiagram) {
                 this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
-            } else if (this.diagramDescription.sequencediagram) {
-                this.drawSequenceDiagram(svg, this.diagramDescription.sequencediagram, style, layout)
+    } else if (this.diagramDescription.sequencediagram) {
+      this.drawSequenceDiagram(svg, this.diagramDescription.sequencediagram)
             } else if (this.diagramDescription.usecasediagram) {
                 this.drawUseCaseDiagram(svg, this.diagramDescription.usecasediagram)
             }
@@ -98,6 +88,7 @@ CodeSmithy.UMLWebWidget = { }
                 let item = classDiagram[i]
                 if (item.class) {
                     this.classboxes[item.class.name] = new ns.ClassBox(svg, item.class, this.settings.canMove, style.classbox, layout)
+        this.classboxes[item.class.name].draw(svg)
                 } else if (item.relationship) {
                     let classbox1
                     let classbox2
@@ -116,30 +107,17 @@ CodeSmithy.UMLWebWidget = { }
             }
         }
 
-        this.drawSequenceDiagram = function(svg, sequenceDiagram, style, layout) {
-            if (layout == null) {
-                layout = { }
-            }
-            if (layout.lifelinepositions == null) {
-                layout.lifelinepositions = { }
-            }
+    for (var key in this.classboxes) {
+      this.classboxes[key].draw(svg)
+    }
+  }
 
-            for (var i = 0; i < sequenceDiagram.length; i++) {
-                let item = sequenceDiagram[i]
-                if (item.lifeline) {
-                    this.lifelines[item.lifeline.name] = new ns.Lifeline(svg, item.lifeline, style.lifeline, layout)
-                } else if (item.messages) {
-                    for (var j = 0; j < item.messages.length; j++) {
-                        let message = item.messages[j]
-                        let newConnector = new ns.Connector(svg, "synchronousmessage", this.lifelines[message.synchronousmessage.caller], this.lifelines[message.synchronousmessage.callee])
-                        newConnector.draw()
-                    }
-                }
-            }
-        }
+  this.drawSequenceDiagram = function(svg, sequenceDiagram) {
+    svg.rect(100, 100)
+  }
 
         this.drawUseCaseDiagram = function(svg, useCaseDiagram) {
-            svg.rect(150, 100)
+          svg.rect(150, 100)
         }
 
     }
@@ -174,7 +152,12 @@ CodeSmithy.UMLWebWidget = { }
                 width: 0,
                 height: 0
             }
-    
+  //  if (interactive) {
+    //  classGroup.click(function() {
+      //  self.toggle(this)
+//      })
+  //  }
+
             currentDimensions.height = style["margin-top"]
 
             var classNameDef = defs.text(classInfo.name).addClass("UMLClassName").move(style["margin-left"], currentDimensions.height)
@@ -218,11 +201,62 @@ CodeSmithy.UMLWebWidget = { }
                     self.fire('positionchanged')
                 })
             }
+/*      this.sizingState = 0
+      this.clientx = 0
+      this.initialWidth = 0
 
-            return classGroup
+      this.selectedClassBoxBorder = classGroup.group().hide()
+      this.selectedClassBoxBorder.rect(10, 10).move(-5,-5)
+      this.selectedClassBoxBorder.rect(10, 10).move((classBoxWidth/2) - 5, -5)
+      var topRightSizingHandle = this.selectedClassBoxBorder.rect(10, 10).move(classBoxWidth - 5, -5).addClass("TopRightSizingHandle")
+      topRightSizingHandle.mousedown(function(evt) {
+        this.sizingState = 1
+        this.initialWidth = this.width()
+        this.clientx = evt.clientX
+      })
+      topRightSizingHandle.mousemove(function(evt) {
+        if (this.sizingState == 1) {
+          this.width(this.initialWidth + evt.clientX - this.clientx)
         }
+      })
+      topRightSizingHandle.mouseup(function(evt) {
+        this.sizingState = 0
+      })
+      topRightSizingHandle.mouseout(function(evt) {
+        this.sizingState = 0
+      })
+      this.selectedClassBoxBorder.rect(10, 10).move(classBoxWidth - 5, (classBoxHeight/2) - 5)
+      this.selectedClassBoxBorder.rect(10, 10).move(classBoxWidth - 5, classBoxHeight - 5)
+      this.selectedClassBoxBorder.rect(10, 10).move((classBoxWidth/2) - 5, classBoxHeight - 5)
+      this.selectedClassBoxBorder.rect(10, 10).move(-5, classBoxHeight - 5)
+      this.selectedClassBoxBorder.rect(10, 10).move(-5, (classBoxHeight/2) - 5)
+*/
+    }
 
-        // Add an attribute or operation compartment and updates the current dimensions
+    return classGroup
+  }
+
+  this.draw = function(svg) {
+    this.svg = svg.use(this.def)
+  }
+
+  this.hide = function() {
+    this.svg.hide()
+  }
+
+  this.selected = false
+
+  this.toggle = function(el) {
+    if (this.selected) {
+      this.selectedClassBoxBorder.hide()
+      this.selected = false
+    } else {
+      this.selectedClassBoxBorder.show()
+      this.selected = true
+    }
+  }
+
+}
         // of the class box
         function addCompartment(svg, currentDimensions, style, items, cssClass) {
             currentDimensions.height += style["margin-top"]
@@ -273,49 +307,6 @@ CodeSmithy.UMLWebWidget = { }
     /////
 
     /////
-    // Start of the CodeSmithy.UMLWebWidget.Lifeline class definition
-    //
-    ns.Lifeline = function(svg, lifelineDescription, lifelineStyle, layout) {
-
-        this.lifelineDescription = lifelineDescription
-        this.def = createDef(svg.defs(), lifelineDescription, lifelineStyle, layout)
-        this.svg = svg.use(this.def)
-
-        function createDef(defs, lifelineDescription, style, layout) {
-            var lifelineGroup = defs.group().addClass("UMLLifeline")
-
-            let currentDimensions = { 
-                width: 0,
-                height: 0
-            }
-    
-            currentDimensions.height = style["margin-top"]
-
-            var instanceNameDef = defs.text(":" + lifelineDescription.name).addClass("UMLInstanceName").move(style["margin-left"], currentDimensions.height)
-            currentDimensions.width = Math.max(currentDimensions.width, instanceNameDef.bbox().width)
-            currentDimensions.height += (instanceNameDef.bbox().height + style["margin-bottom"])
-
-            currentDimensions.width += (style["margin-left"] + style["margin-right"])
-    
-            lifelineGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
-            lifelineGroup.use(instanceNameDef)
-
-            // Offset by 1 to leave some space because the border stroke width is 2
-            lifelineGroup.move(1,1)
-
-            if (layout.lifelinepositions[lifelineDescription.name]) {
-                lifelineGroup.move(layout.lifelinepositions[lifelineDescription.name].x, layout.lifelinepositions[lifelineDescription.name].y)
-            }
-
-            return lifelineGroup
-        }
-
-    }
-    //
-    // End of the CodeSmithy.UMLWebWidget.Lifeline class definition
-    //////
-
-    /////
     // Start of the CodeSmithy.UMLWebWidget.Connector class definition
     //
     ns.Connector = function(svg, type, classbox1, classbox2, layout) {
@@ -331,8 +322,6 @@ CodeSmithy.UMLWebWidget = { }
             this.svg.addClass("UMLCompositionRelationship")
         } else if (this.type == "aggregation") {
             this.svg.addClass("UMLAggregationRelationship")
-        } else if (this.type == "synchronousmessage") {
-            this.svg.addClass("UMLSynchronousMessage")
         }
 
         this.draw = function() {
@@ -341,8 +330,6 @@ CodeSmithy.UMLWebWidget = { }
                 drawInheritanceRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
             } else if ((this.type == "composition") || (this.type == "aggregation")) {
                 drawCompositionOrAggregationRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
-            } else if (this.type == "synchronousmessage") {
-                drawSynchronousMessage(this.svg, this.classbox1, this.classbox2)
             }
         }
 
@@ -508,13 +495,6 @@ CodeSmithy.UMLWebWidget = { }
                     }
                     break
             }
-        }
-
-        function drawSynchronousMessage(svg, caller, callee) {
-            let bbox1 = caller.svg.bbox()
-            let bbox2 = callee.svg.bbox()
-
-            svg.line(bbox1.cx, 50, bbox2.cx, 50)
         }
 
         var ConnectorPosition = {
