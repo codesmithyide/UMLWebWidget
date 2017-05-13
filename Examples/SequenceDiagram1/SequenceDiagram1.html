@@ -51,6 +51,43 @@
                         "caller": "Shopkeeper",
                         "callee": "Till"
                       }
+                  },
+                  {
+                    "returnmessage":
+                      {
+                        "caller": "Shopkeeper",
+                        "callee": "Till"
+                      }
+                  },
+                  {
+                    "synchronousmessage":
+                      {
+                        "name": "countMoney",
+                        "caller": "Shopkeeper",
+                        "callee": "Shopkeeper"
+                      }
+                  },
+                  {
+                    "synchronousmessage":
+                      {
+                        "name": "putMoney",
+                        "caller": "Shopkeeper",
+                        "callee": "Till"
+                      }
+                  },
+                  {
+                    "returnmessage":
+                      {
+                        "caller": "Shopkeeper",
+                        "callee": "Till"
+                      }
+                  },
+                  {
+                    "returnmessage":
+                      {
+                        "caller": "Customer",
+                        "callee": "Shopkeeper"
+                      }
                   }
                 ]
             }
@@ -58,7 +95,7 @@
       }
     </div>
     <script>
-      var sequenceDiagram = new CodeSmithy.UMLWebWidget.Diagram()
+      var sequenceDiagram = new CodeSmithy.UMLWebWidget.Diagram({ height: 300 })
 
       var layout = {
         "lifelinepositions": {

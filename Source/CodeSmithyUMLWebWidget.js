@@ -133,9 +133,18 @@ CodeSmithy.UMLWebWidget = { }
                 } else if (item.messages) {
                     for (var j = 0; j < item.messages.length; j++) {
                         let message = item.messages[j]
-                        let lifeline1 = this.lifelines[message.synchronousmessage.caller]
-                        let lifeline2 = this.lifelines[message.synchronousmessage.callee]
-                        let newConnector = createLifelineConnector(this, svg, "synchronousmessage", lifeline1, lifeline2, message.synchronousmessage.name)
+                        let lifeline1
+                        let lifeline2
+                        let newConnector
+                        if (message.synchronousmessage) {
+                            lifeline1 = this.lifelines[message.synchronousmessage.caller]
+                            lifeline2 = this.lifelines[message.synchronousmessage.callee]
+                            newConnector = createLifelineConnector(this, svg, "synchronousmessage", lifeline1, lifeline2, message.synchronousmessage.name)
+                        } else if (message.returnmessage) {
+                            lifeline1 = this.lifelines[message.returnmessage.caller]
+                            lifeline2 = this.lifelines[message.returnmessage.callee]
+                            newConnector = createLifelineConnector(this, svg, "returnmessage", lifeline1, lifeline2, "")
+                        }
                         lifeline1.connectors.push(newConnector)
                         lifeline2.connectors.push(newConnector)
                         newConnector.draw()
@@ -304,12 +313,17 @@ CodeSmithy.UMLWebWidget = { }
         this.connectors = [ ]
 
         this.drawLine = function(svg) {
+            let firstConnectorY = 0
+            if (this.connectors.length > 0) {
+                firstConnectorY = this.connectors[0].svg.bbox().y
+            }
             let lastConnectorY = 0
             if (this.connectors.length > 0) {
                 lastConnectorY = this.connectors[this.connectors.length - 1].svg.bbox().y + this.connectors[this.connectors.length - 1].svg.bbox().height
             }
             let lineGroup = svg.group().addClass("UMLLifeline")
-            lineGroup.line(this.svg.bbox().cx, this.svg.bbox().y + this.svg.bbox().height, this.svg.bbox().cx, lastConnectorY)
+            lineGroup.line(this.svg.bbox().cx, this.svg.bbox().y + this.svg.bbox().height, this.svg.bbox().cx, firstConnectorY)
+            lineGroup.rect(8, (lastConnectorY - firstConnectorY)).move(this.svg.bbox().cx - 4, firstConnectorY)
         }
 
         function createDef(defs, lifelineDescription, style, layout) {
@@ -365,6 +379,8 @@ CodeSmithy.UMLWebWidget = { }
             this.svg.addClass("UMLAggregationRelationship")
         } else if (this.type == "synchronousmessage") {
             this.svg.addClass("UMLSynchronousMessage")
+        } else if (this.type == "returnmessage") {
+            this.svg.addClass("UMLReturnMessage")
         }
 
         this.draw = function() {
@@ -375,6 +391,8 @@ CodeSmithy.UMLWebWidget = { }
                 drawCompositionOrAggregationRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
             } else if (this.type == "synchronousmessage") {
                 drawSynchronousMessage(this.svg, this.classbox1, this.classbox2, this.text)
+            } else if (this.type == "returnmessage") {
+                drawReturnMessage(this.svg, this.classbox1, this.classbox2)
             }
         }
 
@@ -541,22 +559,45 @@ CodeSmithy.UMLWebWidget = { }
         }
 
         function drawSynchronousMessage(svg, caller, callee, text) {
+            if (caller != callee) {
+                let startX = caller.svg.bbox().cx
+                let endX = callee.svg.bbox().cx
+                let width = (endX - startX)
+
+                let textDef = svg.defs().text(text)
+                if (textDef.bbox().width < width) {
+                    textDef.move((startX + ((width - textDef.bbox().width) / 2)), 0)
+                }
+
+                let y = textDef.bbox().height + 2
+                svg.line(startX, y, endX - 12, y)
+                let polygonDescription = "" + (endX - 12) + "," + (y - 6) + " " +
+                    endX + "," + y + " " +
+                    (endX - 12) + "," + (y + 6)
+                svg.polygon(polygonDescription)
+                svg.use(textDef)
+            } else {
+                let startX = caller.svg.bbox().cx
+                let textDef = svg.defs().text(text).move(startX + 8, 5)
+                let offsetY = textDef.bbox().y + textDef.bbox().height + 3
+                svg.use(textDef)
+                svg.line(startX, offsetY, startX + 30, offsetY)
+                svg.line(startX + 30, offsetY, startX + 30, 20 + offsetY)
+                svg.line(startX + 30, 20 + offsetY, startX, 20 + offsetY)
+                let polygonDescription = "" + startX + "," + (20 + offsetY) + " " +
+                    (startX + 12) + "," + (20 + offsetY - 6) + " " +
+                    (startX + 12) + "," + (20 + offsetY + 6)
+                svg.polygon(polygonDescription)
+            }
+        }
+
+        function drawReturnMessage(svg, caller, callee) {
             let startX = caller.svg.bbox().cx
             let endX = callee.svg.bbox().cx
-            let width = (endX - startX)
 
-            let textDef = svg.defs().text(text)
-            if (textDef.bbox().width < width) {
-                textDef.move((startX + ((width - textDef.bbox().width) / 2)), 0)
-            }
-
-            let y = textDef.bbox().height + 2
-            svg.line(startX, y, endX - 12, y)
-            polygonDescription = "" + (endX - 12) + "," + (y - 6) + " " +
-                endX + "," + y + " " +
-                (endX - 12) + "," + (y + 6)
-            svg.polygon(polygonDescription)
-            svg.use(textDef)
+            svg.line(startX, 6, startX + 10, 0)
+            svg.line(startX, 6, endX, 6).attr("stroke-dasharray", "4, 4")
+            svg.line(startX, 6, startX + 10, 12)
         }
 
         var ConnectorPosition = {
