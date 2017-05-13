@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Sequence Diagram 1</title>
+
+    <script src="../../ThirdParty/jquery-3.2.1.min.js"></script>
+    <script src="../../ThirdParty/svg.min.js"></script>
+    <script src="../../Source/CodeSmithyUMLWebWidget.js"></script>
+
+    <link rel="stylesheet" href="../../StyleSheets/CodeSmithyUMLWebWidget.css">
+  </head>
+  <body>
+    <p>The following diagram is a sequence diagram with two lifelines and a few messages exchanged between them.</p>
+    <div id="diagram1" class="CodeSmithyUMLWebWidget">
+      { 
+        "sequencediagram":
+          [
+            { 
+              "lifeline":
+                {
+                  "name": "Customer"
+                }
+            },
+            { 
+              "lifeline":
+                {
+                  "name": "Shopkeeper"
+                }
+            },
+            { 
+              "lifeline":
+                {
+                  "name": "Till"
+                }
+            },
+            {
+              "messages":
+                [
+                  {
+                    "synchronousmessage":
+                      {
+                        "name": "pay",
+                        "caller": "Customer",
+                        "callee": "Shopkeeper"
+                      }
+                  },
+                  {
+                    "synchronousmessage":
+                      {
+                        "name": "open",
+                        "caller": "Shopkeeper",
+                        "callee": "Till"
+                      }
+                  }
+                ]
+            }
+          ]
+      }
+    </div>
+    <script>
+      var sequenceDiagram = new CodeSmithy.UMLWebWidget.Diagram()
+
+      var layout = {
+        "lifelinepositions": {
+          "Customer": { "x": 1, "y": 1 },
+          "Shopkeeper": { "x": 150, "y": 1 },
+          "Till": { "x": 320, "y": 1 }
+        }
+      }
+
+      sequenceDiagram.createFromDiv("diagram1", layout)
+    </script>
+  </body>
+</html>

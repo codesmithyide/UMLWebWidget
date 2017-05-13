@@ -125,6 +125,7 @@ CodeSmithy.UMLWebWidget = { }
             }
 
             for (var i = 0; i < sequenceDiagram.length; i++) {
+                let nextYPosition = 0
                 let item = sequenceDiagram[i]
                 if (item.lifeline) {
                     this.lifelines[item.lifeline.name] = new ns.Lifeline(svg, item.lifeline, style.lifeline, layout)
@@ -133,6 +134,8 @@ CodeSmithy.UMLWebWidget = { }
                         let message = item.messages[j]
                         let newConnector = new ns.Connector(svg, "synchronousmessage", this.lifelines[message.synchronousmessage.caller], this.lifelines[message.synchronousmessage.callee])
                         newConnector.draw()
+                        newConnector.svg.move(0, nextYPosition)
+                        nextYPosition += newConnector.svg.bbox().height
                     }
                 }
             }
@@ -514,7 +517,12 @@ CodeSmithy.UMLWebWidget = { }
             let bbox1 = caller.svg.bbox()
             let bbox2 = callee.svg.bbox()
 
-            svg.line(bbox1.cx, 50, bbox2.cx, 50)
+            let y = 50
+            svg.line(bbox1.cx, y, bbox2.cx - 12, y)
+            polygonDescription = "" + (bbox2.cx - 12) + "," + (y - 6) + " " +
+                bbox2.cx + "," + y + " " +
+                (bbox2.cx - 12) + "," + (y + 6)
+            svg.polygon(polygonDescription)
         }
 
         var ConnectorPosition = {
