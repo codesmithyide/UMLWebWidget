@@ -418,18 +418,12 @@ CodeSmithy.UMLWebWidget = { }
             let polygonDescription
             switch (connectionPositions.end) {
                 case ConnectorPosition.TopCenter:
-                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
-                        (endPoint.x - 10) + "," + (endPoint.y - 12) + " " +
-                        (endPoint.x + 10) + "," + (endPoint.y - 12)                
-                    svg.polygon(polygonDescription)
+                    drawInheritanceArrow(svg, endPoint, "bottom")
                     svg.line(endPoint.x, endPoint.y - 12, startPoint.x, startPoint.y)
                     break
 
                 case ConnectorPosition.RightCenter:
-                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
-                        (endPoint.x + 12) + "," + (endPoint.y - 10) + " " +
-                        (endPoint.x + 12) + "," + (endPoint.y + 10)                
-                    svg.polygon(polygonDescription)
+                    drawInheritanceArrow(svg, endPoint, "left")
                     if (endPoint.y == startPoint.y) {
                         svg.line(endPoint.x + 12, endPoint.y, startPoint.x, startPoint.y)
                     } else {
@@ -441,10 +435,7 @@ CodeSmithy.UMLWebWidget = { }
                     break
 
                 case ConnectorPosition.BottomCenter:
-                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
-                        (endPoint.x - 10) + "," + (endPoint.y + 12) + " " +
-                        (endPoint.x + 10) + "," + (endPoint.y + 12)                
-                    svg.polygon(polygonDescription)
+                    drawInheritanceArrow(svg, endPoint, "top")
                     if (endPoint.x == startPoint.x) {
                         svg.line(endPoint.x, endPoint.y + 12, startPoint.x, startPoint.y)
                     } else {
@@ -456,10 +447,7 @@ CodeSmithy.UMLWebWidget = { }
                     break
 
                 case ConnectorPosition.LeftCenter:
-                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
-                        (endPoint.x - 12) + "," + (endPoint.y - 10) + " " +
-                        (endPoint.x - 12) + "," + (endPoint.y + 10)                
-                    svg.polygon(polygonDescription)
+                    drawInheritanceArrow(svg, endPoint, "right")
                     if (endPoint.y == startPoint.y) {
                         svg.line(endPoint.x - 12, endPoint.y, startPoint.x, startPoint.y)
                     } else {
@@ -660,6 +648,39 @@ CodeSmithy.UMLWebWidget = { }
                     break
             }
             return result
+        }
+
+        // Draws an arrow for an inheritance relationship. The arrow's tip
+        // is at the position gives as argument.
+        function drawInheritanceArrow(svg, position, orientation) {
+            let secondPoint = { x: 0, y: 0 }
+            let thirdPoint = { x: 0, y: 0 }
+            if (orientation == "right") {
+               secondPoint.x = (position.x - 12)
+               secondPoint.y = (position.y - 10)
+               thirdPoint.x = (position.x - 12)
+               thirdPoint.y = (position.y + 10)
+            } else if (orientation == "left") {
+               secondPoint.x = (position.x + 12)
+               secondPoint.y = (position.y - 10)
+               thirdPoint.x = (position.x + 12)
+               thirdPoint.y = (position.y + 10)                
+            } else if (orientation == "top") {
+               secondPoint.x = (position.x - 10)
+               secondPoint.y = (position.y + 12)
+               thirdPoint.x = (position.x + 10)
+               thirdPoint.y = (position.y + 12)
+            } else if (orientation == "bottom") {
+               secondPoint.x = (position.x - 10)
+               secondPoint.y = (position.y - 12)
+               thirdPoint.x = (position.x + 10)
+               thirdPoint.y = (position.y - 12)
+            }
+            
+            let polygonDescription = "" + position.x + "," + position.y + " " +
+                secondPoint.x + "," + secondPoint.y + " " +
+                thirdPoint.x + "," + thirdPoint.y                
+            svg.polygon(polygonDescription)
         }
 
         function drawHorizontalDiamond(svg, position) {
