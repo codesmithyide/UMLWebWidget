@@ -439,16 +439,13 @@ CodeSmithy.UMLWebWidget = { }
             let startPoint = getConnectionPoint(connectionPositions.start, bbox2)
             let endPoint = getConnectionPoint(connectionPositions.end, bbox1)
 
+            let connectorOrientation = getConnectorHeadOrientationFromPosition(connectionPositions.end)
             let polygonDescription
             let middleX = 0
             let middleY = 0
             switch (connectionPositions.end) {
                 case ConnectorPosition.TopCenter:
-                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
-                        (endPoint.x - 8) + "," + (endPoint.y - 10) + " " +
-                        endPoint.x + "," + (endPoint.y - 20) + " " +
-                        (endPoint.x + 8) + "," + (endPoint.y - 10)
-                    svg.polygon(polygonDescription)
+                    drawDiamond(svg, endPoint, connectorOrientation)
                     if (endPoint.x == startPoint.x) {
                         svg.line(endPoint.x, endPoint.y - 20, startPoint.x, startPoint.y)
                     } else {
@@ -460,7 +457,7 @@ CodeSmithy.UMLWebWidget = { }
                     break
 
                 case ConnectorPosition.RightCenter:
-                    drawHorizontalDiamond(svg, endPoint)
+                    drawDiamond(svg, endPoint, connectorOrientation)
                     if (connectionPositions.start == ConnectorPosition.LeftCenter) {                        
                         if (endPoint.y == startPoint.y) {
                             svg.line(endPoint.x + 20, endPoint.y, startPoint.x, startPoint.y)
@@ -477,7 +474,7 @@ CodeSmithy.UMLWebWidget = { }
                     break
 
                 case ConnectorPosition.BottomCenter:
-                    drawVerticalDiamond(svg, endPoint)
+                    drawDiamond(svg, endPoint, connectorOrientation)
                     if (endPoint.x == startPoint.x) {
                         svg.line(endPoint.x, endPoint.y + 20, startPoint.x, startPoint.y)
                     } else {
@@ -489,11 +486,7 @@ CodeSmithy.UMLWebWidget = { }
                     break
 
                 case ConnectorPosition.LeftCenter:
-                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
-                        (endPoint.x - 10) + "," + (endPoint.y - 8) + " " +
-                        (endPoint.x - 20) + "," + endPoint.y + " " +
-                        (endPoint.x - 10) + "," + (endPoint.y + 8)
-                    svg.polygon(polygonDescription)
+                    drawDiamond(svg, endPoint, connectorOrientation)
                     if (endPoint.y == startPoint.y) {
                         svg.line(endPoint.x - 20, endPoint.y, startPoint.x, startPoint.y)
                     } else {
@@ -682,20 +675,47 @@ CodeSmithy.UMLWebWidget = { }
             return lineConnectionPoint
         }
 
-        function drawHorizontalDiamond(svg, position) {
-            let polygonDescription = "" + position.x + "," + position.y + " " +
-                (position.x + 10) + "," + (position.y - 8) + " " +
-                (position.x + 20) + "," + position.y + " " +
-                (position.x + 10) + "," + (position.y + 8)
-            svg.polygon(polygonDescription)
-        }
+        // Draws a diamond for an inheritance relationship. The arrow's tip
+        // is at the position gives as argument.
+        // It returns the point to which the line of the connector should
+        // be connected.
+        function drawDiamond(svg, position, orientation) {
+            let secondPoint = { x: 0, y: 0 }
+            let thirdPoint = { x: 0, y: 0 }
+            let fourthPoint = { x: 0, y: 0 }
+            switch (orientation) {
+                case ConnectorHeadOrientation.Right:
+                    secondPoint = { x: (position.x - 10), y: (position.y - 8) }
+                    thirdPoint = { x: (position.x - 20), y: position.y }
+                    fourthPoint = { x: (position.x - 10), y: (position.y + 8) }
+                    break
 
-        function drawVerticalDiamond(svg, position) {
+                case ConnectorHeadOrientation.Left:
+                    secondPoint = { x: (position.x + 10), y: (position.y - 8) }
+                    thirdPoint = { x: (position.x + 20), y: position.y }
+                    fourthPoint = { x: (position.x + 10), y: (position.y + 8) }
+                    break
+
+                case ConnectorHeadOrientation.Up:
+                    secondPoint = { x: (position.x + 8), y: (position.y + 10) }
+                    thirdPoint = { x: position.x, y: (position.y + 20) }
+                    fourthPoint = { x: (position.x - 8), y: (position.y + 10) }
+                    break
+
+                case ConnectorHeadOrientation.Down:
+                    secondPoint = { x: (position.x + 8), y: (position.y - 10) }
+                    thirdPoint = { x: position.x, y: (position.y - 20) }
+                    fourthPoint = { x: (position.x - 8), y: (position.y - 10) }
+                    break
+            }
+
             let polygonDescription = "" + position.x + "," + position.y + " " +
-                (position.x - 8) + "," + (position.y + 10) + " " +
-                position.x + "," + (position.y + 20) + " " +
-                (position.x + 8) + "," + (position.y + 10)
+                secondPoint.x + "," + secondPoint.y + " " +
+                thirdPoint.x + "," + thirdPoint.y + " " +
+                fourthPoint.x + "," + fourthPoint.y
             svg.polygon(polygonDescription)
+
+            return thirdPoint
         }
 
         function drawConnectorLine(svg, startPoint, endPoint, orientation) {
