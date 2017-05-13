@@ -440,63 +440,8 @@ CodeSmithy.UMLWebWidget = { }
             let endPoint = getConnectionPoint(connectionPositions.end, bbox1)
 
             let connectorOrientation = getConnectorHeadOrientationFromPosition(connectionPositions.end)
-            let polygonDescription
-            let middleX = 0
-            let middleY = 0
-            switch (connectionPositions.end) {
-                case ConnectorPosition.TopCenter:
-                    drawDiamond(svg, endPoint, connectorOrientation)
-                    if (endPoint.x == startPoint.x) {
-                        svg.line(endPoint.x, endPoint.y - 20, startPoint.x, startPoint.y)
-                    } else {
-                        middleY = (endPoint.y - 20 + ((startPoint.y - endPoint.y + 20)/2))
-                        svg.line(endPoint.x, endPoint.y - 20, endPoint.x, middleY)
-                        svg.line(endPoint.x, middleY, startPoint.x, middleY)
-                        svg.line(startPoint.x, middleY, startPoint.x, startPoint.y)
-                    }
-                    break
-
-                case ConnectorPosition.RightCenter:
-                    drawDiamond(svg, endPoint, connectorOrientation)
-                    if (connectionPositions.start == ConnectorPosition.LeftCenter) {                        
-                        if (endPoint.y == startPoint.y) {
-                            svg.line(endPoint.x + 20, endPoint.y, startPoint.x, startPoint.y)
-                        } else {
-                            middleX = (endPoint.x + 20 + ((startPoint.x - endPoint.x - 20)/2))
-                            svg.line(endPoint.x + 20, endPoint.y, middleX, endPoint.y)
-                            svg.line(middleX, endPoint.y, middleX, startPoint.y)
-                            svg.line(middleX, startPoint.y, startPoint.x, startPoint.y)
-                        }
-                    } else {
-                        svg.line(endPoint.x + 20, endPoint.y, startPoint.x, endPoint.y)
-                        svg.line(startPoint.x, endPoint.y, startPoint.x, startPoint.y)
-                    }
-                    break
-
-                case ConnectorPosition.BottomCenter:
-                    drawDiamond(svg, endPoint, connectorOrientation)
-                    if (endPoint.x == startPoint.x) {
-                        svg.line(endPoint.x, endPoint.y + 20, startPoint.x, startPoint.y)
-                    } else {
-                        middleY = (endPoint.y + 20 + ((startPoint.y - endPoint.y - 20)/2))
-                        svg.line(endPoint.x, endPoint.y + 20, endPoint.x, middleY)
-                        svg.line(endPoint.x, middleY, startPoint.x, middleY)
-                        svg.line(startPoint.x, middleY, startPoint.x, startPoint.y)
-                    }
-                    break
-
-                case ConnectorPosition.LeftCenter:
-                    drawDiamond(svg, endPoint, connectorOrientation)
-                    if (endPoint.y == startPoint.y) {
-                        svg.line(endPoint.x - 20, endPoint.y, startPoint.x, startPoint.y)
-                    } else {
-                        middleX = (endPoint.x - 20 - ((endPoint.x - 20 - startPoint.x)/2))
-                        svg.line(endPoint.x - 20, endPoint.y, middleX, endPoint.y)
-                        svg.line(middleX, endPoint.y, middleX, startPoint.y)
-                        svg.line(middleX, startPoint.y, startPoint.x, startPoint.y)
-                    }
-                    break
-            }
+            let lineConnectionPoint = drawDiamond(svg, endPoint, connectorOrientation)
+            drawConnectorLine(svg, startPoint, lineConnectionPoint, connectorOrientation)  
         }
 
         function drawSynchronousMessage(svg, caller, callee, text) {
