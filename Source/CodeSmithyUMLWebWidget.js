@@ -133,7 +133,7 @@ CodeSmithy.UMLWebWidget = { }
                 } else if (item.messages) {
                     for (var j = 0; j < item.messages.length; j++) {
                         let message = item.messages[j]
-                        let newConnector = createLifelineConnector(this, svg, "synchronousmessage", this.lifelines[message.synchronousmessage.caller], this.lifelines[message.synchronousmessage.callee])
+                        let newConnector = createLifelineConnector(this, svg, "synchronousmessage", this.lifelines[message.synchronousmessage.caller], this.lifelines[message.synchronousmessage.callee], message.synchronousmessage.name)
                         newConnector.draw()
                         newConnector.svg.move(0, nextYPosition)
                         nextYPosition += newConnector.svg.bbox().height
@@ -150,8 +150,8 @@ CodeSmithy.UMLWebWidget = { }
             return new ns.Connector(svg, type, classbox1, classbox2, "", layout)
         }
 
-        function createLifelineConnector(self, svg, type, classbox1, classbox2, layout) {
-            return new ns.Connector(svg, type, classbox1, classbox2, "name", layout)
+        function createLifelineConnector(self, svg, type, classbox1, classbox2, name, layout) {
+            return new ns.Connector(svg, type, classbox1, classbox2, name, layout)
         }
     }
     //
@@ -524,7 +524,7 @@ CodeSmithy.UMLWebWidget = { }
                 textDef.move((startX + ((width - textDef.bbox().width) / 2)), 0)
             }
 
-            let y = textDef.bbox().height
+            let y = textDef.bbox().height + 2
             svg.line(startX, y, endX - 12, y)
             polygonDescription = "" + (endX - 12) + "," + (y - 6) + " " +
                 endX + "," + y + " " +
