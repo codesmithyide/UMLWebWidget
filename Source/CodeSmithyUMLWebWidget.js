@@ -108,7 +108,7 @@ CodeSmithy.UMLWebWidget = { }
                         classbox1 = this.classboxes[item.relationship.containingclass]
                         classbox2 = this.classboxes[item.relationship.containedclass]
                     }
-                    let newConnector = new ns.Connector(svg, item.relationship.type, classbox1, classbox2, layout)
+                    let newConnector = createClassBoxConnector(this, svg, item.relationship.type, classbox1, classbox2, layout)
                     classbox1.connectors.push(newConnector)
                     classbox2.connectors.push(newConnector)
                     newConnector.draw()
@@ -124,15 +124,16 @@ CodeSmithy.UMLWebWidget = { }
                 layout.lifelinepositions = { }
             }
 
+            let nextYPosition = 0
             for (var i = 0; i < sequenceDiagram.length; i++) {
-                let nextYPosition = 0
                 let item = sequenceDiagram[i]
                 if (item.lifeline) {
                     this.lifelines[item.lifeline.name] = new ns.Lifeline(svg, item.lifeline, style.lifeline, layout)
+                    nextYPosition = Math.max(nextYPosition, this.lifelines[item.lifeline.name].svg.bbox().y + this.lifelines[item.lifeline.name].svg.bbox().height + 20)
                 } else if (item.messages) {
                     for (var j = 0; j < item.messages.length; j++) {
                         let message = item.messages[j]
-                        let newConnector = new ns.Connector(svg, "synchronousmessage", this.lifelines[message.synchronousmessage.caller], this.lifelines[message.synchronousmessage.callee])
+                        let newConnector = createLifelineConnector(this, svg, "synchronousmessage", this.lifelines[message.synchronousmessage.caller], this.lifelines[message.synchronousmessage.callee])
                         newConnector.draw()
                         newConnector.svg.move(0, nextYPosition)
                         nextYPosition += newConnector.svg.bbox().height
@@ -145,6 +146,13 @@ CodeSmithy.UMLWebWidget = { }
             svg.rect(150, 100)
         }
 
+        function createClassBoxConnector(self, svg, type, classbox1, classbox2, layout) {
+            return new ns.Connector(svg, type, classbox1, classbox2, "", layout)
+        }
+
+        function createLifelineConnector(self, svg, type, classbox1, classbox2, layout) {
+            return new ns.Connector(svg, type, classbox1, classbox2, "name", layout)
+        }
     }
     //
     // End of the CodeSmithy.UMLWebWidget.Diagram class definition
@@ -321,11 +329,12 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.Connector class definition
     //
-    ns.Connector = function(svg, type, classbox1, classbox2, layout) {
+    ns.Connector = function(svg, type, classbox1, classbox2, text, layout) {
 
         this.type = type
         this.classbox1 = classbox1
         this.classbox2 = classbox2
+        this.text = text
         this.layout = layout
         this.svg = svg.group()
         if (this.type == "inheritance") {
@@ -345,7 +354,7 @@ CodeSmithy.UMLWebWidget = { }
             } else if ((this.type == "composition") || (this.type == "aggregation")) {
                 drawCompositionOrAggregationRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
             } else if (this.type == "synchronousmessage") {
-                drawSynchronousMessage(this.svg, this.classbox1, this.classbox2)
+                drawSynchronousMessage(this.svg, this.classbox1, this.classbox2, this.text)
             }
         }
 
@@ -505,16 +514,23 @@ CodeSmithy.UMLWebWidget = { }
             }
         }
 
-        function drawSynchronousMessage(svg, caller, callee) {
-            let bbox1 = caller.svg.bbox()
-            let bbox2 = callee.svg.bbox()
+        function drawSynchronousMessage(svg, caller, callee, text) {
+            let startX = caller.svg.bbox().cx
+            let endX = callee.svg.bbox().cx
+            let width = (endX - startX)
 
-            let y = 50
-            svg.line(bbox1.cx, y, bbox2.cx - 12, y)
-            polygonDescription = "" + (bbox2.cx - 12) + "," + (y - 6) + " " +
-                bbox2.cx + "," + y + " " +
-                (bbox2.cx - 12) + "," + (y + 6)
+            let textDef = svg.defs().text(text)
+            if (textDef.bbox().width < width) {
+                textDef.move((startX + ((width - textDef.bbox().width) / 2)), 0)
+            }
+
+            let y = textDef.bbox().height
+            svg.line(startX, y, endX - 12, y)
+            polygonDescription = "" + (endX - 12) + "," + (y - 6) + " " +
+                endX + "," + y + " " +
+                (endX - 12) + "," + (y + 6)
             svg.polygon(polygonDescription)
+            svg.use(textDef)
         }
 
         var ConnectorPosition = {
