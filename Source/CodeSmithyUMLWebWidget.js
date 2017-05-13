@@ -459,11 +459,7 @@ CodeSmithy.UMLWebWidget = { }
                     break
 
                 case ConnectorPosition.RightCenter:
-                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
-                        (endPoint.x + 10) + "," + (endPoint.y - 8) + " " +
-                        (endPoint.x + 20) + "," + endPoint.y + " " +
-                        (endPoint.x + 10) + "," + (endPoint.y + 8)
-                    svg.polygon(polygonDescription)
+                    drawHorizontalDiamond(svg, endPoint)
                     if (connectionPositions.start == ConnectorPosition.LeftCenter) {                        
                         if (endPoint.y == startPoint.y) {
                             svg.line(endPoint.x + 20, endPoint.y, startPoint.x, startPoint.y)
@@ -480,11 +476,7 @@ CodeSmithy.UMLWebWidget = { }
                     break
 
                 case ConnectorPosition.BottomCenter:
-                    polygonDescription = "" + endPoint.x + "," + endPoint.y + " " +
-                        (endPoint.x - 8) + "," + (endPoint.y + 10) + " " +
-                        endPoint.x + "," + (endPoint.y + 20) + " " +
-                        (endPoint.x + 8) + "," + (endPoint.y + 10)
-                    svg.polygon(polygonDescription)
+                    drawVerticalDiamond(svg, endPoint)
                     if (endPoint.x == startPoint.x) {
                         svg.line(endPoint.x, endPoint.y + 20, startPoint.x, startPoint.y)
                     } else {
@@ -587,6 +579,21 @@ CodeSmithy.UMLWebWidget = { }
             return result
         }
 
+        function drawHorizontalDiamond(svg, position) {
+            let polygonDescription = "" + position.x + "," + position.y + " " +
+                (position.x + 10) + "," + (position.y - 8) + " " +
+                (position.x + 20) + "," + position.y + " " +
+                (position.x + 10) + "," + (position.y + 8)
+            svg.polygon(polygonDescription)
+        }
+
+        function drawVerticalDiamond(svg, position) {
+            let polygonDescription = "" + position.x + "," + position.y + " " +
+                (position.x - 8) + "," + (position.y + 10) + " " +
+                position.x + "," + (position.y + 20) + " " +
+                (position.x + 8) + "," + (position.y + 10)
+            svg.polygon(polygonDescription)
+        }
     }
     //
     // End of the CodeSmithy.UMLWebWidget.Connector class definition
