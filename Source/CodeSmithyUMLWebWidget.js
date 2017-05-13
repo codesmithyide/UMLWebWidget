@@ -133,12 +133,20 @@ CodeSmithy.UMLWebWidget = { }
                 } else if (item.messages) {
                     for (var j = 0; j < item.messages.length; j++) {
                         let message = item.messages[j]
-                        let newConnector = createLifelineConnector(this, svg, "synchronousmessage", this.lifelines[message.synchronousmessage.caller], this.lifelines[message.synchronousmessage.callee], message.synchronousmessage.name)
+                        let lifeline1 = this.lifelines[message.synchronousmessage.caller]
+                        let lifeline2 = this.lifelines[message.synchronousmessage.callee]
+                        let newConnector = createLifelineConnector(this, svg, "synchronousmessage", lifeline1, lifeline2, message.synchronousmessage.name)
+                        lifeline1.connectors.push(newConnector)
+                        lifeline2.connectors.push(newConnector)
                         newConnector.draw()
-                        newConnector.svg.move(0, nextYPosition)
+                        newConnector.move(nextYPosition)
                         nextYPosition += newConnector.svg.bbox().height
                     }
                 }
+            }
+
+            for (var key in this.lifelines) {
+                this.lifelines[key].drawLine(svg)
             }
         }
 
@@ -292,6 +300,18 @@ CodeSmithy.UMLWebWidget = { }
         this.def = createDef(svg.defs(), lifelineDescription, lifelineStyle, layout)
         this.svg = svg.use(this.def)
 
+        // List of connectors that are connected to this lifeline
+        this.connectors = [ ]
+
+        this.drawLine = function(svg) {
+            let lastConnectorY = 0
+            if (this.connectors.length > 0) {
+                lastConnectorY = this.connectors[this.connectors.length - 1].svg.bbox().y + this.connectors[this.connectors.length - 1].svg.bbox().height
+            }
+            let lineGroup = svg.group().addClass("UMLLifeline")
+            lineGroup.line(this.svg.bbox().cx, this.svg.bbox().y + this.svg.bbox().height, this.svg.bbox().cx, lastConnectorY)
+        }
+
         function createDef(defs, lifelineDescription, style, layout) {
             var lifelineGroup = defs.group().addClass("UMLLifeline")
 
@@ -356,6 +376,12 @@ CodeSmithy.UMLWebWidget = { }
             } else if (this.type == "synchronousmessage") {
                 drawSynchronousMessage(this.svg, this.classbox1, this.classbox2, this.text)
             }
+        }
+
+        this.move = function(y) {
+            this.svg.each(function(i, children) {
+                this.dy(y)
+            })
         }
 
         this.hide = function() {
