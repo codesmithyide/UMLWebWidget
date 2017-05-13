@@ -415,15 +415,13 @@ CodeSmithy.UMLWebWidget = { }
             let startPoint = getConnectionPoint(connectionPositions.start, bbox2)
             let endPoint = getConnectionPoint(connectionPositions.end, bbox1)
 
-            let polygonDescription
+            drawInheritanceArrow(svg, endPoint, getConnectorHeadOrientationFromPosition(connectionPositions.end))
             switch (connectionPositions.end) {
-                case ConnectorPosition.TopCenter:
-                    drawInheritanceArrow(svg, endPoint, "bottom")
+                case ConnectorPosition.TopCenter:        
                     svg.line(endPoint.x, endPoint.y - 12, startPoint.x, startPoint.y)
                     break
 
                 case ConnectorPosition.RightCenter:
-                    drawInheritanceArrow(svg, endPoint, "left")
                     if (endPoint.y == startPoint.y) {
                         svg.line(endPoint.x + 12, endPoint.y, startPoint.x, startPoint.y)
                     } else {
@@ -435,7 +433,6 @@ CodeSmithy.UMLWebWidget = { }
                     break
 
                 case ConnectorPosition.BottomCenter:
-                    drawInheritanceArrow(svg, endPoint, "top")
                     if (endPoint.x == startPoint.x) {
                         svg.line(endPoint.x, endPoint.y + 12, startPoint.x, startPoint.y)
                     } else {
@@ -447,7 +444,6 @@ CodeSmithy.UMLWebWidget = { }
                     break
 
                 case ConnectorPosition.LeftCenter:
-                    drawInheritanceArrow(svg, endPoint, "right")
                     if (endPoint.y == startPoint.y) {
                         svg.line(endPoint.x - 12, endPoint.y, startPoint.x, startPoint.y)
                     } else {
@@ -650,31 +646,63 @@ CodeSmithy.UMLWebWidget = { }
             return result
         }
 
+        // Orientation of the head (e.g. arrow or diamond)
+        // of a connector
+        var ConnectorHeadOrientation = {
+            Up: 0,
+            Down: 1,
+            Left: 2,
+            Right: 3
+        }
+
+        // Get the orientiation of the head of the connector
+        // based on where the connector is connected
+        function getConnectorHeadOrientationFromPosition(position) {
+            switch (position) {
+                case ConnectorPosition.TopCenter:
+                    return ConnectorHeadOrientation.Down
+                case ConnectorPosition.RightCenter:
+                    return ConnectorHeadOrientation.Left
+                case ConnectorPosition.BottomCenter:
+                    return ConnectorHeadOrientation.Up
+                case ConnectorPosition.LeftCenter:
+                    return ConnectorHeadOrientation.Right
+            }
+        }
+
         // Draws an arrow for an inheritance relationship. The arrow's tip
         // is at the position gives as argument.
         function drawInheritanceArrow(svg, position, orientation) {
             let secondPoint = { x: 0, y: 0 }
             let thirdPoint = { x: 0, y: 0 }
-            if (orientation == "right") {
-               secondPoint.x = (position.x - 12)
-               secondPoint.y = (position.y - 10)
-               thirdPoint.x = (position.x - 12)
-               thirdPoint.y = (position.y + 10)
-            } else if (orientation == "left") {
-               secondPoint.x = (position.x + 12)
-               secondPoint.y = (position.y - 10)
-               thirdPoint.x = (position.x + 12)
-               thirdPoint.y = (position.y + 10)                
-            } else if (orientation == "top") {
-               secondPoint.x = (position.x - 10)
-               secondPoint.y = (position.y + 12)
-               thirdPoint.x = (position.x + 10)
-               thirdPoint.y = (position.y + 12)
-            } else if (orientation == "bottom") {
-               secondPoint.x = (position.x - 10)
-               secondPoint.y = (position.y - 12)
-               thirdPoint.x = (position.x + 10)
-               thirdPoint.y = (position.y - 12)
+            switch (orientation) {
+                case ConnectorHeadOrientation.Right:
+                    secondPoint.x = (position.x - 12)
+                    secondPoint.y = (position.y - 10)
+                    thirdPoint.x = (position.x - 12)
+                    thirdPoint.y = (position.y + 10)
+                    break
+
+                case ConnectorHeadOrientation.Left:
+                    secondPoint.x = (position.x + 12)
+                    secondPoint.y = (position.y - 10)
+                    thirdPoint.x = (position.x + 12)
+                    thirdPoint.y = (position.y + 10)    
+                    break
+            
+                case ConnectorHeadOrientation.Up:
+                    secondPoint.x = (position.x - 10)
+                    secondPoint.y = (position.y + 12)
+                    thirdPoint.x = (position.x + 10)
+                    thirdPoint.y = (position.y + 12)
+                    break
+
+                case ConnectorHeadOrientation.Down:
+                    secondPoint.x = (position.x - 10)
+                    secondPoint.y = (position.y - 12)
+                    thirdPoint.x = (position.x + 10)
+                    thirdPoint.y = (position.y - 12)
+                    break
             }
             
             let polygonDescription = "" + position.x + "," + position.y + " " +
