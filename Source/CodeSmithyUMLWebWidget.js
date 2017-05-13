@@ -415,45 +415,9 @@ CodeSmithy.UMLWebWidget = { }
             let startPoint = getConnectionPoint(connectionPositions.start, bbox2)
             let endPoint = getConnectionPoint(connectionPositions.end, bbox1)
 
-            drawInheritanceArrow(svg, endPoint, getConnectorHeadOrientationFromPosition(connectionPositions.end))
-            switch (connectionPositions.end) {
-                case ConnectorPosition.TopCenter:        
-                    svg.line(endPoint.x, endPoint.y - 12, startPoint.x, startPoint.y)
-                    break
-
-                case ConnectorPosition.RightCenter:
-                    if (endPoint.y == startPoint.y) {
-                        svg.line(endPoint.x + 12, endPoint.y, startPoint.x, startPoint.y)
-                    } else {
-                        middleX = (endPoint.x + 12 + ((startPoint.x - endPoint.x - 12)/2))
-                        svg.line(endPoint.x + 12, endPoint.y, middleX, endPoint.y)
-                        svg.line(middleX, endPoint.y, middleX, startPoint.y)
-                        svg.line(middleX, startPoint.y, startPoint.x, startPoint.y)
-                    }
-                    break
-
-                case ConnectorPosition.BottomCenter:
-                    if (endPoint.x == startPoint.x) {
-                        svg.line(endPoint.x, endPoint.y + 12, startPoint.x, startPoint.y)
-                    } else {
-                        middleY = (endPoint.y + 12 + ((startPoint.y - endPoint.y - 12)/2))
-                        svg.line(endPoint.x, endPoint.y + 12, endPoint.x, middleY)
-                        svg.line(endPoint.x, middleY, startPoint.x, middleY)
-                        svg.line(startPoint.x, middleY, startPoint.x, startPoint.y)
-                    }
-                    break
-
-                case ConnectorPosition.LeftCenter:
-                    if (endPoint.y == startPoint.y) {
-                        svg.line(endPoint.x - 12, endPoint.y, startPoint.x, startPoint.y)
-                    } else {
-                        middleX = (endPoint.x - 12 - ((endPoint.x - 12 - startPoint.x)/2))
-                        svg.line(endPoint.x - 12, endPoint.y, middleX, endPoint.y)
-                        svg.line(middleX, endPoint.y, middleX, startPoint.y)
-                        svg.line(middleX, startPoint.y, startPoint.x, startPoint.y)
-                    }
-                    break
-            }
+            let connectorOrientation = getConnectorHeadOrientationFromPosition(connectionPositions.end)
+            let lineConnectionPoint = drawInheritanceArrow(svg, endPoint, connectorOrientation)
+            drawConnectorLine(svg, startPoint, lineConnectionPoint, connectorOrientation)
         }
 
         // Draws a composition connector between two classes
@@ -672,15 +636,17 @@ CodeSmithy.UMLWebWidget = { }
 
         // Draws an arrow for an inheritance relationship. The arrow's tip
         // is at the position gives as argument.
+        // It returns the point to which the line of the connector should
+        // be connected.
         function drawInheritanceArrow(svg, position, orientation) {
             let secondPoint = { x: 0, y: 0 }
             let thirdPoint = { x: 0, y: 0 }
+            let lineConnectionPoint = { x: 0, y: 0 }
             switch (orientation) {
                 case ConnectorHeadOrientation.Right:
-                    secondPoint.x = (position.x - 12)
-                    secondPoint.y = (position.y - 10)
-                    thirdPoint.x = (position.x - 12)
-                    thirdPoint.y = (position.y + 10)
+                    secondPoint = { x: (position.x - 12), y: (position.y - 10) }
+                    thirdPoint = { x: (position.x - 12), y: (position.y + 10) }
+                    lineConnectionPoint = { x: (position.x - 12), y: position.y }
                     break
 
                 case ConnectorHeadOrientation.Left:
@@ -688,6 +654,7 @@ CodeSmithy.UMLWebWidget = { }
                     secondPoint.y = (position.y - 10)
                     thirdPoint.x = (position.x + 12)
                     thirdPoint.y = (position.y + 10)    
+                    lineConnectionPoint = { x: (position.x + 12), y: position.y }
                     break
             
                 case ConnectorHeadOrientation.Up:
@@ -695,6 +662,7 @@ CodeSmithy.UMLWebWidget = { }
                     secondPoint.y = (position.y + 12)
                     thirdPoint.x = (position.x + 10)
                     thirdPoint.y = (position.y + 12)
+                    lineConnectionPoint = { x: position.x, y: (position.y + 12) }
                     break
 
                 case ConnectorHeadOrientation.Down:
@@ -702,6 +670,7 @@ CodeSmithy.UMLWebWidget = { }
                     secondPoint.y = (position.y - 12)
                     thirdPoint.x = (position.x + 10)
                     thirdPoint.y = (position.y - 12)
+                    lineConnectionPoint = { x: position.x, y: (position.y - 12) }
                     break
             }
             
@@ -709,6 +678,8 @@ CodeSmithy.UMLWebWidget = { }
                 secondPoint.x + "," + secondPoint.y + " " +
                 thirdPoint.x + "," + thirdPoint.y                
             svg.polygon(polygonDescription)
+
+            return lineConnectionPoint
         }
 
         function drawHorizontalDiamond(svg, position) {
@@ -725,6 +696,34 @@ CodeSmithy.UMLWebWidget = { }
                 position.x + "," + (position.y + 20) + " " +
                 (position.x + 8) + "," + (position.y + 10)
             svg.polygon(polygonDescription)
+        }
+
+        function drawConnectorLine(svg, startPoint, endPoint, orientation) {
+            switch (orientation) {
+                case ConnectorHeadOrientation.Up:
+                case ConnectorHeadOrientation.Down:
+                    if (endPoint.x == startPoint.x) {
+                        svg.line(endPoint.x, endPoint.y, startPoint.x, startPoint.y)
+                    } else {
+                        let middleY = (endPoint.y + ((startPoint.y - endPoint.y)/2))
+                        svg.line(endPoint.x, endPoint.y, endPoint.x, middleY)
+                        svg.line(endPoint.x, middleY, startPoint.x, middleY)
+                        svg.line(startPoint.x, middleY, startPoint.x, startPoint.y)
+                    }
+                    break
+
+                case ConnectorHeadOrientation.Left:
+                case ConnectorHeadOrientation.Right:
+                    if (endPoint.y == startPoint.y) {
+                        svg.line(endPoint.x, endPoint.y, startPoint.x, startPoint.y)
+                    } else {
+                        let middleX = (endPoint.x + ((startPoint.x - endPoint.x)/2))
+                        svg.line(endPoint.x, endPoint.y, middleX, endPoint.y)
+                        svg.line(middleX, endPoint.y, middleX, startPoint.y)
+                        svg.line(middleX, startPoint.y, startPoint.x, startPoint.y)
+                    }
+                    break
+            }
         }
     }
     //
