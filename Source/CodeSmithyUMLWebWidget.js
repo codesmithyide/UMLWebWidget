@@ -79,7 +79,7 @@ CodeSmithy.UMLWebWidget = { }
             } else if (this.diagramDescription.sequencediagram) {
                 this.drawSequenceDiagram(svg, this.diagramDescription.sequencediagram, style, layout)
             } else if (this.diagramDescription.usecasediagram) {
-                this.drawUseCaseDiagram(svg, this.diagramDescription.usecasediagram)
+                this.drawUseCaseDiagram(svg, this.diagramDescription.usecasediagram, layout)
             }
         }
 
@@ -159,8 +159,13 @@ CodeSmithy.UMLWebWidget = { }
             }
         }
 
-        this.drawUseCaseDiagram = function(svg, useCaseDiagram) {
-            svg.rect(150, 100)
+        this.drawUseCaseDiagram = function(svg, useCaseDiagram, layout) {
+            for (var i = 0; i < useCaseDiagram.length; i++) {
+                let item = useCaseDiagram[i]
+                if (item.actor) {
+                    new ns.Actor(svg, item.actor, layout)
+                }
+            }
         }
 
         function createClassBoxConnector(self, svg, type, classbox1, classbox2, layout) {
@@ -359,6 +364,36 @@ CodeSmithy.UMLWebWidget = { }
     //
     // End of the CodeSmithy.UMLWebWidget.Lifeline class definition
     //////
+
+    /////
+    // Start of the CodeSmithy.UMLWebWidget.Actor class definition
+    //
+    ns.Actor = function(svg, actorDescription, layout) {
+
+        this.actorDescription = actorDescription
+        this.svg = svg.group().addClass("UMLActor")
+        draw(this.svg, this.actorDescription)
+
+        function draw(svg, actorDescription) {
+            let textDef = svg.text(actorDescription.name).move(0, 35)
+            let width = textDef.bbox().width
+            let offset = ((width - 16) / 2)
+            svg.circle(12).move(2 + offset, 1)
+            svg.line(8 + offset, 13, 8 + offset, 26)
+            svg.line(offset, 18, 16 + offset, 18)
+            svg.line(8 + offset, 26, offset, 33)
+            svg.line(8 + offset, 26, 16 + offset, 33)
+
+            if (layout.actorpositions[actorDescription.name]) {
+                svg.move(layout.actorpositions[actorDescription.name].x, layout.actorpositions[actorDescription.name].y)
+            }
+
+            svg.use(textDef)     
+        }
+    }
+    //
+    // End of the CodeSmithy.UMLWebWidget.Actor class definition
+    /////
 
     /////
     // Start of the CodeSmithy.UMLWebWidget.Connector class definition
