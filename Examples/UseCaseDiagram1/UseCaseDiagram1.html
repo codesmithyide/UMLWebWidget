@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Use Case Diagram 1</title>
+
+    <script src="../../ThirdParty/jquery-3.2.1.min.js"></script>
+    <script src="../../ThirdParty/svg.min.js"></script>
+    <script src="../../Source/CodeSmithyUMLWebWidget.js"></script>
+
+    <link rel="stylesheet" href="../../StyleSheets/CodeSmithyUMLWebWidget.css">
+  </head>
+  <body>
+    <p>The following diagram is a simple use case diagram.</p>
+    <div id="diagram1" class="CodeSmithyUMLWebWidget">
+      { 
+        "usecasediagram":
+          [
+            { 
+              "actor":
+                {
+                  "name": "Customer"
+                }
+            },
+            { 
+              "actor":
+                {
+                  "name": "Shopkeeper"
+                }
+            },
+            { 
+              "actor":
+                {
+                  "name": "Till"
+                }
+            },
+            {
+              "usecase":
+                {
+                  "title": "Pay for items"
+                }
+            }
+          ]
+      }
+    </div>
+    <script>
+      var classDiagram = new CodeSmithy.UMLWebWidget.Diagram()
+
+      var layout = {
+        "actorpositions": {
+          "Customer": { "x": 1, "y": 1 },
+          "Shopkeeper": { "x": 150, "y": 1 },
+          "Till": { "x": 320, "y": 1 }
+        }
+      }
+
+      classDiagram.createFromDiv("diagram1", layout)
+    </script>
+  </body>
+</html>

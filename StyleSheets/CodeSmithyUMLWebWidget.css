@@ -2,12 +2,33 @@
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
-   opacity: 0.75;
 }
 
 .CodeSmithyUMLWebWidget .UMLClass line {
    stroke: #595959;
    stroke-width: 1;
+}
+
+.CodeSmithyUMLWebWidget .UMLLifeline rect {
+   stroke: #595959;
+   stroke-width: 2;
+   fill: #f1f4ff;
+}
+
+.CodeSmithyUMLWebWidget .UMLLifeline line {
+   stroke: #595959;
+   stroke-width: 2;
+}
+
+.CodeSmithyUMLWebWidget .UMLActor line {
+   stroke: #595959;
+   stroke-width: 2;
+}
+
+.CodeSmithyUMLWebWidget .UMLActor circle {
+   stroke: #595959;
+   stroke-width: 2;
+   fill: white;
 }
 
 .CodeSmithyUMLWebWidget .UMLClassName {
@@ -31,6 +52,13 @@
    fill: #404040;
 }
 
+.CodeSmithyUMLWebWidget .UMLInstanceName {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: bold;
+   fill: #404040;
+}
+
 .CodeSmithyUMLWebWidget .UMLInheritanceRelationship line {
    stroke: #454545;
    stroke-width: 2;
@@ -51,6 +79,31 @@
    stroke: #454545;
    stroke-width: 2;
    fill: #454545;
+}
+
+.CodeSmithyUMLWebWidget .UMLAggregationRelationship line {
+   stroke: #454545;
+   stroke-width: 2;
+}
+
+.CodeSmithyUMLWebWidget .UMLAggregationRelationship polygon {
+   stroke: #454545;
+   stroke-width: 2;
+   fill: white;
+}
+
+.CodeSmithyUMLWebWidget .UMLSynchronousMessage line {
+   stroke: #454545;
+   stroke-width: 2;
+}
+
+.CodeSmithyUMLWebWidget .UMLReturnMessage line {
+   stroke: #454545;
+   stroke-width: 2;
+}
+
+.CodeSmithyUMLWebWidget .TopRightSizingHandle {
+   cursor: nesw-resize
 }
 
 .CodeSmithyUMLWebWidget.StandardStyle .UMLClass rect {
@@ -77,4 +130,12 @@
 .CodeSmithyUMLWebWidget.StandardStyle .UMLCompositionRelationship polygon {
    stroke: black;
    fill: black;
+}
+
+.CodeSmithyUMLWebWidget.StandardStyle .UMLAggregationRelationship line {
+   stroke: black;
+}
+
+.CodeSmithyUMLWebWidget.StandardStyle .UMLAggregationRelationship polygon {
+   stroke: black;
 }
