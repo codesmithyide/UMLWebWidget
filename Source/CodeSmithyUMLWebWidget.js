@@ -9,23 +9,23 @@ CodeSmithy.UMLWebWidget = { }
     ns.Style = function() {
 
         this.getTopMargin = function(element) {
-            return this.style[element]["margin-top"]
+            return getValueOrDefault(this, element, "margin-top")
         }
 
         this.getBottomMargin = function(element) {
-            return this.style[element]["margin-bottom"]
+            return getValueOrDefault(this, element, "margin-bottom")
         }
 
         this.getLeftMargin = function(element) {
-            return this.style[element]["margin-left"]
+            return getValueOrDefault(this, element, "margin-left")
         }
 
         this.getRightMargin = function(element) {
-            return this.style[element]["margin-right"]
+            return getValueOrDefault(this, element, "margin-right")
         }
 
-        this.style = { 
-            "classbox": {
+        this.style = {
+            "defaults": {
                 "margin-left": 12,
                 "margin-right": 12,
                 "margin-top": 9,
@@ -36,6 +36,14 @@ CodeSmithy.UMLWebWidget = { }
                 "margin-right": 12,
                 "margin-top": 9,
                 "margin-bottom": 9
+            }
+        }
+
+        function getValueOrDefault(self, element, style) {
+            if (self.style[element] && self.style[element][style]) {
+                return self.style[element][style]
+            } else {
+                return self.style["defaults"][style]
             }
         }
 
