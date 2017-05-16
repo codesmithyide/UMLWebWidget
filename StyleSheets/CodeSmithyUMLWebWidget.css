@@ -31,6 +31,12 @@
    fill: white;
 }
 
+.CodeSmithyUMLWebWidget .UMLUseCase ellipse {
+   stroke: #595959;
+   stroke-width: 2;
+   fill: #f1f4ff;
+}
+
 .CodeSmithyUMLWebWidget .UMLClassName {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
@@ -98,6 +104,11 @@
 }
 
 .CodeSmithyUMLWebWidget .UMLReturnMessage line {
+   stroke: #454545;
+   stroke-width: 2;
+}
+
+.CodeSmithyUMLWebWidget .UMLUseCaseAssociation line {
    stroke: #454545;
    stroke-width: 2;
 }

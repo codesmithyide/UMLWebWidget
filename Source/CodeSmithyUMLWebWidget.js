@@ -50,6 +50,14 @@ CodeSmithy.UMLWebWidget = { }
         // diagram
         this.lifelines = { }
 
+        // The list of all UML actors present on the
+        // diagram
+        this.actors = { }
+
+        // The list of all UML use cases present on the
+        // diagram
+        this.usecases = { }
+
         // Create a diagram from a div element in the HTML document.
         // The div element must contain a JSON object with the UML
         // diagram information. The contents of the div will be replaced
@@ -163,7 +171,11 @@ CodeSmithy.UMLWebWidget = { }
             for (var i = 0; i < useCaseDiagram.length; i++) {
                 let item = useCaseDiagram[i]
                 if (item.actor) {
-                    new ns.Actor(svg, item.actor, layout)
+                    this.actors[item.actor.name] = new ns.Actor(svg, item.actor, layout)
+                } else if (item.usecase) {
+                    this.usecases[item.usecase.title] = new ns.UseCase(svg, item.usecase, layout)
+                } else if (item.association) {
+                    createUseCaseConnector(this, svg, this.actors[item.association.actor], this.usecases[item.association.usecase]).draw()
                 }
             }
         }
@@ -174,6 +186,10 @@ CodeSmithy.UMLWebWidget = { }
 
         function createLifelineConnector(self, svg, type, classbox1, classbox2, name, layout) {
             return new ns.Connector(svg, type, classbox1, classbox2, name, layout)
+        }
+
+        function createUseCaseConnector(self, svg, actor, usecase) {
+            return new ns.Connector(svg, "usecaseassociation", actor, usecase)
         }
     }
     //
@@ -371,8 +387,9 @@ CodeSmithy.UMLWebWidget = { }
     ns.Actor = function(svg, actorDescription, layout) {
 
         this.actorDescription = actorDescription
-        this.svg = svg.group().addClass("UMLActor")
-        draw(this.svg, this.actorDescription)
+        this.def = svg.group().addClass("UMLActor")
+        draw(this.def, this.actorDescription)
+        this.svg = svg.use(this.def)
 
         function draw(svg, actorDescription) {
             let textDef = svg.text(actorDescription.name).move(0, 35)
@@ -396,6 +413,26 @@ CodeSmithy.UMLWebWidget = { }
     /////
 
     /////
+    // Start of the CodeSmithy.UMLWebWidget.UseCase class definition
+    //
+    ns.UseCase = function(svg, useCaseDescription, layout) {
+
+        this.def = svg.group().addClass("UMLUseCase")
+        let textDef = this.def.defs().text(useCaseDescription.title).move(0, 0)
+        this.def.ellipse(1.2*textDef.bbox().width, 3*textDef.bbox().height)
+        this.def.use(textDef).move(0.1*textDef.bbox().width, textDef.bbox().height)
+        if (layout.usecasepositions[useCaseDescription.title]) {
+            this.def.move(layout.usecasepositions[useCaseDescription.title].x, layout.usecasepositions[useCaseDescription.title].y)
+        }
+        this.svg = svg.use(this.def)
+
+    }
+    //
+    // End of the CodeSmithy.UMLWebWidget.UseCase class definition
+    /////
+
+
+    /////
     // Start of the CodeSmithy.UMLWebWidget.Connector class definition
     //
     ns.Connector = function(svg, type, classbox1, classbox2, text, layout) {
@@ -416,6 +453,8 @@ CodeSmithy.UMLWebWidget = { }
             this.svg.addClass("UMLSynchronousMessage")
         } else if (this.type == "returnmessage") {
             this.svg.addClass("UMLReturnMessage")
+        } else if (this.type == "usecaseassociation") {
+            this.svg.addClass("UMLUseCaseAssociation")
         }
 
         this.draw = function() {
@@ -428,6 +467,8 @@ CodeSmithy.UMLWebWidget = { }
                 drawSynchronousMessage(this.svg, this.classbox1, this.classbox2, this.text)
             } else if (this.type == "returnmessage") {
                 drawReturnMessage(this.svg, this.classbox1, this.classbox2)
+            } else if (this.type == "usecaseassociation") {
+                drawUseCaseAssociation(this.svg, this.classbox1, this.classbox2)
             }
         }
 
@@ -519,6 +560,10 @@ CodeSmithy.UMLWebWidget = { }
             svg.line(startX, 6, startX + 10, 0)
             svg.line(startX, 6, endX, 6).attr("stroke-dasharray", "4, 4")
             svg.line(startX, 6, startX + 10, 12)
+        }
+
+        function drawUseCaseAssociation(svg, classbox1, classbox2) {
+            svg.line(classbox1.svg.bbox().x + classbox1.svg.bbox().width, classbox1.svg.bbox().cy, classbox2.svg.bbox().x, classbox2.svg.bbox().cy)
         }
 
         var ConnectorPosition = {

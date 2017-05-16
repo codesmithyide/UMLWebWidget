@@ -36,7 +36,28 @@
             {
               "usecase":
                 {
-                  "title": "Pay for items"
+                  "title": "Pay for merchandise"
+                }
+            },
+            {
+              "association":
+                {
+                  "actor": "Customer",
+                  "usecase": "Pay for merchandise"
+                }
+            },
+            {
+              "association":
+                {
+                  "actor": "Shopkeeper",
+                  "usecase": "Pay for merchandise"
+                }
+            },
+            {
+              "association":
+                {
+                  "actor": "Till",
+                  "usecase": "Pay for merchandise"
                 }
             }
           ]
@@ -47,9 +68,12 @@
 
       var layout = {
         "actorpositions": {
-          "Customer": { "x": 1, "y": 1 },
-          "Shopkeeper": { "x": 150, "y": 1 },
-          "Till": { "x": 320, "y": 1 }
+          "Customer": { "x": 10, "y": 1 },
+          "Shopkeeper": { "x": 1, "y": 75 },
+          "Till": { "x": 33, "y": 150 }
+        },
+        "usecasepositions": {
+          "Pay for merchandise": { "x": 140, "y": 75 }
         }
       }
 
