@@ -6,6 +6,41 @@ CodeSmithy.UMLWebWidget = { }
 
 ;(function(ns) {
 
+    ns.Style = function() {
+
+        this.getTopMargin = function(element) {
+            return this.style[element]["margin-top"]
+        }
+
+        this.getBottomMargin = function(element) {
+            return this.style[element]["margin-bottom"]
+        }
+
+        this.getLeftMargin = function(element) {
+            return this.style[element]["margin-left"]
+        }
+
+        this.getRightMargin = function(element) {
+            return this.style[element]["margin-right"]
+        }
+
+        this.style = { 
+            "classbox": {
+                "margin-left": 12,
+                "margin-right": 12,
+                "margin-top": 9,
+                "margin-bottom": 9
+            },
+            "lifeline": {
+                "margin-left": 12,
+                "margin-right": 12,
+                "margin-top": 9,
+                "margin-bottom": 9
+            }
+        }
+
+    }
+
     /////
     // Start of the CodeSmithy.UMLWebWidget.Diagram class definition
     //
@@ -68,24 +103,13 @@ CodeSmithy.UMLWebWidget = { }
             this.diagramDescription = JSON.parse($('#' + divId).text())
             $('#' + divId).empty()
             var svg = SVG(divId).size(this.settings.width, this.settings.height)
-            var style = { 
-                "classbox": {
-                    "margin-left": 12,
-                    "margin-right": 12,
-                    "margin-top": 9,
-                    "margin-bottom": 9
-                },
-                "lifeline": {
-                    "margin-left": 12,
-                    "margin-right": 12,
-                    "margin-top": 9,
-                    "margin-bottom": 9
-                }
-            }
+            let style = new ns.Style()
             if (this.diagramDescription.classdiagram) {
                 this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
-            } else if (this.diagramDescription.sequencediagram) {
-                this.drawSequenceDiagram(svg, this.diagramDescription.sequencediagram, style, layout)
+            } else if (this.diagramDescription.componentdiagram) {
+                this.drawComponentDiagram(svg, this.diagramDescription.componentdiagram)
+            }else if (this.diagramDescription.sequencediagram) {
+                this.drawSequenceDiagram(svg, this.diagramDescription.sequencediagram, style.style, layout)
             } else if (this.diagramDescription.usecasediagram) {
                 this.drawUseCaseDiagram(svg, this.diagramDescription.usecasediagram, layout)
             }
@@ -105,7 +129,7 @@ CodeSmithy.UMLWebWidget = { }
             for (var i = 0; i < classDiagram.length; i++) {
                 let item = classDiagram[i]
                 if (item.class) {
-                    this.classboxes[item.class.name] = new ns.ClassBox(svg, item.class, this.settings.canMove, style.classbox, layout)
+                    this.classboxes[item.class.name] = new ns.ClassBox(svg, item.class, this.settings.canMove, style, layout)
                 } else if (item.relationship) {
                     let classbox1
                     let classbox2
@@ -122,6 +146,15 @@ CodeSmithy.UMLWebWidget = { }
                     newConnector.draw()
                 }
             }
+        }
+
+        this.drawComponentDiagram = function(svg, componentDiagram) {
+            for (var i = 0; i < componentDiagram.length; i++) {
+                let item = componentDiagram[i]
+                if (item.component) {
+                    new ns.Component(svg, item.component)
+                }
+            } 
         }
 
         this.drawSequenceDiagram = function(svg, sequenceDiagram, style, layout) {
@@ -199,10 +232,10 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.ClassBox class definition
     //
-    ns.ClassBox = function(svg, classDescription, canMove, classboxStyle, layout) {
+    ns.ClassBox = function(svg, classDescription, canMove, style, layout) {
         
         this.classDescription = classDescription
-        this.def = createDef(this, svg.defs(), classDescription, canMove, classboxStyle, layout)
+        this.def = createDef(this, svg.defs(), classDescription, canMove, style, layout)
         this.svg = svg.use(this.def)
 
         // List of connectors that are connected to this class box
@@ -224,11 +257,11 @@ CodeSmithy.UMLWebWidget = { }
                 height: 0
             }
     
-            currentDimensions.height = style["margin-top"]
+            currentDimensions.height = style.getTopMargin("classbox")
 
-            var classNameDef = defs.text(classInfo.name).addClass("UMLClassName").move(style["margin-left"], currentDimensions.height)
+            var classNameDef = defs.text(classInfo.name).addClass("UMLClassName").move(style.getLeftMargin("classbox"), currentDimensions.height)
             currentDimensions.width = Math.max(currentDimensions.width, classNameDef.bbox().width)
-            currentDimensions.height += (classNameDef.bbox().height + style["margin-bottom"])
+            currentDimensions.height += (classNameDef.bbox().height + style.getBottomMargin("classbox"))
 
             var line1YPos = currentDimensions.height
             let attributeGroupDef = addCompartment(defs, currentDimensions, style, classInfo.attributes, "UMLAttribute")
@@ -242,7 +275,7 @@ CodeSmithy.UMLWebWidget = { }
                 classNameDef.dx((currentDimensions.width - classNameDef.bbox().width)/2)
             }
 
-            currentDimensions.width += (style["margin-left"] + style["margin-right"])
+            currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
     
             classGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
             classGroup.use(classNameDef)
@@ -274,12 +307,12 @@ CodeSmithy.UMLWebWidget = { }
         // Add an attribute or operation compartment and updates the current dimensions
         // of the class box
         function addCompartment(svg, currentDimensions, style, items, cssClass) {
-            currentDimensions.height += style["margin-top"]
+            currentDimensions.height += style.getTopMargin("classbox")
             let compartmentDef = createAttributeOrOperationGroupDef(svg, items, cssClass)
-            compartmentDef.dmove(style["margin-left"], currentDimensions.height)
+            compartmentDef.dmove(style.getLeftMargin("classbox"), currentDimensions.height)
             currentDimensions.width = Math.max(currentDimensions.width, compartmentDef.bbox().width)
             currentDimensions.height += compartmentDef.bbox().height
-            currentDimensions.height += style["margin-bottom"]
+            currentDimensions.height += style.getBottomMargin("classbox")
             return compartmentDef
         }
 
@@ -319,6 +352,20 @@ CodeSmithy.UMLWebWidget = { }
     }
     //
     // End of the CodeSmithy.UMLWebWidget.ClassBox class definition
+    /////
+
+    /////
+    // Start of the CodeSmithy.UMLWebWidget.Component class definition
+    //
+    ns.Component = function(svg, componentDescription) {
+
+        var componentNameDef = svg.defs().text(componentDescription.name)
+            
+        svg.use(componentNameDef)
+
+    }
+    //
+    // End of the CodeSmithy.UMLWebWidget.Component class definition
     /////
 
     /////

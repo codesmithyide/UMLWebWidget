@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Component Diagram 1</title>
+
+    <script src="../../ThirdParty/jquery-3.2.1.min.js"></script>
+    <script src="../../ThirdParty/svg.min.js"></script>
+    <script src="../../Source/CodeSmithyUMLWebWidget.js"></script>
+
+    <link rel="stylesheet" href="../../StyleSheets/CodeSmithyUMLWebWidget.css">
+  </head>
+  <body>
+    <p>The following diagram is a component diagram.</p>
+    <div id="diagram1" class="CodeSmithyUMLWebWidget">
+      { 
+        "componentdiagram":
+          [
+            { 
+              "component":
+                {
+                  "name": "Window"
+                }
+            }
+          ]
+      }
+    </div>
+    <script>
+      var classDiagram = new CodeSmithy.UMLWebWidget.Diagram()
+      classDiagram.createFromDiv("diagram1")
+    </script>
+  </body>
+</html>
