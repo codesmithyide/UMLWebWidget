@@ -316,22 +316,20 @@ CodeSmithy.UMLWebWidget = { }
         // of the class box
         function addCompartment(svg, currentDimensions, style, items, cssClass) {
             currentDimensions.height += style.getTopMargin("classbox")
-            let compartmentDef = createAttributeOrOperationGroupDef(svg, items, cssClass)
-            compartmentDef.dmove(style.getLeftMargin("classbox"), currentDimensions.height)
+            let compartmentDef = createAttributeOrOperationGroupDef(svg, currentDimensions, items, cssClass)
+            compartmentDef.dmove(style.getLeftMargin("classbox"), 0)
             currentDimensions.width = Math.max(currentDimensions.width, compartmentDef.bbox().width)
-            currentDimensions.height += compartmentDef.bbox().height
             currentDimensions.height += style.getBottomMargin("classbox")
             return compartmentDef
         }
 
         // Creates a group with all the attributes or operations
-        function createAttributeOrOperationGroupDef(svg, items, cssClass) {
+        function createAttributeOrOperationGroupDef(svg, currentDimensions, items, cssClass) {
             let itemGroupDef = svg.group()
-            let currentHeight = 0
             for (var i = 0; i < items.length; i++) {
                 let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i], cssClass)
-                itemDef.move(0, currentHeight)
-                currentHeight += itemDef.bbox().height
+                itemDef.move(0, currentDimensions.height)
+                currentDimensions.height += itemDef.bbox().height
             }
             return itemGroupDef
         }
@@ -366,6 +364,8 @@ CodeSmithy.UMLWebWidget = { }
     // Start of the CodeSmithy.UMLWebWidget.Component class definition
     //
     ns.Component = function(svg, componentDescription) {
+
+        this.componentDescription = componentDescription
 
         var componentNameDef = svg.defs().text(componentDescription.name)
             
