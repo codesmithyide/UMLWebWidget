@@ -372,9 +372,9 @@ CodeSmithy.UMLWebWidget = { }
         let offset = 0
         if (componentDescription.interfaces) {
             for (var i = 0; i < componentDescription.interfaces.length; i++) {
-                let interfaceDef = componentWithConnectorsGroup.text(componentDescription.interfaces[i].name).move(0, 0)
-                new ns.BallConnector(componentWithConnectorsGroup, interfaceDef.bbox().width + 5)
-                offset = Math.max(offset, interfaceDef.bbox().width + 5)
+                let ballConnector = new ns.BallConnector(svg.defs(), componentWithConnectorsGroup, componentDescription.interfaces[i].name)
+                ballConnector.draw()
+                offset = Math.max(offset, ballConnector.width)
             }
         }
 
@@ -891,9 +891,23 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.BallConnector class definition
     //
-    ns.BallConnector = function(svg, length) {
-        svg.circle(10).move(length/2 - 5, 20)
-        svg.line(10 + length/2 - 5, 25, length, 25)
+    ns.BallConnector = function(svgDefs, svgParentGroup, text) {
+
+        this.width = 0
+
+        this.draw = function() {
+            svgParentGroup.use(textDef)
+            svgParentGroup.circle(10).move((this.width)/2 - 5, 20)
+            svgParentGroup.line(10 + (this.width)/2 - 5, 25, (this.width), 25)
+        }
+
+        let textDef = null
+
+        ;(function(self) {
+            textDef = svgDefs.text(text).move(0, 0) 
+            self.width = textDef.bbox().width + 5
+        })(this)
+
     }
     //
     // End of the CodeSmithy.UMLWebWidget.BallConnector class definition
