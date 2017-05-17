@@ -317,8 +317,7 @@ CodeSmithy.UMLWebWidget = { }
         function addCompartment(svg, currentDimensions, style, items, cssClass) {
             currentDimensions.height += style.getTopMargin("classbox")
             let compartmentDef = createAttributeOrOperationGroupDef(svg, currentDimensions, items, cssClass)
-            compartmentDef.dmove(style.getLeftMargin("classbox"), 0)
-            currentDimensions.width = Math.max(currentDimensions.width, compartmentDef.bbox().width)
+            compartmentDef.dmove(style.getLeftMargin("classbox"), 0)            
             currentDimensions.height += style.getBottomMargin("classbox")
             return compartmentDef
         }
@@ -329,6 +328,7 @@ CodeSmithy.UMLWebWidget = { }
             for (var i = 0; i < items.length; i++) {
                 let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i], cssClass)
                 itemDef.move(0, currentDimensions.height)
+                currentDimensions.width = Math.max(currentDimensions.width, itemDef.bbox().width)
                 currentDimensions.height += itemDef.bbox().height
             }
             return itemGroupDef
