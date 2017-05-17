@@ -15,6 +15,17 @@
    fill: #f1f4ff;
 }
 
+.CodeSmithyUMLWebWidget .UMLComponent circle {
+   stroke: #595959;
+   stroke-width: 2;
+   fill: #f1f4ff;
+}
+
+.CodeSmithyUMLWebWidget .UMLComponent line {
+   stroke: #595959;
+   stroke-width: 2;
+}
+
 .CodeSmithyUMLWebWidget .UMLComponentStereotype rect {
    stroke: #595959;
    stroke-width: 1;

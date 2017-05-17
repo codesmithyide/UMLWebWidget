@@ -15,10 +15,20 @@
       { 
         "componentdiagram":
           [
+           { 
+              "component":
+                {
+                  "name": "ControlPanel"
+                }
+            },
             { 
               "component":
                 {
-                  "name": "Window"
+                  "name": "WebServer",
+                  "interfaces":
+                    [
+                      { "name": "IControl" }
+                    ]
                 }
             }
           ]
@@ -26,7 +36,15 @@
     </div>
     <script>
       var classDiagram = new CodeSmithy.UMLWebWidget.Diagram()
-      classDiagram.createFromDiv("diagram1")
+
+      var layout = {
+        "componentpositions": {
+          "ControlPanel": { "x": 10, "y": 1 },
+          "WebServer": { "x": 200, "y": 1 }
+        }
+      }
+
+      classDiagram.createFromDiv("diagram1", layout)
     </script>
   </body>
 </html>

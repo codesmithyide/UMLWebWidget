@@ -115,7 +115,7 @@ CodeSmithy.UMLWebWidget = { }
             if (this.diagramDescription.classdiagram) {
                 this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
             } else if (this.diagramDescription.componentdiagram) {
-                this.drawComponentDiagram(svg, this.diagramDescription.componentdiagram, style)
+                this.drawComponentDiagram(svg, this.diagramDescription.componentdiagram, style, layout)
             }else if (this.diagramDescription.sequencediagram) {
                 this.drawSequenceDiagram(svg, this.diagramDescription.sequencediagram, style.style, layout)
             } else if (this.diagramDescription.usecasediagram) {
@@ -156,11 +156,11 @@ CodeSmithy.UMLWebWidget = { }
             }
         }
 
-        this.drawComponentDiagram = function(svg, componentDiagram, style) {
+        this.drawComponentDiagram = function(svg, componentDiagram, style, layout) {
             for (var i = 0; i < componentDiagram.length; i++) {
                 let item = componentDiagram[i]
                 if (item.component) {
-                    new ns.Component(svg, item.component, style)
+                    new ns.Component(svg, item.component, style, layout)
                 }
             } 
         }
@@ -363,11 +363,22 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.Component class definition
     //
-    ns.Component = function(svg, componentDescription, style) {
+    ns.Component = function(svg, componentDescription, style, layout) {
 
         this.componentDescription = componentDescription
 
-        var componentGroup = svg.group().addClass("UMLComponent")
+        var componentWithConnectorsGroup = svg.group().addClass("UMLComponent")
+
+        let offset = 0
+        if (componentDescription.interfaces) {
+            for (var i = 0; i < componentDescription.interfaces.length; i++) {
+                let interfaceDef = componentWithConnectorsGroup.text(componentDescription.interfaces[i].name).move(0, 0)
+                createBall(componentWithConnectorsGroup, interfaceDef.bbox().width + 5)
+                offset = Math.max(offset, interfaceDef.bbox().width + 5)
+            }
+        }
+
+        var componentGroup = componentWithConnectorsGroup.group()
 
         let currentDimensions = { 
             width: 0,
@@ -379,18 +390,23 @@ CodeSmithy.UMLWebWidget = { }
         let stereotypeGroup = createStereotype(componentGroup.defs())
         currentDimensions.height += stereotypeGroup.bbox().height + 5
 
-        var componentNameDef = componentGroup.defs().text(componentDescription.name).addClass("UMLComponentName").move(style.getLeftMargin("component"), currentDimensions.height)
+        var componentNameDef = componentGroup.defs().text(componentDescription.name).addClass("UMLComponentName").move(offset + style.getLeftMargin("component"), currentDimensions.height)
         currentDimensions.width = Math.max(currentDimensions.width, componentNameDef.bbox().width)
         currentDimensions.height += (componentNameDef.bbox().height + style.getBottomMargin("component"))
 
         currentDimensions.width += (style.getLeftMargin("component") + style.getRightMargin("component"))
     
-        componentGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
-        componentGroup.use(stereotypeGroup).move((currentDimensions.width - style.getRightMargin("component") - stereotypeGroup.bbox().width), style.getTopMargin("component"))
+        componentGroup.rect(currentDimensions.width, currentDimensions.height).move(offset,0)
+        componentGroup.use(stereotypeGroup).move(offset + (currentDimensions.width - style.getRightMargin("component") - stereotypeGroup.bbox().width), style.getTopMargin("component"))
         componentGroup.use(componentNameDef)
 
         // Offset by 1 to leave some space because the border stroke width is 2
-        componentGroup.move(1,1)
+        componentGroup.move(1, 1)
+
+
+        if (layout.componentpositions[componentDescription.name]) {
+            componentWithConnectorsGroup.move(layout.componentpositions[componentDescription.name].x, layout.componentpositions[componentDescription.name].y)
+        }
 
         function createStereotype(svg) {
             var stereotypeGroup = svg.group().addClass("UMLComponentStereotype")
@@ -398,6 +414,11 @@ CodeSmithy.UMLWebWidget = { }
             stereotypeGroup.rect(8, 3).move(0, 3)
             stereotypeGroup.rect(8, 3).move(0, 9)
             return stereotypeGroup
+        }
+
+        function createBall(svg, length) {
+            svg.circle(10).move(length/2 - 5, 20)
+            svg.line(10 + length/2 - 5, 25, length, 25)
         }
     }
     //
