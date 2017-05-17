@@ -18,7 +18,7 @@
 .CodeSmithyUMLWebWidget .UMLComponent circle {
    stroke: #595959;
    stroke-width: 2;
-   fill: #f1f4ff;
+   fill: white;
 }
 
 .CodeSmithyUMLWebWidget .UMLComponent line {

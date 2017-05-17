@@ -373,7 +373,7 @@ CodeSmithy.UMLWebWidget = { }
         if (componentDescription.interfaces) {
             for (var i = 0; i < componentDescription.interfaces.length; i++) {
                 let interfaceDef = componentWithConnectorsGroup.text(componentDescription.interfaces[i].name).move(0, 0)
-                createBall(componentWithConnectorsGroup, interfaceDef.bbox().width + 5)
+                new ns.BallConnector(componentWithConnectorsGroup, interfaceDef.bbox().width + 5)
                 offset = Math.max(offset, interfaceDef.bbox().width + 5)
             }
         }
@@ -387,8 +387,8 @@ CodeSmithy.UMLWebWidget = { }
 
         currentDimensions.height = style.getTopMargin("component")
 
-        let stereotypeGroup = createStereotype(componentGroup.defs())
-        currentDimensions.height += stereotypeGroup.bbox().height + 5
+        let stereotype = new Stereotype(componentGroup)
+        currentDimensions.height += stereotype.height
 
         var componentNameDef = componentGroup.defs().text(componentDescription.name).addClass("UMLComponentName").move(offset + style.getLeftMargin("component"), currentDimensions.height)
         currentDimensions.width = Math.max(currentDimensions.width, componentNameDef.bbox().width)
@@ -396,30 +396,39 @@ CodeSmithy.UMLWebWidget = { }
 
         currentDimensions.width += (style.getLeftMargin("component") + style.getRightMargin("component"))
     
-        componentGroup.rect(currentDimensions.width, currentDimensions.height).move(offset,0)
-        componentGroup.use(stereotypeGroup).move(offset + (currentDimensions.width - style.getRightMargin("component") - stereotypeGroup.bbox().width), style.getTopMargin("component"))
+        componentGroup.rect(currentDimensions.width, currentDimensions.height).move(offset, 0)
+        stereotype.move(offset + (currentDimensions.width - style.getRightMargin("component") - stereotype.width), style.getTopMargin("component"))
+        stereotype.draw()
         componentGroup.use(componentNameDef)
 
         // Offset by 1 to leave some space because the border stroke width is 2
         componentGroup.move(1, 1)
 
-
         if (layout.componentpositions[componentDescription.name]) {
             componentWithConnectorsGroup.move(layout.componentpositions[componentDescription.name].x, layout.componentpositions[componentDescription.name].y)
         }
 
-        function createStereotype(svg) {
-            var stereotypeGroup = svg.group().addClass("UMLComponentStereotype")
-            stereotypeGroup.rect(11, 15).move(4, 0)
-            stereotypeGroup.rect(8, 3).move(0, 3)
-            stereotypeGroup.rect(8, 3).move(0, 9)
-            return stereotypeGroup
+        function Stereotype(svgParentGroup) {
+
+            this.x = 0
+            this.y = 0
+            this.width = 15
+            this.height = 20
+
+            this.move = function(x, y) {
+                this.x = x
+                this.y = y
+            }
+
+            this.draw = function() {
+                let stereoTypeGroup = svgParentGroup.group().addClass("UMLComponentStereotype")
+                stereoTypeGroup.rect(11, 15).move(4 + this.x, this.y)
+                stereoTypeGroup.rect(8, 3).move(this.x, this.y + 3)
+                stereoTypeGroup.rect(8, 3).move(this.x, this.y + 9)
+            }
+
         }
 
-        function createBall(svg, length) {
-            svg.circle(10).move(length/2 - 5, 20)
-            svg.line(10 + length/2 - 5, 25, length, 25)
-        }
     }
     //
     // End of the CodeSmithy.UMLWebWidget.Component class definition
@@ -877,6 +886,17 @@ CodeSmithy.UMLWebWidget = { }
     }
     //
     // End of the CodeSmithy.UMLWebWidget.Connector class definition
+    /////
+
+    /////
+    // Start of the CodeSmithy.UMLWebWidget.BallConnector class definition
+    //
+    ns.BallConnector = function(svg, length) {
+        svg.circle(10).move(length/2 - 5, 20)
+        svg.line(10 + length/2 - 5, 25, length, 25)
+    }
+    //
+    // End of the CodeSmithy.UMLWebWidget.BallConnector class definition
     /////
 
 })(CodeSmithy.UMLWebWidget)
