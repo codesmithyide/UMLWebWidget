@@ -9,6 +9,18 @@
    stroke-width: 1;
 }
 
+.CodeSmithyUMLWebWidget .UMLComponent rect {
+   stroke: #595959;
+   stroke-width: 2;
+   fill: #f1f4ff;
+}
+
+.CodeSmithyUMLWebWidget .UMLComponentStereotype rect {
+   stroke: #595959;
+   stroke-width: 1;
+   fill: #f1f4ff;
+}
+
 .CodeSmithyUMLWebWidget .UMLLifeline rect {
    stroke: #595959;
    stroke-width: 2;

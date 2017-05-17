@@ -115,7 +115,7 @@ CodeSmithy.UMLWebWidget = { }
             if (this.diagramDescription.classdiagram) {
                 this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
             } else if (this.diagramDescription.componentdiagram) {
-                this.drawComponentDiagram(svg, this.diagramDescription.componentdiagram)
+                this.drawComponentDiagram(svg, this.diagramDescription.componentdiagram, style)
             }else if (this.diagramDescription.sequencediagram) {
                 this.drawSequenceDiagram(svg, this.diagramDescription.sequencediagram, style.style, layout)
             } else if (this.diagramDescription.usecasediagram) {
@@ -156,11 +156,11 @@ CodeSmithy.UMLWebWidget = { }
             }
         }
 
-        this.drawComponentDiagram = function(svg, componentDiagram) {
+        this.drawComponentDiagram = function(svg, componentDiagram, style) {
             for (var i = 0; i < componentDiagram.length; i++) {
                 let item = componentDiagram[i]
                 if (item.component) {
-                    new ns.Component(svg, item.component)
+                    new ns.Component(svg, item.component, style)
                 }
             } 
         }
@@ -363,14 +363,42 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.Component class definition
     //
-    ns.Component = function(svg, componentDescription) {
+    ns.Component = function(svg, componentDescription, style) {
 
         this.componentDescription = componentDescription
 
-        var componentNameDef = svg.defs().text(componentDescription.name)
-            
-        svg.use(componentNameDef)
+        var componentGroup = svg.group().addClass("UMLComponent")
 
+        let currentDimensions = { 
+            width: 0,
+            height: 0
+        }
+
+        currentDimensions.height = style.getTopMargin("component")
+
+        let stereotypeGroup = createStereotype(componentGroup.defs())
+        currentDimensions.height += stereotypeGroup.bbox().height + 5
+
+        var componentNameDef = componentGroup.defs().text(componentDescription.name).addClass("UMLComponentName").move(style.getLeftMargin("component"), currentDimensions.height)
+        currentDimensions.width = Math.max(currentDimensions.width, componentNameDef.bbox().width)
+        currentDimensions.height += (componentNameDef.bbox().height + style.getBottomMargin("component"))
+
+        currentDimensions.width += (style.getLeftMargin("component") + style.getRightMargin("component"))
+    
+        componentGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
+        componentGroup.use(stereotypeGroup).move((currentDimensions.width - style.getRightMargin("component") - stereotypeGroup.bbox().width), style.getTopMargin("component"))
+        componentGroup.use(componentNameDef)
+
+        // Offset by 1 to leave some space because the border stroke width is 2
+        componentGroup.move(1,1)
+
+        function createStereotype(svg) {
+            var stereotypeGroup = svg.group().addClass("UMLComponentStereotype")
+            stereotypeGroup.rect(11, 15).move(4, 0)
+            stereotypeGroup.rect(8, 3).move(0, 3)
+            stereotypeGroup.rect(8, 3).move(0, 9)
+            return stereotypeGroup
+        }
     }
     //
     // End of the CodeSmithy.UMLWebWidget.Component class definition
