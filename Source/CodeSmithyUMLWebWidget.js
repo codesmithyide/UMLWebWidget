@@ -412,7 +412,7 @@ CodeSmithy.UMLWebWidget = { }
         componentGroup.move(1, 1)
 
         for (let i = 0; i < this.socketConnectors.length; i++) {
-            this.socketConnectors[i].move(currentDimensions.width,currentDimensions.height/2)
+            this.socketConnectors[i].moveConnectionPoint(currentDimensions.width, currentDimensions.height/2)
             this.socketConnectors[i].draw()
         }
 
@@ -934,9 +934,20 @@ CodeSmithy.UMLWebWidget = { }
         this.y = 0
         this.width = 0
 
+        // Move the connector so that the top left
+        // corner of the bounding box is at position
+        // (x, y)
         this.move = function(x, y) {
             this.x = x
             this.y = y
+        }
+
+        // Move the connector so that its connection
+        // point is at position (x, y)
+        this.moveConnectionPoint = function(x, y) {
+            let connectorOffsetY = textDef.bbox().height + 6
+            y -= connectorOffsetY
+            this.move(x, y)
         }
 
         this.draw = function() {
