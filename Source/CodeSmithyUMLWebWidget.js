@@ -366,15 +366,22 @@ CodeSmithy.UMLWebWidget = { }
     ns.Component = function(svg, componentDescription, style, layout) {
 
         this.componentDescription = componentDescription
+        this.socketConnectors = [ ]
 
         var componentWithConnectorsGroup = svg.group().addClass("UMLComponent")
 
         let offset = 0
         if (componentDescription.interfaces) {
-            for (var i = 0; i < componentDescription.interfaces.length; i++) {
+            for (let i = 0; i < componentDescription.interfaces.length; i++) {
                 let ballConnector = new ns.BallConnector(svg.defs(), componentWithConnectorsGroup, componentDescription.interfaces[i].name)
                 ballConnector.draw()
                 offset = Math.max(offset, ballConnector.width)
+            }
+        }
+        if (componentDescription.dependencies) {
+            for (let i = 0; i < componentDescription.dependencies.length; i++) {
+                let socketConnector = new ns.SocketConnector(svg.defs(), componentWithConnectorsGroup, componentDescription.dependencies[i].name)
+                this.socketConnectors.push(socketConnector)
             }
         }
 
@@ -403,6 +410,11 @@ CodeSmithy.UMLWebWidget = { }
 
         // Offset by 1 to leave some space because the border stroke width is 2
         componentGroup.move(1, 1)
+
+        for (let i = 0; i < this.socketConnectors.length; i++) {
+            this.socketConnectors[i].move(currentDimensions.width,currentDimensions.height/2)
+            this.socketConnectors[i].draw()
+        }
 
         if (layout.componentpositions[componentDescription.name]) {
             componentWithConnectorsGroup.move(layout.componentpositions[componentDescription.name].x, layout.componentpositions[componentDescription.name].y)
@@ -911,6 +923,40 @@ CodeSmithy.UMLWebWidget = { }
     }
     //
     // End of the CodeSmithy.UMLWebWidget.BallConnector class definition
+    /////
+
+    /////
+    // Start of the CodeSmithy.UMLWebWidget.SocketConnector class definition
+    //
+    ns.SocketConnector = function(svgDefs, svgParentGroup, text) {
+
+        this.x = 0
+        this.y = 0
+        this.width = 0
+
+        this.move = function(x, y) {
+            this.x = x
+            this.y = y
+        }
+
+        this.draw = function() {
+            svgParentGroup.use(textDef).move(this.x + 5, this.y)
+            svgParentGroup.line(this.x, this.y + textDef.bbox().height + 8, this.x + (this.width / 2), this.y + textDef.bbox().height + 8)
+            let clippath = svgParentGroup.clip()
+            clippath.rect(10, 17).move(this.x + (this.width / 2) - 1, this.y + textDef.bbox().height, 0)
+            svgParentGroup.circle(15).move(this.x + (this.width / 2), this.y + textDef.bbox().height + 1).clipWith(clippath)
+        }
+
+        let textDef = null
+
+        ;(function(self) {
+            textDef = svgDefs.text(text).move(0, 0)
+            self.width = textDef.bbox().width + 5
+        })(this)
+
+    }
+    //
+    // End of the CodeSmithy.UMLWebWidget.SocketConnector class definition
     /////
 
 })(CodeSmithy.UMLWebWidget)
