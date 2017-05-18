@@ -418,7 +418,7 @@ CodeSmithy.UMLWebWidget = { }
         }
 
         for (let i = 0; i < this.socketConnectors.length; i++) {
-            this.socketConnectors[i].moveConnectionPoint(currentDimensions.width, currentDimensions.height/2)
+            this.socketConnectors[i].moveConnectionPoint(currentDimensions.width + offset, currentDimensions.height/2)
             this.socketConnectors[i].draw()
         }
 
