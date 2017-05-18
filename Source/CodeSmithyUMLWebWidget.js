@@ -366,6 +366,7 @@ CodeSmithy.UMLWebWidget = { }
     ns.Component = function(svg, componentDescription, style, layout) {
 
         this.componentDescription = componentDescription
+        this.ballConnectors = [ ]
         this.socketConnectors = [ ]
 
         var componentWithConnectorsGroup = svg.group().addClass("UMLComponent")
@@ -374,7 +375,7 @@ CodeSmithy.UMLWebWidget = { }
         if (componentDescription.interfaces) {
             for (let i = 0; i < componentDescription.interfaces.length; i++) {
                 let ballConnector = new ns.BallConnector(svg.defs(), componentWithConnectorsGroup, componentDescription.interfaces[i].name)
-                ballConnector.draw()
+                this.ballConnectors.push(ballConnector)
                 offset = Math.max(offset, ballConnector.width)
             }
         }
@@ -410,6 +411,11 @@ CodeSmithy.UMLWebWidget = { }
 
         // Offset by 1 to leave some space because the border stroke width is 2
         componentGroup.move(1, 1)
+
+        for (let i = 0; i < this.ballConnectors.length; i++) {
+            this.ballConnectors[i].moveConnectionPoint(0, currentDimensions.height/2)
+            this.ballConnectors[i].draw()
+        }
 
         for (let i = 0; i < this.socketConnectors.length; i++) {
             this.socketConnectors[i].moveConnectionPoint(currentDimensions.width, currentDimensions.height/2)
@@ -905,12 +911,30 @@ CodeSmithy.UMLWebWidget = { }
     //
     ns.BallConnector = function(svgDefs, svgParentGroup, text) {
 
+        this.x = 0
+        this.y = 0
         this.width = 0
 
+        // Move the connector so that the top left
+        // corner of the bounding box is at position
+        // (x, y)
+        this.move = function(x, y) {
+            this.x = x
+            this.y = y
+        }
+
+        // Move the connector so that its connection
+        // point is at position (x, y)
+        this.moveConnectionPoint = function(x, y) {
+            let connectorOffsetY = textDef.bbox().height + 6
+            y -= connectorOffsetY
+            this.move(x, y)
+        }
+
         this.draw = function() {
-            svgParentGroup.use(textDef)
-            svgParentGroup.circle(10).move((this.width)/2 - 5, 20)
-            svgParentGroup.line(10 + (this.width)/2 - 5, 25, (this.width), 25)
+            svgParentGroup.use(textDef).move(this.x, this.y)
+            svgParentGroup.circle(10).move((this.width)/2 - 5, this.y + 22)
+            svgParentGroup.line(10 + (this.width)/2 - 5, this.y + 27, (this.width), this.y + 27)
         }
 
         let textDef = null
