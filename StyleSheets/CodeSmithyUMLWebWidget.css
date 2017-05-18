@@ -136,6 +136,11 @@
    stroke-width: 2;
 }
 
+.CodeSmithyUMLWebWidget .UMLAssemblyConnector line {
+   stroke: #454545;
+   stroke-width: 2;
+}
+
 .CodeSmithyUMLWebWidget .TopRightSizingHandle {
    cursor: nesw-resize
 }

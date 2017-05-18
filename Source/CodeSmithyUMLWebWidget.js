@@ -89,6 +89,10 @@ CodeSmithy.UMLWebWidget = { }
         // diagram
         this.classboxes = { }
 
+        // The list of all UML components present on the
+        // diagram
+        this.components = { }
+
         // The list of all UML lifelines present on the
         // diagram
         this.lifelines = { }
@@ -116,7 +120,7 @@ CodeSmithy.UMLWebWidget = { }
                 this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
             } else if (this.diagramDescription.componentdiagram) {
                 this.drawComponentDiagram(svg, this.diagramDescription.componentdiagram, style, layout)
-            }else if (this.diagramDescription.sequencediagram) {
+            } else if (this.diagramDescription.sequencediagram) {
                 this.drawSequenceDiagram(svg, this.diagramDescription.sequencediagram, style.style, layout)
             } else if (this.diagramDescription.usecasediagram) {
                 this.drawUseCaseDiagram(svg, this.diagramDescription.usecasediagram, layout)
@@ -160,7 +164,13 @@ CodeSmithy.UMLWebWidget = { }
             for (var i = 0; i < componentDiagram.length; i++) {
                 let item = componentDiagram[i]
                 if (item.component) {
-                    new ns.Component(svg, item.component, style, layout)
+                    this.components[item.component.name] = new ns.Component(svg, item.component, style, layout)
+                } else if (item.assemblyconnector) {
+                    let consumerComponent = this.components[item.assemblyconnector.consumer]
+                    let providerComponent = this.components[item.assemblyconnector.provider]
+                    let newConnector = new ns.AssemblyConnector(svg)
+                    newConnector.move(consumerComponent.getSocketConnectionPoint("").x, consumerComponent.getSocketConnectionPoint("").y, providerComponent.getBallConnectionPoint("").x, providerComponent.getBallConnectionPoint("").y)
+                    newConnector.draw()
                 }
             } 
         }
@@ -369,6 +379,18 @@ CodeSmithy.UMLWebWidget = { }
         this.ballConnectors = [ ]
         this.socketConnectors = [ ]
 
+        this.getBallConnectionPoint = function(name) {
+            for (let i = 0; i < this.ballConnectors.length; i++) {
+                return this.ballConnectors[i].getAssemblyConnectionPoint()
+            }
+        }
+
+        this.getSocketConnectionPoint = function(name) {
+            for (let i = 0; i < this.socketConnectors.length; i++) {
+                return this.socketConnectors[i].getAssemblyConnectionPoint()
+            }
+        }
+
         var componentWithConnectorsGroup = svg.group().addClass("UMLComponent")
 
         let offset = 0
@@ -388,7 +410,16 @@ CodeSmithy.UMLWebWidget = { }
 
         var componentGroup = componentWithConnectorsGroup.group()
 
-        let currentDimensions = { 
+        let position = {
+            x: 0,
+            y: 0
+        }
+
+        if (layout.componentpositions[componentDescription.name]) {
+            position = layout.componentpositions[componentDescription.name]
+        }
+
+        let currentDimensions = {
             width: 0,
             height: 0
         }
@@ -398,14 +429,14 @@ CodeSmithy.UMLWebWidget = { }
         let stereotype = new Stereotype(componentGroup)
         currentDimensions.height += stereotype.height
 
-        var componentNameDef = componentGroup.defs().text(componentDescription.name).addClass("UMLComponentName").move(offset + style.getLeftMargin("component"), currentDimensions.height)
+        var componentNameDef = componentGroup.defs().text(componentDescription.name).addClass("UMLComponentName").move(position.x + offset + style.getLeftMargin("component"), position.y + currentDimensions.height)
         currentDimensions.width = Math.max(currentDimensions.width, componentNameDef.bbox().width)
         currentDimensions.height += (componentNameDef.bbox().height + style.getBottomMargin("component"))
 
         currentDimensions.width += (style.getLeftMargin("component") + style.getRightMargin("component"))
     
-        componentGroup.rect(currentDimensions.width, currentDimensions.height).move(offset, 0)
-        stereotype.move(offset + (currentDimensions.width - style.getRightMargin("component") - stereotype.width), style.getTopMargin("component"))
+        componentGroup.rect(currentDimensions.width, currentDimensions.height).move(position.x + offset, position.y)
+        stereotype.move(position.x + offset + (currentDimensions.width - style.getRightMargin("component") - stereotype.width), position.y + style.getTopMargin("component"))
         stereotype.draw()
         componentGroup.use(componentNameDef)
 
@@ -413,17 +444,13 @@ CodeSmithy.UMLWebWidget = { }
         componentGroup.move(1, 1)
 
         for (let i = 0; i < this.ballConnectors.length; i++) {
-            this.ballConnectors[i].moveConnectionPoint(0, currentDimensions.height/2)
+            this.ballConnectors[i].moveConnectionPoint(position.x, position.y + currentDimensions.height/2)
             this.ballConnectors[i].draw()
         }
 
         for (let i = 0; i < this.socketConnectors.length; i++) {
-            this.socketConnectors[i].moveConnectionPoint(currentDimensions.width + offset, currentDimensions.height/2)
+            this.socketConnectors[i].moveConnectionPoint(position.x + currentDimensions.width + offset, position.y + currentDimensions.height/2)
             this.socketConnectors[i].draw()
-        }
-
-        if (layout.componentpositions[componentDescription.name]) {
-            componentWithConnectorsGroup.move(layout.componentpositions[componentDescription.name].x, layout.componentpositions[componentDescription.name].y)
         }
 
         function Stereotype(svgParentGroup) {
@@ -907,6 +934,31 @@ CodeSmithy.UMLWebWidget = { }
     /////
 
     /////
+    // Start of the CodeSmithy.UMLWebWidget.AssemblyConnector class definition
+    //
+    ns.AssemblyConnector = function(svgParentGroup) {
+
+        this.startPoint = { x: 0, y: 0 }
+        this.endPoint = { x: 0, y: 0 }
+
+        this.move = function(x1, y1, x2, y2) {
+             this.startPoint = { x: x1, y: y1 }
+             this.endPoint = { x: x2, y: y2 }
+        }
+
+        this.draw = function() {
+            let assemblyConnectorGroup = svgParentGroup.group().addClass("UMLAssemblyConnector")
+            assemblyConnectorGroup.line(this.startPoint.x, this.startPoint.y, this.endPoint.x, this.endPoint.y).attr("stroke-dasharray", "8, 4")
+            assemblyConnectorGroup.line(this.endPoint.x - 13, this.endPoint.y + 5, this.endPoint.x, this.endPoint.y)
+            assemblyConnectorGroup.line(this.endPoint.x - 13, this.endPoint.y - 5, this.endPoint.x, this.endPoint.y)
+        }
+
+    }
+    //
+    // End of the CodeSmithy.UMLWebWidget.Connector class definition
+    /////
+
+    /////
     // Start of the CodeSmithy.UMLWebWidget.BallConnector class definition
     //
     ns.BallConnector = function(svgDefs, svgParentGroup, text) {
@@ -933,8 +985,12 @@ CodeSmithy.UMLWebWidget = { }
 
         this.draw = function() {
             svgParentGroup.use(textDef).move(this.x, this.y)
-            svgParentGroup.circle(10).move((this.width)/2 - 5, this.y + 22)
-            svgParentGroup.line(10 + (this.width)/2 - 5, this.y + 27, (this.width), this.y + 27)
+            svgParentGroup.circle(10).move(this.x + (this.width)/2 - 5, this.y + 22)
+            svgParentGroup.line(this.x + 10 + (this.width)/2 - 5, this.y + 27, this.x + (this.width), this.y + 27)
+        }
+
+        this.getAssemblyConnectionPoint = function() {
+             return { x: (this.x + (this.width / 2) - 4), y: this.y + textDef.bbox().height + 8 }
         }
 
         let textDef = null
@@ -980,6 +1036,10 @@ CodeSmithy.UMLWebWidget = { }
             let clippath = svgParentGroup.clip()
             clippath.rect(10, 17).move(this.x + (this.width / 2) - 1, this.y + textDef.bbox().height, 0)
             svgParentGroup.circle(15).move(this.x + (this.width / 2), this.y + textDef.bbox().height + 1).clipWith(clippath)
+        }
+
+        this.getAssemblyConnectionPoint = function() {
+             return { x: (this.x + (this.width / 2) - 1 + 10), y: this.y + textDef.bbox().height + 8 }
         }
 
         let textDef = null
