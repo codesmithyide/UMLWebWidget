@@ -43,6 +43,12 @@
    stroke-width: 2;
 }
 
+.CodeSmithyUMLWebWidget .UMLNode rect {
+   stroke: #595959;
+   stroke-width: 2;
+   fill: #f1f4ff;
+}
+
 .CodeSmithyUMLWebWidget .UMLActor line {
    stroke: #595959;
    stroke-width: 2;
