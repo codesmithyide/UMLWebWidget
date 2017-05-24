@@ -143,7 +143,13 @@ CodeSmithy.UMLWebWidget = { }
             for (var i = 0; i < classDiagram.length; i++) {
                 let item = classDiagram[i]
                 if (item.class) {
-                    this.classboxes[item.class.name] = new ns.ClassBox(svg, item.class, this.settings.canMove, style, layout)
+                    let className = item.class.name
+                    let newClassBox = new ns.ClassBox(svg, item.class, this.settings.canMove, style)
+                    this.classboxes[className] = newClassBox
+                    if (layout.classboxpositions[className]) {
+                        newClassBox.move(layout.classboxpositions[className].x, layout.classboxpositions[className].y)
+                    }
+                    newClassBox.draw()
                 } else if (item.relationship) {
                     let classbox1
                     let classbox2
@@ -261,14 +267,21 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.ClassBox class definition
     //
-    ns.ClassBox = function(svg, classDescription, canMove, style, layout) {
+    ns.ClassBox = function(svg, classDescription, canMove, style) {
         
         this.classDescription = classDescription
-        this.def = createDef(this, svg.defs(), classDescription, canMove, style, layout)
+        this.def = createDef(this, svg.defs(), classDescription, canMove, style)
         this.svg = svg.use(this.def)
 
         // List of connectors that are connected to this class box
         this.connectors = [ ]
+
+        this.move = function(x, y) {
+            this.def.move(x, y)
+        }
+
+        this.draw = function() {
+        }
         
         this.fire = function(evt) {
             if (evt == "positionchanged") {
@@ -278,7 +291,7 @@ CodeSmithy.UMLWebWidget = { }
             }
         }
 
-        function createDef(self, defs, classInfo, canMove, style, layout) {
+        function createDef(self, defs, classInfo, canMove, style) {
             var classGroup = defs.group().addClass("UMLClass")
     
             let currentDimensions = { 
@@ -313,13 +326,6 @@ CodeSmithy.UMLWebWidget = { }
             classGroup.line(0, line2YPos, currentDimensions.width, line2YPos)
             classGroup.use(operationGroupDef)
 
-            // Offset by 1 to leave some space because the border stroke width is 2
-            classGroup.move(1,1)
-
-            if (layout.classboxpositions[classDescription.name]) {
-                classGroup.move(layout.classboxpositions[classDescription.name].x, layout.classboxpositions[classDescription.name].y)
-            }
-
             if (canMove) {
                 classGroup.draggable(true)
                 classGroup.on('dragmove.namespace', function(evt) {
@@ -329,6 +335,9 @@ CodeSmithy.UMLWebWidget = { }
                     self.fire('positionchanged')
                 })
             }
+
+            // Offset by 1 to leave some space because the border stroke width is 2
+            classGroup.move(1,1)
 
             return classGroup
         }
@@ -583,7 +592,8 @@ CodeSmithy.UMLWebWidget = { }
         nodeGroup.move(1,1)
 
         if (layout.nodes[nodeDescription.name]) {
-            nodeGroup.move(layout.nodes[nodeDescription.name].x, layout.nodes[nodeDescription.name].y)
+            let position = layout.nodes[nodeDescription.name].position
+            nodeGroup.move(position.x, position.y)
         }
     }
     //
@@ -1103,6 +1113,16 @@ CodeSmithy.UMLWebWidget = { }
     }
     //
     // End of the CodeSmithy.UMLWebWidget.SocketConnector class definition
+    /////
+
+    /////
+    // Start of the LayoutManager class definition
+    //
+    function LayoutManager() {
+
+    }
+    //
+    // End of the LayoutManager class definition
     /////
 
 })(CodeSmithy.UMLWebWidget)
