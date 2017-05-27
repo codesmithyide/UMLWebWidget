@@ -1,45 +1,54 @@
-// Global namespace for CodeSmithy applications
+/**
+  Global namespace for CodeSmithy applications.
+
+  @namespace
+*/
 var CodeSmithy = CodeSmithy || { }
 
-// The namespace for the UMLWebWidget application
-CodeSmithy.UMLWebWidget = { }
+/**
+  The namespace for the UMLWebWidget application.
 
-;(function(ns) {
+  @namespace
+*/
+CodeSmithy.UMLWebWidget = {
 
-    ns.Style = function() {
+    /** Style */
+    Style: class {
 
-        this.getTopMargin = function(element) {
-            return getValueOrDefault(this, element, "margin-top")
-        }
-
-        this.getBottomMargin = function(element) {
-            return getValueOrDefault(this, element, "margin-bottom")
-        }
-
-        this.getLeftMargin = function(element) {
-            return getValueOrDefault(this, element, "margin-left")
-        }
-
-        this.getRightMargin = function(element) {
-            return getValueOrDefault(this, element, "margin-right")
-        }
-
-        this.style = {
-            "defaults": {
-                "margin-left": 12,
-                "margin-right": 12,
-                "margin-top": 9,
-                "margin-bottom": 9
-            },
-            "lifeline": {
-                "margin-left": 12,
-                "margin-right": 12,
-                "margin-top": 9,
-                "margin-bottom": 9
+        constructor() {
+            this.style = {
+                "defaults": {
+                    "margin-left": 12,
+                    "margin-right": 12,
+                    "margin-top": 9,
+                    "margin-bottom": 9
+                },
+                "lifeline": {
+                    "margin-left": 12,
+                    "margin-right": 12,
+                    "margin-top": 9,
+                    "margin-bottom": 9
+                }
             }
         }
 
-        function getValueOrDefault(self, element, style) {
+        getTopMargin(element) {
+            return this.getValueOrDefault(this, element, "margin-top")
+        }
+
+        getBottomMargin(element) {
+            return this.getValueOrDefault(this, element, "margin-bottom")
+        }
+
+        getLeftMargin(element) {
+            return this.getValueOrDefault(this, element, "margin-left")
+        }
+
+        getRightMargin(element) {
+            return this.getValueOrDefault(this, element, "margin-right")
+        }
+
+        getValueOrDefault(self, element, style) {
             if (self.style[element] && self.style[element][style]) {
                 return self.style[element][style]
             } else {
@@ -47,14 +56,14 @@ CodeSmithy.UMLWebWidget = { }
             }
         }
 
-    }
+    },
 
     /////
     // Start of the CodeSmithy.UMLWebWidget.Diagram class definition
     //
     // This class is the entry point for all the functionality provided
     // by the CodeSmithy UMLWebWidget.
-    ns.Diagram = function(settings) {
+    Diagram: function(settings) {
 
         this.Settings = function(settings) {
 
@@ -115,7 +124,7 @@ CodeSmithy.UMLWebWidget = { }
             this.diagramDescription = JSON.parse($('#' + divId).text())
             $('#' + divId).empty()
             var svg = SVG(divId).size(this.settings.width, this.settings.height)
-            let style = new ns.Style()
+            let style = new CodeSmithy.UMLWebWidget.Style()
             if (this.diagramDescription.classdiagram) {
                 this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
             } else if (this.diagramDescription.componentdiagram) {
@@ -140,11 +149,13 @@ CodeSmithy.UMLWebWidget = { }
                 layout.connectorpositions = { }
             }
 
+            let layoutManager = new CodeSmithy.UMLWebWidget.LayoutManager(layout)
+
             for (var i = 0; i < classDiagram.length; i++) {
                 let item = classDiagram[i]
                 if (item.class) {
                     let className = item.class.name
-                    let newClassBox = new ns.ClassBox(svg, item.class, this.settings.canMove, style)
+                    let newClassBox = new CodeSmithy.UMLWebWidget.ClassBox(svg, item.class, this.settings.canMove, style)
                     this.classboxes[className] = newClassBox
                     if (layout.classboxpositions[className]) {
                         newClassBox.move(layout.classboxpositions[className].x, layout.classboxpositions[className].y)
@@ -172,11 +183,11 @@ CodeSmithy.UMLWebWidget = { }
             for (var i = 0; i < componentDiagram.length; i++) {
                 let item = componentDiagram[i]
                 if (item.component) {
-                    this.components[item.component.name] = new ns.Component(svg, item.component, style, layout)
+                    this.components[item.component.name] = new CodeSmithy.UMLWebWidget.Component(svg, item.component, style, layout)
                 } else if (item.assemblyconnector) {
                     let consumerComponent = this.components[item.assemblyconnector.consumer]
                     let providerComponent = this.components[item.assemblyconnector.provider]
-                    let newConnector = new ns.AssemblyConnector(svg)
+                    let newConnector = new CodeSmithy.UMLWebWidget.AssemblyConnector(svg)
                     newConnector.move(consumerComponent.getSocketConnectionPoint("").x, consumerComponent.getSocketConnectionPoint("").y, providerComponent.getBallConnectionPoint("").x, providerComponent.getBallConnectionPoint("").y)
                     newConnector.draw()
                 }
@@ -187,7 +198,7 @@ CodeSmithy.UMLWebWidget = { }
             for (var i = 0; i < deploymentDiagram.length; i++) {
                 let item = deploymentDiagram[i]
                 if (item.node) {
-                    new ns.Node(svg, item.node, style, layout)
+                    new CodeSmithy.UMLWebWidget.Node(svg, item.node, style, layout)
                 }
             }
         }
@@ -204,7 +215,7 @@ CodeSmithy.UMLWebWidget = { }
             for (var i = 0; i < sequenceDiagram.length; i++) {
                 let item = sequenceDiagram[i]
                 if (item.lifeline) {
-                    this.lifelines[item.lifeline.name] = new ns.Lifeline(svg, item.lifeline, style.lifeline, layout)
+                    this.lifelines[item.lifeline.name] = new CodeSmithy.UMLWebWidget.Lifeline(svg, item.lifeline, style.lifeline, layout)
                     nextYPosition = Math.max(nextYPosition, this.lifelines[item.lifeline.name].svg.bbox().y + this.lifelines[item.lifeline.name].svg.bbox().height + 20)
                 } else if (item.messages) {
                     for (var j = 0; j < item.messages.length; j++) {
@@ -239,9 +250,9 @@ CodeSmithy.UMLWebWidget = { }
             for (var i = 0; i < useCaseDiagram.length; i++) {
                 let item = useCaseDiagram[i]
                 if (item.actor) {
-                    this.actors[item.actor.name] = new ns.Actor(svg, item.actor, layout)
+                    this.actors[item.actor.name] = new CodeSmithy.UMLWebWidget.Actor(svg, item.actor, layout)
                 } else if (item.usecase) {
-                    this.usecases[item.usecase.title] = new ns.UseCase(svg, item.usecase, layout)
+                    this.usecases[item.usecase.title] = new CodeSmithy.UMLWebWidget.UseCase(svg, item.usecase, layout)
                 } else if (item.association) {
                     createUseCaseConnector(this, svg, this.actors[item.association.actor], this.usecases[item.association.usecase]).draw()
                 }
@@ -249,17 +260,17 @@ CodeSmithy.UMLWebWidget = { }
         }
 
         function createClassBoxConnector(self, svg, type, classbox1, classbox2, layout) {
-            return new ns.Connector(svg, type, classbox1, classbox2, "", layout)
+            return new CodeSmithy.UMLWebWidget.Connector(svg, type, classbox1, classbox2, "", layout)
         }
 
         function createLifelineConnector(self, svg, type, classbox1, classbox2, name, layout) {
-            return new ns.Connector(svg, type, classbox1, classbox2, name, layout)
+            return new CodeSmithy.UMLWebWidget.Connector(svg, type, classbox1, classbox2, name, layout)
         }
 
         function createUseCaseConnector(self, svg, actor, usecase) {
-            return new ns.Connector(svg, "usecaseassociation", actor, usecase)
+            return new CodeSmithy.UMLWebWidget.Connector(svg, "usecaseassociation", actor, usecase)
         }
-    }
+    },
     //
     // End of the CodeSmithy.UMLWebWidget.Diagram class definition
     /////
@@ -267,7 +278,7 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.ClassBox class definition
     //
-    ns.ClassBox = function(svg, classDescription, canMove, style) {
+    ClassBox: function(svg, classDescription, canMove, style) {
         
         this.classDescription = classDescription
         this.def = createDef(this, svg.defs(), classDescription, canMove, style)
@@ -385,7 +396,7 @@ CodeSmithy.UMLWebWidget = { }
             return stringToSymbolMap[visibility]
         }
 
-    }
+    },
     //
     // End of the CodeSmithy.UMLWebWidget.ClassBox class definition
     /////
@@ -393,7 +404,7 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.Component class definition
     //
-    ns.Component = function(svg, componentDescription, style, layout) {
+    Component: function(svg, componentDescription, style, layout) {
 
         this.componentDescription = componentDescription
         this.ballConnectors = [ ]
@@ -416,14 +427,14 @@ CodeSmithy.UMLWebWidget = { }
         let offset = 0
         if (componentDescription.interfaces) {
             for (let i = 0; i < componentDescription.interfaces.length; i++) {
-                let ballConnector = new ns.BallConnector(svg.defs(), componentWithConnectorsGroup, componentDescription.interfaces[i].name)
+                let ballConnector = new CodeSmithy.UMLWebWidget.BallConnector(svg.defs(), componentWithConnectorsGroup, componentDescription.interfaces[i].name)
                 this.ballConnectors.push(ballConnector)
                 offset = Math.max(offset, ballConnector.width)
             }
         }
         if (componentDescription.dependencies) {
             for (let i = 0; i < componentDescription.dependencies.length; i++) {
-                let socketConnector = new ns.SocketConnector(svg.defs(), componentWithConnectorsGroup, componentDescription.dependencies[i].name)
+                let socketConnector = new CodeSmithy.UMLWebWidget.SocketConnector(svg.defs(), componentWithConnectorsGroup, componentDescription.dependencies[i].name)
                 this.socketConnectors.push(socketConnector)
             }
         }
@@ -494,7 +505,7 @@ CodeSmithy.UMLWebWidget = { }
 
         }
 
-    }
+    },
     //
     // End of the CodeSmithy.UMLWebWidget.Component class definition
     /////
@@ -502,7 +513,7 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.Lifeline class definition
     //
-    ns.Lifeline = function(svg, lifelineDescription, lifelineStyle, layout) {
+    Lifeline: function(svg, lifelineDescription, lifelineStyle, layout) {
 
         this.lifelineDescription = lifelineDescription
         this.def = createDef(svg.defs(), lifelineDescription, lifelineStyle, layout)
@@ -554,7 +565,7 @@ CodeSmithy.UMLWebWidget = { }
             return lifelineGroup
         }
 
-    }
+    },
     //
     // End of the CodeSmithy.UMLWebWidget.Lifeline class definition
     //////
@@ -562,7 +573,7 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.Node class definition
     //
-    ns.Node = function(svg, nodeDescription, style, layout) {
+    Node: function(svg, nodeDescription, style, layout) {
 
         this.nodeDescription = nodeDescription
         
@@ -595,7 +606,7 @@ CodeSmithy.UMLWebWidget = { }
             let position = layout.nodes[nodeDescription.name].position
             nodeGroup.move(position.x, position.y)
         }
-    }
+    },
     //
     // End of the CodeSmithy.UMLWebWidget.Node class definition
     //////
@@ -603,7 +614,7 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.Actor class definition
     //
-    ns.Actor = function(svg, actorDescription, layout) {
+    Actor: function(svg, actorDescription, layout) {
 
         this.actorDescription = actorDescription
         this.def = svg.group().addClass("UMLActor")
@@ -626,7 +637,7 @@ CodeSmithy.UMLWebWidget = { }
 
             svg.use(textDef)     
         }
-    }
+    },
     //
     // End of the CodeSmithy.UMLWebWidget.Actor class definition
     /////
@@ -634,7 +645,7 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.UseCase class definition
     //
-    ns.UseCase = function(svg, useCaseDescription, layout) {
+    UseCase: function(svg, useCaseDescription, layout) {
 
         this.def = svg.group().addClass("UMLUseCase")
         let textDef = this.def.defs().text(useCaseDescription.title).move(0, 0)
@@ -645,7 +656,7 @@ CodeSmithy.UMLWebWidget = { }
         }
         this.svg = svg.use(this.def)
 
-    }
+    },
     //
     // End of the CodeSmithy.UMLWebWidget.UseCase class definition
     /////
@@ -654,7 +665,7 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.Connector class definition
     //
-    ns.Connector = function(svg, type, classbox1, classbox2, text, layout) {
+    Connector: function(svg, type, classbox1, classbox2, text, layout) {
 
         this.type = type
         this.classbox1 = classbox1
@@ -989,7 +1000,7 @@ CodeSmithy.UMLWebWidget = { }
                     break
             }
         }
-    }
+    },
     //
     // End of the CodeSmithy.UMLWebWidget.Connector class definition
     /////
@@ -997,7 +1008,7 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.AssemblyConnector class definition
     //
-    ns.AssemblyConnector = function(svgParentGroup) {
+    AssemblyConnector: function(svgParentGroup) {
 
         this.startPoint = { x: 0, y: 0 }
         this.endPoint = { x: 0, y: 0 }
@@ -1014,7 +1025,7 @@ CodeSmithy.UMLWebWidget = { }
             assemblyConnectorGroup.line(this.endPoint.x - 13, this.endPoint.y - 5, this.endPoint.x, this.endPoint.y)
         }
 
-    }
+    },
     //
     // End of the CodeSmithy.UMLWebWidget.Connector class definition
     /////
@@ -1022,7 +1033,7 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.BallConnector class definition
     //
-    ns.BallConnector = function(svgDefs, svgParentGroup, text) {
+    BallConnector: function(svgDefs, svgParentGroup, text) {
 
         this.x = 0
         this.y = 0
@@ -1061,7 +1072,7 @@ CodeSmithy.UMLWebWidget = { }
             self.width = textDef.bbox().width + 5
         })(this)
 
-    }
+    },
     //
     // End of the CodeSmithy.UMLWebWidget.BallConnector class definition
     /////
@@ -1069,7 +1080,7 @@ CodeSmithy.UMLWebWidget = { }
     /////
     // Start of the CodeSmithy.UMLWebWidget.SocketConnector class definition
     //
-    ns.SocketConnector = function(svgDefs, svgParentGroup, text) {
+    SocketConnector: function(svgDefs, svgParentGroup, text) {
 
         this.x = 0
         this.y = 0
@@ -1110,19 +1121,18 @@ CodeSmithy.UMLWebWidget = { }
             self.width = textDef.bbox().width + 5
         })(this)
 
-    }
+    },
     //
     // End of the CodeSmithy.UMLWebWidget.SocketConnector class definition
     /////
 
-    /////
-    // Start of the LayoutManager class definition
-    //
-    function LayoutManager() {
+    /** Sets the position of the elements on the diagram. */
+    LayoutManager: class {
+
+        constructor(layout) {
+            this.layout = layout
+        }
 
     }
-    //
-    // End of the LayoutManager class definition
-    /////
 
-})(CodeSmithy.UMLWebWidget)
+}
