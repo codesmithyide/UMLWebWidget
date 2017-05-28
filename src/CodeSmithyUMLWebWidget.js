@@ -1,52 +1,10 @@
+'use strict'
+
+import { Style } from "./Style.js"
+
 var CodeSmithy = { }
 
 CodeSmithy.UMLWebWidget = {
-
-    /** Style */
-    Style: class {
-
-        constructor() {
-            this.style = {
-                "defaults": {
-                    "margin-left": 12,
-                    "margin-right": 12,
-                    "margin-top": 9,
-                    "margin-bottom": 9
-                },
-                "lifeline": {
-                    "margin-left": 12,
-                    "margin-right": 12,
-                    "margin-top": 9,
-                    "margin-bottom": 9
-                }
-            }
-        }
-
-        getTopMargin(element) {
-            return this.getValueOrDefault(this, element, "margin-top")
-        }
-
-        getBottomMargin(element) {
-            return this.getValueOrDefault(this, element, "margin-bottom")
-        }
-
-        getLeftMargin(element) {
-            return this.getValueOrDefault(this, element, "margin-left")
-        }
-
-        getRightMargin(element) {
-            return this.getValueOrDefault(this, element, "margin-right")
-        }
-
-        getValueOrDefault(self, element, style) {
-            if (self.style[element] && self.style[element][style]) {
-                return self.style[element][style]
-            } else {
-                return self.style["defaults"][style]
-            }
-        }
-
-    },
 
     /////
     // Start of the CodeSmithy.UMLWebWidget.Diagram class definition
@@ -114,7 +72,7 @@ CodeSmithy.UMLWebWidget = {
             this.diagramDescription = JSON.parse($('#' + divId).text())
             $('#' + divId).empty()
             var svg = SVG(divId).size(this.settings.width, this.settings.height)
-            let style = new CodeSmithy.UMLWebWidget.Style()
+            let style = new Style()
             if (this.diagramDescription.classdiagram) {
                 this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
             } else if (this.diagramDescription.componentdiagram) {
