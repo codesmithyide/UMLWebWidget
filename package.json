@@ -4,6 +4,8 @@
   "description": "A web widget to display UML diagrams",
   "main": "CodeSmithyUMLWebWidget.js",
   "scripts": {
+    "build": "webpack",
+    "builddoc": "jsdoc -r src",
     "test": "node test/index.js"
   },
   "repository": {
@@ -18,5 +20,8 @@
   "homepage": "https://github.com/CodeSmithyIDE/UMLWebWidget#readme",
   "dependencies": {
     "ishiko-test-framework": "^1.0.3"
+  },
+  "devDependencies": {
+    "webpack": "^2.6.1"
   }
 }

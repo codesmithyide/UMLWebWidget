@@ -1,15 +1,5 @@
-/**
-  Global namespace for CodeSmithy applications.
+var CodeSmithy = { }
 
-  @namespace
-*/
-var CodeSmithy = CodeSmithy || { }
-
-/**
-  The namespace for the UMLWebWidget application.
-
-  @namespace
-*/
 CodeSmithy.UMLWebWidget = {
 
     /** Style */
@@ -1135,4 +1125,8 @@ CodeSmithy.UMLWebWidget = {
 
     }
 
+}
+
+export {
+    CodeSmithy
 }
