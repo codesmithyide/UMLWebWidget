@@ -2,6 +2,8 @@
 
 import { Style } from "./Style.js"
 import { LayoutManager } from "./LayoutManager.js"
+import { Lifeline } from "./Lifeline.js"
+import { Node } from "./Node.js"
 import { Actor } from "./Actor.js"
 import { UseCase } from "./UseCase.js"
 import { Connector } from "./Connector.js"
@@ -157,7 +159,7 @@ CodeSmithy.UMLWebWidget = {
             for (var i = 0; i < deploymentDiagram.length; i++) {
                 let item = deploymentDiagram[i]
                 if (item.node) {
-                    new CodeSmithy.UMLWebWidget.Node(svg, item.node, style, layout)
+                    new Node(svg, item.node, style, layout)
                 }
             }
         }
@@ -174,7 +176,7 @@ CodeSmithy.UMLWebWidget = {
             for (var i = 0; i < sequenceDiagram.length; i++) {
                 let item = sequenceDiagram[i]
                 if (item.lifeline) {
-                    this.lifelines[item.lifeline.name] = new CodeSmithy.UMLWebWidget.Lifeline(svg, item.lifeline, style.lifeline, layout)
+                    this.lifelines[item.lifeline.name] = new Lifeline(svg, item.lifeline, style.lifeline, layout)
                     nextYPosition = Math.max(nextYPosition, this.lifelines[item.lifeline.name].svg.bbox().y + this.lifelines[item.lifeline.name].svg.bbox().height + 20)
                 } else if (item.messages) {
                     for (var j = 0; j < item.messages.length; j++) {
@@ -468,111 +470,10 @@ CodeSmithy.UMLWebWidget = {
 
         }
 
-    },
+    }
     //
     // End of the CodeSmithy.UMLWebWidget.Component class definition
     /////
-
-    /////
-    // Start of the CodeSmithy.UMLWebWidget.Lifeline class definition
-    //
-    Lifeline: function(svg, lifelineDescription, lifelineStyle, layout) {
-
-        this.lifelineDescription = lifelineDescription
-        this.def = createDef(svg.defs(), lifelineDescription, lifelineStyle, layout)
-        this.svg = svg.use(this.def)
-
-        // List of connectors that are connected to this lifeline
-        this.connectors = [ ]
-
-        this.drawLine = function(svg) {
-            let firstConnectorY = 0
-            if (this.connectors.length > 0) {
-                firstConnectorY = this.connectors[0].svg.bbox().y
-            }
-            let lastConnectorY = 0
-            if (this.connectors.length > 0) {
-                lastConnectorY = this.connectors[this.connectors.length - 1].svg.bbox().y + this.connectors[this.connectors.length - 1].svg.bbox().height
-            }
-            let lineGroup = svg.group().addClass("UMLLifeline")
-            lineGroup.line(this.svg.bbox().cx, this.svg.bbox().y + this.svg.bbox().height, this.svg.bbox().cx, firstConnectorY)
-            lineGroup.rect(8, (lastConnectorY - firstConnectorY)).move(this.svg.bbox().cx - 4, firstConnectorY)
-        }
-
-        function createDef(defs, lifelineDescription, style, layout) {
-            var lifelineGroup = defs.group().addClass("UMLLifeline")
-
-            let currentDimensions = { 
-                width: 0,
-                height: 0
-            }
-    
-            currentDimensions.height = style["margin-top"]
-
-            var instanceNameDef = defs.text(":" + lifelineDescription.name).addClass("UMLInstanceName").move(style["margin-left"], currentDimensions.height)
-            currentDimensions.width = Math.max(currentDimensions.width, instanceNameDef.bbox().width)
-            currentDimensions.height += (instanceNameDef.bbox().height + style["margin-bottom"])
-
-            currentDimensions.width += (style["margin-left"] + style["margin-right"])
-    
-            lifelineGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
-            lifelineGroup.use(instanceNameDef)
-
-            // Offset by 1 to leave some space because the border stroke width is 2
-            lifelineGroup.move(1,1)
-
-            if (layout.lifelinepositions[lifelineDescription.name]) {
-                lifelineGroup.move(layout.lifelinepositions[lifelineDescription.name].x, layout.lifelinepositions[lifelineDescription.name].y)
-            }
-
-            return lifelineGroup
-        }
-
-    },
-    //
-    // End of the CodeSmithy.UMLWebWidget.Lifeline class definition
-    //////
-
-    /////
-    // Start of the CodeSmithy.UMLWebWidget.Node class definition
-    //
-    Node: function(svg, nodeDescription, style, layout) {
-
-        this.nodeDescription = nodeDescription
-        
-        var nodeGroup = svg.group().addClass("UMLNode")
-    
-        let currentDimensions = { 
-            width: 0,
-            height: 0
-        }
-    
-        currentDimensions.height = style.getTopMargin("node")
-
-        var nodeNameDef = svg.defs().text(nodeDescription.name).addClass("UMLNodeName").move(style.getLeftMargin("node"), currentDimensions.height)
-        currentDimensions.width = Math.max(currentDimensions.width, nodeNameDef.bbox().width)
-        currentDimensions.height += (nodeNameDef.bbox().height + style.getBottomMargin("node"))
-
-        if (currentDimensions.width > nodeNameDef.bbox().width) {
-            nodeNameDef.dx((currentDimensions.width - nodeNameDef.bbox().width)/2)
-        }
-
-        currentDimensions.width += (style.getLeftMargin("node") + style.getRightMargin("node"))
-    
-        nodeGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
-        nodeGroup.use(nodeNameDef)
-
-        // Offset by 1 to leave some space because the border stroke width is 2
-        nodeGroup.move(1,1)
-
-        if (layout.nodes[nodeDescription.name]) {
-            let position = layout.nodes[nodeDescription.name].position
-            nodeGroup.move(position.x, position.y)
-        }
-    }
-    //
-    // End of the CodeSmithy.UMLWebWidget.Node class definition
-    //////
 
 }
 
