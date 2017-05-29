@@ -5,6 +5,7 @@ import { LayoutManager } from "./LayoutManager.js"
 import { AssemblyConnector } from "./AssemblyConnector.js"
 import { BallConnector } from "./BallConnector.js"
 import { SocketConnector } from "./SocketConnector.js"
+import { UseCaseAssociationConnector } from "./UseCaseAssociationConnector.js"
 
 var CodeSmithy = { }
 
@@ -220,7 +221,7 @@ CodeSmithy.UMLWebWidget = {
         }
 
         function createUseCaseConnector(self, svg, actor, usecase) {
-            return new CodeSmithy.UMLWebWidget.Connector(svg, "usecaseassociation", actor, usecase)
+            return new UseCaseAssociationConnector(svg, actor, usecase)
         }
     },
     //
@@ -635,8 +636,6 @@ CodeSmithy.UMLWebWidget = {
             this.svg.addClass("UMLSynchronousMessage")
         } else if (this.type == "returnmessage") {
             this.svg.addClass("UMLReturnMessage")
-        } else if (this.type == "usecaseassociation") {
-            this.svg.addClass("UMLUseCaseAssociation")
         }
 
         this.draw = function() {
@@ -649,8 +648,6 @@ CodeSmithy.UMLWebWidget = {
                 drawSynchronousMessage(this.svg, this.classbox1, this.classbox2, this.text)
             } else if (this.type == "returnmessage") {
                 drawReturnMessage(this.svg, this.classbox1, this.classbox2)
-            } else if (this.type == "usecaseassociation") {
-                drawUseCaseAssociation(this.svg, this.classbox1, this.classbox2)
             }
         }
 
@@ -742,10 +739,6 @@ CodeSmithy.UMLWebWidget = {
             svg.line(startX, 6, startX + 10, 0)
             svg.line(startX, 6, endX, 6).attr("stroke-dasharray", "4, 4")
             svg.line(startX, 6, startX + 10, 12)
-        }
-
-        function drawUseCaseAssociation(svg, classbox1, classbox2) {
-            svg.line(classbox1.svg.bbox().x + classbox1.svg.bbox().width, classbox1.svg.bbox().cy, classbox2.svg.bbox().x, classbox2.svg.bbox().cy)
         }
 
         var ConnectorPosition = {
