@@ -2,6 +2,7 @@
 
 import { Style } from "./Style.js"
 import { LayoutManager } from "./LayoutManager.js"
+import { SynchronousMessageConnector } from "./SynchronousMessageConnector.js"
 import { ReturnMessageConnector } from "./ReturnMessageConnector.js"
 import { AssemblyConnector } from "./AssemblyConnector.js"
 import { BallConnector } from "./BallConnector.js"
@@ -9,6 +10,7 @@ import { SocketConnector } from "./SocketConnector.js"
 import { UseCaseAssociationConnector } from "./UseCaseAssociationConnector.js"
 
 var CodeSmithy = { }
+
 
 CodeSmithy.UMLWebWidget = {
 
@@ -221,7 +223,7 @@ CodeSmithy.UMLWebWidget = {
             if (type == "returnmessage") {
                 return new ReturnMessageConnector(svg, classbox1, classbox2, name, layout)
             } else {
-                return new CodeSmithy.UMLWebWidget.Connector(svg, type, classbox1, classbox2, name, layout)
+                return new SynchronousMessageConnector(svg, classbox1, classbox2, name, layout)
             }
         }
 
@@ -637,8 +639,6 @@ CodeSmithy.UMLWebWidget = {
             this.svg.addClass("UMLCompositionRelationship")
         } else if (this.type == "aggregation") {
             this.svg.addClass("UMLAggregationRelationship")
-        } else if (this.type == "synchronousmessage") {
-            this.svg.addClass("UMLSynchronousMessage")
         }
 
         this.draw = function() {
@@ -647,8 +647,6 @@ CodeSmithy.UMLWebWidget = {
                 drawInheritanceRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
             } else if ((this.type == "composition") || (this.type == "aggregation")) {
                 drawCompositionOrAggregationRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
-            } else if (this.type == "synchronousmessage") {
-                drawSynchronousMessage(this.svg, this.classbox1, this.classbox2, this.text)
             }
         }
 
@@ -698,39 +696,6 @@ CodeSmithy.UMLWebWidget = {
             let connectorOrientation = getConnectorHeadOrientationFromPosition(connectionPositions.end)
             let lineConnectionPoint = drawDiamond(svg, endPoint, connectorOrientation)
             drawConnectorLine(svg, startPoint, lineConnectionPoint, connectorOrientation)  
-        }
-
-        function drawSynchronousMessage(svg, caller, callee, text) {
-            if (caller != callee) {
-                let startX = caller.svg.bbox().cx
-                let endX = callee.svg.bbox().cx
-                let width = (endX - startX)
-
-                let textDef = svg.defs().text(text)
-                if (textDef.bbox().width < width) {
-                    textDef.move((startX + ((width - textDef.bbox().width) / 2)), 0)
-                }
-
-                let y = textDef.bbox().height + 2
-                svg.line(startX, y, endX - 12, y)
-                let polygonDescription = "" + (endX - 12) + "," + (y - 6) + " " +
-                    endX + "," + y + " " +
-                    (endX - 12) + "," + (y + 6)
-                svg.polygon(polygonDescription)
-                svg.use(textDef)
-            } else {
-                let startX = caller.svg.bbox().cx
-                let textDef = svg.defs().text(text).move(startX + 8, 5)
-                let offsetY = textDef.bbox().y + textDef.bbox().height + 3
-                svg.use(textDef)
-                svg.line(startX, offsetY, startX + 30, offsetY)
-                svg.line(startX + 30, offsetY, startX + 30, 20 + offsetY)
-                svg.line(startX + 30, 20 + offsetY, startX, 20 + offsetY)
-                let polygonDescription = "" + startX + "," + (20 + offsetY) + " " +
-                    (startX + 12) + "," + (20 + offsetY - 6) + " " +
-                    (startX + 12) + "," + (20 + offsetY + 6)
-                svg.polygon(polygonDescription)
-            }
         }
 
         var ConnectorPosition = {
