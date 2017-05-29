@@ -2,6 +2,8 @@
 
 import { Style } from "./Style.js"
 import { LayoutManager } from "./LayoutManager.js"
+import { Actor } from "./Actor.js"
+import { UseCase } from "./UseCase.js"
 import { Connector } from "./Connector.js"
 import { SynchronousMessageConnector } from "./SynchronousMessageConnector.js"
 import { ReturnMessageConnector } from "./ReturnMessageConnector.js"
@@ -207,9 +209,9 @@ CodeSmithy.UMLWebWidget = {
             for (var i = 0; i < useCaseDiagram.length; i++) {
                 let item = useCaseDiagram[i]
                 if (item.actor) {
-                    this.actors[item.actor.name] = new CodeSmithy.UMLWebWidget.Actor(svg, item.actor, layout)
+                    this.actors[item.actor.name] = new Actor(svg, item.actor, layout)
                 } else if (item.usecase) {
-                    this.usecases[item.usecase.title] = new CodeSmithy.UMLWebWidget.UseCase(svg, item.usecase, layout)
+                    this.usecases[item.usecase.title] = new UseCase(svg, item.usecase, layout)
                 } else if (item.association) {
                     createUseCaseConnector(this, svg, this.actors[item.association.actor], this.usecases[item.association.usecase]).draw()
                 }
@@ -567,60 +569,10 @@ CodeSmithy.UMLWebWidget = {
             let position = layout.nodes[nodeDescription.name].position
             nodeGroup.move(position.x, position.y)
         }
-    },
+    }
     //
     // End of the CodeSmithy.UMLWebWidget.Node class definition
     //////
-
-    /////
-    // Start of the CodeSmithy.UMLWebWidget.Actor class definition
-    //
-    Actor: function(svg, actorDescription, layout) {
-
-        this.actorDescription = actorDescription
-        this.def = svg.group().addClass("UMLActor")
-        draw(this.def, this.actorDescription)
-        this.svg = svg.use(this.def)
-
-        function draw(svg, actorDescription) {
-            let textDef = svg.text(actorDescription.name).move(0, 35)
-            let width = textDef.bbox().width
-            let offset = ((width - 16) / 2)
-            svg.circle(12).move(2 + offset, 1)
-            svg.line(8 + offset, 13, 8 + offset, 26)
-            svg.line(offset, 18, 16 + offset, 18)
-            svg.line(8 + offset, 26, offset, 33)
-            svg.line(8 + offset, 26, 16 + offset, 33)
-
-            if (layout.actorpositions[actorDescription.name]) {
-                svg.move(layout.actorpositions[actorDescription.name].x, layout.actorpositions[actorDescription.name].y)
-            }
-
-            svg.use(textDef)     
-        }
-    },
-    //
-    // End of the CodeSmithy.UMLWebWidget.Actor class definition
-    /////
-
-    /////
-    // Start of the CodeSmithy.UMLWebWidget.UseCase class definition
-    //
-    UseCase: function(svg, useCaseDescription, layout) {
-
-        this.def = svg.group().addClass("UMLUseCase")
-        let textDef = this.def.defs().text(useCaseDescription.title).move(0, 0)
-        this.def.ellipse(1.2*textDef.bbox().width, 3*textDef.bbox().height)
-        this.def.use(textDef).move(0.1*textDef.bbox().width, textDef.bbox().height)
-        if (layout.usecasepositions[useCaseDescription.title]) {
-            this.def.move(layout.usecasepositions[useCaseDescription.title].x, layout.usecasepositions[useCaseDescription.title].y)
-        }
-        this.svg = svg.use(this.def)
-
-    }
-    //
-    // End of the CodeSmithy.UMLWebWidget.UseCase class definition
-    /////
 
 }
 
