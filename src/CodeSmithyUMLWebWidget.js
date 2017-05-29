@@ -2,6 +2,7 @@
 
 import { Style } from "./Style.js"
 import { LayoutManager } from "./LayoutManager.js"
+import { ReturnMessageConnector } from "./ReturnMessageConnector.js"
 import { AssemblyConnector } from "./AssemblyConnector.js"
 import { BallConnector } from "./BallConnector.js"
 import { SocketConnector } from "./SocketConnector.js"
@@ -217,7 +218,11 @@ CodeSmithy.UMLWebWidget = {
         }
 
         function createLifelineConnector(self, svg, type, classbox1, classbox2, name, layout) {
-            return new CodeSmithy.UMLWebWidget.Connector(svg, type, classbox1, classbox2, name, layout)
+            if (type == "returnmessage") {
+                return new ReturnMessageConnector(svg, classbox1, classbox2, name, layout)
+            } else {
+                return new CodeSmithy.UMLWebWidget.Connector(svg, type, classbox1, classbox2, name, layout)
+            }
         }
 
         function createUseCaseConnector(self, svg, actor, usecase) {
@@ -634,8 +639,6 @@ CodeSmithy.UMLWebWidget = {
             this.svg.addClass("UMLAggregationRelationship")
         } else if (this.type == "synchronousmessage") {
             this.svg.addClass("UMLSynchronousMessage")
-        } else if (this.type == "returnmessage") {
-            this.svg.addClass("UMLReturnMessage")
         }
 
         this.draw = function() {
@@ -646,8 +649,6 @@ CodeSmithy.UMLWebWidget = {
                 drawCompositionOrAggregationRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
             } else if (this.type == "synchronousmessage") {
                 drawSynchronousMessage(this.svg, this.classbox1, this.classbox2, this.text)
-            } else if (this.type == "returnmessage") {
-                drawReturnMessage(this.svg, this.classbox1, this.classbox2)
             }
         }
 
@@ -730,15 +731,6 @@ CodeSmithy.UMLWebWidget = {
                     (startX + 12) + "," + (20 + offsetY + 6)
                 svg.polygon(polygonDescription)
             }
-        }
-
-        function drawReturnMessage(svg, caller, callee) {
-            let startX = caller.svg.bbox().cx
-            let endX = callee.svg.bbox().cx
-
-            svg.line(startX, 6, startX + 10, 0)
-            svg.line(startX, 6, endX, 6).attr("stroke-dasharray", "4, 4")
-            svg.line(startX, 6, startX + 10, 12)
         }
 
         var ConnectorPosition = {
