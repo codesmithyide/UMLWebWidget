@@ -2,6 +2,8 @@
 
 import { Style } from "./Style.js"
 import { LayoutManager } from "./LayoutManager.js"
+import { AssemblyConnector } from "./AssemblyConnector.js"
+import { BallConnector } from "./BallConnector.js"
 import { SocketConnector } from "./SocketConnector.js"
 
 var CodeSmithy = { }
@@ -137,7 +139,7 @@ CodeSmithy.UMLWebWidget = {
                 } else if (item.assemblyconnector) {
                     let consumerComponent = this.components[item.assemblyconnector.consumer]
                     let providerComponent = this.components[item.assemblyconnector.provider]
-                    let newConnector = new CodeSmithy.UMLWebWidget.AssemblyConnector(svg)
+                    let newConnector = new AssemblyConnector(svg)
                     newConnector.move(consumerComponent.getSocketConnectionPoint("").x, consumerComponent.getSocketConnectionPoint("").y, providerComponent.getBallConnectionPoint("").x, providerComponent.getBallConnectionPoint("").y)
                     newConnector.draw()
                 }
@@ -377,7 +379,7 @@ CodeSmithy.UMLWebWidget = {
         let offset = 0
         if (componentDescription.interfaces) {
             for (let i = 0; i < componentDescription.interfaces.length; i++) {
-                let ballConnector = new CodeSmithy.UMLWebWidget.BallConnector(svg.defs(), componentWithConnectorsGroup, componentDescription.interfaces[i].name)
+                let ballConnector = new BallConnector(svg.defs(), componentWithConnectorsGroup, componentDescription.interfaces[i].name)
                 this.ballConnectors.push(ballConnector)
                 offset = Math.max(offset, ballConnector.width)
             }
@@ -950,81 +952,9 @@ CodeSmithy.UMLWebWidget = {
                     break
             }
         }
-    },
+    }
     //
     // End of the CodeSmithy.UMLWebWidget.Connector class definition
-    /////
-
-    /////
-    // Start of the CodeSmithy.UMLWebWidget.AssemblyConnector class definition
-    //
-    AssemblyConnector: function(svgParentGroup) {
-
-        this.startPoint = { x: 0, y: 0 }
-        this.endPoint = { x: 0, y: 0 }
-
-        this.move = function(x1, y1, x2, y2) {
-             this.startPoint = { x: x1, y: y1 }
-             this.endPoint = { x: x2, y: y2 }
-        }
-
-        this.draw = function() {
-            let assemblyConnectorGroup = svgParentGroup.group().addClass("UMLAssemblyConnector")
-            assemblyConnectorGroup.line(this.startPoint.x, this.startPoint.y, this.endPoint.x, this.endPoint.y).attr("stroke-dasharray", "8, 4")
-            assemblyConnectorGroup.line(this.endPoint.x - 13, this.endPoint.y + 5, this.endPoint.x, this.endPoint.y)
-            assemblyConnectorGroup.line(this.endPoint.x - 13, this.endPoint.y - 5, this.endPoint.x, this.endPoint.y)
-        }
-
-    },
-    //
-    // End of the CodeSmithy.UMLWebWidget.Connector class definition
-    /////
-
-    /////
-    // Start of the CodeSmithy.UMLWebWidget.BallConnector class definition
-    //
-    BallConnector: function(svgDefs, svgParentGroup, text) {
-
-        this.x = 0
-        this.y = 0
-        this.width = 0
-
-        // Move the connector so that the top left
-        // corner of the bounding box is at position
-        // (x, y)
-        this.move = function(x, y) {
-            this.x = x
-            this.y = y
-        }
-
-        // Move the connector so that its connection
-        // point is at position (x, y)
-        this.moveConnectionPoint = function(x, y) {
-            let connectorOffsetY = textDef.bbox().height + 6
-            y -= connectorOffsetY
-            this.move(x, y)
-        }
-
-        this.draw = function() {
-            svgParentGroup.use(textDef).move(this.x, this.y)
-            svgParentGroup.circle(10).move(this.x + (this.width)/2 - 5, this.y + 22)
-            svgParentGroup.line(this.x + 10 + (this.width)/2 - 5, this.y + 27, this.x + (this.width), this.y + 27)
-        }
-
-        this.getAssemblyConnectionPoint = function() {
-             return { x: (this.x + (this.width / 2) - 4), y: this.y + textDef.bbox().height + 8 }
-        }
-
-        let textDef = null
-
-        ;(function(self) {
-            textDef = svgDefs.text(text).move(0, 0) 
-            self.width = textDef.bbox().width + 5
-        })(this)
-
-    },
-    //
-    // End of the CodeSmithy.UMLWebWidget.BallConnector class definition
     /////
 
 }
