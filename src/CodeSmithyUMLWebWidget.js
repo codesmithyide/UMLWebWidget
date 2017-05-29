@@ -1,6 +1,8 @@
 'use strict'
 
 import { Style } from "./Style.js"
+import { LayoutManager } from "./LayoutManager.js"
+import { SocketConnector } from "./SocketConnector.js"
 
 var CodeSmithy = { }
 
@@ -97,7 +99,7 @@ CodeSmithy.UMLWebWidget = {
                 layout.connectorpositions = { }
             }
 
-            let layoutManager = new CodeSmithy.UMLWebWidget.LayoutManager(layout)
+            let layoutManager = new LayoutManager(layout)
 
             for (var i = 0; i < classDiagram.length; i++) {
                 let item = classDiagram[i]
@@ -382,7 +384,7 @@ CodeSmithy.UMLWebWidget = {
         }
         if (componentDescription.dependencies) {
             for (let i = 0; i < componentDescription.dependencies.length; i++) {
-                let socketConnector = new CodeSmithy.UMLWebWidget.SocketConnector(svg.defs(), componentWithConnectorsGroup, componentDescription.dependencies[i].name)
+                let socketConnector = new SocketConnector(svg.defs(), componentWithConnectorsGroup, componentDescription.dependencies[i].name)
                 this.socketConnectors.push(socketConnector)
             }
         }
@@ -1024,64 +1026,6 @@ CodeSmithy.UMLWebWidget = {
     //
     // End of the CodeSmithy.UMLWebWidget.BallConnector class definition
     /////
-
-    /////
-    // Start of the CodeSmithy.UMLWebWidget.SocketConnector class definition
-    //
-    SocketConnector: function(svgDefs, svgParentGroup, text) {
-
-        this.x = 0
-        this.y = 0
-        this.width = 0
-
-        // Move the connector so that the top left
-        // corner of the bounding box is at position
-        // (x, y)
-        this.move = function(x, y) {
-            this.x = x
-            this.y = y
-        }
-
-        // Move the connector so that its connection
-        // point is at position (x, y)
-        this.moveConnectionPoint = function(x, y) {
-            let connectorOffsetY = textDef.bbox().height + 6
-            y -= connectorOffsetY
-            this.move(x, y)
-        }
-
-        this.draw = function() {
-            svgParentGroup.use(textDef).move(this.x + 5, this.y)
-            svgParentGroup.line(this.x, this.y + textDef.bbox().height + 8, this.x + (this.width / 2), this.y + textDef.bbox().height + 8)
-            let clippath = svgParentGroup.clip()
-            clippath.rect(10, 17).move(this.x + (this.width / 2) - 1, this.y + textDef.bbox().height, 0)
-            svgParentGroup.circle(15).move(this.x + (this.width / 2), this.y + textDef.bbox().height + 1).clipWith(clippath)
-        }
-
-        this.getAssemblyConnectionPoint = function() {
-             return { x: (this.x + (this.width / 2) - 1 + 10), y: this.y + textDef.bbox().height + 8 }
-        }
-
-        let textDef = null
-
-        ;(function(self) {
-            textDef = svgDefs.text(text).move(0, 0)
-            self.width = textDef.bbox().width + 5
-        })(this)
-
-    },
-    //
-    // End of the CodeSmithy.UMLWebWidget.SocketConnector class definition
-    /////
-
-    /** Sets the position of the elements on the diagram. */
-    LayoutManager: class {
-
-        constructor(layout) {
-            this.layout = layout
-        }
-
-    }
 
 }
 
