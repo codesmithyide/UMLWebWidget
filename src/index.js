@@ -1,7 +1,7 @@
 'use strict'
 
-import { CodeSmithy } from "./CodeSmithyUMLWebWidget.js"
+import { Diagram } from "./CodeSmithyUMLWebWidget.js"
 
 export {
-    CodeSmithy
+    Diagram
 }
