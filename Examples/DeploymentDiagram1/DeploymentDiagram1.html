@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Deployment Diagram 1</title>
+
+    <script src="../../ThirdParty/jquery-3.2.1.min.js"></script>
+    <script src="../../ThirdParty/svg.min.js"></script>
+    <script src="../../dist/codesmithy-umlwebwidget.js"></script>
+
+    <link rel="stylesheet" href="../../StyleSheets/CodeSmithyUMLWebWidget.css">
+  </head>
+  <body>
+    <p>The following diagram is a component diagram.</p>
+    <div id="diagram1" class="CodeSmithyUMLWebWidget">
+      { 
+        "deploymentdiagram":
+          [
+            {
+              "node":
+                {
+                  "name": "WebServer"
+                }
+            },
+            {
+              "node":
+                {
+                  "name": "DatabaseServer"
+                }
+            }
+
+          ]
+      }
+    </div>
+    <script>
+      var classDiagram = new CodeSmithyUMLWebWidget.CodeSmithy.UMLWebWidget.Diagram()
+
+      var layout = {
+        nodes: {
+          WebServer: { 
+            position: { x: 1, y: 1 }
+          },
+          DatabaseServer: {
+            position: { x:150, y: 1 }
+          }
+        }
+      }
+
+      classDiagram.createFromDiv("diagram1", layout)
+    </script>
+  </body>
+</html>
