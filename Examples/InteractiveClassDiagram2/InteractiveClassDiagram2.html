@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Interactive Class Diagram 2</title>
+
+    <script src="../../ThirdParty/jquery-3.2.1.min.js"></script>
+    <script src="../../ThirdParty/svg.min.js"></script>
+    <script src="../../ThirdParty/svg.select.js"></script>
+    <script src="../../ThirdParty/svg.draggable.js"></script>
+    <script src="../../dist/codesmithy-umlwebwidget.js"></script>
+
+    <link rel="stylesheet" href="../../ThirdParty/svg.select.css">
+    <link rel="stylesheet" href="../../StyleSheets/CodeSmithyUMLWebWidget.css">
+  </head>
+  <body>
+    <p>The following diagram is a class diagram that can be edited online by the user.</p>
+    <div id="diagram1" class="CodeSmithyUMLWebWidget">
+      { 
+        "classdiagram":
+          [
+            { 
+              "class":
+                {
+                  "name": "MyBaseClass",
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr1", "visibility": "protected" 
+                      }
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "MyDerivedClass",
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr2", "visibility": "private" 
+                      }
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "class":
+                {
+                  "name": "MyContainedClass",
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr3", "visibility": "private" 
+                      }
+                    ],
+                    "operations":
+                    [
+                    ]
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "inheritance",
+                  "baseclass": "MyBaseClass",
+                  "derivedclass": "MyDerivedClass"
+                }
+            },
+
+            {
+              "relationship":
+                {
+                  "type": "composition",
+                  "containingclass": "MyDerivedClass",
+                  "containedclass": "MyContainedClass"
+                }
+            }
+          ]
+      }
+    </div>
+<div id="s-Label_61" class="label firer ie-background commentable">
+    <div class="valign"><span>Download</span></div>
+</div>
+    <script>
+      var classDiagram = new CodeSmithyUMLWebWidget.Diagram({ width: 800, height: 400, interactive: { canMove: false } })
+
+      var layout = {
+        "positions": {
+          "MyBaseClass": { "x": 21, "y": 10 },
+          "MyDerivedClass": { "x": 10, "y": 125 },
+          "MyContainedClass": { "x": 220, "y": 125 },
+        }
+      }
+
+      classDiagram.createFromDiv("diagram1", layout)
+
+     $('#s-Label_61 span').on('click', function() {
+       var a = document.createElement('a');
+       a.download = "test.txt";
+       a.href = "http://images.gadmin.st.s3.amazonaws.com/n49487/images/buehne/image2.jpeg";
+       a.click();
+     })
+    </script>
+  </body>
+</html>
