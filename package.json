@@ -2,9 +2,9 @@
   "name": "codesmithy-umlwebwidget",
   "version": "1.0.0",
   "description": "A web widget to display UML diagrams",
-  "main": "CodeSmithyUMLWebWidget.js",
+  "main": "dist/codesmithy-umlwebwidget.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --config webpack.config.js",
     "builddoc": "jsdoc -r src",
     "test": "node test/index.js"
   },
