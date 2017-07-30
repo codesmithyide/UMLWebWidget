@@ -66,6 +66,7 @@ export class Diagram {
 
     createFromJSON(jsonDiagramDescription, layout, svg) {
         if (jsonDiagramDescription == null) {
+            jsonDiagramDescription = { }
         }
         this.diagramDescription = jsonDiagramDescription
         let style = new Style()

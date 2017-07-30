@@ -81,20 +81,77 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Settings; });
+
+
+/**
+  Diagram settings.
+
+  @property {int} width - The width of the diagram in pixels.
+  @property {height} height - The height of the diagram in pixels.
+  @property {boolean} debug - If debug is true then additional checks
+    and logging will be performed. This is false by default so that
+    diagrams are displayed as well as possible regardless
+    of errors. It is recommended to enable debug mode when updating a
+    diagram and set it back to false afterwards.
+*/
+class Settings {    
+
+    /** 
+      Creates a new Settings instance with each property
+      having a default value or the value specified in 
+      the jsonSettings argument.
+      @param {json=} jsonSettings - The initial settings.
+      @param {int} [jsonSettings.width=600] - The width of the diagram.
+      @param {int} [jsonSettings.height=200] - The height of the diagram.
+      @param {boolean} [jsonSettings.debug=false] - Debug mode.
+    */
+    constructor(jsonSettings) {
+        this.width = 600
+        this.height = 200
+        this.canMove = false
+        this.canResize = false
+        this.debug = false
+
+        if (jsonSettings) {
+            if (jsonSettings.width) {
+                this.width = jsonSettings.width
+            }
+            if (jsonSettings.height) {
+                this.height = jsonSettings.height
+            }
+            if (jsonSettings.interactive) {
+                if (jsonSettings.interactive.canMove) {
+                    this.canMove = jsonSettings.interactive.canMove
+                }
+            }
+        }
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Component_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Component_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SynchronousMessageConnector_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__ = __webpack_require__(17);
 
 
@@ -114,8 +171,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 
-// This class is the entry point for all the functionality provided
-// by the CodeSmithy UMLWebWidget.
+/**
+  This class is the entry point for all the functionality provided
+  by the CodeSmithy UMLWebWidget.
+*/
 class Diagram {
 
     constructor(settings) {
@@ -162,6 +221,7 @@ class Diagram {
 
     createFromJSON(jsonDiagramDescription, layout, svg) {
         if (jsonDiagramDescription == null) {
+            jsonDiagramDescription = { }
         }
         this.diagramDescription = jsonDiagramDescription
         let style = new __WEBPACK_IMPORTED_MODULE_2__Style_js__["a" /* Style */]()
@@ -324,7 +384,7 @@ function createUseCaseConnector(self, svg, actor, usecase) {
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -361,7 +421,7 @@ class Actor {
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -393,7 +453,7 @@ class AssemblyConnector {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -443,12 +503,13 @@ class BallConnector {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 
+/** A class box. */
 class ClassBox {
 
     constructor(svg, classDescription, canMove, style) {        
@@ -575,11 +636,11 @@ function visibilityStringToSymbol(visibility) {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__ = __webpack_require__(12);
 
 
@@ -698,7 +759,7 @@ class Component {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -990,7 +1051,7 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1009,12 +1070,13 @@ class LayoutManager {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 
+/** A lifeline on a sequence diagram. */
 class Lifeline {
 
     constructor(svg, lifelineDescription, lifelineStyle, layout) {
@@ -1075,7 +1137,7 @@ function createDef(defs, lifelineDescription, style, layout) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1123,7 +1185,7 @@ class Node {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1162,41 +1224,6 @@ class ReturnMessageConnector {
 
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = ReturnMessageConnector;
-
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-
-class Settings {    
-
-    constructor(jsonSettings) {
-        this.width = 600
-        this.height = 200
-        this.canMove = false
-        this.canResize = false
-        this.debug = false
-
-        if (jsonSettings) {
-            if (jsonSettings.width) {
-                this.width = jsonSettings.width
-            }
-            if (jsonSettings.height) {
-                this.height = jsonSettings.height
-            }
-            if (jsonSettings.interactive) {
-                if (jsonSettings.interactive.canMove) {
-                    this.canMove = jsonSettings.interactive.canMove
-                }
-            }
-        }
-    }
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Settings;
 
 
 
@@ -1259,7 +1286,7 @@ class SocketConnector {
 "use strict";
 
 
-/** Style */
+/** Style settings. */
 class Style {
 
     constructor() {
@@ -1460,8 +1487,11 @@ class UseCaseAssociationConnector {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Diagram_js__ = __webpack_require__(0);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Diagram", function() { return __WEBPACK_IMPORTED_MODULE_0__Diagram_js__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Settings_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Diagram_js__ = __webpack_require__(1);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Settings", function() { return __WEBPACK_IMPORTED_MODULE_0__Settings_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Diagram", function() { return __WEBPACK_IMPORTED_MODULE_1__Diagram_js__["a"]; });
+
 
 
 
