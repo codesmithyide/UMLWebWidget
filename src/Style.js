@@ -1,6 +1,6 @@
 'use strict'
 
-/** Style */
+/** Style settings. */
 export class Style {
 
     constructor() {

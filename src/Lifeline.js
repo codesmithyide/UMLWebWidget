@@ -1,5 +1,6 @@
 'use strict'
 
+/** A lifeline on a sequence diagram. */
 export class Lifeline {
 
     constructor(svg, lifelineDescription, lifelineStyle, layout) {

@@ -16,8 +16,10 @@ import { SynchronousMessageConnector } from "./SynchronousMessageConnector.js"
 import { ReturnMessageConnector } from "./ReturnMessageConnector.js"
 import { UseCaseAssociationConnector } from "./UseCaseAssociationConnector.js"
 
-// This class is the entry point for all the functionality provided
-// by the CodeSmithy UMLWebWidget.
+/**
+  This class is the entry point for all the functionality provided
+  by the CodeSmithy UMLWebWidget.
+*/
 export class Diagram {
 
     constructor(settings) {

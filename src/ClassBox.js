@@ -1,5 +1,6 @@
 'use strict'
 
+/** A class box. */
 export class ClassBox {
 
     constructor(svg, classDescription, canMove, style) {        
