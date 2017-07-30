@@ -19,9 +19,9 @@
   },
   "homepage": "https://github.com/CodeSmithyIDE/UMLWebWidget#readme",
   "dependencies": {
-    "ishiko-test-framework": "^1.0.3"
   },
   "devDependencies": {
-    "webpack": "^2.6.1"
+    "ishiko-test-framework": "^1.0.9",
+    "webpack": "^2.7.0"
   }
 }
