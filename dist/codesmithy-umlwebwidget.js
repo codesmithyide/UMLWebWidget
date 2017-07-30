@@ -120,7 +120,7 @@ class Diagram {
             this.width = 600
             this.height = 200
             this.canMove = false
-            this.canResive = false
+            this.canResize = false
 
             if (settings) {
                 if (settings.width) {
@@ -172,9 +172,14 @@ class Diagram {
     // - divId: this is the id of the div element to use, it should be the id
     //   without any '#' prefix.
     createFromDiv(divId, layout) {
-        this.diagramDescription = JSON.parse($('#' + divId).text())
+        let jsonDiagramDescription = JSON.parse($('#' + divId).text())
         $('#' + divId).empty()
         var svg = SVG(divId).size(this.settings.width, this.settings.height)
+        this.createFromJSON(jsonDiagramDescription, layout, svg)
+    }
+
+    createFromJSON(jsonDiagramDescription, layout, svg) {
+        this.diagramDescription = jsonDiagramDescription
         let style = new __WEBPACK_IMPORTED_MODULE_0__Style_js__["a" /* Style */]()
         if (this.diagramDescription.classdiagram) {
             this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
@@ -308,6 +313,9 @@ class Diagram {
                 createUseCaseConnector(this, svg, this.actors[item.association.actor], this.usecases[item.association.usecase]).draw()
             }
         }
+    }
+
+    export() {
     }
 
 }
