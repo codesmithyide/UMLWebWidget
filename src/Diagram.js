@@ -1,5 +1,7 @@
 'use strict'
 
+import { UMLWebWidgetError } from "./UMLWebWidgetError.js"
+import { Settings } from "./Settings.js"
 import { Style } from "./Style.js"
 import { LayoutManager } from "./LayoutManager.js"
 import { ClassBox } from "./ClassBox.js"
@@ -19,29 +21,7 @@ import { UseCaseAssociationConnector } from "./UseCaseAssociationConnector.js"
 export class Diagram {
 
     constructor(settings) {
-        this.Settings = function(settings) {
-
-            this.width = 600
-            this.height = 200
-            this.canMove = false
-            this.canResize = false
-
-            if (settings) {
-                if (settings.width) {
-                    this.width = settings.width
-                }
-                if (settings.height) {
-                    this.height = settings.height
-                }
-                if (settings.interactive) {
-                    if (settings.interactive.canMove) {
-                        this.canMove = settings.interactive.canMove
-                    }
-                }
-            }
-        }
-
-        this.settings = new this.Settings(settings)
+        this.settings = new Settings(settings)
 
         // The description of the UML diagram in JSON
         // format. This will then be parsed to create
@@ -83,6 +63,8 @@ export class Diagram {
     }
 
     createFromJSON(jsonDiagramDescription, layout, svg) {
+        if (jsonDiagramDescription == null) {
+        }
         this.diagramDescription = jsonDiagramDescription
         let style = new Style()
         if (this.diagramDescription.classdiagram) {
