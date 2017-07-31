@@ -81,6 +81,45 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SVGLayer; });
+
+
+/** 
+  <p>
+    The SVG specification has no concept of layers. The 
+    order in which elements are added to the image 
+    dictate which ones will be shown over the others.
+    This is impractical so this class attempts to 
+    provide a workaround.
+  </p>
+
+  <p>
+    Drawing will be first done on several layers. The
+    elements in each of the layers will then be added
+    to the SVG document layer per layer.
+  </p>   
+*/
+class SVGLayer {
+
+    constructor() {
+    }
+
+    text(str) {
+    }
+
+    write(svg) {
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Settings; });
 
 
@@ -134,7 +173,7 @@ class Settings {
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -147,12 +186,12 @@ class UMLWebWidgetError extends Error {
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(7);
@@ -166,6 +205,8 @@ class UMLWebWidgetError extends Error {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SynchronousMessageConnector_js__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__SVGLayer_js__ = __webpack_require__(0);
+
 
 
 
@@ -238,8 +279,11 @@ class Diagram {
         }
         this.diagramDescription = jsonDiagramDescription
         let style = new __WEBPACK_IMPORTED_MODULE_2__Style_js__["a" /* Style */]()
+
+        let svgTextLayer = new __WEBPACK_IMPORTED_MODULE_15__SVGLayer_js__["a" /* SVGLayer */]()
+
         if (this.diagramDescription.classdiagram) {
-            this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
+            this.drawClassDiagram(svg, svgTextLayer, this.diagramDescription.classdiagram, style, layout)
         } else if (this.diagramDescription.componentdiagram) {
             this.drawComponentDiagram(svg, this.diagramDescription.componentdiagram, style, layout)
         } else if (this.diagramDescription.deploymentdiagram) {
@@ -251,7 +295,7 @@ class Diagram {
         }
     }
 
-    drawClassDiagram(svg, classDiagram, style, layout) {
+    drawClassDiagram(svg, svgTextLayer, classDiagram, style, layout) {
         if (layout == null) {
             layout = { }
         }
@@ -268,7 +312,7 @@ class Diagram {
             let item = classDiagram[i]
             if (item.class) {
                 let className = item.class.name
-                let newClassBox = new __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__["a" /* ClassBox */](svg, item.class, this.settings.canMove, style)
+                let newClassBox = new __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__["a" /* ClassBox */](svg, svgTextLayer, item.class, this.settings.canMove, style)
                 this.classboxes[className] = newClassBox
                 if (layout.classboxpositions[className]) {
                     newClassBox.move(layout.classboxpositions[className].x, layout.classboxpositions[className].y)
@@ -290,6 +334,8 @@ class Diagram {
                 newConnector.draw()
             }
         }
+        
+        svgTextLayer.write(svg)
     }
 
     drawComponentDiagram(svg, componentDiagram, style, layout) {
@@ -391,39 +437,6 @@ function createLifelineConnector(self, svg, type, classbox1, classbox2, name, la
 function createUseCaseConnector(self, svg, actor, usecase) {
     return new __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__["a" /* UseCaseAssociationConnector */](svg, actor, usecase)
 }
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SVGLayer; });
-
-
-/** 
-  <p>
-    The SVG specification has no concept of layers. The 
-    order in which elements are added to the image 
-    dictate which ones will be shown over the others.
-    This is impractical so this class attempts to 
-    provide a workaround.
-  </p>
-
-  <p>
-    Drawing will be first done on several layers. The
-    elements in each of the layers will then be added
-    to the SVG document layer per layer.
-  </p>   
-*/
-class SVGLayer {
-
-    constructor() {
-    }
-
-}
-
-
 
 
 /***/ }),
@@ -555,7 +568,7 @@ class BallConnector {
 /** A class box. */
 class ClassBox {
 
-    constructor(svg, classDescription, canMove, style) {        
+    constructor(svg, svgTextLayer, classDescription, canMove, style) {        
         this.classDescription = classDescription
         this.def = createDef(this, svg.defs(), classDescription, canMove, style)
         this.svg = svg.use(this.def)
@@ -1517,10 +1530,10 @@ class UseCaseAssociationConnector {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Diagram_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SVGLayer_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Diagram_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SVGLayer_js__ = __webpack_require__(0);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "UMLWebWidgetError", function() { return __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Settings", function() { return __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Diagram", function() { return __WEBPACK_IMPORTED_MODULE_2__Diagram_js__["a"]; });

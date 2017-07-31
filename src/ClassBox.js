@@ -3,7 +3,7 @@
 /** A class box. */
 export class ClassBox {
 
-    constructor(svg, classDescription, canMove, style) {        
+    constructor(svg, svgTextLayer, classDescription, canMove, style) {        
         this.classDescription = classDescription
         this.def = createDef(this, svg.defs(), classDescription, canMove, style)
         this.svg = svg.use(this.def)

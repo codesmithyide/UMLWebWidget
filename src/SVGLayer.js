@@ -20,6 +20,12 @@ class SVGLayer {
     constructor() {
     }
 
+    text(str) {
+    }
+
+    write(svg) {
+    }
+
 }
 
 export { SVGLayer }
