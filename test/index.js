@@ -1,6 +1,7 @@
 'use strict'
 
 var fs = require('fs')
+var AddSVGLayerTests = require("./SVGLayerTests.js")
 var AddUMLWebWidgetErrorTests = require("./UMLWebWidgetErrorTests.js")
 var AddSettingsTests = require("./SettingsTests.js")
 var AddClassDiagramTests = require("./ClassDiagramTests.js")
@@ -16,6 +17,7 @@ try {
     }
 }
 
+AddSVGLayerTests(theTestHarness)
 AddUMLWebWidgetErrorTests(theTestHarness)
 AddSettingsTests(theTestHarness)
 AddClassDiagramTests(theTestHarness)
