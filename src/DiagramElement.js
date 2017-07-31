@@ -1,5 +1,8 @@
 'use strict'
 
+/**
+  An element of a diagram.
+*/
 class DiagramElement {
 
     constructor(svg) {

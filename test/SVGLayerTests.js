@@ -12,6 +12,8 @@ module.exports = function(theTestHarness) {
     new tf.FunctionBasedTest("Creation test 1", SVGLayerCreationTest1, svgLayerSequence)
 
     new tf.FileComparisonTest("text test 1", SVGLayerTextTest1, svgLayerSequence)
+
+    new tf.FileComparisonTest("merge test 1", SVGLayerMergeTest1, svgLayerSequence)
 }
 
 function SVGLayerCreationTest1(resolve) {
@@ -27,6 +29,9 @@ function SVGLayerTextTest1(resolve) {
     layer.write()
 
     fs.writeFileSync(__dirname + "/output/SVGLayerTextTest1.html", "<html><body><div>" + svg.svg() + "</div></body></html>")
+    resolve(tf.TestResultOutcome.eFailed)
+}
 
+function SVGLayerMergeTest1(resolve) {
     resolve(tf.TestResultOutcome.eFailed)
 }

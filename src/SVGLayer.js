@@ -1,6 +1,6 @@
 'use strict'
 
-/** 
+/**
   <p>
     The SVG specification has no concept of layers. The 
     order in which elements are added to the image 
@@ -34,6 +34,9 @@ class SVGLayer {
             self.svg.add(def.clone())
             def.remove()
         })
+    }
+
+    merge(layer) {
     }
 
 }

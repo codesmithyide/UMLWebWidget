@@ -1,10 +1,14 @@
 'use strict'
 
-/** A class box. */
-export class ClassBox {
+import { DiagramElement } from "./DiagramElement.js"
+import { SVGLayerSet } from "./SVGLayerSet.js"
 
-    constructor(svg, svgTextLayer, classDescription, canMove, style) {        
+/** A class box. */
+class ClassBox extends DiagramElement {
+
+    constructor(svg, classDescription, canMove, style) {      
         this.classDescription = classDescription
+
         this.def = createDef(this, svg.defs(), classDescription, canMove, style)
         this.svg = svg.use(this.def)
 
@@ -14,9 +18,6 @@ export class ClassBox {
 
     move(x, y) {
         this.def.move(x, y)
-    }
-
-    draw() {
     }
         
     fire(evt) {
@@ -122,3 +123,5 @@ function visibilityStringToSymbol(visibility) {
     }
     return stringToSymbolMap[visibility]
 }
+
+export { ClassBox }

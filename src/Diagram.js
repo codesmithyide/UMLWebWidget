@@ -72,10 +72,8 @@ export class Diagram {
         this.diagramDescription = jsonDiagramDescription
         let style = new Style()
 
-        let svgTextLayer = new SVGLayer(svg)
-
         if (this.diagramDescription.classdiagram) {
-            this.drawClassDiagram(svg, svgTextLayer, this.diagramDescription.classdiagram, style, layout)
+            this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
         } else if (this.diagramDescription.componentdiagram) {
             this.drawComponentDiagram(svg, this.diagramDescription.componentdiagram, style, layout)
         } else if (this.diagramDescription.deploymentdiagram) {
@@ -87,7 +85,7 @@ export class Diagram {
         }
     }
 
-    drawClassDiagram(svg, svgTextLayer, classDiagram, style, layout) {
+    drawClassDiagram(svg, classDiagram, style, layout) {
         if (layout == null) {
             layout = { }
         }
@@ -104,7 +102,7 @@ export class Diagram {
             let item = classDiagram[i]
             if (item.class) {
                 let className = item.class.name
-                let newClassBox = new ClassBox(svg, svgTextLayer, item.class, this.settings.canMove, style)
+                let newClassBox = new ClassBox(svg, item.class, this.settings.canMove, style)
                 this.classboxes[className] = newClassBox
                 if (layout.classboxpositions[className]) {
                     newClassBox.move(layout.classboxpositions[className].x, layout.classboxpositions[className].y)
@@ -126,8 +124,6 @@ export class Diagram {
                 newConnector.draw()
             }
         }
-        
-        svgTextLayer.write(svg)
     }
 
     drawComponentDiagram(svg, componentDiagram, style, layout) {

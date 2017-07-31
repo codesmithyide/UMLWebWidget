@@ -20,6 +20,15 @@ class SVGLayerSet {
         return newLayer
     }
 
+    /**
+      Merge another set into this one. Layers
+      with the same name will be merged together
+      with the elements of the set given as argument
+      being appended.
+    */
+    merge(layerSet) {
+    }
+
 }
 
 export { SVGLayerSet }
