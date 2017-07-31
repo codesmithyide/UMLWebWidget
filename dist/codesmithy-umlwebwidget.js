@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 19);
+/******/ 	return __webpack_require__(__webpack_require__.s = 21);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -84,7 +84,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SVGLayer; });
 
 
-/** 
+/**
   <p>
     The SVG specification has no concept of layers. The 
     order in which elements are added to the image 
@@ -127,6 +127,177 @@ class SVGLayer {
 
 /***/ }),
 /* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ClassBox; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SVGLayerSet_js__ = __webpack_require__(2);
+
+
+
+
+
+/** A class box. */
+class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
+
+    constructor(svg, classDescription, canMove, style) {      
+        this.classDescription = classDescription
+
+        this.def = createDef(this, svg.defs(), classDescription, canMove, style)
+        this.svg = svg.use(this.def)
+
+        // List of connectors that are connected to this class box
+        this.connectors = [ ]
+    }
+
+    move(x, y) {
+        this.def.move(x, y)
+    }
+        
+    fire(evt) {
+        if (evt == "positionchanged") {
+            for (let i = 0; i < this.connectors.length; i++) {
+                this.connectors[i].draw()        
+            }
+        }
+    }
+
+}
+
+function createDef(self, defs, classInfo, canMove, style) {
+    var classGroup = defs.group().addClass("UMLClass")
+   
+    let currentDimensions = { 
+        width: 0,
+        height: 0
+    }
+    
+    currentDimensions.height = style.getTopMargin("classbox")
+
+    var classNameDef = defs.text(classInfo.name).addClass("UMLClassName").move(style.getLeftMargin("classbox"), currentDimensions.height)
+    currentDimensions.width = Math.max(currentDimensions.width, classNameDef.bbox().width)
+    currentDimensions.height += (classNameDef.bbox().height + style.getBottomMargin("classbox"))
+
+    var line1YPos = currentDimensions.height
+    let attributeGroupDef = addCompartment(defs, currentDimensions, style, classInfo.attributes, "UMLAttribute")
+ 
+    var line2YPos = currentDimensions.height
+    let operationGroupDef = addCompartment(defs, currentDimensions, style, classInfo.operations, "UMLOperation")
+
+    // According to the UML standard the class name must be
+    // centered so center it
+    if (currentDimensions.width > classNameDef.bbox().width) {
+        classNameDef.dx((currentDimensions.width - classNameDef.bbox().width)/2)
+    }
+
+    currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
+    
+    classGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
+    classGroup.use(classNameDef)
+    classGroup.line(0, line1YPos, currentDimensions.width, line1YPos)
+    classGroup.use(attributeGroupDef)
+    classGroup.line(0, line2YPos, currentDimensions.width, line2YPos)
+    classGroup.use(operationGroupDef)
+
+    if (canMove) {
+        classGroup.draggable(true)
+        classGroup.on('dragmove.namespace', function(evt) {
+            self.fire('positionchanged')
+        })
+        classGroup.on('dragend.namespace', function(evt) {
+            self.fire('positionchanged')
+        })
+    }
+
+    // Offset by 1 to leave some space because the border stroke width is 2
+    classGroup.move(1,1)
+
+    return classGroup
+}
+
+// Add an attribute or operation compartment and updates the current dimensions
+// of the class box
+function addCompartment(svg, currentDimensions, style, items, cssClass) {
+    currentDimensions.height += style.getTopMargin("classbox")
+    let compartmentDef = createAttributeOrOperationGroupDef(svg, currentDimensions, items, cssClass)
+    compartmentDef.dmove(style.getLeftMargin("classbox"), 0)            
+    currentDimensions.height += style.getBottomMargin("classbox")
+    return compartmentDef
+}
+
+// Creates a group with all the attributes or operations
+function createAttributeOrOperationGroupDef(svg, currentDimensions, items, cssClass) {
+    let itemGroupDef = svg.group()
+    for (var i = 0; i < items.length; i++) {
+        let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i], cssClass)
+        itemDef.move(0, currentDimensions.height)
+        currentDimensions.width = Math.max(currentDimensions.width, itemDef.bbox().width)
+        currentDimensions.height += itemDef.bbox().height
+        }
+    return itemGroupDef
+}
+
+// Creates a single attribute or operation line
+function createAttributeOrOperationDef(svg, item, cssClass) {
+    let text = visibilityStringToSymbol(item.visibility) + item.name
+    if (item.return) {
+        text += " : " + item.return
+    }
+    return svg.text(text).addClass(cssClass)
+}
+
+// Converts the visibility from the user string provided
+// in the input to the appropriate UML symbol for
+// visibility
+function visibilityStringToSymbol(visibility) {
+    let stringToSymbolMap = {
+        "public": "+ ",
+        "protected": "# ",
+        "private": "- "
+    }
+    return stringToSymbolMap[visibility]
+}
+
+
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SVGLayerSet; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__ = __webpack_require__(0);
+
+
+
+
+/**
+  <p>
+    A set of layers.
+  </p>
+*/
+class SVGLayerSet {
+
+    constructor(svg) {
+        this.svg = svg
+        this.layers = { }
+    }
+
+    createLayer(name) {
+        let newLayer = new __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__["a" /* SVGLayer */](this.svg)
+        this.layers[name] = newLayer
+        return newLayer
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -183,7 +354,7 @@ class Settings {
 
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -196,25 +367,25 @@ class UMLWebWidgetError extends Error {
 
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Component_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SynchronousMessageConnector_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Component_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SynchronousMessageConnector_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__SVGLayer_js__ = __webpack_require__(0);
 
 
@@ -290,10 +461,8 @@ class Diagram {
         this.diagramDescription = jsonDiagramDescription
         let style = new __WEBPACK_IMPORTED_MODULE_2__Style_js__["a" /* Style */]()
 
-        let svgTextLayer = new __WEBPACK_IMPORTED_MODULE_15__SVGLayer_js__["a" /* SVGLayer */](svg)
-
         if (this.diagramDescription.classdiagram) {
-            this.drawClassDiagram(svg, svgTextLayer, this.diagramDescription.classdiagram, style, layout)
+            this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
         } else if (this.diagramDescription.componentdiagram) {
             this.drawComponentDiagram(svg, this.diagramDescription.componentdiagram, style, layout)
         } else if (this.diagramDescription.deploymentdiagram) {
@@ -305,7 +474,7 @@ class Diagram {
         }
     }
 
-    drawClassDiagram(svg, svgTextLayer, classDiagram, style, layout) {
+    drawClassDiagram(svg, classDiagram, style, layout) {
         if (layout == null) {
             layout = { }
         }
@@ -322,7 +491,7 @@ class Diagram {
             let item = classDiagram[i]
             if (item.class) {
                 let className = item.class.name
-                let newClassBox = new __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__["a" /* ClassBox */](svg, svgTextLayer, item.class, this.settings.canMove, style)
+                let newClassBox = new __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__["a" /* ClassBox */](svg, item.class, this.settings.canMove, style)
                 this.classboxes[className] = newClassBox
                 if (layout.classboxpositions[className]) {
                     newClassBox.move(layout.classboxpositions[className].x, layout.classboxpositions[className].y)
@@ -344,8 +513,6 @@ class Diagram {
                 newConnector.draw()
             }
         }
-        
-        svgTextLayer.write(svg)
     }
 
     drawComponentDiagram(svg, componentDiagram, style, layout) {
@@ -450,7 +617,7 @@ function createUseCaseConnector(self, svg, actor, usecase) {
 
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -487,7 +654,7 @@ class Actor {
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -519,7 +686,7 @@ class AssemblyConnector {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -569,145 +736,12 @@ class BallConnector {
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-/** A class box. */
-class ClassBox {
-
-    constructor(svg, svgTextLayer, classDescription, canMove, style) {        
-        this.classDescription = classDescription
-        this.def = createDef(this, svg.defs(), classDescription, canMove, style)
-        this.svg = svg.use(this.def)
-
-        // List of connectors that are connected to this class box
-        this.connectors = [ ]
-    }
-
-    move(x, y) {
-        this.def.move(x, y)
-    }
-
-    draw() {
-    }
-        
-    fire(evt) {
-        if (evt == "positionchanged") {
-            for (let i = 0; i < this.connectors.length; i++) {
-                this.connectors[i].draw()        
-            }
-        }
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = ClassBox;
-
-
-function createDef(self, defs, classInfo, canMove, style) {
-    var classGroup = defs.group().addClass("UMLClass")
-   
-    let currentDimensions = { 
-        width: 0,
-        height: 0
-    }
-    
-    currentDimensions.height = style.getTopMargin("classbox")
-
-    var classNameDef = defs.text(classInfo.name).addClass("UMLClassName").move(style.getLeftMargin("classbox"), currentDimensions.height)
-    currentDimensions.width = Math.max(currentDimensions.width, classNameDef.bbox().width)
-    currentDimensions.height += (classNameDef.bbox().height + style.getBottomMargin("classbox"))
-
-    var line1YPos = currentDimensions.height
-    let attributeGroupDef = addCompartment(defs, currentDimensions, style, classInfo.attributes, "UMLAttribute")
- 
-    var line2YPos = currentDimensions.height
-    let operationGroupDef = addCompartment(defs, currentDimensions, style, classInfo.operations, "UMLOperation")
-
-    // According to the UML standard the class name must be
-    // centered so center it
-    if (currentDimensions.width > classNameDef.bbox().width) {
-        classNameDef.dx((currentDimensions.width - classNameDef.bbox().width)/2)
-    }
-
-    currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
-    
-    classGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
-    classGroup.use(classNameDef)
-    classGroup.line(0, line1YPos, currentDimensions.width, line1YPos)
-    classGroup.use(attributeGroupDef)
-    classGroup.line(0, line2YPos, currentDimensions.width, line2YPos)
-    classGroup.use(operationGroupDef)
-
-    if (canMove) {
-        classGroup.draggable(true)
-        classGroup.on('dragmove.namespace', function(evt) {
-            self.fire('positionchanged')
-        })
-        classGroup.on('dragend.namespace', function(evt) {
-            self.fire('positionchanged')
-        })
-    }
-
-    // Offset by 1 to leave some space because the border stroke width is 2
-    classGroup.move(1,1)
-
-    return classGroup
-}
-
-// Add an attribute or operation compartment and updates the current dimensions
-// of the class box
-function addCompartment(svg, currentDimensions, style, items, cssClass) {
-    currentDimensions.height += style.getTopMargin("classbox")
-    let compartmentDef = createAttributeOrOperationGroupDef(svg, currentDimensions, items, cssClass)
-    compartmentDef.dmove(style.getLeftMargin("classbox"), 0)            
-    currentDimensions.height += style.getBottomMargin("classbox")
-    return compartmentDef
-}
-
-// Creates a group with all the attributes or operations
-function createAttributeOrOperationGroupDef(svg, currentDimensions, items, cssClass) {
-    let itemGroupDef = svg.group()
-    for (var i = 0; i < items.length; i++) {
-        let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i], cssClass)
-        itemDef.move(0, currentDimensions.height)
-        currentDimensions.width = Math.max(currentDimensions.width, itemDef.bbox().width)
-        currentDimensions.height += itemDef.bbox().height
-        }
-    return itemGroupDef
-}
-
-// Creates a single attribute or operation line
-function createAttributeOrOperationDef(svg, item, cssClass) {
-    let text = visibilityStringToSymbol(item.visibility) + item.name
-    if (item.return) {
-        text += " : " + item.return
-    }
-    return svg.text(text).addClass(cssClass)
-}
-
-// Converts the visibility from the user string provided
-// in the input to the appropriate UML symbol for
-// visibility
-function visibilityStringToSymbol(visibility) {
-    let stringToSymbolMap = {
-        "public": "+ ",
-        "protected": "# ",
-        "private": "- "
-    }
-    return stringToSymbolMap[visibility]
-}
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__ = __webpack_require__(16);
 
 
 
@@ -825,7 +859,7 @@ class Component {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1117,7 +1151,26 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DiagramElement; });
+
+
+class DiagramElement {
+
+    constructor(svg) {
+        this.layers = new SVGLayerSet(svg)
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1136,7 +1189,7 @@ class LayoutManager {
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1203,7 +1256,7 @@ function createDef(defs, lifelineDescription, style, layout) {
 
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1251,7 +1304,7 @@ class Node {
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1294,7 +1347,7 @@ class ReturnMessageConnector {
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1346,7 +1399,7 @@ class SocketConnector {
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1402,7 +1455,7 @@ class Style {
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1472,7 +1525,7 @@ class SynchronousMessageConnector {
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1497,7 +1550,7 @@ class UseCase {
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1535,19 +1588,25 @@ class UseCaseAssociationConnector {
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Diagram_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SVGLayer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Diagram_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ClassBox_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__SVGLayer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__SVGLayerSet_js__ = __webpack_require__(2);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "UMLWebWidgetError", function() { return __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Settings", function() { return __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Diagram", function() { return __WEBPACK_IMPORTED_MODULE_2__Diagram_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayer", function() { return __WEBPACK_IMPORTED_MODULE_3__SVGLayer_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ClassBox", function() { return __WEBPACK_IMPORTED_MODULE_3__ClassBox_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayer", function() { return __WEBPACK_IMPORTED_MODULE_4__SVGLayer_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayerSet", function() { return __WEBPACK_IMPORTED_MODULE_5__SVGLayerSet_js__["a"]; });
+
+
 
 
 
