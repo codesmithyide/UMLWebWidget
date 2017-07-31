@@ -1,6 +1,3 @@
-/////
-// This class is the entry point for all the functionality provided
-// by the CodeSmithy UMLWebWidget.
 function Diagram(settings) {
 
     // The description of the UML diagram in JSON

@@ -18,10 +18,11 @@
     "url": "https://github.com/CodeSmithyIDE/UMLWebWidget/issues"
   },
   "homepage": "https://github.com/CodeSmithyIDE/UMLWebWidget#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "ishiko-test-framework": "^1.0.9",
+    "ishiko-test-framework": "^1.0.12",
+    "svg.js": "^2.6.3",
+    "svgdom": "0.0.15",
     "webpack": "^2.7.0"
   }
 }

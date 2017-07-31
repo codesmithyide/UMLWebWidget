@@ -229,10 +229,10 @@ class Diagram {
         let jsonDiagramDescription = JSON.parse($('#' + divId).text())
         $('#' + divId).empty()
         var svg = SVG(divId).size(this.settings.width, this.settings.height)
-        this.createFromJSON(jsonDiagramDescription, layout, svg)
+        this.createFromJSON(svg, jsonDiagramDescription, layout)
     }
 
-    createFromJSON(jsonDiagramDescription, layout, svg) {
+    createFromJSON(svg, jsonDiagramDescription, layout) {
         if (jsonDiagramDescription == null) {
             jsonDiagramDescription = { }
         }
@@ -370,9 +370,6 @@ class Diagram {
                 createUseCaseConnector(this, svg, this.actors[item.association.actor], this.usecases[item.association.usecase]).draw()
             }
         }
-    }
-
-    export() {
     }
 
 }
