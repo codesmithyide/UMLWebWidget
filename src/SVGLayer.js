@@ -17,13 +17,23 @@
 */
 class SVGLayer {
 
-    constructor() {
+    constructor(svg) {
+        this.svg = svg
+        this.defs = [ ]
     }
 
-    text(str) {
+    text(str) { 
+        let textDef = this.svg.defs().text(str)
+        this.defs.push(textDef)
+        return textDef
     }
 
-    write(svg) {
+    write() {
+        let self = this
+        this.defs.forEach(function(def) {
+            self.svg.add(def.clone())
+            def.remove()
+        })
     }
 
 }

@@ -72,7 +72,7 @@ export class Diagram {
         this.diagramDescription = jsonDiagramDescription
         let style = new Style()
 
-        let svgTextLayer = new SVGLayer()
+        let svgTextLayer = new SVGLayer(svg)
 
         if (this.diagramDescription.classdiagram) {
             this.drawClassDiagram(svg, svgTextLayer, this.diagramDescription.classdiagram, style, layout)

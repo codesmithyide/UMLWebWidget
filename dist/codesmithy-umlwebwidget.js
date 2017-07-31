@@ -101,13 +101,23 @@ return /******/ (function(modules) { // webpackBootstrap
 */
 class SVGLayer {
 
-    constructor() {
+    constructor(svg) {
+        this.svg = svg
+        this.defs = [ ]
     }
 
-    text(str) {
+    text(str) { 
+        let textDef = this.svg.defs().text(str)
+        this.defs.push(textDef)
+        return textDef
     }
 
-    write(svg) {
+    write() {
+        let self = this
+        this.defs.forEach(function(def) {
+            self.svg.add(def.clone())
+            def.remove()
+        })
     }
 
 }
@@ -280,7 +290,7 @@ class Diagram {
         this.diagramDescription = jsonDiagramDescription
         let style = new __WEBPACK_IMPORTED_MODULE_2__Style_js__["a" /* Style */]()
 
-        let svgTextLayer = new __WEBPACK_IMPORTED_MODULE_15__SVGLayer_js__["a" /* SVGLayer */]()
+        let svgTextLayer = new __WEBPACK_IMPORTED_MODULE_15__SVGLayer_js__["a" /* SVGLayer */](svg)
 
         if (this.diagramDescription.classdiagram) {
             this.drawClassDiagram(svg, svgTextLayer, this.diagramDescription.classdiagram, style, layout)
