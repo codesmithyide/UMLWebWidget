@@ -37,6 +37,7 @@ class SVGLayer {
     }
 
     merge(layer) {
+        this.defs.concat(layer.defs)
     }
 
 }
