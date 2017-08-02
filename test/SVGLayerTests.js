@@ -1,10 +1,10 @@
 'use strict'
 
-var fs = require('fs')
 var window = require("svgdom")
 var SVG = require("svg.js")(window)
 var UMLWebWidget = require("../dist/codesmithy-umlwebwidget.js")
 var tf = require("ishiko-test-framework")
+var TestUtils = require("./TestUtils.js")
 
 module.exports = function(theTestHarness) {
     let svgLayerSequence = theTestHarness.appendTestSequence("SVGLayer tests")
@@ -23,25 +23,27 @@ function SVGLayerCreationTest1(resolve) {
 }
 
 function SVGLayerTextTest1(resolve) {
-    let svg = SVG(window.document.documentElement)
+    let svg = SVG(window.document.createElement("div"))
 
     let layer = new UMLWebWidget.SVGLayer(svg)
-    layer.text("Hello World!")
+    layer.text("Hello World!").move(0, 0)
     layer.write()
 
-    fs.writeFileSync(__dirname + "/output/SVGLayerTextTest1.html", "<html><body><div>" + svg.svg() + "</div></body></html>")
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerTextTest1.html")
+
     resolve(tf.TestResultOutcome.eFailed)
 }
 
 function SVGLayerTextTest2(resolve) {
-    let svg = SVG(window.document.documentElement)
+    let svg = SVG(window.document.createElement("div"))
 
     let layer = new UMLWebWidget.SVGLayer(svg)
-    layer.text("Hello World!")
-    layer.text("How are you?").dy(20)
+    layer.text("Hello World!").move(0, 0)
+    layer.text("How are you?").move(0, 20)
     layer.write()
 
-    fs.writeFileSync(__dirname + "/output/SVGLayerTextTest2.html", "<html><body><div>" + svg.svg() + "</div></body></html>")
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerTextTest2.html")
+    
     resolve(tf.TestResultOutcome.eFailed)
 }
 
@@ -49,15 +51,16 @@ function SVGLayerMergeTest1(resolve) {
     let svg = SVG(window.document.documentElement)
 
     let layer1 = new UMLWebWidget.SVGLayer(svg)
-    layer1.text("Hello World!")
+    layer1.text("Hello World!").move(0, 0)
 
     let layer2 = new UMLWebWidget.SVGLayer(svg)
-    layer2.text("How are you?").dy(20)
+    layer2.text("How are you?").move(0, 20)
 
     layer1.merge(layer2)
 
     layer1.write()
 
-    fs.writeFileSync(__dirname + "/output/SVGLayerMergeTest1.html", "<html><body><div>" + svg.svg() + "</div></body></html>")
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerMergeTest1.html")
+    
     resolve(tf.TestResultOutcome.eFailed)
 }
