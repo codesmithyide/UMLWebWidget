@@ -13,6 +13,7 @@ module.exports = function(theTestHarness) {
 
     new tf.FileComparisonTest("text test 1", SVGLayerTextTest1, svgLayerSequence)
     new tf.FileComparisonTest("text test 2", SVGLayerTextTest2, svgLayerSequence)
+    new tf.FileComparisonTest("text test 3", SVGLayerTextTest3, svgLayerSequence)
 
     new tf.FileComparisonTest("merge test 1", SVGLayerMergeTest1, svgLayerSequence)
 }
@@ -22,19 +23,33 @@ function SVGLayerCreationTest1(resolve) {
     resolve(tf.TestResultOutcome.ePassed)
 }
 
-function SVGLayerTextTest1(resolve) {
+function SVGLayerTextTest1(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let layer = new UMLWebWidget.SVGLayer(svg)
+    layer.write()
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerTextTest1.html")
+
+    test.setOutputFilePath(__dirname + "/output/SVGLayerTextTest1.html")
+    test.setReferenceFilePath(__dirname + "/reference/SVGLayerTextTest1.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+function SVGLayerTextTest2(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
     let layer = new UMLWebWidget.SVGLayer(svg)
     layer.text("Hello World!").move(0, 0)
     layer.write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerTextTest1.html")
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerTextTest2.html")
 
     resolve(tf.TestResultOutcome.eFailed)
 }
 
-function SVGLayerTextTest2(resolve) {
+function SVGLayerTextTest3(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
     let layer = new UMLWebWidget.SVGLayer(svg)
@@ -42,12 +57,12 @@ function SVGLayerTextTest2(resolve) {
     layer.text("How are you?").move(0, 20)
     layer.write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerTextTest2.html")
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerTextTest3.html")
     
     resolve(tf.TestResultOutcome.eFailed)
 }
 
-function SVGLayerMergeTest1(resolve) {
+function SVGLayerMergeTest1(resolve, reject, test) {
     let svg = SVG(window.document.documentElement)
 
     let layer1 = new UMLWebWidget.SVGLayer(svg)
