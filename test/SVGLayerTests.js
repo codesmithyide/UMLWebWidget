@@ -46,7 +46,10 @@ function SVGLayerTextTest2(resolve, reject, test) {
 
     TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerTextTest2.html")
 
-    resolve(tf.TestResultOutcome.eFailed)
+    test.setOutputFilePath(__dirname + "/output/SVGLayerTextTest2.html")
+    test.setReferenceFilePath(__dirname + "/reference/SVGLayerTextTest2.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
 }
 
 function SVGLayerTextTest3(resolve, reject, test) {
@@ -59,7 +62,10 @@ function SVGLayerTextTest3(resolve, reject, test) {
 
     TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerTextTest3.html")
     
-    resolve(tf.TestResultOutcome.eFailed)
+    test.setOutputFilePath(__dirname + "/output/SVGLayerTextTest3.html")
+    test.setReferenceFilePath(__dirname + "/reference/SVGLayerTextTest3.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
 }
 
 function SVGLayerMergeTest1(resolve, reject, test) {
