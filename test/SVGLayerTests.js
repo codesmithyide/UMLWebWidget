@@ -69,7 +69,7 @@ function SVGLayerTextTest3(resolve, reject, test) {
 }
 
 function SVGLayerMergeTest1(resolve, reject, test) {
-    let svg = SVG(window.document.documentElement)
+    let svg = SVG(window.document.createElement("div"))
 
     let layer1 = new UMLWebWidget.SVGLayer(svg)
     layer1.text("Hello World!").move(0, 0)
@@ -83,5 +83,8 @@ function SVGLayerMergeTest1(resolve, reject, test) {
 
     TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerMergeTest1.html")
     
-    resolve(tf.TestResultOutcome.eFailed)
+    test.setOutputFilePath(__dirname + "/output/SVGLayerTextTest3.html")
+    test.setReferenceFilePath(__dirname + "/reference/SVGLayerTextTest3.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
 }
