@@ -30,14 +30,14 @@ class SVGLayer {
 
     write() {
         let self = this
-        this.defs.forEach(function(def) {
-            self.svg.add(def.clone())
+        self.defs.forEach(function(def) {
+            def.clone(self.svg)
             def.remove()
         })
     }
 
     merge(layer) {
-        this.defs.concat(layer.defs)
+        this.defs = this.defs.concat(layer.defs)
     }
 
 }

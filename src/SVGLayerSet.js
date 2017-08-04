@@ -27,6 +27,11 @@ class SVGLayerSet {
       being appended.
     */
     merge(layerSet) {
+        let self = this
+        let keys = Object.keys(self.layers)
+        keys.forEach(function(key) {
+            self.layers[key].merge(layerSet.layers[key])
+        })
     }
 
 }
