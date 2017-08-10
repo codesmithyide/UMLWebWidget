@@ -20,7 +20,7 @@
   "homepage": "https://github.com/CodeSmithyIDE/UMLWebWidget#readme",
   "dependencies": {},
   "devDependencies": {
-    "ishiko-test-framework": "^1.0.12",
+    "ishiko-test-framework": "^1.0.13",
     "pretty-data": "^0.40.0",
     "svg.js": "^2.6.3",
     "svgdom": "0.0.15",
