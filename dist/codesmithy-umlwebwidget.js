@@ -134,9 +134,57 @@ class SVGLayer {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SVGLayerSet; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__ = __webpack_require__(0);
+
+
+
+
+/**
+  <p>
+    A set of layers.
+  </p>
+*/
+class SVGLayerSet {
+
+    constructor(svg) {
+        this.svg = svg
+        this.layers = { }
+    }
+
+    createLayer(name) {
+        let newLayer = new __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__["a" /* SVGLayer */](this.svg)
+        this.layers[name] = newLayer
+        return newLayer
+    }
+
+    /**
+      Merge another set into this one. Layers
+      with the same name will be merged together
+      with the elements of the set given as argument
+      being appended.
+    */
+    merge(layerSet) {
+        let self = this
+        let keys = Object.keys(self.layers)
+        keys.forEach(function(key) {
+            self.layers[key].merge(layerSet.layers[key])
+        })
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ClassBox; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SVGLayerSet_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SVGLayerSet_js__ = __webpack_require__(1);
 
 
 
@@ -145,10 +193,12 @@ class SVGLayer {
 /** A class box. */
 class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
-    constructor(svg, classDescription, canMove, style) {      
+    constructor(svg, classDescription, canMove, style) {  
+        super(svg)
         this.classDescription = classDescription
 
         this.def = createDef(this, svg.defs(), classDescription, canMove, style)
+
         this.svg = svg.use(this.def)
 
         // List of connectors that are connected to this class box
@@ -171,7 +221,7 @@ class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
 
 function createDef(self, defs, classInfo, canMove, style) {
     var classGroup = defs.group().addClass("UMLClass")
-   
+
     let currentDimensions = { 
         width: 0,
         height: 0
@@ -267,46 +317,24 @@ function visibilityStringToSymbol(visibility) {
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SVGLayerSet; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DiagramElement; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__ = __webpack_require__(1);
+
 
 
 
 
 /**
-  <p>
-    A set of layers.
-  </p>
+  An element of a diagram.
 */
-class SVGLayerSet {
+class DiagramElement {
 
     constructor(svg) {
-        this.svg = svg
-        this.layers = { }
-    }
-
-    createLayer(name) {
-        let newLayer = new __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__["a" /* SVGLayer */](this.svg)
-        this.layers[name] = newLayer
-        return newLayer
-    }
-
-    /**
-      Merge another set into this one. Layers
-      with the same name will be merged together
-      with the elements of the set given as argument
-      being appended.
-    */
-    merge(layerSet) {
-        let self = this
-        let keys = Object.keys(self.layers)
-        keys.forEach(function(key) {
-            self.layers[key].merge(layerSet.layers[key])
-        })
+        this.layers = new __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__["a" /* SVGLayerSet */](svg)
     }
 
 }
@@ -315,7 +343,7 @@ class SVGLayerSet {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -372,7 +400,63 @@ class Settings {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+
+/** Style settings. */
+class Style {
+
+    constructor() {
+        this.style = {
+            "defaults": {
+                "margin-left": 12,
+                "margin-right": 12,
+                "margin-top": 9,
+                "margin-bottom": 9
+            },
+            "lifeline": {
+                "margin-left": 12,
+                "margin-right": 12,
+                "margin-top": 9,
+                "margin-bottom": 9
+            }
+        }
+    }
+
+    getTopMargin(element) {
+        return this.getValueOrDefault(this, element, "margin-top")
+    }
+
+    getBottomMargin(element) {
+        return this.getValueOrDefault(this, element, "margin-bottom")
+    }
+
+    getLeftMargin(element) {
+        return this.getValueOrDefault(this, element, "margin-left")
+    }
+
+    getRightMargin(element) {
+        return this.getValueOrDefault(this, element, "margin-right")
+    }
+
+    getValueOrDefault(self, element, style) {
+        if (self.style[element] && self.style[element][style]) {
+            return self.style[element][style]
+        } else {
+            return self.style["defaults"][style]
+        }
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Style;
+
+
+
+/***/ }),
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -385,24 +469,24 @@ class UMLWebWidgetError extends Error {
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Component_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Component_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SynchronousMessageConnector_js__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__SVGLayer_js__ = __webpack_require__(0);
 
@@ -635,7 +719,7 @@ function createUseCaseConnector(self, svg, actor, usecase) {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -672,7 +756,7 @@ class Actor {
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -704,7 +788,7 @@ class AssemblyConnector {
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -754,12 +838,12 @@ class BallConnector {
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__ = __webpack_require__(17);
 
 
 
@@ -877,7 +961,7 @@ class Component {
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1169,29 +1253,7 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
 
 
 /***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DiagramElement; });
-
-
-/**
-  An element of a diagram.
-*/
-class DiagramElement {
-
-    constructor(svg) {
-        this.layers = new SVGLayerSet(svg)
-    }
-
-}
-
-
-
-
-/***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1210,7 +1272,7 @@ class LayoutManager {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1277,7 +1339,7 @@ function createDef(defs, lifelineDescription, style, layout) {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1325,7 +1387,7 @@ class Node {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1368,7 +1430,7 @@ class ReturnMessageConnector {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1416,62 +1478,6 @@ class SocketConnector {
 
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = SocketConnector;
-
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-
-/** Style settings. */
-class Style {
-
-    constructor() {
-        this.style = {
-            "defaults": {
-                "margin-left": 12,
-                "margin-right": 12,
-                "margin-top": 9,
-                "margin-bottom": 9
-            },
-            "lifeline": {
-                "margin-left": 12,
-                "margin-right": 12,
-                "margin-top": 9,
-                "margin-bottom": 9
-            }
-        }
-    }
-
-    getTopMargin(element) {
-        return this.getValueOrDefault(this, element, "margin-top")
-    }
-
-    getBottomMargin(element) {
-        return this.getValueOrDefault(this, element, "margin-bottom")
-    }
-
-    getLeftMargin(element) {
-        return this.getValueOrDefault(this, element, "margin-left")
-    }
-
-    getRightMargin(element) {
-        return this.getValueOrDefault(this, element, "margin-right")
-    }
-
-    getValueOrDefault(self, element, style) {
-        if (self.style[element] && self.style[element][style]) {
-            return self.style[element][style]
-        } else {
-            return self.style["defaults"][style]
-        }
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Style;
 
 
 
@@ -1614,18 +1620,24 @@ class UseCaseAssociationConnector {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Diagram_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ClassBox_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__SVGLayer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__SVGLayerSet_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__DiagramElement_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ClassBox_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__SVGLayer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__SVGLayerSet_js__ = __webpack_require__(1);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "UMLWebWidgetError", function() { return __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Settings", function() { return __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Diagram", function() { return __WEBPACK_IMPORTED_MODULE_2__Diagram_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ClassBox", function() { return __WEBPACK_IMPORTED_MODULE_3__ClassBox_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayer", function() { return __WEBPACK_IMPORTED_MODULE_4__SVGLayer_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayerSet", function() { return __WEBPACK_IMPORTED_MODULE_5__SVGLayerSet_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Style", function() { return __WEBPACK_IMPORTED_MODULE_2__Style_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Diagram", function() { return __WEBPACK_IMPORTED_MODULE_3__Diagram_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "DiagramElement", function() { return __WEBPACK_IMPORTED_MODULE_4__DiagramElement_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ClassBox", function() { return __WEBPACK_IMPORTED_MODULE_5__ClassBox_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayer", function() { return __WEBPACK_IMPORTED_MODULE_6__SVGLayer_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayerSet", function() { return __WEBPACK_IMPORTED_MODULE_7__SVGLayerSet_js__["a"]; });
+
+
 
 
 

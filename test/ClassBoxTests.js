@@ -1,5 +1,7 @@
 'use strict'
 
+var window = require("svgdom")
+var SVG = require("svg.js")(window)
 var UMLWebWidget = require("../dist/codesmithy-umlwebwidget.js")
 var tf = require("ishiko-test-framework")
 
@@ -10,6 +12,17 @@ module.exports = function(theTestHarness) {
 }
 
 function ClassBoxCreationTest1(resolve) {
-    let classbox = new UMLWebWidget.ClassBox()
+    let svg = SVG(window.document.createElement("div"))
+    let classDescription = {
+        "name": "MyClass",
+        "attributes":
+            [
+            ],
+        "operations":
+            [
+            ]
+    }
+    let style = new UMLWebWidget.Style()
+    let classbox = new UMLWebWidget.ClassBox(svg, classDescription, false, style)
     resolve(tf.TestResultOutcome.ePassed)
 }

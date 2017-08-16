@@ -6,10 +6,12 @@ import { SVGLayerSet } from "./SVGLayerSet.js"
 /** A class box. */
 class ClassBox extends DiagramElement {
 
-    constructor(svg, classDescription, canMove, style) {      
+    constructor(svg, classDescription, canMove, style) {  
+        super(svg)
         this.classDescription = classDescription
 
         this.def = createDef(this, svg.defs(), classDescription, canMove, style)
+
         this.svg = svg.use(this.def)
 
         // List of connectors that are connected to this class box
@@ -32,7 +34,7 @@ class ClassBox extends DiagramElement {
 
 function createDef(self, defs, classInfo, canMove, style) {
     var classGroup = defs.group().addClass("UMLClass")
-   
+
     let currentDimensions = { 
         width: 0,
         height: 0
