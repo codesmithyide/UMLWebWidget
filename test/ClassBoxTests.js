@@ -13,6 +13,8 @@ module.exports = function(theTestHarness) {
 
     new tf.FileComparisonTest("getLayers test 1", ClassBoxGetLayersTest1, classboxSequence)
     new tf.FileComparisonTest("getLayers test 2", ClassBoxGetLayersTest2, classboxSequence)
+
+    new tf.FileComparisonTest("move test 1", ClassBoxMoveTest1, classboxSequence)
 }
 
 function ClassBoxCreationTest1(resolve) {
@@ -99,6 +101,34 @@ function ClassBoxGetLayersTest2(resolve, reject, test) {
 
     test.setOutputFilePath(__dirname + "/output/ClassBoxGetLayersTest2.html")
     test.setReferenceFilePath(__dirname + "/reference/ClassBoxGetLayersTest2.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+function ClassBoxMoveTest1(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let classDescription = {
+        "name": "MyClass",
+        "attributes":
+            [
+            ],
+        "operations":
+            [
+            ]
+    }
+    let style = new UMLWebWidget.Style()
+    let classbox = new UMLWebWidget.ClassBox(svg, classDescription, false, style)
+    classbox.move(20, 50)
+
+    let layers = classbox.getLayers()
+    layers.layers["shape"].write()
+    layers.layers["text"].write()
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ClassBoxMoveTest1.html", true)
+
+    test.setOutputFilePath(__dirname + "/output/ClassBoxMoveTest1.html")
+    test.setReferenceFilePath(__dirname + "/reference/ClassBoxMoveTest1.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }

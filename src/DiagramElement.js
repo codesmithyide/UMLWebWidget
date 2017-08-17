@@ -16,6 +16,8 @@ class DiagramElement {
     constructor(svg) {
         this.layers = new SVGLayerSet(svg)
         this.uptodate = false
+        this.x = 0
+        this.y = 0
     }
 
     /**
@@ -31,6 +33,12 @@ class DiagramElement {
             this.update()
         }
         return this.layers
+    }
+
+    move(x, y) {
+        this.uptodate = false
+        this.x = x
+        this.y = y
     }
 
     /**

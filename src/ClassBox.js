@@ -15,19 +15,16 @@ class ClassBox extends DiagramElement {
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.classDescription = classDescription
-
-        this.def = createDef(this, classDescription, canMove, style)
+        this.canMove = canMove
+        this.style = style
 
         // List of connectors that are connected to this class box
         this.connectors = [ ]
     }
 
     update() {
-        this.outofdate = false
-    }
-
-    move(x, y) {
-        this.def.move(x, y)
+        createDef(this, this.classDescription, this.canMove, this.style)
+        this.uptodate = true
     }
         
     fire(evt) {
@@ -49,8 +46,8 @@ function createDef(self, classInfo, canMove, style) {
     }
 
     let borderAdjustment = {
-        top: 1,
-        left: 1
+        top: self.y + 1,
+        left: self.x + 1
     }
     
     currentDimensions.height = style.getTopMargin("classbox")
