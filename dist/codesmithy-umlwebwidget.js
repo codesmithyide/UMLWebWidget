@@ -203,6 +203,7 @@ class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
 
     constructor(svg, classDescription, canMove, style) {
         super(svg)
+        this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.classDescription = classDescription
 
@@ -247,15 +248,15 @@ function createDef(self, defs, classInfo, canMove, style) {
     
     currentDimensions.height = style.getTopMargin("classbox")
 
-    var classNameDef = self.textLayer.text(classInfo.name).addClass("UMLClassName").move(style.getLeftMargin("classbox"), currentDimensions.height)
+    var classNameDef = self.textLayer.text(classInfo.name).addClass("UMLClassName").move(borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top + currentDimensions.height)
     currentDimensions.width = Math.max(currentDimensions.width, classNameDef.bbox().width)
     currentDimensions.height += (classNameDef.bbox().height + style.getBottomMargin("classbox"))
 
     var line1YPos = currentDimensions.height
-    let attributeGroupDef = addCompartment(defs, currentDimensions, style, classInfo.attributes, "UMLAttribute")
+    let attributeGroupDef = addCompartment(defs, currentDimensions, style, classInfo.attributes, "UMLAttribute").dmove(borderAdjustment.left, borderAdjustment.top)
  
     var line2YPos = currentDimensions.height
-    let operationGroupDef = addCompartment(defs, currentDimensions, style, classInfo.operations, "UMLOperation")
+    let operationGroupDef = addCompartment(defs, currentDimensions, style, classInfo.operations, "UMLOperation").dmove(borderAdjustment.left, borderAdjustment.top)
 
     // According to the UML standard the class name must be
     // centered so center it
@@ -265,10 +266,10 @@ function createDef(self, defs, classInfo, canMove, style) {
 
     currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
     
-    classGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
-    classGroup.line(0, line1YPos, currentDimensions.width, line1YPos)
+    classGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
+    classGroup.line(borderAdjustment.left, borderAdjustment.top + line1YPos, borderAdjustment.left + currentDimensions.width, borderAdjustment.top + line1YPos)
     classGroup.use(attributeGroupDef)
-    classGroup.line(0, line2YPos, currentDimensions.width, line2YPos)
+    classGroup.line(borderAdjustment.left, borderAdjustment.top + line2YPos, borderAdjustment.left + currentDimensions.width, borderAdjustment.top + line2YPos)
     classGroup.use(operationGroupDef)
 
     if (canMove) {
@@ -280,9 +281,6 @@ function createDef(self, defs, classInfo, canMove, style) {
             self.fire('positionchanged')
         })
     }
-
-    // Offset by 1 to leave some space because the border stroke width is 2
-    classGroup.move(borderAdjustment.left, borderAdjustment.top)
 
     return classGroup
 }
