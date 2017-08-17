@@ -1,10 +1,10 @@
-.CodeSmithyUMLWebWidget .UMLClass rect {
+.CodeSmithyUMLWebWidget .UMLClassBox rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.CodeSmithyUMLWebWidget .UMLClass line {
+.CodeSmithyUMLWebWidget .UMLClassBox line {
    stroke: #595959;
    stroke-width: 1;
 }
@@ -66,21 +66,21 @@
    fill: #f1f4ff;
 }
 
-.CodeSmithyUMLWebWidget .UMLClassName {
+.CodeSmithyUMLWebWidget .UMLClassName text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: bold;
    fill: #404040;
 }
 
-.CodeSmithyUMLWebWidget .UMLAttribute {
+.CodeSmithyUMLWebWidget .UMLClassAttributes text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: normal;
    fill: #404040;
 }
 
-.CodeSmithyUMLWebWidget .UMLOperation {
+.CodeSmithyUMLWebWidget .UMLClassOperations text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: normal;
@@ -151,12 +151,12 @@
    cursor: nesw-resize
 }
 
-.CodeSmithyUMLWebWidget.StandardStyle .UMLClass rect {
+.CodeSmithyUMLWebWidget.StandardStyle .UMLClassBox rect {
    stroke: black;
    fill: white;
 }
 
-.CodeSmithyUMLWebWidget.StandardStyle .UMLClass line {
+.CodeSmithyUMLWebWidget.StandardStyle .UMLClassBox line {
    stroke: black;
 }
 

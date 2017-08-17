@@ -61,6 +61,40 @@ function ClassBoxGetLayersTest1(resolve, reject, test) {
 function ClassBoxGetLayersTest2(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
+    let classDescription = {
+        "name": "MyClass",
+        "attributes":
+            [
+                {
+                    "name": "m_attr1", "visibility": "public" 
+                },
+                {
+                    "name": "m_attr2", "visibility": "protected" 
+                },
+                {
+                    "name": "m_attr3", "visibility": "private" 
+                }
+            ],
+        "operations":
+            [
+                { 
+                    "name": "method1()", "visibility": "public", "return": "int"
+                },
+                { 
+                    "name": "method2()", "visibility": "protected", "return": "void"
+                },
+                { 
+                    "name": "method3()", "visibility": "private", "return": "std::string"
+                }
+            ]
+    }
+    let style = new UMLWebWidget.Style()
+    let classbox = new UMLWebWidget.ClassBox(svg, classDescription, false, style)
+
+    let layers = classbox.getLayers()
+    layers.layers["shape"].write()
+    layers.layers["text"].write()
+
     TestUtils.exportSVGToHTML(svg, __dirname + "/output/ClassBoxGetLayersTest2.html", true)
 
     test.setOutputFilePath(__dirname + "/output/ClassBoxGetLayersTest2.html")

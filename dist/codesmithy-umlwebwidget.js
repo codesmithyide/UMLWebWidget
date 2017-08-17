@@ -225,9 +225,7 @@ class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         this.textLayer = this.layers.createLayer("text")
         this.classDescription = classDescription
 
-        this.def = createDef(this, svg.defs(), classDescription, canMove, style)
-
-        this.svg = svg.use(this.def)
+        this.def = createDef(this, classDescription, canMove, style)
 
         // List of connectors that are connected to this class box
         this.connectors = [ ]
@@ -251,8 +249,8 @@ class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
 
 }
 
-function createDef(self, defs, classInfo, canMove, style) {
-    var classGroup = self.shapeLayer.group().addClass("UMLClass")
+function createDef(self, classInfo, canMove, style) {
+    var classGroup = self.shapeLayer.group().addClass("UMLClassBox")
 
     let currentDimensions = { 
         width: 0,
@@ -266,30 +264,29 @@ function createDef(self, defs, classInfo, canMove, style) {
     
     currentDimensions.height = style.getTopMargin("classbox")
 
-    var classNameDef = self.textLayer.text(classInfo.name).addClass("UMLClassName").move(borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top + currentDimensions.height)
-    currentDimensions.width = Math.max(currentDimensions.width, classNameDef.bbox().width)
-    currentDimensions.height += (classNameDef.bbox().height + style.getBottomMargin("classbox"))
+    var classNameGroup = self.textLayer.group().addClass("UMLClassName")
+    var className = classNameGroup.text(classInfo.name).move(borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top + currentDimensions.height)
+    currentDimensions.width = Math.max(currentDimensions.width, className.bbox().width)
+    currentDimensions.height += (className.bbox().height + style.getBottomMargin("classbox"))
 
     var line1YPos = currentDimensions.height
-    let attributeGroupDef = addCompartment(defs, currentDimensions, style, classInfo.attributes, "UMLAttribute").dmove(borderAdjustment.left, borderAdjustment.top)
+    let attributeGroupDef = addCompartment(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.attributes, "UMLClassAttributes")
  
     var line2YPos = currentDimensions.height
-    let operationGroupDef = addCompartment(defs, currentDimensions, style, classInfo.operations, "UMLOperation").dmove(borderAdjustment.left, borderAdjustment.top)
+    let operationGroupDef = addCompartment(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.operations, "UMLClassOperations")
 
     // According to the UML standard the class name must be
     // centered so center it
-    if (currentDimensions.width > classNameDef.bbox().width) {
-        classNameDef.dx((currentDimensions.width - classNameDef.bbox().width)/2)
+    if (currentDimensions.width > className.bbox().width) {
+        className.dx((currentDimensions.width - className.bbox().width)/2)
     }
 
     currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
     
     classGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
     classGroup.line(borderAdjustment.left, borderAdjustment.top + line1YPos, borderAdjustment.left + currentDimensions.width, borderAdjustment.top + line1YPos)
-    classGroup.use(attributeGroupDef)
     classGroup.line(borderAdjustment.left, borderAdjustment.top + line2YPos, borderAdjustment.left + currentDimensions.width, borderAdjustment.top + line2YPos)
-    classGroup.use(operationGroupDef)
-
+    
     if (canMove) {
         classGroup.draggable(true)
         classGroup.on('dragmove.namespace', function(evt) {
@@ -305,20 +302,19 @@ function createDef(self, defs, classInfo, canMove, style) {
 
 // Add an attribute or operation compartment and updates the current dimensions
 // of the class box
-function addCompartment(svg, currentDimensions, style, items, cssClass) {
+function addCompartment(textLayer, currentDimensions, borderAdjustment, style, items, cssClass) {
     currentDimensions.height += style.getTopMargin("classbox")
-    let compartmentDef = createAttributeOrOperationGroupDef(svg, currentDimensions, items, cssClass)
-    compartmentDef.dmove(style.getLeftMargin("classbox"), 0)            
+    let compartmentDef = createAttributeOrOperationGroupDef(textLayer, currentDimensions, borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top, items, cssClass)
     currentDimensions.height += style.getBottomMargin("classbox")
     return compartmentDef
 }
 
 // Creates a group with all the attributes or operations
-function createAttributeOrOperationGroupDef(svg, currentDimensions, items, cssClass) {
-    let itemGroupDef = svg.group()
+function createAttributeOrOperationGroupDef(textLayer, currentDimensions, offsetX, offsetY, items, cssClass) {
+    let itemGroupDef = textLayer.group().addClass(cssClass)
     for (var i = 0; i < items.length; i++) {
-        let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i], cssClass)
-        itemDef.move(0, currentDimensions.height)
+        let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i])
+        itemDef.move(offsetX, offsetY + currentDimensions.height)
         currentDimensions.width = Math.max(currentDimensions.width, itemDef.bbox().width)
         currentDimensions.height += itemDef.bbox().height
         }
@@ -326,12 +322,12 @@ function createAttributeOrOperationGroupDef(svg, currentDimensions, items, cssCl
 }
 
 // Creates a single attribute or operation line
-function createAttributeOrOperationDef(svg, item, cssClass) {
+function createAttributeOrOperationDef(svg, item) {
     let text = visibilityStringToSymbol(item.visibility) + item.name
     if (item.return) {
         text += " : " + item.return
     }
-    return svg.text(text).addClass(cssClass)
+    return svg.text(text)
 }
 
 // Converts the visibility from the user string provided
