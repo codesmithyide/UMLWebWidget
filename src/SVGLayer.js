@@ -22,6 +22,24 @@ class SVGLayer {
         this.defs = [ ]
     }
 
+    group() {
+        let groupDef = this.svg.defs().group()
+        this.defs.push(groupDef)
+        return groupDef
+    }
+
+    line(x1, y1, x2, y2) {
+        let lineDef = this.svg.defs().line(x1, y1, x2, y2)
+        this.defs.push(lineDef)
+        return lineDef
+    }
+
+    rect(width, height) {
+        let rectDef = this.svg.defs().rect(width, height)
+        this.defs.push(rectDef)
+        return rectDef
+    }
+
     text(str) { 
         let textDef = this.svg.defs().text(str)
         this.defs.push(textDef)

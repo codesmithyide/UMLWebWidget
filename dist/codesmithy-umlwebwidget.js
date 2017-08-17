@@ -106,6 +106,24 @@ class SVGLayer {
         this.defs = [ ]
     }
 
+    group() {
+        let groupDef = this.svg.defs().group()
+        this.defs.push(groupDef)
+        return groupDef
+    }
+
+    line(x1, y1, x2, y2) {
+        let lineDef = this.svg.defs().line(x1, y1, x2, y2)
+        this.defs.push(lineDef)
+        return lineDef
+    }
+
+    rect(width, height) {
+        let rectDef = this.svg.defs().rect(width, height)
+        this.defs.push(rectDef)
+        return rectDef
+    }
+
     text(str) { 
         let textDef = this.svg.defs().text(str)
         this.defs.push(textDef)
@@ -234,7 +252,7 @@ class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
 }
 
 function createDef(self, defs, classInfo, canMove, style) {
-    var classGroup = defs.group().addClass("UMLClass")
+    var classGroup = self.shapeLayer.group().addClass("UMLClass")
 
     let currentDimensions = { 
         width: 0,
@@ -643,6 +661,7 @@ class Diagram {
                 if (layout.classboxpositions[className]) {
                     newClassBox.move(layout.classboxpositions[className].x, layout.classboxpositions[className].y)
                 }
+                newClassBox.layers.getLayer("shape").write()
                 newClassBox.layers.getLayer("text").write()
             } else if (item.relationship) {
                 let classbox1

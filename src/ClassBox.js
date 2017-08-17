@@ -43,7 +43,7 @@ class ClassBox extends DiagramElement {
 }
 
 function createDef(self, defs, classInfo, canMove, style) {
-    var classGroup = defs.group().addClass("UMLClass")
+    var classGroup = self.shapeLayer.group().addClass("UMLClass")
 
     let currentDimensions = { 
         width: 0,
