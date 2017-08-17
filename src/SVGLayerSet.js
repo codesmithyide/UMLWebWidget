@@ -14,6 +14,10 @@ class SVGLayerSet {
         this.layers = { }
     }
 
+    getLayer(name) {
+        return this.layers[name]
+    }
+
     createLayer(name) {
         let newLayer = new SVGLayer(this.svg)
         this.layers[name] = newLayer

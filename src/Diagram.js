@@ -107,7 +107,7 @@ export class Diagram {
                 if (layout.classboxpositions[className]) {
                     newClassBox.move(layout.classboxpositions[className].x, layout.classboxpositions[className].y)
                 }
-                newClassBox.draw()
+                newClassBox.layers.getLayer("text").write()
             } else if (item.relationship) {
                 let classbox1
                 let classbox2

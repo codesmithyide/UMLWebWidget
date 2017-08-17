@@ -152,6 +152,10 @@ class SVGLayerSet {
         this.layers = { }
     }
 
+    getLayer(name) {
+        return this.layers[name]
+    }
+
     createLayer(name) {
         let newLayer = new __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__["a" /* SVGLayer */](this.svg)
         this.layers[name] = newLayer
@@ -190,11 +194,16 @@ class SVGLayerSet {
 
 
 
-/** A class box. */
+/** 
+  A class box. 
+
+  @extends DiagramElement
+*/
 class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
-    constructor(svg, classDescription, canMove, style) {  
+    constructor(svg, classDescription, canMove, style) {
         super(svg)
+        this.textLayer = this.layers.createLayer("text")
         this.classDescription = classDescription
 
         this.def = createDef(this, svg.defs(), classDescription, canMove, style)
@@ -203,6 +212,10 @@ class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
 
         // List of connectors that are connected to this class box
         this.connectors = [ ]
+    }
+
+    update() {
+        this.outofdate = false
     }
 
     move(x, y) {
@@ -226,10 +239,15 @@ function createDef(self, defs, classInfo, canMove, style) {
         width: 0,
         height: 0
     }
+
+    let borderAdjustment = {
+        top: 1,
+        left: 1
+    }
     
     currentDimensions.height = style.getTopMargin("classbox")
 
-    var classNameDef = defs.text(classInfo.name).addClass("UMLClassName").move(style.getLeftMargin("classbox"), currentDimensions.height)
+    var classNameDef = self.textLayer.text(classInfo.name).addClass("UMLClassName").move(style.getLeftMargin("classbox"), currentDimensions.height)
     currentDimensions.width = Math.max(currentDimensions.width, classNameDef.bbox().width)
     currentDimensions.height += (classNameDef.bbox().height + style.getBottomMargin("classbox"))
 
@@ -248,7 +266,6 @@ function createDef(self, defs, classInfo, canMove, style) {
     currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
     
     classGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
-    classGroup.use(classNameDef)
     classGroup.line(0, line1YPos, currentDimensions.width, line1YPos)
     classGroup.use(attributeGroupDef)
     classGroup.line(0, line2YPos, currentDimensions.width, line2YPos)
@@ -265,7 +282,7 @@ function createDef(self, defs, classInfo, canMove, style) {
     }
 
     // Offset by 1 to leave some space because the border stroke width is 2
-    classGroup.move(1,1)
+    classGroup.move(borderAdjustment.left, borderAdjustment.top)
 
     return classGroup
 }
@@ -330,11 +347,41 @@ function visibilityStringToSymbol(visibility) {
 
 /**
   An element of a diagram.
+
+  @property {SVGLayerSet} this.layers - The various SVG layers
+    to use to render this element.
+  @property {boolean} this.uptodate - Whether the layers need 
+    to be updated because of changes to the element.
 */
 class DiagramElement {
 
     constructor(svg) {
         this.layers = new __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__["a" /* SVGLayerSet */](svg)
+        this.uptodate = false
+    }
+
+    /**
+      Gets the layers of the element. This checks
+      if any changes were made to the element and calls
+      {@link DiagramElement#update} if necessary before
+      returning the layers.
+      @returns {SVGLayerSet} The SVG layers to use to draw the
+        element.
+    */
+    getLayers() {
+        if (!this.uptodate) {
+            this.update()
+        }
+        return this.layers
+    }
+
+    /**
+      This function must be called after changes were
+      made to update the contents of the SVG layers.
+
+      @virtual
+    */
+    update() {
     }
 
 }
@@ -598,7 +645,7 @@ class Diagram {
                 if (layout.classboxpositions[className]) {
                     newClassBox.move(layout.classboxpositions[className].x, layout.classboxpositions[className].y)
                 }
-                newClassBox.draw()
+                newClassBox.layers.getLayer("text").write()
             } else if (item.relationship) {
                 let classbox1
                 let classbox2

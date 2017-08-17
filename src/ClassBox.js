@@ -3,11 +3,16 @@
 import { DiagramElement } from "./DiagramElement.js"
 import { SVGLayerSet } from "./SVGLayerSet.js"
 
-/** A class box. */
+/** 
+  A class box. 
+
+  @extends DiagramElement
+*/
 class ClassBox extends DiagramElement {
 
-    constructor(svg, classDescription, canMove, style) {  
+    constructor(svg, classDescription, canMove, style) {
         super(svg)
+        this.textLayer = this.layers.createLayer("text")
         this.classDescription = classDescription
 
         this.def = createDef(this, svg.defs(), classDescription, canMove, style)
@@ -16,6 +21,10 @@ class ClassBox extends DiagramElement {
 
         // List of connectors that are connected to this class box
         this.connectors = [ ]
+    }
+
+    update() {
+        this.outofdate = false
     }
 
     move(x, y) {
@@ -39,10 +48,15 @@ function createDef(self, defs, classInfo, canMove, style) {
         width: 0,
         height: 0
     }
+
+    let borderAdjustment = {
+        top: 1,
+        left: 1
+    }
     
     currentDimensions.height = style.getTopMargin("classbox")
 
-    var classNameDef = defs.text(classInfo.name).addClass("UMLClassName").move(style.getLeftMargin("classbox"), currentDimensions.height)
+    var classNameDef = self.textLayer.text(classInfo.name).addClass("UMLClassName").move(style.getLeftMargin("classbox"), currentDimensions.height)
     currentDimensions.width = Math.max(currentDimensions.width, classNameDef.bbox().width)
     currentDimensions.height += (classNameDef.bbox().height + style.getBottomMargin("classbox"))
 
@@ -61,7 +75,6 @@ function createDef(self, defs, classInfo, canMove, style) {
     currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
     
     classGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
-    classGroup.use(classNameDef)
     classGroup.line(0, line1YPos, currentDimensions.width, line1YPos)
     classGroup.use(attributeGroupDef)
     classGroup.line(0, line2YPos, currentDimensions.width, line2YPos)
@@ -78,7 +91,7 @@ function createDef(self, defs, classInfo, canMove, style) {
     }
 
     // Offset by 1 to leave some space because the border stroke width is 2
-    classGroup.move(1,1)
+    classGroup.move(borderAdjustment.left, borderAdjustment.top)
 
     return classGroup
 }
