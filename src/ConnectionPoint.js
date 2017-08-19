@@ -24,6 +24,7 @@ class ConnectionPoint extends DiagramElement {
         super(svg)
         this.element = element
     }
+
 }
 
 export { ConnectionPoint }

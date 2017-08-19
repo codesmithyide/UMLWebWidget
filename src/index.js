@@ -4,6 +4,7 @@ import { UMLWebWidgetError } from "./UMLWebWidgetError.js"
 import { Settings } from "./Settings.js"
 import { Style } from "./Style.js"
 import { Diagram } from "./Diagram.js"
+import { ConnectionPoint } from "./ConnectionPoint.js"
 import { DiagramElement } from "./DiagramElement.js"
 import { ClassBox } from "./ClassBox.js"
 import { SVGLayer } from "./SVGLayer.js"
@@ -15,6 +16,7 @@ export {
     Style,
     Diagram,
     DiagramElement,
+    ConnectionPoint,
     ClassBox,
     SVGLayer,
     SVGLayerSet

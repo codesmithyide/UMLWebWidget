@@ -2,6 +2,7 @@
 
 import { SVGLayerSet } from "./SVGLayerSet.js"
 
+var position = Symbol()
 
 /**
   An element of a diagram.
@@ -16,8 +17,7 @@ class DiagramElement {
     constructor(svg) {
         this.layers = new SVGLayerSet(svg)
         this.uptodate = false
-        this.x = 0
-        this.y = 0
+        this[position] = { x: 0, y: 0 }
     }
 
     /**
@@ -35,10 +35,19 @@ class DiagramElement {
         return this.layers
     }
 
+    
+    x() {
+        return this[position].x
+    }
+
+    y() {
+        return this[position].y
+    }
+
     move(x, y) {
         this.uptodate = false
-        this.x = x
-        this.y = y
+        this[position].x = x
+        this[position].y = y
     }
 
     /**

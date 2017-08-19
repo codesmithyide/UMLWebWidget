@@ -2,11 +2,16 @@
 
 import { DiagramElement } from "./DiagramElement.js"
 import { SVGLayerSet } from "./SVGLayerSet.js"
+import { ConnectionPoint } from "./ConnectionPoint.js"
 
 /** 
   A class box. 
 
   @extends DiagramElement
+  @property {ConnectionPoint[]} this.connectionPoints - The class
+    keeps a list of connection points where other elements are 
+    connected so they can be notified of relevant changes to the
+    class box.
 */
 class ClassBox extends DiagramElement {
 
@@ -18,8 +23,20 @@ class ClassBox extends DiagramElement {
         this.canMove = canMove
         this.style = style
 
-        // List of connectors that are connected to this class box
-        this.connectors = [ ]
+        // List of connection points that are connected to
+        // this class box
+        this.connectionPoints = [ ]
+    }
+
+    /**
+      Returns a connection point that can be used to connect
+      a connector to this class box. The new connection
+      point is added to this.connectionPoints.
+    */
+    createConnectionPoint() {
+        let newPoint = new ConnectionPoint(this)
+        this.connectionPoints.push(newPoint)
+        return newPoint
     }
 
     update() {
@@ -29,8 +46,8 @@ class ClassBox extends DiagramElement {
         
     fire(evt) {
         if (evt == "positionchanged") {
-            for (let i = 0; i < this.connectors.length; i++) {
-                this.connectors[i].draw()        
+            for (let i = 0; i < this.connectionPoints.length; i++) {
+                this.connectionPoints[i].draw()        
             }
         }
     }
@@ -46,8 +63,8 @@ function createDef(self, classInfo, canMove, style) {
     }
 
     let borderAdjustment = {
-        top: self.y + 1,
-        left: self.x + 1
+        top: self.y() + 1,
+        left: self.x() + 1
     }
     
     currentDimensions.height = style.getTopMargin("classbox")
