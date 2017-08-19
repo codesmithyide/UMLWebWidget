@@ -1,6 +1,7 @@
 'use strict'
 
 import { DiagramElement } from "./DiagramElement.js"
+import { ConnectionPointPosition } from "./ConnectionPointPosition.js"
 
 /**
   <p>
