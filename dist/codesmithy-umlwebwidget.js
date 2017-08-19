@@ -73,11 +73,84 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 21);
+/******/ 	return __webpack_require__(__webpack_require__.s = 22);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DiagramElement; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__ = __webpack_require__(2);
+
+
+
+
+var position = Symbol()
+
+/**
+  An element of a diagram.
+
+  @property {SVGLayerSet} this.layers - The various SVG layers
+    to use to render this element.
+  @property {boolean} this.uptodate - Whether the layers need 
+    to be updated because of changes to the element.
+*/
+class DiagramElement {
+
+    constructor(svg) {
+        this.layers = new __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__["a" /* SVGLayerSet */](svg)
+        this.uptodate = false
+        this[position] = { x: 0, y: 0 }
+    }
+
+    /**
+      Gets the layers of the element. This checks
+      if any changes were made to the element and calls
+      {@link DiagramElement#update} if necessary before
+      returning the layers.
+      @returns {SVGLayerSet} The SVG layers to use to draw the
+        element.
+    */
+    getLayers() {
+        if (!this.uptodate) {
+            this.update()
+        }
+        return this.layers
+    }
+
+    
+    x() {
+        return this[position].x
+    }
+
+    y() {
+        return this[position].y
+    }
+
+    move(x, y) {
+        this.uptodate = false
+        this[position].x = x
+        this[position].y = y
+    }
+
+    /**
+      This function must be called after changes were
+      made to update the contents of the SVG layers.
+
+      @virtual
+    */
+    update() {
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -148,12 +221,12 @@ class SVGLayer {
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SVGLayerSet; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__ = __webpack_require__(1);
 
 
 
@@ -200,13 +273,15 @@ class SVGLayerSet {
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ClassBox; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SVGLayerSet_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SVGLayerSet_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ConnectionPoint_js__ = __webpack_require__(4);
+
 
 
 
@@ -216,6 +291,10 @@ class SVGLayerSet {
   A class box. 
 
   @extends DiagramElement
+  @property {ConnectionPoint[]} this.connectionPoints - The class
+    keeps a list of connection points where other elements are 
+    connected so they can be notified of relevant changes to the
+    class box.
 */
 class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
@@ -227,8 +306,20 @@ class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         this.canMove = canMove
         this.style = style
 
-        // List of connectors that are connected to this class box
-        this.connectors = [ ]
+        // List of connection points that are connected to
+        // this class box
+        this.connectionPoints = [ ]
+    }
+
+    /**
+      Returns a connection point that can be used to connect
+      a connector to this class box. The new connection
+      point is added to this.connectionPoints.
+    */
+    createConnectionPoint() {
+        let newPoint = new __WEBPACK_IMPORTED_MODULE_2__ConnectionPoint_js__["a" /* ConnectionPoint */](this)
+        this.connectionPoints.push(newPoint)
+        return newPoint
     }
 
     update() {
@@ -238,8 +329,8 @@ class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         
     fire(evt) {
         if (evt == "positionchanged") {
-            for (let i = 0; i < this.connectors.length; i++) {
-                this.connectors[i].draw()        
+            for (let i = 0; i < this.connectionPoints.length; i++) {
+                this.connectionPoints[i].draw()        
             }
         }
     }
@@ -255,8 +346,8 @@ function createDef(self, classInfo, canMove, style) {
     }
 
     let borderAdjustment = {
-        top: self.y + 1,
-        left: self.x + 1
+        top: self.y() + 1,
+        left: self.x() + 1
     }
     
     currentDimensions.height = style.getTopMargin("classbox")
@@ -343,62 +434,37 @@ function visibilityStringToSymbol(visibility) {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DiagramElement; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__ = __webpack_require__(1);
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConnectionPoint; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
 
 
 
 
 /**
-  An element of a diagram.
+  <p>
+    The point where an element and a connector meet.
+  </p>
 
-  @property {SVGLayerSet} this.layers - The various SVG layers
-    to use to render this element.
-  @property {boolean} this.uptodate - Whether the layers need 
-    to be updated because of changes to the element.
+  <p>
+    Although it derives from {@link DiagramElement} this
+    element will probably be invisible to the user. 
+    However it may be useful to make the connection points
+    visible under some circumstances like for instance when
+    the diagram is being edited.
+  </p>
+
+  @extends DiagramElement
+  @property {DiagramElement} this.element - The element.
 */
-class DiagramElement {
+class ConnectionPoint extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
-    constructor(svg) {
-        this.layers = new __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__["a" /* SVGLayerSet */](svg)
-        this.uptodate = false
-        this.x = 0
-        this.y = 0
-    }
-
-    /**
-      Gets the layers of the element. This checks
-      if any changes were made to the element and calls
-      {@link DiagramElement#update} if necessary before
-      returning the layers.
-      @returns {SVGLayerSet} The SVG layers to use to draw the
-        element.
-    */
-    getLayers() {
-        if (!this.uptodate) {
-            this.update()
-        }
-        return this.layers
-    }
-
-    move(x, y) {
-        this.uptodate = false
-        this.x = x
-        this.y = y
-    }
-
-    /**
-      This function must be called after changes were
-      made to update the contents of the SVG layers.
-
-      @virtual
-    */
-    update() {
+    constructor(svg, element) {
+        super(svg)
+        this.element = element
     }
 
 }
@@ -407,7 +473,7 @@ class DiagramElement {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -464,7 +530,7 @@ class Settings {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -520,7 +586,7 @@ class Style {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -533,26 +599,26 @@ class UMLWebWidgetError extends Error {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Component_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SynchronousMessageConnector_js__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__SVGLayer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Component_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SynchronousMessageConnector_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__SVGLayer_js__ = __webpack_require__(1);
 
 
 
@@ -674,9 +740,9 @@ class Diagram {
                     classbox1 = this.classboxes[item.relationship.containingclass]
                     classbox2 = this.classboxes[item.relationship.containedclass]
                 }
-                let newConnector = createClassBoxConnector(this, svg, item.relationship.type, classbox1, classbox2, layout)
-                classbox1.connectors.push(newConnector)
-                classbox2.connectors.push(newConnector)
+                let connectionPoint1 = classbox1.createConnectionPoint()
+                let connectionPoint2 = classbox2.createConnectionPoint()
+                let newConnector = createClassBoxConnector(this, svg, item.relationship.type, connectionPoint1, connectionPoint2, layout) 
                 newConnector.draw()
             }
         }
@@ -766,8 +832,8 @@ class Diagram {
 /* harmony export (immutable) */ __webpack_exports__["a"] = Diagram;
 
 
-function createClassBoxConnector(self, svg, type, classbox1, classbox2, layout) {
-    return new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, type, classbox1, classbox2, "", layout)
+function createClassBoxConnector(self, svg, type, connectionPoint1, connectionPoint2, layout) {
+    return new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, type, connectionPoint1, connectionPoint2, "", layout)
 }
 
 function createLifelineConnector(self, svg, type, classbox1, classbox2, name, layout) {
@@ -784,7 +850,7 @@ function createUseCaseConnector(self, svg, actor, usecase) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -821,7 +887,7 @@ class Actor {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -853,7 +919,7 @@ class AssemblyConnector {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -903,12 +969,12 @@ class BallConnector {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__ = __webpack_require__(18);
 
 
 
@@ -1026,18 +1092,22 @@ class Component {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Connector; });
 
 
+/**
+  Represents a connector between elements.
+*/
 class Connector {
 
-    constructor(svg, type, classbox1, classbox2, text, layout) {
+    constructor(svg, type, connectionPoint1, connectionPoint2, text, layout) {
         this.type = type
-        this.classbox1 = classbox1
-        this.classbox2 = classbox2
+        this.connectionPoint1 = connectionPoint1
+        this.connectionPoint2 = connectionPoint2
         this.text = text
         this.layout = layout
         this.svg = svg.group()
@@ -1053,9 +1123,9 @@ class Connector {
     draw() {
         this.svg.clear()
         if (this.type == "inheritance") {
-            drawInheritanceRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
+            drawInheritanceRelationship(this.svg, this.connectionPoint1, this.connectionPoint2, this.layout)
         } else if ((this.type == "composition") || (this.type == "aggregation")) {
-            drawCompositionOrAggregationRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
+            drawCompositionOrAggregationRelationship(this.svg, this.connectionPoint1, this.connectionPoint2, this.layout)
         }
     }
 
@@ -1070,8 +1140,6 @@ class Connector {
     }
 
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = Connector;
-
 
 // Draws an inheritance connector between two classes
 function drawInheritanceRelationship(svg, baseclassbox, derivedclassbox, layout) {
@@ -1317,8 +1385,10 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
 }
 
 
+
+
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1337,7 +1407,7 @@ class LayoutManager {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1404,7 +1474,7 @@ function createDef(defs, lifelineDescription, style, layout) {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1452,7 +1522,7 @@ class Node {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1495,7 +1565,7 @@ class ReturnMessageConnector {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1547,7 +1617,7 @@ class SocketConnector {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1617,7 +1687,7 @@ class SynchronousMessageConnector {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1642,7 +1712,7 @@ class UseCase {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1680,27 +1750,30 @@ class UseCaseAssociationConnector {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__DiagramElement_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ClassBox_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__SVGLayer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__SVGLayerSet_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ConnectionPoint_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__DiagramElement_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ClassBox_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__SVGLayer_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__SVGLayerSet_js__ = __webpack_require__(2);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "UMLWebWidgetError", function() { return __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Settings", function() { return __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Style", function() { return __WEBPACK_IMPORTED_MODULE_2__Style_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Diagram", function() { return __WEBPACK_IMPORTED_MODULE_3__Diagram_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "DiagramElement", function() { return __WEBPACK_IMPORTED_MODULE_4__DiagramElement_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ClassBox", function() { return __WEBPACK_IMPORTED_MODULE_5__ClassBox_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayer", function() { return __WEBPACK_IMPORTED_MODULE_6__SVGLayer_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayerSet", function() { return __WEBPACK_IMPORTED_MODULE_7__SVGLayerSet_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "DiagramElement", function() { return __WEBPACK_IMPORTED_MODULE_5__DiagramElement_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ConnectionPoint", function() { return __WEBPACK_IMPORTED_MODULE_4__ConnectionPoint_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ClassBox", function() { return __WEBPACK_IMPORTED_MODULE_6__ClassBox_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayer", function() { return __WEBPACK_IMPORTED_MODULE_7__SVGLayer_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayerSet", function() { return __WEBPACK_IMPORTED_MODULE_8__SVGLayerSet_js__["a"]; });
+
 
 
 

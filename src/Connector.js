@@ -1,11 +1,14 @@
 'use strict'
 
-export class Connector {
+/**
+  Represents a connector between elements.
+*/
+class Connector {
 
-    constructor(svg, type, classbox1, classbox2, text, layout) {
+    constructor(svg, type, connectionPoint1, connectionPoint2, text, layout) {
         this.type = type
-        this.classbox1 = classbox1
-        this.classbox2 = classbox2
+        this.connectionPoint1 = connectionPoint1
+        this.connectionPoint2 = connectionPoint2
         this.text = text
         this.layout = layout
         this.svg = svg.group()
@@ -21,9 +24,9 @@ export class Connector {
     draw() {
         this.svg.clear()
         if (this.type == "inheritance") {
-            drawInheritanceRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
+            drawInheritanceRelationship(this.svg, this.connectionPoint1, this.connectionPoint2, this.layout)
         } else if ((this.type == "composition") || (this.type == "aggregation")) {
-            drawCompositionOrAggregationRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
+            drawCompositionOrAggregationRelationship(this.svg, this.connectionPoint1, this.connectionPoint2, this.layout)
         }
     }
 
@@ -281,3 +284,5 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
             break
     }
 }
+
+export { Connector }

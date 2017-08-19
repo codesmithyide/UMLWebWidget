@@ -119,9 +119,9 @@ export class Diagram {
                     classbox1 = this.classboxes[item.relationship.containingclass]
                     classbox2 = this.classboxes[item.relationship.containedclass]
                 }
-                let newConnector = createClassBoxConnector(this, svg, item.relationship.type, classbox1, classbox2, layout)
-                classbox1.connectors.push(newConnector)
-                classbox2.connectors.push(newConnector)
+                let connectionPoint1 = classbox1.createConnectionPoint()
+                let connectionPoint2 = classbox2.createConnectionPoint()
+                let newConnector = createClassBoxConnector(this, svg, item.relationship.type, connectionPoint1, connectionPoint2, layout) 
                 newConnector.draw()
             }
         }
@@ -209,8 +209,8 @@ export class Diagram {
 
 }
 
-function createClassBoxConnector(self, svg, type, classbox1, classbox2, layout) {
-    return new Connector(svg, type, classbox1, classbox2, "", layout)
+function createClassBoxConnector(self, svg, type, connectionPoint1, connectionPoint2, layout) {
+    return new Connector(svg, type, connectionPoint1, connectionPoint2, "", layout)
 }
 
 function createLifelineConnector(self, svg, type, classbox1, classbox2, name, layout) {
