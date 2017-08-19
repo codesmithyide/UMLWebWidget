@@ -1,10 +1,10 @@
 'use strict'
 
-var fs = require('fs')
 var window = require("svgdom")
 var SVG = require("svg.js")(window)
 var UMLWebWidget = require("../dist/codesmithy-umlwebwidget.js")
 var tf = require("ishiko-test-framework")
+var TestUtils = require("./TestUtils.js")
 
 module.exports = function(theTestHarness) {
     let classDiagramSequence = theTestHarness.appendTestSequence("Class diagram tests")
@@ -72,7 +72,11 @@ function ClassDiagramCreateFromJSONTest3(resolve, reject, test) {
     let descriptionKeys = Object.keys(classDiagram.diagramDescription)
     let classboxesKeys = Object.keys(classDiagram.classboxes)
     if ((descriptionKeys.length == 1) && (classboxesKeys.length == 1)) {
-        fs.writeFileSync(__dirname + "/output/ClassDiagramCreateFromJSONTest3.html", "<html><head><link rel='stylesheet' href='../../StyleSheets/CodeSmithyUMLWebWidget.css'></head><body><div class='CodeSmithyUMLWebWidget'>" + svg.svg() + "</div></body></html>")
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/ClassDiagramCreateFromJSONTest3.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/ClassDiagramCreateFromJSONTest3.html")
+        test.setReferenceFilePath(__dirname + "/reference/ClassDiagramCreateFromJSONTest3.html")
+
         resolve(tf.TestResultOutcome.ePassed)
     } else {
         resolve(tf.TestResultOutcome.eFailed)
