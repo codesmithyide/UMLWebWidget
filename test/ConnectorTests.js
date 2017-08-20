@@ -70,7 +70,7 @@ function ConnectorGetLayersTest3(resolve, reject, test) {
 
     let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint1.move(20, 20)
-    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.TopCenter)
     connectionPoint2.move(20, 60)
     let connector = new UMLWebWidget.Connector(svg, "inheritance", connectionPoint1, connectionPoint2)
 
@@ -91,7 +91,7 @@ function ConnectorGetLayersTest4(resolve, reject, test) {
 
     let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint1.move(20, 60)
-    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.BottomCenter)
     connectionPoint2.move(20, 20)
     let connector = new UMLWebWidget.Connector(svg, "inheritance", connectionPoint1, connectionPoint2)
 
