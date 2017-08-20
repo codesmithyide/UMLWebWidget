@@ -86,6 +86,14 @@ function ClassDiagramCreateFromJSONTest3(resolve, reject, test) {
 
 function ClassDiagramCreateFromJSONTest4(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
+
+    let layout = {
+        "classboxpositions": {
+            "MyClass1": { "x": 0, "y": 0 },
+            "MyClass2": { "x": 150, "y": 0 }
+        }
+    }
+
     let classDiagram = new UMLWebWidget.Diagram()
     classDiagram.createFromJSON(svg, {
         "classdiagram":
@@ -115,7 +123,9 @@ function ClassDiagramCreateFromJSONTest4(resolve, reject, test) {
                         }
                 }
             ]
-    })
+    },
+    layout)
+
     let descriptionKeys = Object.keys(classDiagram.diagramDescription)
     let classboxesKeys = Object.keys(classDiagram.classboxes)
     if ((descriptionKeys.length == 1) && (classboxesKeys.length == 2)) {
