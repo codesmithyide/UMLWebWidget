@@ -7,6 +7,7 @@ import { Diagram } from "./Diagram.js"
 import { ConnectionPoint } from "./ConnectionPoint.js"
 import { ConnectionPointPosition } from "./ConnectionPointPosition.js"
 import { DiagramElement } from "./DiagramElement.js"
+import { LayoutManager } from "./LayoutManager.js"
 import { ClassBox } from "./ClassBox.js"
 import { SVGLayer } from "./SVGLayer.js"
 import { SVGLayerSet } from "./SVGLayerSet.js"
@@ -19,6 +20,7 @@ export {
     DiagramElement,
     ConnectionPoint,
     ConnectionPointPosition,
+    LayoutManager,
     ClassBox,
     SVGLayer,
     SVGLayerSet
