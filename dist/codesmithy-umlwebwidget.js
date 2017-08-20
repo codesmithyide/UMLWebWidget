@@ -590,644 +590,6 @@ let staticTopLeft = new ConnectionPointPosition("top-left")
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-/** Sets the position of the elements on the diagram. */
-class LayoutManager {
-
-    constructor(layout) {
-        this.layout = layout
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = LayoutManager;
-
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Settings; });
-
-
-/**
-  Diagram settings.
-
-  @property {int} width - The width of the diagram in pixels.
-  @property {height} height - The height of the diagram in pixels.
-  @property {boolean} debug - If debug is true then additional checks
-    and logging will be performed. This is false by default so that
-    diagrams are displayed as well as possible regardless
-    of errors. It is recommended to enable debug mode when updating a
-    diagram and set it back to false afterwards.
-*/
-class Settings {    
-
-    /** 
-      Creates a new Settings instance with each property
-      having a default value or the value specified in 
-      the jsonSettings argument.
-      @param {json=} jsonSettings - The initial settings.
-      @param {int} [jsonSettings.width=600] - The width of the diagram.
-      @param {int} [jsonSettings.height=200] - The height of the diagram.
-      @param {boolean} [jsonSettings.debug=false] - Debug mode.
-    */
-    constructor(jsonSettings) {
-        this.width = 600
-        this.height = 200
-        this.canMove = false
-        this.canResize = false
-        this.debug = false
-
-        if (jsonSettings) {
-            if (jsonSettings.width) {
-                this.width = jsonSettings.width
-            }
-            if (jsonSettings.height) {
-                this.height = jsonSettings.height
-            }
-            if (jsonSettings.interactive) {
-                if (jsonSettings.interactive.canMove) {
-                    this.canMove = jsonSettings.interactive.canMove
-                }
-            }
-        }
-    }
-
-}
-
-
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-
-/** Style settings. */
-class Style {
-
-    constructor() {
-        this.style = {
-            "defaults": {
-                "margin-left": 12,
-                "margin-right": 12,
-                "margin-top": 9,
-                "margin-bottom": 9
-            },
-            "lifeline": {
-                "margin-left": 12,
-                "margin-right": 12,
-                "margin-top": 9,
-                "margin-bottom": 9
-            }
-        }
-    }
-
-    getTopMargin(element) {
-        return this.getValueOrDefault(this, element, "margin-top")
-    }
-
-    getBottomMargin(element) {
-        return this.getValueOrDefault(this, element, "margin-bottom")
-    }
-
-    getLeftMargin(element) {
-        return this.getValueOrDefault(this, element, "margin-left")
-    }
-
-    getRightMargin(element) {
-        return this.getValueOrDefault(this, element, "margin-right")
-    }
-
-    getValueOrDefault(self, element, style) {
-        if (self.style[element] && self.style[element][style]) {
-            return self.style[element][style]
-        } else {
-            return self.style["defaults"][style]
-        }
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Style;
-
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-
-class UMLWebWidgetError extends Error {    
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = UMLWebWidgetError;
-
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Component_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SynchronousMessageConnector_js__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__SVGLayer_js__ = __webpack_require__(1);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
-  This class is the entry point for all the functionality provided
-  by the CodeSmithy UMLWebWidget.
-*/
-class Diagram {
-
-    constructor(settings) {
-        this.settings = new __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a" /* Settings */](settings)
-
-        // The description of the UML diagram in JSON
-        // format. This will then be parsed to create
-        // the graphical form.
-        this.diagramDescription = { }
-
-        // The list of all UML class boxes present on the
-        // diagram
-        this.classboxes = { }
-
-        // The list of all UML components present on the
-        // diagram
-        this.components = { }
-
-        // The list of all UML lifelines present on the
-        // diagram
-        this.lifelines = { }
-
-        // The list of all UML actors present on the
-        // diagram
-        this.actors = { }
-
-        // The list of all UML use cases present on the
-        // diagram
-        this.usecases = { }
-    }
-
-    // Create a diagram from a div element in the HTML document.
-    // The div element must contain a JSON object with the UML
-    // diagram information. The contents of the div will be replaced
-    // by the diagram.
-    // - divId: this is the id of the div element to use, it should be the id
-    //   without any '#' prefix.
-    createFromDiv(divId, layout) {
-        let jsonDiagramDescription = JSON.parse($('#' + divId).text())
-        $('#' + divId).empty()
-        var svg = SVG(divId).size(this.settings.width, this.settings.height)
-        this.createFromJSON(svg, jsonDiagramDescription, layout)
-    }
-
-    createFromJSON(svg, jsonDiagramDescription, layout) {
-        if (jsonDiagramDescription == null) {
-            jsonDiagramDescription = { }
-        }
-        this.diagramDescription = jsonDiagramDescription
-        let style = new __WEBPACK_IMPORTED_MODULE_2__Style_js__["a" /* Style */]()
-
-        if (this.diagramDescription.classdiagram) {
-            this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
-        } else if (this.diagramDescription.componentdiagram) {
-            this.drawComponentDiagram(svg, this.diagramDescription.componentdiagram, style, layout)
-        } else if (this.diagramDescription.deploymentdiagram) {
-            this.drawDeploymentDiagram(svg, this.diagramDescription.deploymentdiagram, style, layout)
-        } else if (this.diagramDescription.sequencediagram) {
-            this.drawSequenceDiagram(svg, this.diagramDescription.sequencediagram, style.style, layout)
-        } else if (this.diagramDescription.usecasediagram) {
-            this.drawUseCaseDiagram(svg, this.diagramDescription.usecasediagram, layout)
-        }
-    }
-
-    drawClassDiagram(svg, classDiagram, style, layout) {
-        if (layout == null) {
-            layout = { }
-        }
-        if (layout.classboxpositions == null) {
-            layout.classboxpositions = { }
-        }
-        if (layout.connectorpositions == null) {
-            layout.connectorpositions = { }
-        }
-
-        let layoutManager = new __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__["a" /* LayoutManager */](layout)
-
-        for (var i = 0; i < classDiagram.length; i++) {
-            let item = classDiagram[i]
-            if (item.class) {
-                let className = item.class.name
-                let newClassBox = new __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__["a" /* ClassBox */](svg, item.class, this.settings.canMove, style)
-                this.classboxes[className] = newClassBox
-                if (layout.classboxpositions[className]) {
-                    newClassBox.move(layout.classboxpositions[className].x, layout.classboxpositions[className].y)
-                }
-                newClassBox.getLayers().getLayer("shape").write()
-                newClassBox.getLayers().getLayer("text").write()
-            } else if (item.relationship) {
-                let classbox1
-                let classbox2
-                if (item.relationship.type == "inheritance") {
-                    classbox1 = this.classboxes[item.relationship.baseclass]
-                    classbox2 = this.classboxes[item.relationship.derivedclass] 
-                } else if ((item.relationship.type == "composition") || (item.relationship.type == "aggregation")) {
-                    classbox1 = this.classboxes[item.relationship.containingclass]
-                    classbox2 = this.classboxes[item.relationship.containedclass]
-                }
-                let connectionPoint1 = classbox1.createConnectionPoint()
-                let connectionPoint2 = classbox2.createConnectionPoint()
-                let newConnector = createClassBoxConnector(this, svg, item.relationship.type, connectionPoint1, connectionPoint2, layout) 
-                newConnector.draw()
-            }
-        }
-    }
-
-    drawComponentDiagram(svg, componentDiagram, style, layout) {
-        for (var i = 0; i < componentDiagram.length; i++) {
-            let item = componentDiagram[i]
-            if (item.component) {
-                this.components[item.component.name] = new __WEBPACK_IMPORTED_MODULE_5__Component_js__["a" /* Component */](svg, item.component, style, layout)
-            } else if (item.assemblyconnector) {
-                let consumerComponent = this.components[item.assemblyconnector.consumer]
-                let providerComponent = this.components[item.assemblyconnector.provider]
-                let newConnector = new __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__["a" /* AssemblyConnector */](svg)
-                newConnector.move(consumerComponent.getSocketConnectionPoint("").x, consumerComponent.getSocketConnectionPoint("").y, providerComponent.getBallConnectionPoint("").x, providerComponent.getBallConnectionPoint("").y)
-                newConnector.draw()
-            }
-        } 
-    }
-
-    drawDeploymentDiagram(svg, deploymentDiagram, style, layout) {
-        for (var i = 0; i < deploymentDiagram.length; i++) {
-            let item = deploymentDiagram[i]
-            if (item.node) {
-                new __WEBPACK_IMPORTED_MODULE_7__Node_js__["a" /* Node */](svg, item.node, style, layout)
-            }
-        }
-    }
-
-    drawSequenceDiagram(svg, sequenceDiagram, style, layout) {
-        if (layout == null) {
-            layout = { }
-        }
-        if (layout.lifelinepositions == null) {
-            layout.lifelinepositions = { }
-        }
-
-        let nextYPosition = 0
-        for (var i = 0; i < sequenceDiagram.length; i++) {
-            let item = sequenceDiagram[i]
-            if (item.lifeline) {
-                this.lifelines[item.lifeline.name] = new __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__["a" /* Lifeline */](svg, item.lifeline, style.lifeline, layout)
-                nextYPosition = Math.max(nextYPosition, this.lifelines[item.lifeline.name].svg.bbox().y + this.lifelines[item.lifeline.name].svg.bbox().height + 20)
-            } else if (item.messages) {
-                for (var j = 0; j < item.messages.length; j++) {
-                    let message = item.messages[j]
-                    let lifeline1
-                    let lifeline2
-                    let newConnector
-                    if (message.synchronousmessage) {
-                        lifeline1 = this.lifelines[message.synchronousmessage.caller]
-                        lifeline2 = this.lifelines[message.synchronousmessage.callee]
-                        newConnector = createLifelineConnector(this, svg, "synchronousmessage", lifeline1, lifeline2, message.synchronousmessage.name)
-                    } else if (message.returnmessage) {
-                        lifeline1 = this.lifelines[message.returnmessage.caller]
-                        lifeline2 = this.lifelines[message.returnmessage.callee]
-                        newConnector = createLifelineConnector(this, svg, "returnmessage", lifeline1, lifeline2, "")
-                    }
-                    lifeline1.connectors.push(newConnector)
-                    lifeline2.connectors.push(newConnector)
-                    newConnector.draw()
-                    newConnector.move(nextYPosition)
-                    nextYPosition += newConnector.svg.bbox().height
-                }
-            }
-        }
-
-        for (var key in this.lifelines) {
-            this.lifelines[key].drawLine(svg)
-        }
-    }
-
-    drawUseCaseDiagram(svg, useCaseDiagram, layout) {
-        for (var i = 0; i < useCaseDiagram.length; i++) {
-            let item = useCaseDiagram[i]
-            if (item.actor) {
-                this.actors[item.actor.name] = new __WEBPACK_IMPORTED_MODULE_8__Actor_js__["a" /* Actor */](svg, item.actor, layout)
-            } else if (item.usecase) {
-                this.usecases[item.usecase.title] = new __WEBPACK_IMPORTED_MODULE_9__UseCase_js__["a" /* UseCase */](svg, item.usecase, layout)
-            } else if (item.association) {
-                createUseCaseConnector(this, svg, this.actors[item.association.actor], this.usecases[item.association.usecase]).draw()
-            }
-        }
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Diagram;
-
-
-function createClassBoxConnector(self, svg, type, connectionPoint1, connectionPoint2, layout) {
-    return new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, type, connectionPoint1, connectionPoint2, "", layout)
-}
-
-function createLifelineConnector(self, svg, type, classbox1, classbox2, name, layout) {
-    if (type == "returnmessage") {
-        return new __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__["a" /* ReturnMessageConnector */](svg, classbox1, classbox2, name, layout)
-    } else {
-        return new __WEBPACK_IMPORTED_MODULE_12__SynchronousMessageConnector_js__["a" /* SynchronousMessageConnector */](svg, classbox1, classbox2, name, layout)
-    }
-}
-
-function createUseCaseConnector(self, svg, actor, usecase) {
-    return new __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__["a" /* UseCaseAssociationConnector */](svg, actor, usecase)
-}
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-
-class Actor {
-
-    constructor(svg, actorDescription, layout) {
-        this.actorDescription = actorDescription
-        this.def = svg.group().addClass("UMLActor")
-        this.draw(this.def, this.actorDescription)
-        this.svg = svg.use(this.def)
-    }
-
-    draw(svg, actorDescription) {
-        let textDef = svg.text(actorDescription.name).move(0, 35)
-        let width = textDef.bbox().width
-        let offset = ((width - 16) / 2)
-        svg.circle(12).move(2 + offset, 1)
-        svg.line(8 + offset, 13, 8 + offset, 26)
-        svg.line(offset, 18, 16 + offset, 18)
-        svg.line(8 + offset, 26, offset, 33)
-        svg.line(8 + offset, 26, 16 + offset, 33)
-
-        if (layout.actorpositions[actorDescription.name]) {
-            svg.move(layout.actorpositions[actorDescription.name].x, layout.actorpositions[actorDescription.name].y)
-        }
-
-        svg.use(textDef)     
-    }
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Actor;
-
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-
-class AssemblyConnector {
-
-    constructor(svgParentGroup) {
-        this.svgParentGroup = svgParentGroup
-        this.startPoint = { x: 0, y: 0 }
-        this.endPoint = { x: 0, y: 0 }
-    }
-
-    move(x1, y1, x2, y2) {
-        this.startPoint = { x: x1, y: y1 }
-        this.endPoint = { x: x2, y: y2 }
-    }
-
-    draw() {
-        let assemblyConnectorGroup = this.svgParentGroup.group().addClass("UMLAssemblyConnector")
-        assemblyConnectorGroup.line(this.startPoint.x, this.startPoint.y, this.endPoint.x, this.endPoint.y).attr("stroke-dasharray", "8, 4")
-        assemblyConnectorGroup.line(this.endPoint.x - 13, this.endPoint.y + 5, this.endPoint.x, this.endPoint.y)
-        assemblyConnectorGroup.line(this.endPoint.x - 13, this.endPoint.y - 5, this.endPoint.x, this.endPoint.y)
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = AssemblyConnector;
-
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-
-var textDef = Symbol()
-
-class BallConnector {
-
-    constructor(svgDefs, svgParentGroup, text) {
-        this.svgParentGroup = svgParentGroup
-        this.x = 0
-        this.y = 0
-        this[textDef] = svgDefs.text(text).move(0, 0) 
-        this.width = this[textDef].bbox().width + 5
-    }
-
-    // Move the connector so that the top left
-    // corner of the bounding box is at position
-    // (x, y)
-    move(x, y) {
-        this.x = x
-        this.y = y
-    }
-
-    // Move the connector so that its connection
-    // point is at position (x, y)
-    moveConnectionPoint(x, y) {
-        let connectorOffsetY = this[textDef].bbox().height + 6
-        y -= connectorOffsetY
-        this.move(x, y)
-    }
-
-    draw() {
-        this.svgParentGroup.use(this[textDef]).move(this.x, this.y)
-        this.svgParentGroup.circle(10).move(this.x + (this.width)/2 - 5, this.y + 22)
-        this.svgParentGroup.line(this.x + 10 + (this.width)/2 - 5, this.y + 27, this.x + (this.width), this.y + 27)
-    }
-
-    getAssemblyConnectionPoint() {
-        return { x: (this.x + (this.width / 2) - 4), y: this.y + this[textDef].bbox().height + 8 }
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = BallConnector;
-
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__ = __webpack_require__(19);
-
-
-
-
-
-class Stereotype {
-
-    constructor(svgParentGroup) {
-        this.svgParentGroup = svgParentGroup
-        this.x = 0
-        this.y = 0
-        this.width = 15
-        this.height = 20
-    }
-
-    move(x, y) {
-        this.x = x
-        this.y = y
-    }
-
-    draw() {
-        let stereoTypeGroup = this.svgParentGroup.group().addClass("UMLComponentStereotype")
-        stereoTypeGroup.rect(11, 15).move(4 + this.x, this.y)
-        stereoTypeGroup.rect(8, 3).move(this.x, this.y + 3)
-        stereoTypeGroup.rect(8, 3).move(this.x, this.y + 9)
-    }
-
-}
-
-class Component {
-
-    constructor(svg, componentDescription, style, layout) {
-        this.componentDescription = componentDescription
-        this.ballConnectors = [ ]
-        this.socketConnectors = [ ]
-
-        var componentWithConnectorsGroup = svg.group().addClass("UMLComponent")
-
-        let offset = 0
-        if (componentDescription.interfaces) {
-            for (let i = 0; i < componentDescription.interfaces.length; i++) {
-                let ballConnector = new __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__["a" /* BallConnector */](svg.defs(), componentWithConnectorsGroup, componentDescription.interfaces[i].name)
-                this.ballConnectors.push(ballConnector)
-                offset = Math.max(offset, ballConnector.width)
-            }
-        }
-        if (componentDescription.dependencies) {
-            for (let i = 0; i < componentDescription.dependencies.length; i++) {
-                let socketConnector = new __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__["a" /* SocketConnector */](svg.defs(), componentWithConnectorsGroup, componentDescription.dependencies[i].name)
-                this.socketConnectors.push(socketConnector)
-            }
-        }
-
-        var componentGroup = componentWithConnectorsGroup.group()
-
-        let position = {
-            x: 0,
-            y: 0
-        }
-
-        if (layout.componentpositions[componentDescription.name]) {
-            position = layout.componentpositions[componentDescription.name]
-        }
-
-        let currentDimensions = {
-            width: 0,
-            height: 0
-        }
-
-        currentDimensions.height = style.getTopMargin("component")
-
-        let stereotype = new Stereotype(componentGroup)
-        currentDimensions.height += stereotype.height
-
-        var componentNameDef = componentGroup.defs().text(componentDescription.name).addClass("UMLComponentName").move(position.x + offset + style.getLeftMargin("component"), position.y + currentDimensions.height)
-        currentDimensions.width = Math.max(currentDimensions.width, componentNameDef.bbox().width)
-        currentDimensions.height += (componentNameDef.bbox().height + style.getBottomMargin("component"))
-
-        currentDimensions.width += (style.getLeftMargin("component") + style.getRightMargin("component"))
-    
-        componentGroup.rect(currentDimensions.width, currentDimensions.height).move(position.x + offset, position.y)
-        stereotype.move(position.x + offset + (currentDimensions.width - style.getRightMargin("component") - stereotype.width), position.y + style.getTopMargin("component"))
-        stereotype.draw()
-        componentGroup.use(componentNameDef)
-
-        // Offset by 1 to leave some space because the border stroke width is 2
-        componentGroup.move(1, 1)
-
-        for (let i = 0; i < this.ballConnectors.length; i++) {
-            this.ballConnectors[i].moveConnectionPoint(position.x, position.y + currentDimensions.height/2)
-            this.ballConnectors[i].draw()
-        }
-
-        for (let i = 0; i < this.socketConnectors.length; i++) {
-            this.socketConnectors[i].moveConnectionPoint(position.x + currentDimensions.width + offset, position.y + currentDimensions.height/2)
-            this.socketConnectors[i].draw()
-        }
-    }
-
-    getBallConnectionPoint(name) {
-        for (let i = 0; i < this.ballConnectors.length; i++) {
-            return this.ballConnectors[i].getAssemblyConnectionPoint()
-        }
-    }
-
-    getSocketConnectionPoint(name) {
-        for (let i = 0; i < this.socketConnectors.length; i++) {
-            return this.socketConnectors[i].getAssemblyConnectionPoint()
-        }
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Component;
-
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Connector; });
 
 
@@ -1516,6 +878,644 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
     }
 }
 
+
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+
+/** Sets the position of the elements on the diagram. */
+class LayoutManager {
+
+    constructor(layout) {
+        this.layout = layout
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = LayoutManager;
+
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Settings; });
+
+
+/**
+  Diagram settings.
+
+  @property {int} width - The width of the diagram in pixels.
+  @property {height} height - The height of the diagram in pixels.
+  @property {boolean} debug - If debug is true then additional checks
+    and logging will be performed. This is false by default so that
+    diagrams are displayed as well as possible regardless
+    of errors. It is recommended to enable debug mode when updating a
+    diagram and set it back to false afterwards.
+*/
+class Settings {    
+
+    /** 
+      Creates a new Settings instance with each property
+      having a default value or the value specified in 
+      the jsonSettings argument.
+      @param {json=} jsonSettings - The initial settings.
+      @param {int} [jsonSettings.width=600] - The width of the diagram.
+      @param {int} [jsonSettings.height=200] - The height of the diagram.
+      @param {boolean} [jsonSettings.debug=false] - Debug mode.
+    */
+    constructor(jsonSettings) {
+        this.width = 600
+        this.height = 200
+        this.canMove = false
+        this.canResize = false
+        this.debug = false
+
+        if (jsonSettings) {
+            if (jsonSettings.width) {
+                this.width = jsonSettings.width
+            }
+            if (jsonSettings.height) {
+                this.height = jsonSettings.height
+            }
+            if (jsonSettings.interactive) {
+                if (jsonSettings.interactive.canMove) {
+                    this.canMove = jsonSettings.interactive.canMove
+                }
+            }
+        }
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+
+/** Style settings. */
+class Style {
+
+    constructor() {
+        this.style = {
+            "defaults": {
+                "margin-left": 12,
+                "margin-right": 12,
+                "margin-top": 9,
+                "margin-bottom": 9
+            },
+            "lifeline": {
+                "margin-left": 12,
+                "margin-right": 12,
+                "margin-top": 9,
+                "margin-bottom": 9
+            }
+        }
+    }
+
+    getTopMargin(element) {
+        return this.getValueOrDefault(this, element, "margin-top")
+    }
+
+    getBottomMargin(element) {
+        return this.getValueOrDefault(this, element, "margin-bottom")
+    }
+
+    getLeftMargin(element) {
+        return this.getValueOrDefault(this, element, "margin-left")
+    }
+
+    getRightMargin(element) {
+        return this.getValueOrDefault(this, element, "margin-right")
+    }
+
+    getValueOrDefault(self, element, style) {
+        if (self.style[element] && self.style[element][style]) {
+            return self.style[element][style]
+        } else {
+            return self.style["defaults"][style]
+        }
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Style;
+
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+
+class UMLWebWidgetError extends Error {    
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = UMLWebWidgetError;
+
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Component_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SynchronousMessageConnector_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__SVGLayer_js__ = __webpack_require__(1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+  This class is the entry point for all the functionality provided
+  by the CodeSmithy UMLWebWidget.
+*/
+class Diagram {
+
+    constructor(settings) {
+        this.settings = new __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a" /* Settings */](settings)
+
+        // The description of the UML diagram in JSON
+        // format. This will then be parsed to create
+        // the graphical form.
+        this.diagramDescription = { }
+
+        // The list of all UML class boxes present on the
+        // diagram
+        this.classboxes = { }
+
+        // The list of all UML components present on the
+        // diagram
+        this.components = { }
+
+        // The list of all UML lifelines present on the
+        // diagram
+        this.lifelines = { }
+
+        // The list of all UML actors present on the
+        // diagram
+        this.actors = { }
+
+        // The list of all UML use cases present on the
+        // diagram
+        this.usecases = { }
+    }
+
+    // Create a diagram from a div element in the HTML document.
+    // The div element must contain a JSON object with the UML
+    // diagram information. The contents of the div will be replaced
+    // by the diagram.
+    // - divId: this is the id of the div element to use, it should be the id
+    //   without any '#' prefix.
+    createFromDiv(divId, layout) {
+        let jsonDiagramDescription = JSON.parse($('#' + divId).text())
+        $('#' + divId).empty()
+        var svg = SVG(divId).size(this.settings.width, this.settings.height)
+        this.createFromJSON(svg, jsonDiagramDescription, layout)
+    }
+
+    createFromJSON(svg, jsonDiagramDescription, layout) {
+        if (jsonDiagramDescription == null) {
+            jsonDiagramDescription = { }
+        }
+        this.diagramDescription = jsonDiagramDescription
+        let style = new __WEBPACK_IMPORTED_MODULE_2__Style_js__["a" /* Style */]()
+
+        if (this.diagramDescription.classdiagram) {
+            this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
+        } else if (this.diagramDescription.componentdiagram) {
+            this.drawComponentDiagram(svg, this.diagramDescription.componentdiagram, style, layout)
+        } else if (this.diagramDescription.deploymentdiagram) {
+            this.drawDeploymentDiagram(svg, this.diagramDescription.deploymentdiagram, style, layout)
+        } else if (this.diagramDescription.sequencediagram) {
+            this.drawSequenceDiagram(svg, this.diagramDescription.sequencediagram, style.style, layout)
+        } else if (this.diagramDescription.usecasediagram) {
+            this.drawUseCaseDiagram(svg, this.diagramDescription.usecasediagram, layout)
+        }
+    }
+
+    drawClassDiagram(svg, classDiagram, style, layout) {
+        if (layout == null) {
+            layout = { }
+        }
+        if (layout.classboxpositions == null) {
+            layout.classboxpositions = { }
+        }
+        if (layout.connectorpositions == null) {
+            layout.connectorpositions = { }
+        }
+
+        let layoutManager = new __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__["a" /* LayoutManager */](layout)
+
+        for (var i = 0; i < classDiagram.length; i++) {
+            let item = classDiagram[i]
+            if (item.class) {
+                let className = item.class.name
+                let newClassBox = new __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__["a" /* ClassBox */](svg, item.class, this.settings.canMove, style)
+                this.classboxes[className] = newClassBox
+                if (layout.classboxpositions[className]) {
+                    newClassBox.move(layout.classboxpositions[className].x, layout.classboxpositions[className].y)
+                }
+                newClassBox.getLayers().getLayer("shape").write()
+                newClassBox.getLayers().getLayer("text").write()
+            } else if (item.relationship) {
+                let classbox1
+                let classbox2
+                if (item.relationship.type == "inheritance") {
+                    classbox1 = this.classboxes[item.relationship.baseclass]
+                    classbox2 = this.classboxes[item.relationship.derivedclass] 
+                } else if ((item.relationship.type == "composition") || (item.relationship.type == "aggregation")) {
+                    classbox1 = this.classboxes[item.relationship.containingclass]
+                    classbox2 = this.classboxes[item.relationship.containedclass]
+                }
+                let connectionPoint1 = classbox1.createConnectionPoint()
+                let connectionPoint2 = classbox2.createConnectionPoint()
+                let newConnector = createClassBoxConnector(this, svg, item.relationship.type, connectionPoint1, connectionPoint2, layout) 
+                newConnector.draw()
+            }
+        }
+    }
+
+    drawComponentDiagram(svg, componentDiagram, style, layout) {
+        for (var i = 0; i < componentDiagram.length; i++) {
+            let item = componentDiagram[i]
+            if (item.component) {
+                this.components[item.component.name] = new __WEBPACK_IMPORTED_MODULE_5__Component_js__["a" /* Component */](svg, item.component, style, layout)
+            } else if (item.assemblyconnector) {
+                let consumerComponent = this.components[item.assemblyconnector.consumer]
+                let providerComponent = this.components[item.assemblyconnector.provider]
+                let newConnector = new __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__["a" /* AssemblyConnector */](svg)
+                newConnector.move(consumerComponent.getSocketConnectionPoint("").x, consumerComponent.getSocketConnectionPoint("").y, providerComponent.getBallConnectionPoint("").x, providerComponent.getBallConnectionPoint("").y)
+                newConnector.draw()
+            }
+        } 
+    }
+
+    drawDeploymentDiagram(svg, deploymentDiagram, style, layout) {
+        for (var i = 0; i < deploymentDiagram.length; i++) {
+            let item = deploymentDiagram[i]
+            if (item.node) {
+                new __WEBPACK_IMPORTED_MODULE_7__Node_js__["a" /* Node */](svg, item.node, style, layout)
+            }
+        }
+    }
+
+    drawSequenceDiagram(svg, sequenceDiagram, style, layout) {
+        if (layout == null) {
+            layout = { }
+        }
+        if (layout.lifelinepositions == null) {
+            layout.lifelinepositions = { }
+        }
+
+        let nextYPosition = 0
+        for (var i = 0; i < sequenceDiagram.length; i++) {
+            let item = sequenceDiagram[i]
+            if (item.lifeline) {
+                this.lifelines[item.lifeline.name] = new __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__["a" /* Lifeline */](svg, item.lifeline, style.lifeline, layout)
+                nextYPosition = Math.max(nextYPosition, this.lifelines[item.lifeline.name].svg.bbox().y + this.lifelines[item.lifeline.name].svg.bbox().height + 20)
+            } else if (item.messages) {
+                for (var j = 0; j < item.messages.length; j++) {
+                    let message = item.messages[j]
+                    let lifeline1
+                    let lifeline2
+                    let newConnector
+                    if (message.synchronousmessage) {
+                        lifeline1 = this.lifelines[message.synchronousmessage.caller]
+                        lifeline2 = this.lifelines[message.synchronousmessage.callee]
+                        newConnector = createLifelineConnector(this, svg, "synchronousmessage", lifeline1, lifeline2, message.synchronousmessage.name)
+                    } else if (message.returnmessage) {
+                        lifeline1 = this.lifelines[message.returnmessage.caller]
+                        lifeline2 = this.lifelines[message.returnmessage.callee]
+                        newConnector = createLifelineConnector(this, svg, "returnmessage", lifeline1, lifeline2, "")
+                    }
+                    lifeline1.connectors.push(newConnector)
+                    lifeline2.connectors.push(newConnector)
+                    newConnector.draw()
+                    newConnector.move(nextYPosition)
+                    nextYPosition += newConnector.svg.bbox().height
+                }
+            }
+        }
+
+        for (var key in this.lifelines) {
+            this.lifelines[key].drawLine(svg)
+        }
+    }
+
+    drawUseCaseDiagram(svg, useCaseDiagram, layout) {
+        for (var i = 0; i < useCaseDiagram.length; i++) {
+            let item = useCaseDiagram[i]
+            if (item.actor) {
+                this.actors[item.actor.name] = new __WEBPACK_IMPORTED_MODULE_8__Actor_js__["a" /* Actor */](svg, item.actor, layout)
+            } else if (item.usecase) {
+                this.usecases[item.usecase.title] = new __WEBPACK_IMPORTED_MODULE_9__UseCase_js__["a" /* UseCase */](svg, item.usecase, layout)
+            } else if (item.association) {
+                createUseCaseConnector(this, svg, this.actors[item.association.actor], this.usecases[item.association.usecase]).draw()
+            }
+        }
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Diagram;
+
+
+function createClassBoxConnector(self, svg, type, connectionPoint1, connectionPoint2, layout) {
+    return new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, type, connectionPoint1, connectionPoint2, "", layout)
+}
+
+function createLifelineConnector(self, svg, type, classbox1, classbox2, name, layout) {
+    if (type == "returnmessage") {
+        return new __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__["a" /* ReturnMessageConnector */](svg, classbox1, classbox2, name, layout)
+    } else {
+        return new __WEBPACK_IMPORTED_MODULE_12__SynchronousMessageConnector_js__["a" /* SynchronousMessageConnector */](svg, classbox1, classbox2, name, layout)
+    }
+}
+
+function createUseCaseConnector(self, svg, actor, usecase) {
+    return new __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__["a" /* UseCaseAssociationConnector */](svg, actor, usecase)
+}
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+
+class Actor {
+
+    constructor(svg, actorDescription, layout) {
+        this.actorDescription = actorDescription
+        this.def = svg.group().addClass("UMLActor")
+        this.draw(this.def, this.actorDescription)
+        this.svg = svg.use(this.def)
+    }
+
+    draw(svg, actorDescription) {
+        let textDef = svg.text(actorDescription.name).move(0, 35)
+        let width = textDef.bbox().width
+        let offset = ((width - 16) / 2)
+        svg.circle(12).move(2 + offset, 1)
+        svg.line(8 + offset, 13, 8 + offset, 26)
+        svg.line(offset, 18, 16 + offset, 18)
+        svg.line(8 + offset, 26, offset, 33)
+        svg.line(8 + offset, 26, 16 + offset, 33)
+
+        if (layout.actorpositions[actorDescription.name]) {
+            svg.move(layout.actorpositions[actorDescription.name].x, layout.actorpositions[actorDescription.name].y)
+        }
+
+        svg.use(textDef)     
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Actor;
+
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+
+class AssemblyConnector {
+
+    constructor(svgParentGroup) {
+        this.svgParentGroup = svgParentGroup
+        this.startPoint = { x: 0, y: 0 }
+        this.endPoint = { x: 0, y: 0 }
+    }
+
+    move(x1, y1, x2, y2) {
+        this.startPoint = { x: x1, y: y1 }
+        this.endPoint = { x: x2, y: y2 }
+    }
+
+    draw() {
+        let assemblyConnectorGroup = this.svgParentGroup.group().addClass("UMLAssemblyConnector")
+        assemblyConnectorGroup.line(this.startPoint.x, this.startPoint.y, this.endPoint.x, this.endPoint.y).attr("stroke-dasharray", "8, 4")
+        assemblyConnectorGroup.line(this.endPoint.x - 13, this.endPoint.y + 5, this.endPoint.x, this.endPoint.y)
+        assemblyConnectorGroup.line(this.endPoint.x - 13, this.endPoint.y - 5, this.endPoint.x, this.endPoint.y)
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = AssemblyConnector;
+
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+
+var textDef = Symbol()
+
+class BallConnector {
+
+    constructor(svgDefs, svgParentGroup, text) {
+        this.svgParentGroup = svgParentGroup
+        this.x = 0
+        this.y = 0
+        this[textDef] = svgDefs.text(text).move(0, 0) 
+        this.width = this[textDef].bbox().width + 5
+    }
+
+    // Move the connector so that the top left
+    // corner of the bounding box is at position
+    // (x, y)
+    move(x, y) {
+        this.x = x
+        this.y = y
+    }
+
+    // Move the connector so that its connection
+    // point is at position (x, y)
+    moveConnectionPoint(x, y) {
+        let connectorOffsetY = this[textDef].bbox().height + 6
+        y -= connectorOffsetY
+        this.move(x, y)
+    }
+
+    draw() {
+        this.svgParentGroup.use(this[textDef]).move(this.x, this.y)
+        this.svgParentGroup.circle(10).move(this.x + (this.width)/2 - 5, this.y + 22)
+        this.svgParentGroup.line(this.x + 10 + (this.width)/2 - 5, this.y + 27, this.x + (this.width), this.y + 27)
+    }
+
+    getAssemblyConnectionPoint() {
+        return { x: (this.x + (this.width / 2) - 4), y: this.y + this[textDef].bbox().height + 8 }
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = BallConnector;
+
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__ = __webpack_require__(19);
+
+
+
+
+
+class Stereotype {
+
+    constructor(svgParentGroup) {
+        this.svgParentGroup = svgParentGroup
+        this.x = 0
+        this.y = 0
+        this.width = 15
+        this.height = 20
+    }
+
+    move(x, y) {
+        this.x = x
+        this.y = y
+    }
+
+    draw() {
+        let stereoTypeGroup = this.svgParentGroup.group().addClass("UMLComponentStereotype")
+        stereoTypeGroup.rect(11, 15).move(4 + this.x, this.y)
+        stereoTypeGroup.rect(8, 3).move(this.x, this.y + 3)
+        stereoTypeGroup.rect(8, 3).move(this.x, this.y + 9)
+    }
+
+}
+
+class Component {
+
+    constructor(svg, componentDescription, style, layout) {
+        this.componentDescription = componentDescription
+        this.ballConnectors = [ ]
+        this.socketConnectors = [ ]
+
+        var componentWithConnectorsGroup = svg.group().addClass("UMLComponent")
+
+        let offset = 0
+        if (componentDescription.interfaces) {
+            for (let i = 0; i < componentDescription.interfaces.length; i++) {
+                let ballConnector = new __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__["a" /* BallConnector */](svg.defs(), componentWithConnectorsGroup, componentDescription.interfaces[i].name)
+                this.ballConnectors.push(ballConnector)
+                offset = Math.max(offset, ballConnector.width)
+            }
+        }
+        if (componentDescription.dependencies) {
+            for (let i = 0; i < componentDescription.dependencies.length; i++) {
+                let socketConnector = new __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__["a" /* SocketConnector */](svg.defs(), componentWithConnectorsGroup, componentDescription.dependencies[i].name)
+                this.socketConnectors.push(socketConnector)
+            }
+        }
+
+        var componentGroup = componentWithConnectorsGroup.group()
+
+        let position = {
+            x: 0,
+            y: 0
+        }
+
+        if (layout.componentpositions[componentDescription.name]) {
+            position = layout.componentpositions[componentDescription.name]
+        }
+
+        let currentDimensions = {
+            width: 0,
+            height: 0
+        }
+
+        currentDimensions.height = style.getTopMargin("component")
+
+        let stereotype = new Stereotype(componentGroup)
+        currentDimensions.height += stereotype.height
+
+        var componentNameDef = componentGroup.defs().text(componentDescription.name).addClass("UMLComponentName").move(position.x + offset + style.getLeftMargin("component"), position.y + currentDimensions.height)
+        currentDimensions.width = Math.max(currentDimensions.width, componentNameDef.bbox().width)
+        currentDimensions.height += (componentNameDef.bbox().height + style.getBottomMargin("component"))
+
+        currentDimensions.width += (style.getLeftMargin("component") + style.getRightMargin("component"))
+    
+        componentGroup.rect(currentDimensions.width, currentDimensions.height).move(position.x + offset, position.y)
+        stereotype.move(position.x + offset + (currentDimensions.width - style.getRightMargin("component") - stereotype.width), position.y + style.getTopMargin("component"))
+        stereotype.draw()
+        componentGroup.use(componentNameDef)
+
+        // Offset by 1 to leave some space because the border stroke width is 2
+        componentGroup.move(1, 1)
+
+        for (let i = 0; i < this.ballConnectors.length; i++) {
+            this.ballConnectors[i].moveConnectionPoint(position.x, position.y + currentDimensions.height/2)
+            this.ballConnectors[i].draw()
+        }
+
+        for (let i = 0; i < this.socketConnectors.length; i++) {
+            this.socketConnectors[i].moveConnectionPoint(position.x + currentDimensions.width + offset, position.y + currentDimensions.height/2)
+            this.socketConnectors[i].draw()
+        }
+    }
+
+    getBallConnectionPoint(name) {
+        for (let i = 0; i < this.ballConnectors.length; i++) {
+            return this.ballConnectors[i].getAssemblyConnectionPoint()
+        }
+    }
+
+    getSocketConnectionPoint(name) {
+        for (let i = 0; i < this.socketConnectors.length; i++) {
+            return this.socketConnectors[i].getAssemblyConnectionPoint()
+        }
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Component;
 
 
 
@@ -1868,28 +1868,31 @@ class UseCaseAssociationConnector {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ConnectionPoint_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ConnectionPointPosition_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__LayoutManager_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ClassBox_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__SVGLayer_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__SVGLayerSet_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Connector_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__LayoutManager_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ClassBox_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__SVGLayer_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__SVGLayerSet_js__ = __webpack_require__(2);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "UMLWebWidgetError", function() { return __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Settings", function() { return __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Style", function() { return __WEBPACK_IMPORTED_MODULE_2__Style_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Diagram", function() { return __WEBPACK_IMPORTED_MODULE_3__Diagram_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "DiagramElement", function() { return __WEBPACK_IMPORTED_MODULE_6__DiagramElement_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Connector", function() { return __WEBPACK_IMPORTED_MODULE_7__Connector_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ConnectionPoint", function() { return __WEBPACK_IMPORTED_MODULE_4__ConnectionPoint_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ConnectionPointPosition", function() { return __WEBPACK_IMPORTED_MODULE_5__ConnectionPointPosition_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "LayoutManager", function() { return __WEBPACK_IMPORTED_MODULE_7__LayoutManager_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ClassBox", function() { return __WEBPACK_IMPORTED_MODULE_8__ClassBox_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayer", function() { return __WEBPACK_IMPORTED_MODULE_9__SVGLayer_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayerSet", function() { return __WEBPACK_IMPORTED_MODULE_10__SVGLayerSet_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "LayoutManager", function() { return __WEBPACK_IMPORTED_MODULE_8__LayoutManager_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ClassBox", function() { return __WEBPACK_IMPORTED_MODULE_9__ClassBox_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayer", function() { return __WEBPACK_IMPORTED_MODULE_10__SVGLayer_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayerSet", function() { return __WEBPACK_IMPORTED_MODULE_11__SVGLayerSet_js__["a"]; });
+
 
 
 
