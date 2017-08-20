@@ -591,14 +591,20 @@ let staticTopLeft = new ConnectionPointPosition("top-left")
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Connector; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
+
+
 
 
 /**
   Represents a connector between elements.
+
+  @extends DiagramElement
 */
-class Connector {
+class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
     constructor(svg, type, connectionPoint1, connectionPoint2, text, layout) {
+        super(svg)
         this.type = type
         this.connectionPoint1 = connectionPoint1
         this.connectionPoint2 = connectionPoint2

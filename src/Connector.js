@@ -1,11 +1,16 @@
 'use strict'
 
+import { DiagramElement } from "./DiagramElement.js"
+
 /**
   Represents a connector between elements.
+
+  @extends DiagramElement
 */
-class Connector {
+class Connector extends DiagramElement {
 
     constructor(svg, type, connectionPoint1, connectionPoint2, text, layout) {
+        super(svg)
         this.type = type
         this.connectionPoint1 = connectionPoint1
         this.connectionPoint2 = connectionPoint2
