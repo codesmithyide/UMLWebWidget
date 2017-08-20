@@ -18,12 +18,15 @@ import { ConnectionPointPosition } from "./ConnectionPointPosition.js"
 
   @extends DiagramElement
   @property {DiagramElement} this.element - The element.
+  @property {ConnectionPointPosition} this.position - The position
+    of the connection point relative to the element.
 */
 class ConnectionPoint extends DiagramElement {
 
-    constructor(svg, element) {
+    constructor(svg, element, position) {
         super(svg)
         this.element = element
+        this.position = position
     }
 
 }

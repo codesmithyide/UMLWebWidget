@@ -35,12 +35,11 @@ class DiagramElement {
         return this.layers
     }
 
-    
-    x() {
+    get x() {
         return this[position].x
     }
 
-    y() {
+    get y() {
         return this[position].y
     }
 
