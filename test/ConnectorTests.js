@@ -23,7 +23,11 @@ function ConnectorCreationTest1(resolve) {
 function ConnectorGetLayersTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
-    let connector = new UMLWebWidget.Connector(svg)
+    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg)
+    connectionPoint1.move(20, 20)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg)
+    connectionPoint2.move(60, 20)
+    let connector = new UMLWebWidget.Connector(svg, "inheritance", connectionPoint1, connectionPoint2)
 
     let layers = connector.getLayers()
     layers.getLayer("shape").write()
