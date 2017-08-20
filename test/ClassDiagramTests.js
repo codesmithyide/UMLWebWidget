@@ -50,7 +50,7 @@ function ClassDiagramCreateFromJSONTest2(resolve) {
 }
 
 function ClassDiagramCreateFromJSONTest3(resolve, reject, test) {
-    let svg = SVG(window.document.documentElement)
+    let svg = SVG(window.document.createElement("div"))
     let classDiagram = new UMLWebWidget.Diagram()
     classDiagram.createFromJSON(svg, {
         "classdiagram":
