@@ -612,7 +612,6 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         this.connectionPoint2 = connectionPoint2
         this.text = text
         this.layout = layout
-        this.svg = svg.group()
         if (this.type == "inheritance") {
             this.svg.addClass("UMLInheritanceRelationship")
         } else if (this.type == "composition") {

@@ -18,7 +18,6 @@ class Connector extends DiagramElement {
         this.connectionPoint2 = connectionPoint2
         this.text = text
         this.layout = layout
-        this.svg = svg.group()
         if (this.type == "inheritance") {
             this.svg.addClass("UMLInheritanceRelationship")
         } else if (this.type == "composition") {
