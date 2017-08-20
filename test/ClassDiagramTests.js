@@ -14,6 +14,7 @@ module.exports = function(theTestHarness) {
     new tf.FunctionBasedTest("createFromJSON test 1", ClassDiagramCreateFromJSONTest1, classDiagramSequence)
     new tf.FunctionBasedTest("createFromJSON test 2", ClassDiagramCreateFromJSONTest2, classDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 3", ClassDiagramCreateFromJSONTest3, classDiagramSequence)
+    new tf.FileComparisonTest("createFromJSON test 4", ClassDiagramCreateFromJSONTest4, classDiagramSequence)
 }
 
 function ClassDiagramCreationTest1(resolve) {
@@ -76,6 +77,52 @@ function ClassDiagramCreateFromJSONTest3(resolve, reject, test) {
 
         test.setOutputFilePath(__dirname + "/output/ClassDiagramCreateFromJSONTest3.html")
         test.setReferenceFilePath(__dirname + "/reference/ClassDiagramCreateFromJSONTest3.html")
+
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
+}
+
+function ClassDiagramCreateFromJSONTest4(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+    let classDiagram = new UMLWebWidget.Diagram()
+    classDiagram.createFromJSON(svg, {
+        "classdiagram":
+            [
+                { 
+                    "class":
+                        {
+                            "name": "MyClass1",
+                             "attributes":
+                                 [
+                                 ],
+                             "operations":
+                                 [
+                                 ]
+                        }
+                },
+                { 
+                    "class":
+                        {
+                            "name": "MyClass2",
+                             "attributes":
+                                 [
+                                 ],
+                             "operations":
+                                 [
+                                 ]
+                        }
+                }
+            ]
+    })
+    let descriptionKeys = Object.keys(classDiagram.diagramDescription)
+    let classboxesKeys = Object.keys(classDiagram.classboxes)
+    if ((descriptionKeys.length == 1) && (classboxesKeys.length == 2)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/ClassDiagramCreateFromJSONTest4.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/ClassDiagramCreateFromJSONTest4.html")
+        test.setReferenceFilePath(__dirname + "/reference/ClassDiagramCreateFromJSONTest4.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
