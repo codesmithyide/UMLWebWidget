@@ -26,9 +26,9 @@ function ConnectorCreationTest1(resolve) {
 function ConnectorGetLayersTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
-    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg)
+    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint1.move(20, 20)
-    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.LeftCenter)
     connectionPoint2.move(60, 20)
     let connector = new UMLWebWidget.Connector(svg, "inheritance", connectionPoint1, connectionPoint2)
 
@@ -47,9 +47,9 @@ function ConnectorGetLayersTest1(resolve, reject, test) {
 function ConnectorGetLayersTest2(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
-    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg)
+    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint1.move(60, 20)
-    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.RightCenter)
     connectionPoint2.move(20, 20)
     let connector = new UMLWebWidget.Connector(svg, "inheritance", connectionPoint1, connectionPoint2)
 
@@ -68,9 +68,9 @@ function ConnectorGetLayersTest2(resolve, reject, test) {
 function ConnectorGetLayersTest3(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
-    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg)
+    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint1.move(20, 20)
-    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint2.move(20, 60)
     let connector = new UMLWebWidget.Connector(svg, "inheritance", connectionPoint1, connectionPoint2)
 
@@ -89,9 +89,9 @@ function ConnectorGetLayersTest3(resolve, reject, test) {
 function ConnectorGetLayersTest4(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
-    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg)
+    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint1.move(20, 60)
-    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint2.move(20, 20)
     let connector = new UMLWebWidget.Connector(svg, "inheritance", connectionPoint1, connectionPoint2)
 
