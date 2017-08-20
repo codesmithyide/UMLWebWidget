@@ -605,6 +605,8 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
 
     constructor(svg, type, connectionPoint1, connectionPoint2, text, layout) {
         super(svg)
+        this.shapeLayer = this.layers.createLayer("shape")
+        this.textLayer = this.layers.createLayer("text")
         this.type = type
         this.connectionPoint1 = connectionPoint1
         this.connectionPoint2 = connectionPoint2
