@@ -15,6 +15,9 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("getLayers test 2", ClassBoxGetLayersTest2, classboxSequence)
 
     new tf.FileComparisonTest("move test 1", ClassBoxMoveTest1, classboxSequence)
+
+    new tf.FunctionBasedTest("getConnectionPointsRectangle test 1", ClassBoxGetConnectionPointsRectangleTest1,
+        classboxSequence)
 }
 
 function ClassBoxCreationTest1(resolve) {
@@ -131,4 +134,27 @@ function ClassBoxMoveTest1(resolve, reject, test) {
     test.setReferenceFilePath(__dirname + "/reference/ClassBoxMoveTest1.html")
 
     resolve(tf.TestResultOutcome.ePassed)
+}
+
+function ClassBoxGetConnectionPointsRectangleTest1(resolve) {
+    let svg = SVG(window.document.createElement("div"))
+    let classDescription = {
+        "name": "MyClass",
+        "attributes":
+            [
+            ],
+        "operations":
+            [
+            ]
+    }
+    let style = new UMLWebWidget.Style()
+    let classbox = new UMLWebWidget.ClassBox(svg, classDescription, false, style)
+    
+    let rect = classbox.getConnectionPointsRectangle()
+    if ((rect.x == 1) && (rect.y == 1) &&
+        (rect.x2 == 85.8125) && (rect.y2 == 76.7890625)) {
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
 }
