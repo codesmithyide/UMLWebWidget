@@ -21,6 +21,8 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("getLayers test 8", ConnectorGetLayersTest8, connectorSequence)
     new tf.FileComparisonTest("getLayers test 9", ConnectorGetLayersTest9, connectorSequence)
     new tf.FileComparisonTest("getLayers test 10", ConnectorGetLayersTest10, connectorSequence)
+    new tf.FileComparisonTest("getLayers test 11", ConnectorGetLayersTest11, connectorSequence)
+    new tf.FileComparisonTest("getLayers test 12", ConnectorGetLayersTest12, connectorSequence)
 }
 
 function ConnectorCreationTest1(resolve) {
@@ -235,6 +237,48 @@ function ConnectorGetLayersTest10(resolve, reject, test) {
 
     test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest10.html")
     test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest10.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+function ConnectorGetLayersTest11(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
+    connectionPoint1.move(20, 20)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.LeftCenter)
+    connectionPoint2.move(60, 20)
+    let connector = new UMLWebWidget.Connector(svg, "aggregation", connectionPoint1, connectionPoint2)
+
+    let layers = connector.getLayers()
+    layers.getLayer("shape").write()
+    layers.getLayer("text").write()
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ConnectorGetLayersTest11.html", true)
+
+    test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest11.html")
+    test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest11.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+function ConnectorGetLayersTest12(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
+    connectionPoint1.move(20, 20)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.LeftCenter)
+    connectionPoint2.move(60, 20)
+    let connector = new UMLWebWidget.Connector(svg, "aggregation", connectionPoint1, connectionPoint2)
+
+    let layers = connector.getLayers()
+    layers.getLayer("shape").write()
+    layers.getLayer("text").write()
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ConnectorGetLayersTest12.html", true)
+
+    test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest12.html")
+    test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest12.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
