@@ -147,7 +147,7 @@ function ClassDiagramCreateFromJSONTest5(resolve, reject, test) {
     let layout = {
         "classboxpositions": {
             "MyBaseClass": { "x": 0, "y": 0 },
-            "MyDerivedClass": { "x": 150, "y": 0 }
+            "MyDerivedClass": { "x": 170, "y": 0 }
         }
     }
 
