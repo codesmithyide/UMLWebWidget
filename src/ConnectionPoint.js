@@ -23,7 +23,7 @@ import { ConnectionPointPosition } from "./ConnectionPointPosition.js"
 */
 class ConnectionPoint extends DiagramElement {
 
-    constructor(svg, element, position) {
+    constructor(svg, element, position = ConnectionPointPosition.BottomCenter) {
         super(svg)
         this.element = element
         this.position = position

@@ -22,6 +22,7 @@ class ClassBox extends DiagramElement {
         this.classDescription = classDescription
         this.canMove = canMove
         this.style = style
+        this.connectionPointsRectangle = null
 
         // List of connection points that are connected to
         // this class box
@@ -43,6 +44,10 @@ class ClassBox extends DiagramElement {
         createDef(this, this.classDescription, this.canMove, this.style)
         this.uptodate = true
     }
+
+    doGetConnectionPointsRectangle() {
+        return this.connectionPointsRectangle 
+    }
         
     fire(evt) {
         if (evt == "positionchanged") {
@@ -63,8 +68,8 @@ function createDef(self, classInfo, canMove, style) {
     }
 
     let borderAdjustment = {
-        top: self.y() + 1,
-        left: self.x() + 1
+        top: self.y + 1,
+        left: self.x + 1
     }
     
     currentDimensions.height = style.getTopMargin("classbox")
@@ -88,10 +93,12 @@ function createDef(self, classInfo, canMove, style) {
 
     currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
     
-    classGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
+    let rect = classGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
     classGroup.line(borderAdjustment.left, borderAdjustment.top + line1YPos, borderAdjustment.left + currentDimensions.width, borderAdjustment.top + line1YPos)
     classGroup.line(borderAdjustment.left, borderAdjustment.top + line2YPos, borderAdjustment.left + currentDimensions.width, borderAdjustment.top + line2YPos)
-    
+
+    self.connectionPointsRectangle = rect.bbox()
+
     if (canMove) {
         classGroup.draggable(true)
         classGroup.on('dragmove.namespace', function(evt) {
