@@ -113,16 +113,22 @@ export class Diagram {
                 let classbox1
                 let classbox2
                 if (item.relationship.type == "inheritance") {
-                    classbox1 = this.classboxes[item.relationship.baseclass]
-                    classbox2 = this.classboxes[item.relationship.derivedclass] 
+                    classbox1 = this.classboxes[item.relationship.derivedclass]
+                    classbox2 = this.classboxes[item.relationship.baseclass] 
                 } else if ((item.relationship.type == "composition") || (item.relationship.type == "aggregation")) {
-                    classbox1 = this.classboxes[item.relationship.containingclass]
-                    classbox2 = this.classboxes[item.relationship.containedclass]
+                    classbox1 = this.classboxes[item.relationship.containedclass]
+                    classbox2 = this.classboxes[item.relationship.containingclass]
                 }
-                let connectionPoint1 = classbox1.createConnectionPoint()
-                let connectionPoint2 = classbox2.createConnectionPoint()
+                let connectionPoint1 = classbox1.createConnectionPoint(svg)
+                let connectionPoint2 = classbox2.createConnectionPoint(svg)
+                let bbox1 = classbox1.getConnectionPointsRectangle()
+                let bbox2 = classbox2.getConnectionPointsRectangle()
+                let connectionPositions = layoutManager.getConnectionPositions(bbox1, bbox2)
+                connectionPoint1.setPosition(connectionPositions.start)
+                connectionPoint2.setPosition(connectionPositions.end)
                 let newConnector = createClassBoxConnector(this, svg, item.relationship.type, connectionPoint1, connectionPoint2, layout) 
-                newConnector.draw()
+                newConnector.getLayers().getLayer("shape").write()
+                newConnector.getLayers().getLayer("text").write()
             }
         }
     }

@@ -34,8 +34,8 @@ class ClassBox extends DiagramElement {
       a connector to this class box. The new connection
       point is added to this.connectionPoints.
     */
-    createConnectionPoint() {
-        let newPoint = new ConnectionPoint(this)
+    createConnectionPoint(svg) {
+        let newPoint = new ConnectionPoint(svg, this)
         this.connectionPoints.push(newPoint)
         return newPoint
     }

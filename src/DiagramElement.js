@@ -50,12 +50,34 @@ class DiagramElement {
     }
 
     /**
+      Returns the rectangle on which connection points
+      can be placed. Returns null if no connection points
+      are allowed or where they can be placed can't be
+      expressed as a rectangle.
+    */
+    getConnectionPointsRectangle() {
+        if (!this.uptodate) {
+            this.update()
+        }
+        return this.doGetConnectionPointsRectangle()
+    }
+
+    /**
       This function must be called after changes were
       made to update the contents of the SVG layers.
 
       @virtual
     */
     update() {
+    }
+
+    /**
+       Implements the getConnectionPointsRectangle method.
+
+      @virtual
+    */
+    doGetConnectionPointsRectangle() {
+        return null
     }
 
 }
