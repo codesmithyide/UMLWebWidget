@@ -81,404 +81,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DiagramElement; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__ = __webpack_require__(2);
-
-
-
-
-var position = Symbol()
-
-/**
-  An element of a diagram.
-
-  @property {SVGLayerSet} this.layers - The various SVG layers
-    to use to render this element.
-  @property {boolean} this.uptodate - Whether the layers need 
-    to be updated because of changes to the element.
-*/
-class DiagramElement {
-
-    constructor(svg) {
-        this.layers = new __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__["a" /* SVGLayerSet */](svg)
-        this.uptodate = false
-        this[position] = { x: 0, y: 0 }
-    }
-
-    /**
-      Gets the layers of the element. This checks
-      if any changes were made to the element and calls
-      {@link DiagramElement#update} if necessary before
-      returning the layers.
-      @returns {SVGLayerSet} The SVG layers to use to draw the
-        element.
-    */
-    getLayers() {
-        if (!this.uptodate) {
-            this.update()
-        }
-        return this.layers
-    }
-
-    
-    x() {
-        return this[position].x
-    }
-
-    y() {
-        return this[position].y
-    }
-
-    move(x, y) {
-        this.uptodate = false
-        this[position].x = x
-        this[position].y = y
-    }
-
-    /**
-      This function must be called after changes were
-      made to update the contents of the SVG layers.
-
-      @virtual
-    */
-    update() {
-    }
-
-}
-
-
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SVGLayer; });
-
-
-/**
-  <p>
-    The SVG specification has no concept of layers. The 
-    order in which elements are added to the image 
-    dictate which ones will be shown over the others.
-    This is impractical so this class attempts to 
-    provide a workaround.
-  </p>
-
-  <p>
-    Drawing will be first done on several layers. The
-    elements in each of the layers will then be added
-    to the SVG document layer per layer.
-  </p>   
-*/
-class SVGLayer {
-
-    constructor(svg) {
-        this.svg = svg
-        this.defs = [ ]
-    }
-
-    group() {
-        let groupDef = this.svg.defs().group()
-        this.defs.push(groupDef)
-        return groupDef
-    }
-
-    line(x1, y1, x2, y2) {
-        let lineDef = this.svg.defs().line(x1, y1, x2, y2)
-        this.defs.push(lineDef)
-        return lineDef
-    }
-
-    rect(width, height) {
-        let rectDef = this.svg.defs().rect(width, height)
-        this.defs.push(rectDef)
-        return rectDef
-    }
-
-    text(str) { 
-        let textDef = this.svg.defs().text(str)
-        this.defs.push(textDef)
-        return textDef
-    }
-
-    write() {
-        let self = this
-        self.defs.forEach(function(def) {
-            def.clone(self.svg)
-            def.remove()
-        })
-    }
-
-    merge(layer) {
-        this.defs = this.defs.concat(layer.defs)
-    }
-
-}
-
-
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SVGLayerSet; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__ = __webpack_require__(1);
-
-
-
-
-/**
-  <p>
-    A set of layers.
-  </p>
-*/
-class SVGLayerSet {
-
-    constructor(svg) {
-        this.svg = svg
-        this.layers = { }
-    }
-
-    getLayer(name) {
-        return this.layers[name]
-    }
-
-    createLayer(name) {
-        let newLayer = new __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__["a" /* SVGLayer */](this.svg)
-        this.layers[name] = newLayer
-        return newLayer
-    }
-
-    /**
-      Merge another set into this one. Layers
-      with the same name will be merged together
-      with the elements of the set given as argument
-      being appended.
-    */
-    merge(layerSet) {
-        let self = this
-        let keys = Object.keys(self.layers)
-        keys.forEach(function(key) {
-            self.layers[key].merge(layerSet.layers[key])
-        })
-    }
-
-}
-
-
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ClassBox; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SVGLayerSet_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ConnectionPoint_js__ = __webpack_require__(4);
-
-
-
-
-
-
-/** 
-  A class box. 
-
-  @extends DiagramElement
-  @property {ConnectionPoint[]} this.connectionPoints - The class
-    keeps a list of connection points where other elements are 
-    connected so they can be notified of relevant changes to the
-    class box.
-*/
-class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
-
-    constructor(svg, classDescription, canMove, style) {
-        super(svg)
-        this.shapeLayer = this.layers.createLayer("shape")
-        this.textLayer = this.layers.createLayer("text")
-        this.classDescription = classDescription
-        this.canMove = canMove
-        this.style = style
-
-        // List of connection points that are connected to
-        // this class box
-        this.connectionPoints = [ ]
-    }
-
-    /**
-      Returns a connection point that can be used to connect
-      a connector to this class box. The new connection
-      point is added to this.connectionPoints.
-    */
-    createConnectionPoint() {
-        let newPoint = new __WEBPACK_IMPORTED_MODULE_2__ConnectionPoint_js__["a" /* ConnectionPoint */](this)
-        this.connectionPoints.push(newPoint)
-        return newPoint
-    }
-
-    update() {
-        createDef(this, this.classDescription, this.canMove, this.style)
-        this.uptodate = true
-    }
-        
-    fire(evt) {
-        if (evt == "positionchanged") {
-            for (let i = 0; i < this.connectionPoints.length; i++) {
-                this.connectionPoints[i].draw()        
-            }
-        }
-    }
-
-}
-
-function createDef(self, classInfo, canMove, style) {
-    var classGroup = self.shapeLayer.group().addClass("UMLClassBox")
-
-    let currentDimensions = { 
-        width: 0,
-        height: 0
-    }
-
-    let borderAdjustment = {
-        top: self.y() + 1,
-        left: self.x() + 1
-    }
-    
-    currentDimensions.height = style.getTopMargin("classbox")
-
-    var classNameGroup = self.textLayer.group().addClass("UMLClassName")
-    var className = classNameGroup.text(classInfo.name).move(borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top + currentDimensions.height)
-    currentDimensions.width = Math.max(currentDimensions.width, className.bbox().width)
-    currentDimensions.height += (className.bbox().height + style.getBottomMargin("classbox"))
-
-    var line1YPos = currentDimensions.height
-    let attributeGroupDef = addCompartment(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.attributes, "UMLClassAttributes")
- 
-    var line2YPos = currentDimensions.height
-    let operationGroupDef = addCompartment(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.operations, "UMLClassOperations")
-
-    // According to the UML standard the class name must be
-    // centered so center it
-    if (currentDimensions.width > className.bbox().width) {
-        className.dx((currentDimensions.width - className.bbox().width)/2)
-    }
-
-    currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
-    
-    classGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
-    classGroup.line(borderAdjustment.left, borderAdjustment.top + line1YPos, borderAdjustment.left + currentDimensions.width, borderAdjustment.top + line1YPos)
-    classGroup.line(borderAdjustment.left, borderAdjustment.top + line2YPos, borderAdjustment.left + currentDimensions.width, borderAdjustment.top + line2YPos)
-    
-    if (canMove) {
-        classGroup.draggable(true)
-        classGroup.on('dragmove.namespace', function(evt) {
-            self.fire('positionchanged')
-        })
-        classGroup.on('dragend.namespace', function(evt) {
-            self.fire('positionchanged')
-        })
-    }
-
-    return classGroup
-}
-
-// Add an attribute or operation compartment and updates the current dimensions
-// of the class box
-function addCompartment(textLayer, currentDimensions, borderAdjustment, style, items, cssClass) {
-    currentDimensions.height += style.getTopMargin("classbox")
-    let compartmentDef = createAttributeOrOperationGroupDef(textLayer, currentDimensions, borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top, items, cssClass)
-    currentDimensions.height += style.getBottomMargin("classbox")
-    return compartmentDef
-}
-
-// Creates a group with all the attributes or operations
-function createAttributeOrOperationGroupDef(textLayer, currentDimensions, offsetX, offsetY, items, cssClass) {
-    let itemGroupDef = textLayer.group().addClass(cssClass)
-    for (var i = 0; i < items.length; i++) {
-        let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i])
-        itemDef.move(offsetX, offsetY + currentDimensions.height)
-        currentDimensions.width = Math.max(currentDimensions.width, itemDef.bbox().width)
-        currentDimensions.height += itemDef.bbox().height
-        }
-    return itemGroupDef
-}
-
-// Creates a single attribute or operation line
-function createAttributeOrOperationDef(svg, item) {
-    let text = visibilityStringToSymbol(item.visibility) + item.name
-    if (item.return) {
-        text += " : " + item.return
-    }
-    return svg.text(text)
-}
-
-// Converts the visibility from the user string provided
-// in the input to the appropriate UML symbol for
-// visibility
-function visibilityStringToSymbol(visibility) {
-    let stringToSymbolMap = {
-        "public": "+ ",
-        "protected": "# ",
-        "private": "- "
-    }
-    return stringToSymbolMap[visibility]
-}
-
-
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConnectionPoint; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__ = __webpack_require__(5);
-
-
-
-
-
-/**
-  <p>
-    The point where an element and a connector meet.
-  </p>
-
-  <p>
-    Although it derives from {@link DiagramElement} this
-    element will probably be invisible to the user. 
-    However it may be useful to make the connection points
-    visible under some circumstances like for instance when
-    the diagram is being edited.
-  </p>
-
-  @extends DiagramElement
-  @property {DiagramElement} this.element - The element.
-*/
-class ConnectionPoint extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
-
-    constructor(svg, element) {
-        super(svg)
-        this.element = element
-    }
-
-}
-
-
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConnectionPointPosition; });
 
 
@@ -586,12 +188,475 @@ let staticTopLeft = new ConnectionPointPosition("top-left")
 
 
 /***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DiagramElement; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__ = __webpack_require__(3);
+
+
+
+
+var position = Symbol()
+
+/**
+  An element of a diagram.
+
+  @property {SVGLayerSet} this.layers - The various SVG layers
+    to use to render this element.
+  @property {boolean} this.uptodate - Whether the layers need 
+    to be updated because of changes to the element.
+*/
+class DiagramElement {
+
+    constructor(svg) {
+        this.layers = new __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__["a" /* SVGLayerSet */](svg)
+        this.uptodate = false
+        this[position] = { x: 0, y: 0 }
+    }
+
+    /**
+      Gets the layers of the element. This checks
+      if any changes were made to the element and calls
+      {@link DiagramElement#update} if necessary before
+      returning the layers.
+      @returns {SVGLayerSet} The SVG layers to use to draw the
+        element.
+    */
+    getLayers() {
+        if (!this.uptodate) {
+            this.update()
+        }
+        return this.layers
+    }
+
+    get x() {
+        return this[position].x
+    }
+
+    get y() {
+        return this[position].y
+    }
+
+    move(x, y) {
+        this.uptodate = false
+        this[position].x = x
+        this[position].y = y
+    }
+
+    /**
+      Returns the rectangle on which connection points
+      can be placed. Returns null if no connection points
+      are allowed or where they can be placed can't be
+      expressed as a rectangle.
+    */
+    getConnectionPointsRectangle() {
+        if (!this.uptodate) {
+            this.update()
+        }
+        return this.doGetConnectionPointsRectangle()
+    }
+
+    /**
+      This function must be called after changes were
+      made to update the contents of the SVG layers.
+
+      @virtual
+    */
+    update() {
+    }
+
+    /**
+       Implements the getConnectionPointsRectangle method.
+
+      @virtual
+    */
+    doGetConnectionPointsRectangle() {
+        return null
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SVGLayer; });
+
+
+/**
+  <p>
+    The SVG specification has no concept of layers. The 
+    order in which elements are added to the image 
+    dictate which ones will be shown over the others.
+    This is impractical so this class attempts to 
+    provide a workaround.
+  </p>
+
+  <p>
+    Drawing will be first done on several layers. The
+    elements in each of the layers will then be added
+    to the SVG document layer per layer.
+  </p>   
+*/
+class SVGLayer {
+
+    constructor(svg) {
+        this.svg = svg
+        this.defs = [ ]
+    }
+
+    group() {
+        let groupDef = this.svg.defs().group()
+        this.defs.push(groupDef)
+        return groupDef
+    }
+
+    line(x1, y1, x2, y2) {
+        let lineDef = this.svg.defs().line(x1, y1, x2, y2)
+        this.defs.push(lineDef)
+        return lineDef
+    }
+
+    rect(width, height) {
+        let rectDef = this.svg.defs().rect(width, height)
+        this.defs.push(rectDef)
+        return rectDef
+    }
+
+    text(str) { 
+        let textDef = this.svg.defs().text(str)
+        this.defs.push(textDef)
+        return textDef
+    }
+
+    write() {
+        let self = this
+        self.defs.forEach(function(def) {
+            def.clone(self.svg)
+            def.remove()
+        })
+    }
+
+    merge(layer) {
+        this.defs = this.defs.concat(layer.defs)
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SVGLayerSet; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__ = __webpack_require__(2);
+
+
+
+
+/**
+  <p>
+    A set of layers.
+  </p>
+*/
+class SVGLayerSet {
+
+    constructor(svg) {
+        this.svg = svg
+        this.layers = { }
+    }
+
+    getLayer(name) {
+        return this.layers[name]
+    }
+
+    createLayer(name) {
+        let newLayer = new __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__["a" /* SVGLayer */](this.svg)
+        this.layers[name] = newLayer
+        return newLayer
+    }
+
+    /**
+      Merge another set into this one. Layers
+      with the same name will be merged together
+      with the elements of the set given as argument
+      being appended.
+    */
+    merge(layerSet) {
+        let self = this
+        let keys = Object.keys(self.layers)
+        keys.forEach(function(key) {
+            self.layers[key].merge(layerSet.layers[key])
+        })
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ClassBox; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SVGLayerSet_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ConnectionPoint_js__ = __webpack_require__(5);
+
+
+
+
+
+
+/** 
+  A class box. 
+
+  @extends DiagramElement
+  @property {ConnectionPoint[]} this.connectionPoints - The class
+    keeps a list of connection points where other elements are 
+    connected so they can be notified of relevant changes to the
+    class box.
+*/
+class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
+
+    constructor(svg, classDescription, canMove, style) {
+        super(svg)
+        this.shapeLayer = this.layers.createLayer("shape")
+        this.textLayer = this.layers.createLayer("text")
+        this.classDescription = classDescription
+        this.canMove = canMove
+        this.style = style
+        this.connectionPointsRectangle = null
+
+        // List of connection points that are connected to
+        // this class box
+        this.connectionPoints = [ ]
+    }
+
+    /**
+      Returns a connection point that can be used to connect
+      a connector to this class box. The new connection
+      point is added to this.connectionPoints.
+    */
+    createConnectionPoint(svg) {
+        let newPoint = new __WEBPACK_IMPORTED_MODULE_2__ConnectionPoint_js__["a" /* ConnectionPoint */](svg, this)
+        this.connectionPoints.push(newPoint)
+        return newPoint
+    }
+
+    update() {
+        createDef(this, this.classDescription, this.canMove, this.style)
+        this.uptodate = true
+    }
+
+    doGetConnectionPointsRectangle() {
+        return this.connectionPointsRectangle 
+    }
+        
+    fire(evt) {
+        if (evt == "positionchanged") {
+            for (let i = 0; i < this.connectionPoints.length; i++) {
+                this.connectionPoints[i].draw()        
+            }
+        }
+    }
+
+}
+
+function createDef(self, classInfo, canMove, style) {
+    var classGroup = self.shapeLayer.group().addClass("UMLClassBox")
+
+    let currentDimensions = { 
+        width: 0,
+        height: 0
+    }
+
+    let borderAdjustment = {
+        top: self.y + 1,
+        left: self.x + 1
+    }
+    
+    currentDimensions.height = style.getTopMargin("classbox")
+
+    var classNameGroup = self.textLayer.group().addClass("UMLClassName")
+    var className = classNameGroup.text(classInfo.name).move(borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top + currentDimensions.height)
+    currentDimensions.width = Math.max(currentDimensions.width, className.bbox().width)
+    currentDimensions.height += (className.bbox().height + style.getBottomMargin("classbox"))
+
+    var line1YPos = currentDimensions.height
+    let attributeGroupDef = addCompartment(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.attributes, "UMLClassAttributes")
+ 
+    var line2YPos = currentDimensions.height
+    let operationGroupDef = addCompartment(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.operations, "UMLClassOperations")
+
+    // According to the UML standard the class name must be
+    // centered so center it
+    if (currentDimensions.width > className.bbox().width) {
+        className.dx((currentDimensions.width - className.bbox().width)/2)
+    }
+
+    currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
+    
+    let rect = classGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
+    classGroup.line(borderAdjustment.left, borderAdjustment.top + line1YPos, borderAdjustment.left + currentDimensions.width, borderAdjustment.top + line1YPos)
+    classGroup.line(borderAdjustment.left, borderAdjustment.top + line2YPos, borderAdjustment.left + currentDimensions.width, borderAdjustment.top + line2YPos)
+
+    self.connectionPointsRectangle = rect.bbox()
+
+    if (canMove) {
+        classGroup.draggable(true)
+        classGroup.on('dragmove.namespace', function(evt) {
+            self.fire('positionchanged')
+        })
+        classGroup.on('dragend.namespace', function(evt) {
+            self.fire('positionchanged')
+        })
+    }
+
+    return classGroup
+}
+
+// Add an attribute or operation compartment and updates the current dimensions
+// of the class box
+function addCompartment(textLayer, currentDimensions, borderAdjustment, style, items, cssClass) {
+    currentDimensions.height += style.getTopMargin("classbox")
+    let compartmentDef = createAttributeOrOperationGroupDef(textLayer, currentDimensions, borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top, items, cssClass)
+    currentDimensions.height += style.getBottomMargin("classbox")
+    return compartmentDef
+}
+
+// Creates a group with all the attributes or operations
+function createAttributeOrOperationGroupDef(textLayer, currentDimensions, offsetX, offsetY, items, cssClass) {
+    let itemGroupDef = textLayer.group().addClass(cssClass)
+    for (var i = 0; i < items.length; i++) {
+        let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i])
+        itemDef.move(offsetX, offsetY + currentDimensions.height)
+        currentDimensions.width = Math.max(currentDimensions.width, itemDef.bbox().width)
+        currentDimensions.height += itemDef.bbox().height
+        }
+    return itemGroupDef
+}
+
+// Creates a single attribute or operation line
+function createAttributeOrOperationDef(svg, item) {
+    let text = visibilityStringToSymbol(item.visibility) + item.name
+    if (item.return) {
+        text += " : " + item.return
+    }
+    return svg.text(text)
+}
+
+// Converts the visibility from the user string provided
+// in the input to the appropriate UML symbol for
+// visibility
+function visibilityStringToSymbol(visibility) {
+    let stringToSymbolMap = {
+        "public": "+ ",
+        "protected": "# ",
+        "private": "- "
+    }
+    return stringToSymbolMap[visibility]
+}
+
+
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConnectionPoint; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__ = __webpack_require__(0);
+
+
+
+
+
+/**
+  <p>
+    The point where an element and a connector meet.
+  </p>
+
+  <p>
+    Although it derives from {@link DiagramElement} this
+    element will probably be invisible to the user. 
+    However it may be useful to make the connection points
+    visible under some circumstances like for instance when
+    the diagram is being edited.
+  </p>
+
+  @extends DiagramElement
+  @property {DiagramElement} this.element - The element.
+  @property {ConnectionPointPosition} this.position - The position
+    of the connection point relative to the element.
+*/
+class ConnectionPoint extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
+
+    constructor(svg, element, position = __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].BottomCenter) {
+        super(svg)
+        this.element = element
+        this.position = position
+    }
+
+    setPosition(position) {
+        this.position = position
+
+        let x = 0
+        let y = 0
+        let boundingbox = this.element.getConnectionPointsRectangle()
+
+        switch (this.position) {
+            case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].TopCenter:
+                x = boundingbox.cx
+                y = boundingbox.y
+                break
+
+            case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].RightCenter:
+                x = (boundingbox.x + boundingbox.width)
+                y = boundingbox.cy
+                break
+
+            case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].BottomCenter:
+                x = boundingbox.cx
+                y = (boundingbox.y + boundingbox.height)
+                break
+
+            case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].LeftCenter:
+                x = boundingbox.x
+                y = boundingbox.cy
+                break
+        }
+
+        this.move(x, y)
+    }
+
+}
+
+
+
+
+/***/ }),
 /* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Connector; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__ = __webpack_require__(0);
+
 
 
 
@@ -603,7 +668,7 @@ let staticTopLeft = new ConnectionPointPosition("top-left")
 */
 class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
-    constructor(svg, type, connectionPoint1, connectionPoint2, text, layout) {
+    constructor(svg, type, connectionPoint1, connectionPoint2, text) {
         super(svg)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
@@ -611,23 +676,20 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         this.connectionPoint1 = connectionPoint1
         this.connectionPoint2 = connectionPoint2
         this.text = text
-        this.layout = layout
-        if (this.type == "inheritance") {
-            this.svg.addClass("UMLInheritanceRelationship")
-        } else if (this.type == "composition") {
-            this.svg.addClass("UMLCompositionRelationship")
-        } else if (this.type == "aggregation") {
-            this.svg.addClass("UMLAggregationRelationship")
-        }
     }
 
-    draw() {
-        this.svg.clear()
+    update() {
         if (this.type == "inheritance") {
-            drawInheritanceRelationship(this.svg, this.connectionPoint1, this.connectionPoint2, this.layout)
-        } else if ((this.type == "composition") || (this.type == "aggregation")) {
-            drawCompositionOrAggregationRelationship(this.svg, this.connectionPoint1, this.connectionPoint2, this.layout)
+            let lineGroup = this.shapeLayer.group().addClass("UMLInheritanceRelationship")
+            drawInheritanceRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
+        } else if (this.type == "composition") {
+            let lineGroup = this.shapeLayer.group().addClass("UMLCompositionRelationship")
+            drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
+        } else if (this.type == "aggregation") {
+            let lineGroup = this.shapeLayer.group().addClass("UMLAggregationRelationship")
+            drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         }
+        this.uptodate = true
     }
 
     move(y) {
@@ -643,103 +705,19 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
 }
 
 // Draws an inheritance connector between two classes
-function drawInheritanceRelationship(svg, baseclassbox, derivedclassbox, layout) {
-    let bbox1 = baseclassbox.svg.bbox()
-    let bbox2 = derivedclassbox.svg.bbox()
-
-    let connectionPositions = getConnectionPositions(bbox1, bbox2)
-    let startPoint = getConnectionPoint(connectionPositions.start, bbox2)
-    let endPoint = getConnectionPoint(connectionPositions.end, bbox1)
-
-    let connectorOrientation = getConnectorHeadOrientationFromPosition(connectionPositions.end)
-    let lineConnectionPoint = drawInheritanceArrow(svg, endPoint, connectorOrientation)
-    drawConnectorLine(svg, startPoint, lineConnectionPoint, connectorOrientation)
+function drawInheritanceRelationship(lineGroup, connectionPoint1, connectionPoint2) {
+    let connectorOrientation = getConnectorHeadOrientationFromPosition(connectionPoint2.position)
+    let lineConnectionPoint = getInheritanceArrowLineConnectionPoint(connectionPoint2, connectorOrientation)
+    drawConnectorLine(lineGroup, connectionPoint1, lineConnectionPoint, connectorOrientation)
+    drawInheritanceArrow(lineGroup, connectionPoint2, connectorOrientation)
 }
 
 // Draws a composition connector between two classes
-function drawCompositionOrAggregationRelationship(svg, containingclassbox, containedclassbox, layout) {
-    let bbox1 = containingclassbox.svg.bbox()
-    let bbox2 = containedclassbox.svg.bbox()
-
-    let connectionPositions = getConnectionPositions(bbox1, bbox2)
-
-    let layoutOverride = layout.connectorpositions[containedclassbox.classDescription.name + "-" + containingclassbox.classDescription.name + "-aggregation"];
-    if (layoutOverride) {
-        if (layoutOverride.end) {
-            if (layoutOverride.end == "RightCenter") {
-                connectionPositions.end = ConnectorPosition.RightCenter
-            }
-        }
-    }
-
-    let startPoint = getConnectionPoint(connectionPositions.start, bbox2)
-    let endPoint = getConnectionPoint(connectionPositions.end, bbox1)
-
-    let connectorOrientation = getConnectorHeadOrientationFromPosition(connectionPositions.end)
-    let lineConnectionPoint = drawDiamond(svg, endPoint, connectorOrientation)
-    drawConnectorLine(svg, startPoint, lineConnectionPoint, connectorOrientation)  
-}
-
-var ConnectorPosition = {
-    TopCenter: 0,
-    TopRight: 1,
-    RightCenter: 2,
-    BottomRight: 3,
-    BottomCenter: 4,
-    BottomLeft: 5,
-    LeftCenter: 6,
-    TopLeft: 7
-}
-
-function getConnectionPositions(boundingbox1, boundingbox2) {
-    let result = { 
-        start: ConnectorPosition.TopCenter,
-        end: ConnectorPosition.TopCenter
-    }
-
-    if ((boundingbox1.y + boundingbox1.height) < boundingbox2.y) {
-        result.start = ConnectorPosition.TopCenter
-        result.end = ConnectorPosition.BottomCenter
-    } else if ((boundingbox2.y + boundingbox2.height) < boundingbox1.y) {
-        result.start = ConnectorPosition.BottomCenter
-        result.end = ConnectorPosition.TopCenter
-    } else if ((boundingbox1.x + boundingbox1.width) < boundingbox2.x) {
-        result.start = ConnectorPosition.LeftCenter
-        result.end = ConnectorPosition.RightCenter
-    } else if ((boundingbox2.x + boundingbox2.width) < boundingbox1.x) {
-        result.start = ConnectorPosition.RightCenter
-        result.end = ConnectorPosition.LeftCenter
-    }
-
-    return result
-}
-
-// Gets one of the predefined positions for connection
-// points on a bounding box.
-function getConnectionPoint(position, boundingbox) {
-    let result = { x: 0, y: 0 }
-    switch (position) {
-        case ConnectorPosition.TopCenter:
-            result.x = boundingbox.cx
-            result.y = boundingbox.y
-            break
-
-        case ConnectorPosition.RightCenter:
-            result.x = (boundingbox.x + boundingbox.width)
-            result.y = boundingbox.cy
-            break
-
-        case ConnectorPosition.BottomCenter:
-            result.x = boundingbox.cx
-            result.y = (boundingbox.y + boundingbox.height)
-            break
-
-        case ConnectorPosition.LeftCenter:
-            result.x = boundingbox.x
-            result.y = boundingbox.cy
-            break
-    }
-    return result
+function drawCompositionOrAggregationRelationship(lineGroup, connectionPoint1, connectionPoint2) {
+    let connectorOrientation = getConnectorHeadOrientationFromPosition(connectionPoint2.position)
+    let lineConnectionPoint = getDiamondLineConnectionPoint(connectionPoint2, connectorOrientation)
+    drawConnectorLine(lineGroup, connectionPoint1, lineConnectionPoint, connectorOrientation)
+    drawDiamond(lineGroup, connectionPoint2, connectorOrientation)
 }
 
 // Orientation of the head (e.g. arrow or diamond)
@@ -755,15 +733,38 @@ var ConnectorHeadOrientation = {
 // based on where the connector is connected
 function getConnectorHeadOrientationFromPosition(position) {
     switch (position) {
-        case ConnectorPosition.TopCenter:
+        case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].TopCenter:
             return ConnectorHeadOrientation.Down
-        case ConnectorPosition.RightCenter:
+        case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].RightCenter:
             return ConnectorHeadOrientation.Left
-        case ConnectorPosition.BottomCenter:
+        case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].BottomCenter:
             return ConnectorHeadOrientation.Up
-        case ConnectorPosition.LeftCenter:
+        case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].LeftCenter:
             return ConnectorHeadOrientation.Right
     }
+}
+
+function getInheritanceArrowLineConnectionPoint(position, orientation) {
+    let lineConnectionPoint = { x: 0, y: 0 }
+    switch (orientation) {
+        case ConnectorHeadOrientation.Right:
+            lineConnectionPoint = { x: (position.x - 12), y: position.y }
+            break
+
+        case ConnectorHeadOrientation.Left:
+            lineConnectionPoint = { x: (position.x + 12), y: position.y }
+            break
+            
+        case ConnectorHeadOrientation.Up:
+            lineConnectionPoint = { x: position.x, y: (position.y + 12) }
+            break
+
+        case ConnectorHeadOrientation.Down:
+            lineConnectionPoint = { x: position.x, y: (position.y - 12) }
+            break
+    }
+            
+    return lineConnectionPoint
 }
 
 // Draws an arrow for an inheritance relationship. The arrow's tip
@@ -773,12 +774,10 @@ function getConnectorHeadOrientationFromPosition(position) {
 function drawInheritanceArrow(svg, position, orientation) {
     let secondPoint = { x: 0, y: 0 }
     let thirdPoint = { x: 0, y: 0 }
-    let lineConnectionPoint = { x: 0, y: 0 }
     switch (orientation) {
         case ConnectorHeadOrientation.Right:
             secondPoint = { x: (position.x - 12), y: (position.y - 10) }
             thirdPoint = { x: (position.x - 12), y: (position.y + 10) }
-            lineConnectionPoint = { x: (position.x - 12), y: position.y }
             break
 
         case ConnectorHeadOrientation.Left:
@@ -786,7 +785,6 @@ function drawInheritanceArrow(svg, position, orientation) {
             secondPoint.y = (position.y - 10)
             thirdPoint.x = (position.x + 12)
             thirdPoint.y = (position.y + 10)    
-            lineConnectionPoint = { x: (position.x + 12), y: position.y }
             break
             
         case ConnectorHeadOrientation.Up:
@@ -794,7 +792,6 @@ function drawInheritanceArrow(svg, position, orientation) {
             secondPoint.y = (position.y + 12)
             thirdPoint.x = (position.x + 10)
             thirdPoint.y = (position.y + 12)
-            lineConnectionPoint = { x: position.x, y: (position.y + 12) }
             break
 
         case ConnectorHeadOrientation.Down:
@@ -802,7 +799,6 @@ function drawInheritanceArrow(svg, position, orientation) {
             secondPoint.y = (position.y - 12)
             thirdPoint.x = (position.x + 10)
             thirdPoint.y = (position.y - 12)
-            lineConnectionPoint = { x: position.x, y: (position.y - 12) }
             break
     }
             
@@ -810,8 +806,29 @@ function drawInheritanceArrow(svg, position, orientation) {
         secondPoint.x + "," + secondPoint.y + " " +
         thirdPoint.x + "," + thirdPoint.y                
     svg.polygon(polygonDescription)
+}
 
-    return lineConnectionPoint
+function getDiamondLineConnectionPoint(position, orientation) {
+    let thirdPoint = { x: 0, y: 0 }
+    switch (orientation) {
+        case ConnectorHeadOrientation.Right:
+            thirdPoint = { x: (position.x - 20), y: position.y }
+            break
+
+        case ConnectorHeadOrientation.Left:
+            thirdPoint = { x: (position.x + 20), y: position.y }
+            break
+
+        case ConnectorHeadOrientation.Up:
+            thirdPoint = { x: position.x, y: (position.y + 20) }
+            break
+
+        case ConnectorHeadOrientation.Down:
+            thirdPoint = { x: position.x, y: (position.y - 20) }
+            break
+    }
+
+    return thirdPoint
 }
 
 // Draws a diamond for an inheritance relationship. The arrow's tip
@@ -846,40 +863,38 @@ function drawDiamond(svg, position, orientation) {
             thirdPoint = { x: position.x, y: (position.y - 20) }
             fourthPoint = { x: (position.x - 8), y: (position.y - 10) }
             break
-   }
-
-   let polygonDescription = "" + position.x + "," + position.y + " " +
-       secondPoint.x + "," + secondPoint.y + " " +
-       thirdPoint.x + "," + thirdPoint.y + " " +
-            fourthPoint.x + "," + fourthPoint.y
-        svg.polygon(polygonDescription)
-
-        return thirdPoint
     }
+
+    let polygonDescription = "" + position.x + "," + position.y + " " +
+        secondPoint.x + "," + secondPoint.y + " " +
+        thirdPoint.x + "," + thirdPoint.y + " " +
+        fourthPoint.x + "," + fourthPoint.y
+    svg.polygon(polygonDescription)
+}
 
 function drawConnectorLine(svg, startPoint, endPoint, orientation) {
     switch (orientation) {
         case ConnectorHeadOrientation.Up:
         case ConnectorHeadOrientation.Down:
             if (endPoint.x == startPoint.x) {
-                svg.line(endPoint.x, endPoint.y, startPoint.x, startPoint.y)
+                svg.line(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
             } else {
                 let middleY = (endPoint.y + ((startPoint.y - endPoint.y)/2))
-                svg.line(endPoint.x, endPoint.y, endPoint.x, middleY)
-                svg.line(endPoint.x, middleY, startPoint.x, middleY)
-                svg.line(startPoint.x, middleY, startPoint.x, startPoint.y)
+                svg.line(startPoint.x, startPoint.y, startPoint.x, middleY)
+                svg.line(startPoint.x, middleY, endPoint.x, middleY)
+                svg.line(endPoint.x, middleY, endPoint.x, endPoint.y)                 
             }
             break
 
         case ConnectorHeadOrientation.Left:
         case ConnectorHeadOrientation.Right:
             if (endPoint.y == startPoint.y) {
-                svg.line(endPoint.x, endPoint.y, startPoint.x, startPoint.y)
+                svg.line(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
             } else {
                 let middleX = (endPoint.x + ((startPoint.x - endPoint.x)/2))
-                svg.line(endPoint.x, endPoint.y, middleX, endPoint.y)
-                svg.line(middleX, endPoint.y, middleX, startPoint.y)
-                svg.line(middleX, startPoint.y, startPoint.x, startPoint.y)
+                svg.line(startPoint.x, startPoint.y, middleX, startPoint.y)
+                svg.line(middleX, startPoint.y, middleX, endPoint.y)
+                svg.line(middleX, endPoint.y, endPoint.x, endPoint.y)
             }
             break
     }
@@ -893,6 +908,9 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__ = __webpack_require__(0);
+
+
 
 
 /** Sets the position of the elements on the diagram. */
@@ -902,6 +920,40 @@ class LayoutManager {
         this.layout = layout
     }
 
+    getConnectionPositions(boundingbox1, boundingbox2) {
+        let result = { 
+            start: __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].TopCenter,
+            end: __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].TopCenter
+        }
+
+        if ((boundingbox2.y + boundingbox2.height) < boundingbox1.y) {
+            result.start = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].TopCenter
+            result.end = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].BottomCenter
+        } else if ((boundingbox1.y + boundingbox1.height) < boundingbox2.y) {
+            result.start = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].BottomCenter
+            result.end = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].TopCenter
+        } else if ((boundingbox2.x + boundingbox2.width) < boundingbox1.x) {
+            result.start = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].LeftCenter
+            result.end = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].RightCenter
+        } else if ((boundingbox1.x + boundingbox1.width) < boundingbox2.x) {
+            result.start = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].RightCenter
+            result.end = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].LeftCenter
+        }
+
+/*
+    
+    let layoutOverride = layout.connectorpositions[containedclassbox.classDescription.name + "-" + containingclassbox.classDescription.name + "-aggregation"];
+    if (layoutOverride) {
+        if (layoutOverride.end) {
+            if (layoutOverride.end == "RightCenter") {
+                connectionPositions.end = ConnectorPosition.RightCenter
+            }
+        }
+    }
+*/
+
+        return result
+    }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = LayoutManager;
 
@@ -1042,7 +1094,7 @@ class UMLWebWidgetError extends Error {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Component_js__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(17);
@@ -1053,7 +1105,7 @@ class UMLWebWidgetError extends Error {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SynchronousMessageConnector_js__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__SVGLayer_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__SVGLayer_js__ = __webpack_require__(2);
 
 
 
@@ -1128,8 +1180,8 @@ class Diagram {
         this.diagramDescription = jsonDiagramDescription
         let style = new __WEBPACK_IMPORTED_MODULE_2__Style_js__["a" /* Style */]()
 
-        if (this.diagramDescription.classdiagram) {
-            this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
+        if (this.diagramDescription.elements) {
+            this.drawClassDiagram(svg, this.diagramDescription.elements, style, layout)
         } else if (this.diagramDescription.componentdiagram) {
             this.drawComponentDiagram(svg, this.diagramDescription.componentdiagram, style, layout)
         } else if (this.diagramDescription.deploymentdiagram) {
@@ -1169,16 +1221,22 @@ class Diagram {
                 let classbox1
                 let classbox2
                 if (item.relationship.type == "inheritance") {
-                    classbox1 = this.classboxes[item.relationship.baseclass]
-                    classbox2 = this.classboxes[item.relationship.derivedclass] 
+                    classbox1 = this.classboxes[item.relationship.derivedclass]
+                    classbox2 = this.classboxes[item.relationship.baseclass] 
                 } else if ((item.relationship.type == "composition") || (item.relationship.type == "aggregation")) {
-                    classbox1 = this.classboxes[item.relationship.containingclass]
-                    classbox2 = this.classboxes[item.relationship.containedclass]
+                    classbox1 = this.classboxes[item.relationship.containedclass]
+                    classbox2 = this.classboxes[item.relationship.containingclass]
                 }
-                let connectionPoint1 = classbox1.createConnectionPoint()
-                let connectionPoint2 = classbox2.createConnectionPoint()
-                let newConnector = createClassBoxConnector(this, svg, item.relationship.type, connectionPoint1, connectionPoint2, layout) 
-                newConnector.draw()
+                let connectionPoint1 = classbox1.createConnectionPoint(svg)
+                let connectionPoint2 = classbox2.createConnectionPoint(svg)
+                let bbox1 = classbox1.getConnectionPointsRectangle()
+                let bbox2 = classbox2.getConnectionPointsRectangle()
+                let connectionPositions = layoutManager.getConnectionPositions(bbox1, bbox2)
+                connectionPoint1.setPosition(connectionPositions.start)
+                connectionPoint2.setPosition(connectionPositions.end)
+                let newConnector = createClassBoxConnector(this, svg, item.relationship.type, connectionPoint1, connectionPoint2) 
+                newConnector.getLayers().getLayer("shape").write()
+                newConnector.getLayers().getLayer("text").write()
             }
         }
     }
@@ -1267,8 +1325,8 @@ class Diagram {
 /* harmony export (immutable) */ __webpack_exports__["a"] = Diagram;
 
 
-function createClassBoxConnector(self, svg, type, connectionPoint1, connectionPoint2, layout) {
-    return new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, type, connectionPoint1, connectionPoint2, "", layout)
+function createClassBoxConnector(self, svg, type, connectionPoint1, connectionPoint2) {
+    return new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, type, connectionPoint1, connectionPoint2, "")
 }
 
 function createLifelineConnector(self, svg, type, classbox1, classbox2, name, layout) {
@@ -1879,14 +1937,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ConnectionPoint_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ConnectionPointPosition_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__DiagramElement_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ConnectionPoint_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ConnectionPointPosition_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__DiagramElement_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Connector_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__LayoutManager_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ClassBox_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__SVGLayer_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__SVGLayerSet_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ClassBox_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__SVGLayer_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__SVGLayerSet_js__ = __webpack_require__(3);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "UMLWebWidgetError", function() { return __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Settings", function() { return __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Style", function() { return __WEBPACK_IMPORTED_MODULE_2__Style_js__["a"]; });
