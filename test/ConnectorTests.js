@@ -9,6 +9,8 @@ var TestUtils = require("./TestUtils.js")
 module.exports = function(theTestHarness) {
     let connectorSequence = theTestHarness.appendTestSequence("Connector tests")
 
+    TestUtils.createDirectory(__dirname + "/output/connectortests")
+
     new tf.FunctionBasedTest("Creation test 1", ConnectorCreationTest1, connectorSequence)
 
     new tf.FileComparisonTest("getLayers test 1", ConnectorGetLayersTest1, connectorSequence)
@@ -44,10 +46,10 @@ function ConnectorGetLayersTest1(resolve, reject, test) {
     layers.getLayer("shape").write()
     layers.getLayer("text").write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ConnectorGetLayersTest1.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest1.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest1.html")
-    test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest1.html")
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest1.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest1.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
@@ -65,10 +67,10 @@ function ConnectorGetLayersTest2(resolve, reject, test) {
     layers.getLayer("shape").write()
     layers.getLayer("text").write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ConnectorGetLayersTest2.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest2.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest2.html")
-    test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest2.html")
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest2.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest2.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
@@ -86,10 +88,10 @@ function ConnectorGetLayersTest3(resolve, reject, test) {
     layers.getLayer("shape").write()
     layers.getLayer("text").write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ConnectorGetLayersTest3.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest3.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest3.html")
-    test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest3.html")
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest3.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest3.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
@@ -107,10 +109,10 @@ function ConnectorGetLayersTest4(resolve, reject, test) {
     layers.getLayer("shape").write()
     layers.getLayer("text").write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ConnectorGetLayersTest4.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest4.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest4.html")
-    test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest4.html")
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest4.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest4.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
@@ -128,10 +130,10 @@ function ConnectorGetLayersTest5(resolve, reject, test) {
     layers.getLayer("shape").write()
     layers.getLayer("text").write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ConnectorGetLayersTest5.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest5.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest5.html")
-    test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest5.html")
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest5.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest5.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
@@ -149,10 +151,10 @@ function ConnectorGetLayersTest6(resolve, reject, test) {
     layers.getLayer("shape").write()
     layers.getLayer("text").write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ConnectorGetLayersTest6.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest6.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest6.html")
-    test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest6.html")
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest6.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest6.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
@@ -170,10 +172,10 @@ function ConnectorGetLayersTest7(resolve, reject, test) {
     layers.getLayer("shape").write()
     layers.getLayer("text").write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ConnectorGetLayersTest7.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest7.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest7.html")
-    test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest7.html")
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest7.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest7.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
@@ -191,10 +193,10 @@ function ConnectorGetLayersTest8(resolve, reject, test) {
     layers.getLayer("shape").write()
     layers.getLayer("text").write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ConnectorGetLayersTest8.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest8.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest8.html")
-    test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest8.html")
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest8.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest8.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
@@ -212,10 +214,10 @@ function ConnectorGetLayersTest9(resolve, reject, test) {
     layers.getLayer("shape").write()
     layers.getLayer("text").write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ConnectorGetLayersTest9.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest9.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest9.html")
-    test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest9.html")
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest9.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest9.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
@@ -233,10 +235,10 @@ function ConnectorGetLayersTest10(resolve, reject, test) {
     layers.getLayer("shape").write()
     layers.getLayer("text").write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ConnectorGetLayersTest10.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest10.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest10.html")
-    test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest10.html")
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest10.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest10.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
@@ -254,10 +256,10 @@ function ConnectorGetLayersTest11(resolve, reject, test) {
     layers.getLayer("shape").write()
     layers.getLayer("text").write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ConnectorGetLayersTest11.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest11.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest11.html")
-    test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest11.html")
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest11.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest11.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
@@ -275,10 +277,10 @@ function ConnectorGetLayersTest12(resolve, reject, test) {
     layers.getLayer("shape").write()
     layers.getLayer("text").write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ConnectorGetLayersTest12.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest12.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ConnectorGetLayersTest12.html")
-    test.setReferenceFilePath(__dirname + "/reference/ConnectorGetLayersTest12.html")
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest12.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest12.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
