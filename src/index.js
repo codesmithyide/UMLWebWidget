@@ -10,6 +10,7 @@ import { DiagramElement } from "./DiagramElement.js"
 import { Connector } from "./Connector.js"
 import { LayoutManager } from "./LayoutManager.js"
 import { ClassBox } from "./ClassBox.js"
+import { Lifeline } from "./Lifeline.js"
 import { SVGLayer } from "./SVGLayer.js"
 import { SVGLayerSet } from "./SVGLayerSet.js"
 
@@ -24,6 +25,7 @@ export {
     ConnectionPointPosition,
     LayoutManager,
     ClassBox,
+    Lifeline,
     SVGLayer,
     SVGLayerSet
 }

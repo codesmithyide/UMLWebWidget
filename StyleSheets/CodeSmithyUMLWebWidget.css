@@ -87,7 +87,7 @@
    fill: #404040;
 }
 
-.CodeSmithyUMLWebWidget .UMLInstanceName {
+.CodeSmithyUMLWebWidget .UMLInstanceName text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: bold;
