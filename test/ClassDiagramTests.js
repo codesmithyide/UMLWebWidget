@@ -9,6 +9,8 @@ var TestUtils = require("./TestUtils.js")
 module.exports = function(theTestHarness) {
     let classDiagramSequence = theTestHarness.appendTestSequence("Class diagram tests")
 
+    TestUtils.createDirectory(__dirname + "/output/classdiagramtests")
+
     new tf.FunctionBasedTest("Creation test 1", ClassDiagramCreationTest1, classDiagramSequence)
 
     new tf.FunctionBasedTest("createFromJSON test 1", ClassDiagramCreateFromJSONTest1, classDiagramSequence)
@@ -38,13 +40,10 @@ function ClassDiagramCreateFromJSONTest1(resolve) {
 function ClassDiagramCreateFromJSONTest2(resolve) {
     let classDiagram = new UMLWebWidget.Diagram()
     classDiagram.createFromJSON(null, {
-        "classdiagram":
-          [
-          ]
     })
-    let descriptionKeys = Object.keys(classDiagram.diagramDescription)
+    let elementKeys = Object.keys(classDiagram.diagramDescription)
     let classboxesKeys = Object.keys(classDiagram.classboxes)
-    if ((descriptionKeys.length == 1) && (classboxesKeys.length == 0)) {
+    if ((elementKeys.length == 0) && (classboxesKeys.length == 0)) {
         resolve(tf.TestResultOutcome.ePassed)
     } else {
         resolve(tf.TestResultOutcome.eFailed)
@@ -55,7 +54,7 @@ function ClassDiagramCreateFromJSONTest3(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
     let classDiagram = new UMLWebWidget.Diagram()
     classDiagram.createFromJSON(svg, {
-        "classdiagram":
+        "elements":
             [
                 { 
                     "class":
@@ -71,13 +70,13 @@ function ClassDiagramCreateFromJSONTest3(resolve, reject, test) {
                 }
             ]
     })
-    let descriptionKeys = Object.keys(classDiagram.diagramDescription)
+    let elementKeys = Object.keys(classDiagram.diagramDescription)
     let classboxesKeys = Object.keys(classDiagram.classboxes)
-    if ((descriptionKeys.length == 1) && (classboxesKeys.length == 1)) {
-        TestUtils.exportSVGToHTML(svg, __dirname + "/output/ClassDiagramCreateFromJSONTest3.html", true)
+    if ((elementKeys.length == 1) && (classboxesKeys.length == 1)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest3.html", true)
 
-        test.setOutputFilePath(__dirname + "/output/ClassDiagramCreateFromJSONTest3.html")
-        test.setReferenceFilePath(__dirname + "/reference/ClassDiagramCreateFromJSONTest3.html")
+        test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest3.html")
+        test.setReferenceFilePath(__dirname + "/reference/classdiagramtests/ClassDiagramCreateFromJSONTest3.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
@@ -97,7 +96,7 @@ function ClassDiagramCreateFromJSONTest4(resolve, reject, test) {
 
     let classDiagram = new UMLWebWidget.Diagram()
     classDiagram.createFromJSON(svg, {
-        "classdiagram":
+        "elements":
             [
                 { 
                     "class":
@@ -127,13 +126,13 @@ function ClassDiagramCreateFromJSONTest4(resolve, reject, test) {
     },
     layout)
 
-    let descriptionKeys = Object.keys(classDiagram.diagramDescription)
+    let elementKeys = Object.keys(classDiagram.diagramDescription)
     let classboxesKeys = Object.keys(classDiagram.classboxes)
-    if ((descriptionKeys.length == 1) && (classboxesKeys.length == 2)) {
-        TestUtils.exportSVGToHTML(svg, __dirname + "/output/ClassDiagramCreateFromJSONTest4.html", true)
+    if ((elementKeys.length == 1) && (classboxesKeys.length == 2)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest4.html", true)
 
-        test.setOutputFilePath(__dirname + "/output/ClassDiagramCreateFromJSONTest4.html")
-        test.setReferenceFilePath(__dirname + "/reference/ClassDiagramCreateFromJSONTest4.html")
+        test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest4.html")
+        test.setReferenceFilePath(__dirname + "/reference/classdiagramtests/ClassDiagramCreateFromJSONTest4.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
@@ -153,7 +152,7 @@ function ClassDiagramCreateFromJSONTest5(resolve, reject, test) {
 
     let classDiagram = new UMLWebWidget.Diagram()
     classDiagram.createFromJSON(svg, {
-        "classdiagram":
+        "elements":
             [
                 { 
                     "class":
@@ -191,13 +190,13 @@ function ClassDiagramCreateFromJSONTest5(resolve, reject, test) {
     },
     layout)
 
-    let descriptionKeys = Object.keys(classDiagram.diagramDescription)
+    let elementKeys = Object.keys(classDiagram.diagramDescription)
     let classboxesKeys = Object.keys(classDiagram.classboxes)
-    if ((descriptionKeys.length == 1) && (classboxesKeys.length == 2)) {
-        TestUtils.exportSVGToHTML(svg, __dirname + "/output/ClassDiagramCreateFromJSONTest5.html", true)
+    if ((elementKeys.length == 1) && (classboxesKeys.length == 2)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest5.html", true)
 
-        test.setOutputFilePath(__dirname + "/output/ClassDiagramCreateFromJSONTest5.html")
-        test.setReferenceFilePath(__dirname + "/reference/ClassDiagramCreateFromJSONTest5.html")
+        test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest5.html")
+        test.setReferenceFilePath(__dirname + "/reference/classdiagramtests/ClassDiagramCreateFromJSONTest5.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
