@@ -9,6 +9,8 @@ var TestUtils = require("./TestUtils.js")
 module.exports = function(theTestHarness) {
     let classboxSequence = theTestHarness.appendTestSequence("ClassBox tests")
 
+    TestUtils.createDirectory(__dirname + "/output/classboxtests")
+
     new tf.FunctionBasedTest("Creation test 1", ClassBoxCreationTest1, classboxSequence)
 
     new tf.FileComparisonTest("getLayers test 1", ClassBoxGetLayersTest1, classboxSequence)
@@ -55,10 +57,10 @@ function ClassBoxGetLayersTest1(resolve, reject, test) {
     layers.layers["shape"].write()
     layers.layers["text"].write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ClassBoxGetLayersTest1.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/classboxtests/ClassBoxGetLayersTest1.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ClassBoxGetLayersTest1.html")
-    test.setReferenceFilePath(__dirname + "/reference/ClassBoxGetLayersTest1.html")
+    test.setOutputFilePath(__dirname + "/output/classboxtests/ClassBoxGetLayersTest1.html")
+    test.setReferenceFilePath(__dirname + "/reference/classboxtests/ClassBoxGetLayersTest1.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
@@ -100,10 +102,10 @@ function ClassBoxGetLayersTest2(resolve, reject, test) {
     layers.layers["shape"].write()
     layers.layers["text"].write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ClassBoxGetLayersTest2.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/classboxtests/ClassBoxGetLayersTest2.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ClassBoxGetLayersTest2.html")
-    test.setReferenceFilePath(__dirname + "/reference/ClassBoxGetLayersTest2.html")
+    test.setOutputFilePath(__dirname + "/output/classboxtests/ClassBoxGetLayersTest2.html")
+    test.setReferenceFilePath(__dirname + "/reference/classboxtests/ClassBoxGetLayersTest2.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
@@ -128,10 +130,10 @@ function ClassBoxMoveTest1(resolve, reject, test) {
     layers.layers["shape"].write()
     layers.layers["text"].write()
 
-    TestUtils.exportSVGToHTML(svg, __dirname + "/output/ClassBoxMoveTest1.html", true)
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/classboxtests/ClassBoxMoveTest1.html", true)
 
-    test.setOutputFilePath(__dirname + "/output/ClassBoxMoveTest1.html")
-    test.setReferenceFilePath(__dirname + "/reference/ClassBoxMoveTest1.html")
+    test.setOutputFilePath(__dirname + "/output/classboxtests/ClassBoxMoveTest1.html")
+    test.setReferenceFilePath(__dirname + "/reference/classboxtests/ClassBoxMoveTest1.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
