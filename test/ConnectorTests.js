@@ -359,7 +359,7 @@ function ConnectorGetLayersTest16(resolve, reject, test) {
     connectionPoint1.move(20, 30)
     let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.TopCenter)
     connectionPoint2.move(60, 30)
-    let connector = new UMLWebWidget.Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, "call")
+    let connector = new UMLWebWidget.Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, "methodcall")
 
     let layers = connector.getLayers()
     layers.getLayer("shape").write()
