@@ -33,7 +33,7 @@ class Connector extends DiagramElement {
         } else if (this.type == "synchronousmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLSynchronousMessage")
             let textGroup = null
-            if (this.text != null) {
+            if ((this.text != null) && (this.text != "")) {
                 textGroup = this.textLayer.group()
             }
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.text)
@@ -42,16 +42,6 @@ class Connector extends DiagramElement {
             drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
         }
         this.uptodate = true
-    }
-
-    move(y) {
-        this.svg.each(function(i, children) {
-            this.dy(y)
-        })
-    }
-
-    hide() {
-        this.svg.hide()
     }
 
 }
@@ -73,15 +63,15 @@ function drawCompositionOrAggregationRelationship(lineGroup, connectionPoint1, c
 }
 
 function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, text) {
-    if (connectionPoint1 != connectionPoint2) {
-        if ((textGroup != null) && (text != null)) {
+    if (connectionPoint1.x != connectionPoint2.x) {
+        if ((textGroup != null) && (text != null) && (text != "")) {
             let textElement = textGroup.text(text)
             
             let width = (connectionPoint2.x - connectionPoint1.x)
             if (textElement.bbox().width < width) {
                 textElement.move((connectionPoint1.x + ((width - textElement.bbox().width) / 2)), connectionPoint1.y - textElement.bbox().height + 2)
             } else {
-                textElement.move(connectionPoint1.x, connectionPoint1.y - textElement.bbox().height + 2)
+                textElement.move(connectionPoint1.x + 2, connectionPoint1.y - 6 - textElement.bbox().height + 2)
             }
         }
 
@@ -91,17 +81,18 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
             (connectionPoint2.x - 12) + "," + (connectionPoint2.y + 6)
         lineGroup.polygon(polygonDescription)
     } else {
-        let startX = caller.svg.bbox().cx
-        let textDef = this.svg.defs().text(this.text).move(startX + 8, 5)
-        let offsetY = textDef.bbox().y + textDef.bbox().height + 3
-        this.svg.use(textDef)
-        this.svg.line(startX, offsetY, startX + 30, offsetY)
-        this.svg.line(startX + 30, offsetY, startX + 30, 20 + offsetY)
-        this.svg.line(startX + 30, 20 + offsetY, startX, 20 + offsetY)
-        let polygonDescription = "" + startX + "," + (20 + offsetY) + " " +
-            (startX + 12) + "," + (20 + offsetY - 6) + " " +
-            (startX + 12) + "," + (20 + offsetY + 6)
-        this.svg.polygon(polygonDescription)
+        if ((textGroup != null) && (text != null) && (text != "")) {
+            let textElement = textGroup.text(text)
+            textElement.move(connectionPoint1.x + 8, connectionPoint1.y - textElement.bbox().height - 3)
+        }
+
+        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint1.y)
+        lineGroup.line(connectionPoint1.x + 30, connectionPoint1.y, connectionPoint2.x + 30, connectionPoint2.y)
+        lineGroup.line(connectionPoint2.x + 30, connectionPoint2.y, connectionPoint2.x + 12, connectionPoint2.y)
+        let polygonDescription = "" + connectionPoint2.x + "," + connectionPoint2.y + " " +
+            (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
+            (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
+        lineGroup.polygon(polygonDescription)
     }
 }
 
