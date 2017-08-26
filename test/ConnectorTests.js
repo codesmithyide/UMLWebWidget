@@ -30,6 +30,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("getLayers test 15", ConnectorGetLayersTest15, connectorSequence)
     new tf.FileComparisonTest("getLayers test 16", ConnectorGetLayersTest16, connectorSequence)
     new tf.FileComparisonTest("getLayers test 17", ConnectorGetLayersTest17, connectorSequence)
+    new tf.FileComparisonTest("getLayers test 18", ConnectorGetLayersTest18, connectorSequence)
 }
 
 function ConnectorCreationTest1(resolve) {
@@ -378,7 +379,7 @@ function ConnectorGetLayersTest16(resolve, reject, test) {
     resolve(tf.TestResultOutcome.ePassed)
 }
 
-// Test a synchronous message where the caller is the same as the callee
+// Test a synchronous message where the caller is the same as the callee without text
 function ConnectorGetLayersTest17(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
@@ -396,6 +397,28 @@ function ConnectorGetLayersTest17(resolve, reject, test) {
 
     test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest17.html")
     test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest17.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+// Test a synchronous message where the caller is the same as the callee with text
+function ConnectorGetLayersTest18(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
+    connectionPoint1.move(20, 30)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null)
+    connectionPoint2.move(20, 50)
+    let connector = new UMLWebWidget.Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, "selfcall")
+
+    let layers = connector.getLayers()
+    layers.getLayer("shape").write()
+    layers.getLayer("text").write()
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest18.html", true)
+
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest18.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest18.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
