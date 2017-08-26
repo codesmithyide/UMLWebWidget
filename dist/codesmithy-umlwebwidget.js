@@ -1409,17 +1409,7 @@ class Diagram {
             connectionPoint2.setPosition(connectionPositions.end)
         }
 
-        // Draw the elements
-        for (var i = 0; i < classboxes.length; i++) {
-            let classbox = classboxes[i]
-            classbox.getLayers().getLayer("shape").write()
-            classbox.getLayers().getLayer("text").write()
-        }
-        for (var i = 0; i < connectors.length; i++) {
-            let connector = connectors[i]
-            connector.getLayers().getLayer("shape").write()
-            connector.getLayers().getLayer("text").write()
-        }
+        draw(classboxes, null, connectors)
     }
 
     drawComponentDiagram(svg, componentDiagram, style, layout) {
@@ -1472,13 +1462,13 @@ class Diagram {
                         lifeline2 = this.lifelines[message.synchronousmessage.callee]
                         connectionPoint1 = lifeline1.createConnectionPoint(svg)
                         connectionPoint2 = lifeline2.createConnectionPoint(svg)
-                        newConnector = createLifelineConnector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, message.synchronousmessage.name)
+                        newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "synchronousmessage", connectionPoint1, connectionPoint2, message.synchronousmessage.name)
                     } else if (message.returnmessage) {
                         lifeline1 = this.lifelines[message.returnmessage.caller]
                         lifeline2 = this.lifelines[message.returnmessage.callee]
                         connectionPoint1 = lifeline1.createConnectionPoint(svg)
                         connectionPoint2 = lifeline2.createConnectionPoint(svg)
-                        newConnector = createLifelineConnector(svg, "returnmessage", connectionPoint1, connectionPoint2, "")
+                        newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "returnmessage", connectionPoint1, connectionPoint2, "")
                     }
                     lifeline1.connectionPoints.push(connectionPoint1)
                     lifeline2.connectionPoints.push(connectionPoint2)
@@ -1494,17 +1484,7 @@ class Diagram {
 
         layoutManager.layoutMessages(lifelines, connectors)
 
-        // Draw the elements
-        for (var i = 0; i < lifelines.length; i++) {
-            let lifeline = lifelines[i]
-            lifeline.getLayers().getLayer("shape").write()
-            lifeline.getLayers().getLayer("text").write()
-        }
-        for (var i = 0; i < connectors.length; i++) {
-            let connector = connectors[i]
-            connector.getLayers().getLayer("shape").write()
-            connector.getLayers().getLayer("text").write()
-        }
+        draw(null, lifelines, connectors)
 
         for (var key in this.lifelines) {
             this.lifelines[key].drawLine(svg)
@@ -1528,8 +1508,26 @@ class Diagram {
 /* harmony export (immutable) */ __webpack_exports__["a"] = Diagram;
 
 
-function createLifelineConnector(svg, type, connectionPoint1, connectionPoint2, name) {
-    return new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, type, connectionPoint1, connectionPoint2, name)
+function draw(classboxes, lifelines, connectors) {
+    if (classboxes != null) {
+        for (var i = 0; i < classboxes.length; i++) {
+            let classbox = classboxes[i]
+            classbox.getLayers().getLayer("shape").write()
+            classbox.getLayers().getLayer("text").write()
+        }
+    }
+    if (lifelines != null) {
+        for (var i = 0; i < lifelines.length; i++) {
+            let lifeline = lifelines[i]
+            lifeline.getLayers().getLayer("shape").write()
+            lifeline.getLayers().getLayer("text").write()
+        }
+    }
+    for (var i = 0; i < connectors.length; i++) {
+        let connector = connectors[i]
+        connector.getLayers().getLayer("shape").write()
+        connector.getLayers().getLayer("text").write()
+    }
 }
 
 function createUseCaseConnector(self, svg, actor, usecase) {
