@@ -1367,15 +1367,17 @@ class Diagram {
     drawClassDiagram(svg, classDiagram, style, layout) {
         let layoutManager = new __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__["a" /* LayoutManager */](layout)
 
+        let classboxes = []
+        let connectors = []
+
+        // Construct the elements
         for (var i = 0; i < classDiagram.length; i++) {
             let item = classDiagram[i]
             if (item.class) {
                 let className = item.class.name
                 let newClassBox = new __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__["a" /* ClassBox */](svg, className, item.class, this.settings.canMove, style)
                 this.classboxes[className] = newClassBox
-                layoutManager.setElementPosition(newClassBox)
-                newClassBox.getLayers().getLayer("shape").write()
-                newClassBox.getLayers().getLayer("text").write()
+                classboxes.push(newClassBox)                
             } else if (item.relationship) {
                 let classbox1
                 let classbox2
@@ -1388,15 +1390,35 @@ class Diagram {
                 }
                 let connectionPoint1 = classbox1.createConnectionPoint(svg)
                 let connectionPoint2 = classbox2.createConnectionPoint(svg)
-                let bbox1 = classbox1.getConnectionPointsRectangle()
-                let bbox2 = classbox2.getConnectionPointsRectangle()
-                let connectionPositions = layoutManager.getConnectionPositions(bbox1, bbox2)
-                connectionPoint1.setPosition(connectionPositions.start)
-                connectionPoint2.setPosition(connectionPositions.end)
-                let newConnector = createClassBoxConnector(svg, item.relationship.type, connectionPoint1, connectionPoint2) 
-                newConnector.getLayers().getLayer("shape").write()
-                newConnector.getLayers().getLayer("text").write()
+                let newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, item.relationship.type, connectionPoint1, connectionPoint2)
+                connectors.push(newConnector)
             }
+        }
+
+        // Perform the layout
+        for (var i = 0; i < classboxes.length; i++) {
+            layoutManager.setElementPosition(classboxes[i])
+        }
+        for (var i = 0; i < connectors.length; i++) {
+            let connectionPoint1 = connectors[i].connectionPoint1
+            let connectionPoint2 = connectors[i].connectionPoint2
+            let bbox1 = connectionPoint1.element.getConnectionPointsRectangle()
+            let bbox2 = connectionPoint2.element.getConnectionPointsRectangle()
+            let connectionPositions = layoutManager.getConnectionPositions(bbox1, bbox2)
+            connectionPoint1.setPosition(connectionPositions.start)
+            connectionPoint2.setPosition(connectionPositions.end)
+        }
+
+        // Draw the elements
+        for (var i = 0; i < classboxes.length; i++) {
+            let classbox = classboxes[i]
+            classbox.getLayers().getLayer("shape").write()
+            classbox.getLayers().getLayer("text").write()
+        }
+        for (var i = 0; i < connectors.length; i++) {
+            let connector = connectors[i]
+            connector.getLayers().getLayer("shape").write()
+            connector.getLayers().getLayer("text").write()
         }
     }
 
@@ -1430,7 +1452,7 @@ class Diagram {
         let lifelines = []
         let connectors = []
 
-        // Constructs the elements
+        // Construct the elements
         for (var i = 0; i < sequenceDiagram.length; i++) {
             let item = sequenceDiagram[i]
             if (item.lifeline) {
@@ -1442,29 +1464,30 @@ class Diagram {
                     let message = item.messages[j]
                     let lifeline1
                     let lifeline2
+                    let connectionPoint1
+                    let connectionPoint2
                     let newConnector
                     if (message.synchronousmessage) {
                         lifeline1 = this.lifelines[message.synchronousmessage.caller]
                         lifeline2 = this.lifelines[message.synchronousmessage.callee]
-                        let connectionPoint1 = lifeline1.createConnectionPoint(svg)
-                        let connectionPoint2 = lifeline2.createConnectionPoint(svg)
+                        connectionPoint1 = lifeline1.createConnectionPoint(svg)
+                        connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = createLifelineConnector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, message.synchronousmessage.name)
                     } else if (message.returnmessage) {
                         lifeline1 = this.lifelines[message.returnmessage.caller]
                         lifeline2 = this.lifelines[message.returnmessage.callee]
-                        let connectionPoint1 = lifeline1.createConnectionPoint(svg)
-                        let connectionPoint2 = lifeline2.createConnectionPoint(svg)
+                        connectionPoint1 = lifeline1.createConnectionPoint(svg)
+                        connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = createLifelineConnector(svg, "returnmessage", connectionPoint1, connectionPoint2, "")
                     }
-                    lifeline1.connectors.push(newConnector)
-                    lifeline2.connectors.push(newConnector)
+                    lifeline1.connectionPoints.push(connectionPoint1)
+                    lifeline2.connectionPoints.push(connectionPoint2)
                     connectors.push(newConnector)
                 }
             }
         }
 
         // Perform the layout
-        let nextYPosition = 0
         for (var i = 0; i < lifelines.length; i++) {
             layoutManager.setElementPosition(lifelines[i])
         }
@@ -1504,10 +1527,6 @@ class Diagram {
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Diagram;
 
-
-function createClassBoxConnector(svg, type, connectionPoint1, connectionPoint2) {
-    return new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, type, connectionPoint1, connectionPoint2, "")
-}
 
 function createLifelineConnector(svg, type, connectionPoint1, connectionPoint2, name) {
     return new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, type, connectionPoint1, connectionPoint2, name)
