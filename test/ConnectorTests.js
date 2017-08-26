@@ -28,6 +28,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("getLayers test 13", ConnectorGetLayersTest13, connectorSequence)
     new tf.FileComparisonTest("getLayers test 14", ConnectorGetLayersTest14, connectorSequence)
     new tf.FileComparisonTest("getLayers test 15", ConnectorGetLayersTest15, connectorSequence)
+    new tf.FileComparisonTest("getLayers test 16", ConnectorGetLayersTest16, connectorSequence)
 }
 
 function ConnectorCreationTest1(resolve) {
@@ -347,6 +348,27 @@ function ConnectorGetLayersTest15(resolve, reject, test) {
 
     test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest15.html")
     test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest15.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+function ConnectorGetLayersTest16(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
+    connectionPoint1.move(20, 30)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.TopCenter)
+    connectionPoint2.move(60, 30)
+    let connector = new UMLWebWidget.Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, "call")
+
+    let layers = connector.getLayers()
+    layers.getLayer("shape").write()
+    layers.getLayer("text").write()
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest16.html", true)
+
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest16.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest16.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
