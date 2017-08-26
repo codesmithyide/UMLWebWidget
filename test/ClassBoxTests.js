@@ -34,7 +34,7 @@ function ClassBoxCreationTest1(resolve) {
             ]
     }
     let style = new UMLWebWidget.Style()
-    let classbox = new UMLWebWidget.ClassBox(svg, classDescription, false, style)
+    let classbox = new UMLWebWidget.ClassBox(svg, classDescription.name, classDescription, false, style)
     resolve(tf.TestResultOutcome.ePassed)
 }
 
@@ -51,7 +51,7 @@ function ClassBoxGetLayersTest1(resolve, reject, test) {
             ]
     }
     let style = new UMLWebWidget.Style()
-    let classbox = new UMLWebWidget.ClassBox(svg, classDescription, false, style)
+    let classbox = new UMLWebWidget.ClassBox(svg, classDescription.name, classDescription, false, style)
 
     let layers = classbox.getLayers()
     layers.layers["shape"].write()
@@ -96,7 +96,7 @@ function ClassBoxGetLayersTest2(resolve, reject, test) {
             ]
     }
     let style = new UMLWebWidget.Style()
-    let classbox = new UMLWebWidget.ClassBox(svg, classDescription, false, style)
+    let classbox = new UMLWebWidget.ClassBox(svg, classDescription.name, classDescription, false, style)
 
     let layers = classbox.getLayers()
     layers.layers["shape"].write()
@@ -123,7 +123,7 @@ function ClassBoxMoveTest1(resolve, reject, test) {
             ]
     }
     let style = new UMLWebWidget.Style()
-    let classbox = new UMLWebWidget.ClassBox(svg, classDescription, false, style)
+    let classbox = new UMLWebWidget.ClassBox(svg, classDescription.name, classDescription, false, style)
     classbox.move(20, 50)
 
     let layers = classbox.getLayers()
@@ -150,7 +150,7 @@ function ClassBoxGetConnectionPointsRectangleTest1(resolve) {
             ]
     }
     let style = new UMLWebWidget.Style()
-    let classbox = new UMLWebWidget.ClassBox(svg, classDescription, false, style)
+    let classbox = new UMLWebWidget.ClassBox(svg, classDescription.name, classDescription, false, style)
     
     let rect = classbox.getConnectionPointsRectangle()
     if ((rect.x == 1) && (rect.y == 1) &&

@@ -15,10 +15,11 @@ import { ConnectionPoint } from "./ConnectionPoint.js"
 */
 class ClassBox extends DiagramElement {
 
-    constructor(svg, classDescription, canMove, style) {
+    constructor(svg, id, classDescription, canMove, style) {
         super(svg)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
+        this.id = id
         this.classDescription = classDescription
         this.canMove = canMove
         this.style = style
