@@ -29,6 +29,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("getLayers test 14", ConnectorGetLayersTest14, connectorSequence)
     new tf.FileComparisonTest("getLayers test 15", ConnectorGetLayersTest15, connectorSequence)
     new tf.FileComparisonTest("getLayers test 16", ConnectorGetLayersTest16, connectorSequence)
+    new tf.FileComparisonTest("getLayers test 17", ConnectorGetLayersTest17, connectorSequence)
 }
 
 function ConnectorCreationTest1(resolve) {
@@ -294,7 +295,7 @@ function ConnectorGetLayersTest13(resolve, reject, test) {
 
     let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint1.move(20, 20)
-    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.TopCenter)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint2.move(60, 20)
     let connector = new UMLWebWidget.Connector(svg, "returnmessage", connectionPoint1, connectionPoint2)
 
@@ -310,12 +311,13 @@ function ConnectorGetLayersTest13(resolve, reject, test) {
     resolve(tf.TestResultOutcome.ePassed)
 }
 
+// Test a synchronous message without any text
 function ConnectorGetLayersTest14(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
     let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint1.move(20, 20)
-    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.TopCenter)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint2.move(60, 20)
     let connector = new UMLWebWidget.Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2)
 
@@ -331,12 +333,13 @@ function ConnectorGetLayersTest14(resolve, reject, test) {
     resolve(tf.TestResultOutcome.ePassed)
 }
 
+// Test a synchronous message with a text that is shorter than the connector
 function ConnectorGetLayersTest15(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
     let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint1.move(20, 30)
-    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.TopCenter)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint2.move(100, 30)
     let connector = new UMLWebWidget.Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, "call")
 
@@ -352,12 +355,14 @@ function ConnectorGetLayersTest15(resolve, reject, test) {
     resolve(tf.TestResultOutcome.ePassed)
 }
 
+// Test that the text of a synchronous message is positioned properly when it is
+// longer than the connector
 function ConnectorGetLayersTest16(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
     let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint1.move(20, 30)
-    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.TopCenter)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint2.move(60, 30)
     let connector = new UMLWebWidget.Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, "methodcall")
 
@@ -369,6 +374,28 @@ function ConnectorGetLayersTest16(resolve, reject, test) {
 
     test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest16.html")
     test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest16.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+// Test a synchronous message where the caller is the same as the callee
+function ConnectorGetLayersTest17(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
+    connectionPoint1.move(20, 30)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null)
+    connectionPoint2.move(20, 50)
+    let connector = new UMLWebWidget.Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, "")
+
+    let layers = connector.getLayers()
+    layers.getLayer("shape").write()
+    layers.getLayer("text").write()
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest17.html", true)
+
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest17.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest17.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
