@@ -334,10 +334,10 @@ function ConnectorGetLayersTest15(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
     let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
-    connectionPoint1.move(20, 20)
+    connectionPoint1.move(20, 30)
     let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.TopCenter)
-    connectionPoint2.move(60, 20)
-    let connector = new UMLWebWidget.Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, "methodname")
+    connectionPoint2.move(100, 30)
+    let connector = new UMLWebWidget.Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, "call")
 
     let layers = connector.getLayers()
     layers.getLayer("shape").write()

@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 23);
+/******/ 	return __webpack_require__(__webpack_require__.s = 21);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -688,6 +688,16 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         } else if (this.type == "aggregation") {
             let lineGroup = this.shapeLayer.group().addClass("UMLAggregationRelationship")
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
+        } else if (this.type == "synchronousmessage") {
+            let lineGroup = this.shapeLayer.group().addClass("UMLSynchronousMessage")
+            let textGroup = null
+            if (this.text != null) {
+                textGroup = this.textLayer.group()
+            }
+            drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.text)
+        } else if (this.type == "returnmessage") {
+            let lineGroup = this.shapeLayer.group().addClass("UMLReturnMessage")
+            drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
         }
         this.uptodate = true
     }
@@ -718,6 +728,46 @@ function drawCompositionOrAggregationRelationship(lineGroup, connectionPoint1, c
     let lineConnectionPoint = getDiamondLineConnectionPoint(connectionPoint2, connectorOrientation)
     drawConnectorLine(lineGroup, connectionPoint1, lineConnectionPoint, connectorOrientation)
     drawDiamond(lineGroup, connectionPoint2, connectorOrientation)
+}
+
+function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, text) {
+    if (connectionPoint1 != connectionPoint2) {
+        if ((textGroup != null) && (text != null)) {
+            let textElement = textGroup.text(text)
+            
+            let width = (connectionPoint2.x - connectionPoint1.x)
+            if (textElement.bbox().width < width) {
+                textElement.move((connectionPoint1.x + ((width - textElement.bbox().width) / 2)), connectionPoint1.y - textElement.bbox().height + 2)
+            } else {
+                textElement.move(connectionPoint1.x, connectionPoint1.y - textElement.bbox().height + 2)
+            }
+        }
+
+        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x - 12, connectionPoint2.y)
+        let polygonDescription = "" + (connectionPoint2.x - 12) + "," + (connectionPoint2.y - 6) + " " +
+            connectionPoint2.x + "," + connectionPoint2.y + " " +
+            (connectionPoint2.x - 12) + "," + (connectionPoint2.y + 6)
+        lineGroup.polygon(polygonDescription)
+    } else {
+        let startX = caller.svg.bbox().cx
+        let textDef = this.svg.defs().text(this.text).move(startX + 8, 5)
+        let offsetY = textDef.bbox().y + textDef.bbox().height + 3
+        this.svg.use(textDef)
+        this.svg.line(startX, offsetY, startX + 30, offsetY)
+        this.svg.line(startX + 30, offsetY, startX + 30, 20 + offsetY)
+        this.svg.line(startX + 30, 20 + offsetY, startX, 20 + offsetY)
+        let polygonDescription = "" + startX + "," + (20 + offsetY) + " " +
+            (startX + 12) + "," + (20 + offsetY - 6) + " " +
+            (startX + 12) + "," + (20 + offsetY + 6)
+        this.svg.polygon(polygonDescription)
+    }
+}
+
+function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
+    let lineY = connectionPoint2.y + 6
+    lineGroup.line(connectionPoint1.x, connectionPoint1.y + 6, connectionPoint2.x, lineY).attr("stroke-dasharray", "4, 4")
+    lineGroup.line(connectionPoint2.x, lineY, connectionPoint2.x - 10, connectionPoint2.y)
+    lineGroup.line(connectionPoint2.x, lineY, connectionPoint2.x - 10, connectionPoint2.y + 12)
 }
 
 // Orientation of the head (e.g. arrow or diamond)
@@ -1182,15 +1232,11 @@ class UMLWebWidgetError extends Error {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SynchronousMessageConnector_js__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__SVGLayer_js__ = __webpack_require__(2);
-
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__UseCaseAssociationConnector_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__SVGLayer_js__ = __webpack_require__(2);
 
 
 
@@ -1362,6 +1408,9 @@ class Diagram {
             if (item.lifeline) {
                 let newLifeline = new __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__["a" /* Lifeline */](svg, item.lifeline, style)
                 this.lifelines[item.lifeline.name] = newLifeline
+                if (layout.lifelinepositions[item.lifeline.name]) {
+                    newLifeline.move(layout.lifelinepositions[item.lifeline.name].x, layout.lifelinepositions[item.lifeline.name].y)
+                }
                 //nextYPosition = Math.max(nextYPosition, this.lifelines[item.lifeline.name].svg.bbox().y + this.lifelines[item.lifeline.name].svg.bbox().height + 20)
                 newLifeline.getLayers().getLayer("shape").write()
                 newLifeline.getLayers().getLayer("text").write()
@@ -1385,6 +1434,9 @@ class Diagram {
                     newConnector.draw()
                     newConnector.move(nextYPosition)
                     nextYPosition += newConnector.svg.bbox().height*/
+
+    /*     let startX = caller.svg.bbox().cx
+        let endX = callee.svg.bbox().cx*/
                 }
             }
         }
@@ -1415,16 +1467,12 @@ function createClassBoxConnector(self, svg, type, connectionPoint1, connectionPo
     return new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, type, connectionPoint1, connectionPoint2, "")
 }
 
-function createLifelineConnector(self, svg, type, classbox1, classbox2, name, layout) {
-    if (type == "returnmessage") {
-        return new __WEBPACK_IMPORTED_MODULE_13__ReturnMessageConnector_js__["a" /* ReturnMessageConnector */](svg, classbox1, classbox2, name, layout)
-    } else {
-        return new __WEBPACK_IMPORTED_MODULE_12__SynchronousMessageConnector_js__["a" /* SynchronousMessageConnector */](svg, classbox1, classbox2, name, layout)
-    }
+function createLifelineConnector(self, svg, type, connectionPoint1, connectionPoint2, name) {
+    return new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, connectionPoint1, connectionPoint2, name)
 }
 
 function createUseCaseConnector(self, svg, actor, usecase) {
-    return new __WEBPACK_IMPORTED_MODULE_14__UseCaseAssociationConnector_js__["a" /* UseCaseAssociationConnector */](svg, actor, usecase)
+    return new __WEBPACK_IMPORTED_MODULE_12__UseCaseAssociationConnector_js__["a" /* UseCaseAssociationConnector */](svg, actor, usecase)
 }
 
 
@@ -1553,7 +1601,7 @@ class BallConnector {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__ = __webpack_require__(18);
 
 
 
@@ -1725,49 +1773,6 @@ class Node {
 "use strict";
 
 
-class ReturnMessageConnector {
-
-    constructor(svg, classbox1, classbox2, text, layout) {
-        this.classbox1 = classbox1
-        this.classbox2 = classbox2
-        this.text = text
-        this.layout = layout
-        this.svg = svg.group()
-        this.svg.addClass("UMLReturnMessage")
-    }
-
-    draw() {
-        this.svg.clear()
-        let startX = this.classbox1.svg.bbox().cx
-        let endX = this.classbox2.svg.bbox().cx
-
-        this.svg.line(startX, 6, startX + 10, 0)
-        this.svg.line(startX, 6, endX, 6).attr("stroke-dasharray", "4, 4")
-        this.svg.line(startX, 6, startX + 10, 12)
-    }
-
-    move(y) {
-        this.svg.each(function(i, children) {
-            this.dy(y)
-        })
-    }
-
-    hide() {
-        this.svg.hide()
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = ReturnMessageConnector;
-
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-
 var textDef = Symbol()
 
 class SocketConnector {
@@ -1814,77 +1819,7 @@ class SocketConnector {
 
 
 /***/ }),
-/* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-
-class SynchronousMessageConnector {
-
-    constructor(svg, classbox1, classbox2, text, layout) {
-
-        this.classbox1 = classbox1
-        this.classbox2 = classbox2
-        this.text = text
-        this.layout = layout
-        this.svg = svg.group()
-        this.svg.addClass("UMLSynchronousMessage")
-    }
-
-    draw() {
-        this.svg.clear()
-        let caller = this.classbox1
-        let callee = this.classbox2
-        if (caller != callee) {
-            let startX = caller.svg.bbox().cx
-            let endX = callee.svg.bbox().cx
-            let width = (endX - startX)
-
-            let textDef = this.svg.defs().text(this.text)
-            if (textDef.bbox().width < width) {
-                textDef.move((startX + ((width - textDef.bbox().width) / 2)), 0)
-            }
-
-            let y = textDef.bbox().height + 2
-            this.svg.line(startX, y, endX - 12, y)
-            let polygonDescription = "" + (endX - 12) + "," + (y - 6) + " " +
-                endX + "," + y + " " +
-                (endX - 12) + "," + (y + 6)
-            this.svg.polygon(polygonDescription)
-            this.svg.use(textDef)
-        } else {
-            let startX = caller.svg.bbox().cx
-            let textDef = this.svg.defs().text(this.text).move(startX + 8, 5)
-            let offsetY = textDef.bbox().y + textDef.bbox().height + 3
-            this.svg.use(textDef)
-            this.svg.line(startX, offsetY, startX + 30, offsetY)
-            this.svg.line(startX + 30, offsetY, startX + 30, 20 + offsetY)
-            this.svg.line(startX + 30, 20 + offsetY, startX, 20 + offsetY)
-            let polygonDescription = "" + startX + "," + (20 + offsetY) + " " +
-                (startX + 12) + "," + (20 + offsetY - 6) + " " +
-                (startX + 12) + "," + (20 + offsetY + 6)
-            this.svg.polygon(polygonDescription)
-        }
-    }
-
-    move(y) {
-        this.svg.each(function(i, children) {
-            this.dy(y)
-        })
-    }
-
-    hide() {
-        this.svg.hide()
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = SynchronousMessageConnector;
-
-
-
-/***/ }),
-/* 21 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1909,7 +1844,7 @@ class UseCase {
 
 
 /***/ }),
-/* 22 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1947,7 +1882,7 @@ class UseCaseAssociationConnector {
 
 
 /***/ }),
-/* 23 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
