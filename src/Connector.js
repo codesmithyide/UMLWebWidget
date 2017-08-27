@@ -18,6 +18,14 @@ class Connector extends DiagramElement {
         this.connectionPoint1 = connectionPoint1
         this.connectionPoint2 = connectionPoint2
         this.text = text
+        this.height = 30
+    }
+
+    getHeight() {
+        if (!this.uptodate) {
+            this.update()
+        }
+        return this.height
     }
 
     update() {

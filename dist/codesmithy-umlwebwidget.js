@@ -756,6 +756,14 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         this.connectionPoint1 = connectionPoint1
         this.connectionPoint2 = connectionPoint2
         this.text = text
+        this.height = 30
+    }
+
+    getHeight() {
+        if (!this.uptodate) {
+            this.update()
+        }
+        return this.height
     }
 
     update() {
@@ -1075,13 +1083,18 @@ class LayoutManager {
             let lifeline1 = connector.connectionPoint1.element
             let lifeline2 = connector.connectionPoint2.element
             if (lifeline1 != lifeline2) {
-                connector.connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
-                connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
-                nextYPosition += 30 //newConnector.svg.bbox().height
+                if (lifeline2.x >= lifeline1.x) {
+                    connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
+                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x - (lifeline2.getActiveLineWidth() / 2), nextYPosition)
+                } else {
+                    connector.connectionPoint1.move(lifeline1.getLineTopPosition().x - (lifeline1.getActiveLineWidth() / 2), nextYPosition)
+                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition)
+                }
+                nextYPosition += connector.getHeight()
             } else {
-                connector.connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
-                connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 20)
-                nextYPosition += 30 //newConnector.svg.bbox().height
+                connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
+                connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition + 20)
+                nextYPosition += connector.getHeight()
             }
         }
         if (connectors.length > 0) {
@@ -1178,6 +1191,10 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         return this.lineTopPosition
     }
 
+    getActiveLineWidth() {
+        return 8
+    }
+
     update() {
         this.layers.clearEachLayer()
         createDef(this, this.lifelineDescription, this.style)
@@ -1214,11 +1231,11 @@ function createDef(self, lifelineDescription, style) {
     self.lineTopPosition.y = (borderAdjustment.top + currentDimensions.height)
 
     if (self.connectionPoints.length > 0) {
-        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.connectionPoints[0].x, self.connectionPoints[0].y)
+        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.connectionPoints[0].y)
         if (self.connectionPoints.length > 1) {
             lifelineGroup
                 .rect(8, (self.connectionPoints[self.connectionPoints.length - 1].y - self.connectionPoints[0].y))
-                .move(self.connectionPoints[0].x - 4, self.connectionPoints[0].y)
+                .move(self.lineTopPosition.x - 4, self.connectionPoints[0].y)
         }
     }
 }

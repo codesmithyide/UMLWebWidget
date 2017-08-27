@@ -183,14 +183,12 @@ export class Diagram {
                         connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = new Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, message.synchronousmessage.name)
                     } else if (message.returnmessage) {
-                        lifeline1 = this.lifelines[message.returnmessage.caller]
-                        lifeline2 = this.lifelines[message.returnmessage.callee]
+                        lifeline1 = this.lifelines[message.returnmessage.callee]
+                        lifeline2 = this.lifelines[message.returnmessage.caller]
                         connectionPoint1 = lifeline1.createConnectionPoint(svg)
                         connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = new Connector(svg, "returnmessage", connectionPoint1, connectionPoint2, "")
                     }
-                    lifeline1.connectionPoints.push(connectionPoint1)
-                    lifeline2.connectionPoints.push(connectionPoint2)
                     connectors.push(newConnector)
                 }
             }
@@ -204,10 +202,6 @@ export class Diagram {
         layoutManager.layoutMessages(lifelines, connectors)
 
         draw(null, lifelines, connectors)
-
-        for (var key in this.lifelines) {
-            this.lifelines[key].drawLine(svg)
-        }
     }
 
     drawUseCaseDiagram(svg, useCaseDiagram, layout) {
