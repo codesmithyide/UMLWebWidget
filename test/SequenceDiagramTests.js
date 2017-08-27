@@ -15,6 +15,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("createFromJSON test 2", SequenceDiagramCreateFromJSONTest2, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 3", SequenceDiagramCreateFromJSONTest3, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 4", SequenceDiagramCreateFromJSONTest4, sequenceDiagramSequence)
+    new tf.FileComparisonTest("createFromJSON test 5", SequenceDiagramCreateFromJSONTest5, sequenceDiagramSequence)
 }
 
 function SequenceDiagramCreateFromJSONTest1(resolve, reject, test) {
@@ -211,6 +212,93 @@ function SequenceDiagramCreateFromJSONTest4(resolve, reject, test) {
 
         test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest4.html")
         test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest4.html")
+
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
+}
+
+function SequenceDiagramCreateFromJSONTest5(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let layout = {
+        "lifelinepositions": {
+            "Customer": { "x": 1, "y": 1 },
+            "Shopkeeper": { "x": 150, "y": 1 },
+            "Till": { "x": 320, "y": 1 }
+        }
+    }
+
+    let sequenceDiagram = new UMLWebWidget.Diagram()
+    sequenceDiagram.createFromJSON(svg, {
+        "sequencediagram":
+            [
+                { 
+                    "lifeline":
+                        {
+                            "name": "Customer"
+                        }
+                },
+                {
+                    "lifeline":
+                        {
+                            "name": "Shopkeeper"
+                        }
+                },
+                { 
+                    "lifeline":
+                        {
+                            "name": "Till"
+                        }
+                },
+                {
+                    "messages":
+                        [
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "pay",
+                                        "caller": "Customer",
+                                        "callee": "Shopkeeper"
+                                    }
+                            },
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "open",
+                                        "caller": "Shopkeeper",
+                                        "callee": "Till"
+                                    }
+                            },
+                            {
+                                "returnmessage":
+                                    {
+                                        "caller": "Shopkeeper",
+                                        "callee": "Till"
+                                    }
+                            },
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "countMoney",
+                                        "caller": "Shopkeeper",
+                                        "callee": "Shopkeeper"
+                                    }
+                            }
+                        ]
+                }
+            ]
+    },
+    layout)
+
+    let elementKeys = Object.keys(sequenceDiagram.diagramDescription)
+    let lifelinesKeys = Object.keys(sequenceDiagram.lifelines)
+    if ((elementKeys.length == 1) && (lifelinesKeys.length == 3)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest5.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest5.html")
+        test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest5.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
