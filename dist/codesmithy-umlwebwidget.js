@@ -382,35 +382,65 @@ class ConnectionPoint extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["
 */
 class SVGLayer {
 
+    /**
+      Creates a new SVGLayer instance.
+
+      @param {SVG} svg - The root SVG document.
+    */
     constructor(svg) {
         this.svg = svg
         this.defs = [ ]
     }
 
+    /**
+      Adds a group to the layer.
+
+      @returns {SVG.G} An SVG.G element as decribed in {@link http://svgjs.com/parents/#svg-g}
+    */
     group() {
         let groupDef = this.svg.defs().group()
         this.defs.push(groupDef)
         return groupDef
     }
 
+    /**
+      Adds a line to the layer.
+
+      @returns {SVG.Line} An SVG.Line element as decribed in {@link http://svgjs.com/elements/#svg-line}
+    */
     line(x1, y1, x2, y2) {
         let lineDef = this.svg.defs().line(x1, y1, x2, y2)
         this.defs.push(lineDef)
         return lineDef
     }
 
+    /**
+      Adds a rectangle to the layer.
+
+      @returns {SVG.Rect} An SVG.Rect element as decribed in {@link http://svgjs.com/elements/#svg-rect}
+    */
     rect(width, height) {
         let rectDef = this.svg.defs().rect(width, height)
         this.defs.push(rectDef)
         return rectDef
     }
 
+    /**
+      Adds a text element to the layer.
+
+      @returns {SVG.Text} An SVG.Text element as decribed in {@link http://svgjs.com/elements/#svg-text}
+    */
     text(str) { 
         let textDef = this.svg.defs().text(str)
         this.defs.push(textDef)
         return textDef
     }
 
+    /**
+      Writes the layer to the SVG document. This should be the final
+      action performed on the layer. In the current implementation there
+      is no way to undo the write.
+    */
     write() {
         let self = this
         self.defs.forEach(function(def) {
@@ -419,10 +449,29 @@ class SVGLayer {
         })
     }
 
+    /**
+      Merges the contents of another layer into this layer.
+      The other layer should not be used afterwards.
+
+      @param {SVGLayer} layer - The contents of this layer will be merged
+        into this one.
+    */
     merge(layer) {
         this.defs = this.defs.concat(layer.defs)
     }
 
+    /**
+      Remove all contents of the layer. Note that this doesn't
+      remove elements that have been written to the SVG document
+      already.
+    */
+    clear() {
+        let self = this
+        self.defs.forEach(function(def) {
+            def.remove()
+        })
+        self.defs.length = 0
+    }
 }
 
 
@@ -446,15 +495,33 @@ class SVGLayer {
 */
 class SVGLayerSet {
 
+    /**
+      Creates a new SVGLayerSet instance.
+
+      @param {SVG} svg - The root SVG document.
+    */
     constructor(svg) {
         this.svg = svg
         this.layers = { }
     }
 
+    /**
+      Gets a layer.
+
+      @param {string} name - The name of the layer.
+      @returns {SVGLayer|null} The layer or null if no layer
+        with such name exists.
+    */
     getLayer(name) {
         return this.layers[name]
     }
 
+    /**
+      Creates a new layer.
+
+      @param {string} name - The name of the layer.
+      @returns {SVGLayer} The new layer.
+    */
     createLayer(name) {
         let newLayer = new __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__["a" /* SVGLayer */](this.svg)
         this.layers[name] = newLayer
@@ -466,6 +533,8 @@ class SVGLayerSet {
       with the same name will be merged together
       with the elements of the set given as argument
       being appended.
+
+      @param {SVGLayerSet} layerSet - The other layer set.
     */
     merge(layerSet) {
         let self = this
@@ -475,6 +544,16 @@ class SVGLayerSet {
         })
     }
 
+    /**
+      Calls {@link SVGLayer#clear} on each layer in the set.
+    */
+    clearEachLayer() {
+        let self = this
+        let keys = Object.keys(self.layers)
+        keys.forEach(function(key) {
+            self.layers[key].clear()
+        })
+    }
 }
 
 
@@ -985,16 +1064,27 @@ class LayoutManager {
     layoutMessages(lifelines, connectors) {
         let nextYPosition = 0
         for (var i = 0; i < lifelines.length; i++) {
-            nextYPosition = Math.max(nextYPosition, lifelines[i].getLineTopPosition().x + 20)
+            nextYPosition = Math.max(nextYPosition, lifelines[i].getLineTopPosition().y + 20)
         }
         for (var i = 0; i < connectors.length; i++) {
+            console.log("layout" + i)
             let connector = connectors[i]
-            connector.connectionPoint1.move(20, nextYPosition)
-            connector.connectionPoint2.move(80, nextYPosition)
+            let lifeline1 = connector.connectionPoint1.element
+            let lifeline2 = connector.connectionPoint2.element
+            connector.connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
+            connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
             nextYPosition += 30 //newConnector.svg.bbox().height
+
+           console.log("(" + connector.connectionPoint1.x + ", " + connector.connectionPoint1.y + ")")
+           console.log("(" + connector.connectionPoint2.x + ", " + connector.connectionPoint2.y + ")")
               
     /*     let startX = caller.svg.bbox().cx
         let endX = callee.svg.bbox().cx*/
+        }
+        if (connectors.length > 0) {
+            for (var i = 0; i < lifelines.length; i++) {
+                lifelines[i].uptodate = false
+            }
         }
     }
 
@@ -1064,6 +1154,8 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         this.id = id
         this.lifelineDescription = lifelineDescription
         this.style = style
+
+        this.lineTopPosition = { x: 0, y: 0 }
         
         // List of connection points that are connected to
         // this lifeline
@@ -1077,26 +1169,16 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
     }
 
     getLineTopPosition() {
-        return { x: 0, y: 0 }
+        if (!this.uptodate) {
+            this.update()
+        }
+        return this.lineTopPosition
     }
 
     update() {
+        this.layers.clearEachLayer()
         createDef(this, this.lifelineDescription, this.style)
         this.uptodate = true
-    }
-
-    drawLine(svg) {
-      /*  let firstConnectorY = 0
-        if (this.connectors.length > 0) {
-            firstConnectorY = this.connectors[0].svg.bbox().y
-        }
-        let lastConnectorY = 0
-        if (this.connectors.length > 0) {
-            lastConnectorY = this.connectors[this.connectors.length - 1].svg.bbox().y + this.connectors[this.connectors.length - 1].svg.bbox().height
-        }
-        let lineGroup = svg.group().addClass("UMLLifeline")
-        lineGroup.line(this.svg.bbox().cx, this.svg.bbox().y + this.svg.bbox().height, this.svg.bbox().cx, firstConnectorY)
-        lineGroup.rect(8, (lastConnectorY - firstConnectorY)).move(this.svg.bbox().cx - 4, firstConnectorY)*/
     }
 
 }
@@ -1125,10 +1207,17 @@ function createDef(self, lifelineDescription, style) {
     
     lifelineGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
 
-/*
-    if ((layout != null) && layout.lifelinepositions[lifelineDescription.name]) {
-        lifelineGroup.move(layout.lifelinepositions[lifelineDescription.name].x, layout.lifelinepositions[lifelineDescription.name].y)
-    }*/
+    self.lineTopPosition.x = (borderAdjustment.left + (currentDimensions.width / 2))
+    self.lineTopPosition.y = (borderAdjustment.top + currentDimensions.height)
+
+    if (self.connectionPoints.length > 0) {
+        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.connectionPoints[0].x, self.connectionPoints[0].y)
+        if (self.connectionPoints.length > 1) {
+            lifelineGroup
+                .rect(8, (self.connectionPoints[self.connectionPoints.length - 1].y - self.connectionPoints[self.connectionPoints.length - 1].y))
+                .move(self.connectionPoints[0].x - 4, self.connectionPoints[0].y)
+        }
+    }
 }
 
 
@@ -1464,14 +1553,12 @@ class Diagram {
                         connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "synchronousmessage", connectionPoint1, connectionPoint2, message.synchronousmessage.name)
                     } else if (message.returnmessage) {
-                        lifeline1 = this.lifelines[message.returnmessage.caller]
-                        lifeline2 = this.lifelines[message.returnmessage.callee]
+                        lifeline1 = this.lifelines[message.returnmessage.callee]
+                        lifeline2 = this.lifelines[message.returnmessage.caller]
                         connectionPoint1 = lifeline1.createConnectionPoint(svg)
                         connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "returnmessage", connectionPoint1, connectionPoint2, "")
                     }
-                    lifeline1.connectionPoints.push(connectionPoint1)
-                    lifeline2.connectionPoints.push(connectionPoint2)
                     connectors.push(newConnector)
                 }
             }
@@ -1485,10 +1572,6 @@ class Diagram {
         layoutManager.layoutMessages(lifelines, connectors)
 
         draw(null, lifelines, connectors)
-
-        for (var key in this.lifelines) {
-            this.lifelines[key].drawLine(svg)
-        }
     }
 
     drawUseCaseDiagram(svg, useCaseDiagram, layout) {
