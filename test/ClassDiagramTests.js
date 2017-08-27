@@ -311,7 +311,7 @@ function ClassDiagramCreateFromJSONTest7(resolve, reject, test) {
                 {
                     "relationship":
                     {
-                        "type": "composition",
+                        "type": "aggregation",
                         "containingclass": "ContainingClass",
                         "containedclass": "ContainedClass"
                     }
