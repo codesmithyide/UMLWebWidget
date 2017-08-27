@@ -189,6 +189,14 @@ function SequenceDiagramCreateFromJSONTest4(resolve, reject, test) {
                                         "caller": "Customer",
                                         "callee": "Shopkeeper"
                                     }
+                            },
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "open",
+                                        "caller": "Shopkeeper",
+                                        "callee": "Till"
+                                    }
                             }
                         ]
                 }
