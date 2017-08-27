@@ -11,6 +11,7 @@ import { Connector } from "./Connector.js"
 import { LayoutManager } from "./LayoutManager.js"
 import { ClassBox } from "./ClassBox.js"
 import { Lifeline } from "./Lifeline.js"
+import { Actor } from "./Actor.js"
 import { SVGLayer } from "./SVGLayer.js"
 import { SVGLayerSet } from "./SVGLayerSet.js"
 
@@ -26,6 +27,7 @@ export {
     LayoutManager,
     ClassBox,
     Lifeline,
+    Actor,
     SVGLayer,
     SVGLayerSet
 }

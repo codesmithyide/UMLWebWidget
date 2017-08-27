@@ -564,6 +564,55 @@ class SVGLayerSet {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Actor; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
+
+
+
+
+/**
+  An actor on a use case diagram.
+
+  @extends DiagramElement
+*/
+class Actor extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
+
+    constructor(svg, id, actorDescription) {
+        super(svg)
+        this.shapeLayer = this.layers.createLayer("shape")
+        this.textLayer = this.layers.createLayer("text")
+        this.id = id
+        this.actorDescription = actorDescription
+    }
+
+    update() {
+        let shapeGroup = this.shapeLayer.group().addClass("UMLActor")
+        let textGroup = this.textLayer.group()
+        let textDef = textGroup.text(this.actorDescription.name).move(0, 35)
+        let width = textDef.bbox().width
+        let offset = ((width - 16) / 2)
+        shapeGroup.circle(12).move(2 + offset, 1)
+        shapeGroup.line(8 + offset, 13, 8 + offset, 26)
+        shapeGroup.line(offset, 18, 16 + offset, 18)
+        shapeGroup.line(8 + offset, 26, offset, 33)
+        shapeGroup.line(8 + offset, 26, 16 + offset, 33)
+
+        //if (layout.actorpositions[actorDescription.name]) {
+        //    svg.move(layout.actorpositions[actorDescription.name].x, layout.actorpositions[actorDescription.name].y)
+        //}
+
+        this.uptodate = true
+    }
+}
+
+
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ClassBox; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SVGLayerSet_js__ = __webpack_require__(4);
@@ -729,7 +778,7 @@ function visibilityStringToSymbol(visibility) {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1037,7 +1086,7 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1154,7 +1203,7 @@ class LayoutManager {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1254,7 +1303,7 @@ function createDef(self, lifelineDescription, style) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1311,7 +1360,7 @@ class Settings {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1367,7 +1416,7 @@ class Style {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1380,21 +1429,21 @@ class UMLWebWidgetError extends Error {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Component_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__UseCaseAssociationConnector_js__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__SVGLayer_js__ = __webpack_require__(3);
@@ -1574,7 +1623,10 @@ class Diagram {
         for (var i = 0; i < useCaseDiagram.length; i++) {
             let item = useCaseDiagram[i]
             if (item.actor) {
-                this.actors[item.actor.name] = new __WEBPACK_IMPORTED_MODULE_8__Actor_js__["a" /* Actor */](svg, item.actor, layout)
+                let newActor = new __WEBPACK_IMPORTED_MODULE_8__Actor_js__["a" /* Actor */](svg, item.actor.name, item.actor, layout)
+                this.actors[item.actor.name] = newActor
+                newActor.getLayers().getLayer("shape").write()
+                newActor.getLayers().getLayer("text").write()
             } else if (item.usecase) {
                 this.usecases[item.usecase.title] = new __WEBPACK_IMPORTED_MODULE_9__UseCase_js__["a" /* UseCase */](svg, item.usecase, layout)
             } else if (item.association) {
@@ -1636,43 +1688,6 @@ function draw(classboxes, lifelines, connectors, messages) {
 function createUseCaseConnector(self, svg, actor, usecase) {
     return new __WEBPACK_IMPORTED_MODULE_12__UseCaseAssociationConnector_js__["a" /* UseCaseAssociationConnector */](svg, actor, usecase)
 }
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-
-class Actor {
-
-    constructor(svg, actorDescription, layout) {
-        this.actorDescription = actorDescription
-        this.def = svg.group().addClass("UMLActor")
-        this.draw(this.def, this.actorDescription)
-        this.svg = svg.use(this.def)
-    }
-
-    draw(svg, actorDescription) {
-        let textDef = svg.text(actorDescription.name).move(0, 35)
-        let width = textDef.bbox().width
-        let offset = ((width - 16) / 2)
-        svg.circle(12).move(2 + offset, 1)
-        svg.line(8 + offset, 13, 8 + offset, 26)
-        svg.line(offset, 18, 16 + offset, 18)
-        svg.line(8 + offset, 26, offset, 33)
-        svg.line(8 + offset, 26, 16 + offset, 33)
-
-        if (layout.actorpositions[actorDescription.name]) {
-            svg.move(layout.actorpositions[actorDescription.name].x, layout.actorpositions[actorDescription.name].y)
-        }
-
-        svg.use(textDef)     
-    }
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Actor;
-
 
 
 /***/ }),
@@ -2049,19 +2064,20 @@ class UseCaseAssociationConnector {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ConnectionPoint_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ConnectionPointPosition_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Connector_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__LayoutManager_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ClassBox_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Lifeline_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__SVGLayer_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SVGLayerSet_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Connector_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__LayoutManager_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ClassBox_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Lifeline_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__Actor_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SVGLayer_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__SVGLayerSet_js__ = __webpack_require__(4);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "UMLWebWidgetError", function() { return __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Settings", function() { return __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Style", function() { return __WEBPACK_IMPORTED_MODULE_2__Style_js__["a"]; });
@@ -2073,8 +2089,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "LayoutManager", function() { return __WEBPACK_IMPORTED_MODULE_8__LayoutManager_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ClassBox", function() { return __WEBPACK_IMPORTED_MODULE_9__ClassBox_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Lifeline", function() { return __WEBPACK_IMPORTED_MODULE_10__Lifeline_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayer", function() { return __WEBPACK_IMPORTED_MODULE_11__SVGLayer_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayerSet", function() { return __WEBPACK_IMPORTED_MODULE_12__SVGLayerSet_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Actor", function() { return __WEBPACK_IMPORTED_MODULE_11__Actor_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayer", function() { return __WEBPACK_IMPORTED_MODULE_12__SVGLayer_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayerSet", function() { return __WEBPACK_IMPORTED_MODULE_13__SVGLayerSet_js__["a"]; });
+
 
 
 
