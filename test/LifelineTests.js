@@ -22,7 +22,7 @@ function LifelineCreationTest1(resolve) {
         "name": "MyClass"
     }
     let style = new UMLWebWidget.Style()
-    let lifeline = new UMLWebWidget.Lifeline(svg, lifelineDescription, style)
+    let lifeline = new UMLWebWidget.Lifeline(svg, lifelineDescription.name, lifelineDescription, style)
     resolve(tf.TestResultOutcome.ePassed)
 }
 
@@ -34,7 +34,7 @@ function LifelineGetLayersTest1(resolve, reject, test) {
     }
 
     let style = new UMLWebWidget.Style()
-    let lifeline = new UMLWebWidget.Lifeline(svg, lifelineDescription, style)
+    let lifeline = new UMLWebWidget.Lifeline(svg, lifelineDescription.name, lifelineDescription, style)
 
     let layers = lifeline.getLayers()
     layers.getLayer("shape").write()
