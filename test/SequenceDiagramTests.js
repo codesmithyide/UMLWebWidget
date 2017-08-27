@@ -220,7 +220,7 @@ function SequenceDiagramCreateFromJSONTest4(resolve, reject, test) {
 }
 
 function SequenceDiagramCreateFromJSONTest5(resolve, reject, test) {
-    let svg = SVG(window.document.createElement("div"))
+    let svg = SVG(window.document.createElement("div")).size(600, 300)
 
     let layout = {
         "lifelinepositions": {
@@ -285,6 +285,13 @@ function SequenceDiagramCreateFromJSONTest5(resolve, reject, test) {
                                         "caller": "Shopkeeper",
                                         "callee": "Shopkeeper"
                                     }
+                            },
+                            {
+                                "returnmessage":
+                                {
+                                    "caller": "Customer",
+                                    "callee": "Shopkeeper"
+                                }
                             }
                         ]
                 }
