@@ -19,6 +19,7 @@ module.exports = function(theTestHarness) {
 
     new tf.FileComparisonTest("clear test 1", SVGLayerClearTest1, svgLayerSequence)
     new tf.FileComparisonTest("clear test 2", SVGLayerClearTest2, svgLayerSequence)
+    new tf.FileComparisonTest("clear test 3", SVGLayerClearTest3, svgLayerSequence)
 }
 
 function SVGLayerCreationTest1(resolve) {
@@ -123,6 +124,25 @@ function SVGLayerClearTest2(resolve, reject, test) {
     
     test.setOutputFilePath(__dirname + "/output/SVGLayerClearTest2.html")
     test.setReferenceFilePath(__dirname + "/reference/SVGLayerClearTest2.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+// Clear a layer that had a text element in it and then re-add
+// another element
+function SVGLayerClearTest3(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let layer = new UMLWebWidget.SVGLayer(svg)
+    layer.text("Hello World!").move(0, 0)
+    layer.clear()
+
+    layer.write()
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerClearTest3.html")
+    
+    test.setOutputFilePath(__dirname + "/output/SVGLayerClearTest3.html")
+    test.setReferenceFilePath(__dirname + "/reference/SVGLayerClearTest3.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
