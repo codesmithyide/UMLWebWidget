@@ -22,7 +22,7 @@ function SequenceDiagramCreateFromJSONTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
     let sequenceDiagram = new UMLWebWidget.Diagram()
     sequenceDiagram.createFromJSON(svg, {
-        "sequencediagram":
+        "elements":
           [
               { 
                   "lifeline":
@@ -58,7 +58,7 @@ function SequenceDiagramCreateFromJSONTest2(resolve, reject, test) {
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
     sequenceDiagram.createFromJSON(svg, {
-        "sequencediagram":
+        "elements":
           [
               { 
                   "lifeline":
@@ -102,7 +102,7 @@ function SequenceDiagramCreateFromJSONTest3(resolve, reject, test) {
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
     sequenceDiagram.createFromJSON(svg, {
-        "sequencediagram":
+        "elements":
             [
                 { 
                     "lifeline":
@@ -160,7 +160,7 @@ function SequenceDiagramCreateFromJSONTest4(resolve, reject, test) {
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
     sequenceDiagram.createFromJSON(svg, {
-        "sequencediagram":
+        "elements":
             [
                 { 
                     "lifeline":
@@ -232,7 +232,7 @@ function SequenceDiagramCreateFromJSONTest5(resolve, reject, test) {
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
     sequenceDiagram.createFromJSON(svg, {
-        "sequencediagram":
+        "elements":
             [
                 { 
                     "lifeline":

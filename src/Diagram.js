@@ -71,32 +71,36 @@ export class Diagram {
         let style = new Style()
 
         if (this.diagramDescription.elements) {
-            this.drawClassDiagram(svg, this.diagramDescription.elements, style, layout)
+            this.drawDiagram(svg, this.diagramDescription.elements, style, layout)
         } else if (this.diagramDescription.componentdiagram) {
             this.drawComponentDiagram(svg, this.diagramDescription.componentdiagram, style, layout)
         } else if (this.diagramDescription.deploymentdiagram) {
             this.drawDeploymentDiagram(svg, this.diagramDescription.deploymentdiagram, style, layout)
-        } else if (this.diagramDescription.sequencediagram) {
-            this.drawSequenceDiagram(svg, this.diagramDescription.sequencediagram, style, layout)
         } else if (this.diagramDescription.usecasediagram) {
             this.drawUseCaseDiagram(svg, this.diagramDescription.usecasediagram, layout)
         }
     }
 
-    drawClassDiagram(svg, classDiagram, style, layout) {
+    drawDiagram(svg, description, style, layout) {
         let layoutManager = new LayoutManager(layout)
 
         let classboxes = []
+        let lifelines = []
         let connectors = []
+        let messages = []
 
         // Construct the elements
-        for (var i = 0; i < classDiagram.length; i++) {
-            let item = classDiagram[i]
+        for (var i = 0; i < description.length; i++) {
+            let item = description[i]
             if (item.class) {
                 let className = item.class.name
                 let newClassBox = new ClassBox(svg, className, item.class, this.settings.canMove, style)
                 this.classboxes[className] = newClassBox
                 classboxes.push(newClassBox)                
+            } else if (item.lifeline) {
+                let newLifeline = new Lifeline(svg, item.lifeline.name, item.lifeline, style)
+                this.lifelines[item.lifeline.name] = newLifeline
+                lifelines.push(newLifeline)
             } else if (item.relationship) {
                 let classbox1
                 let classbox2
@@ -111,12 +115,35 @@ export class Diagram {
                 let connectionPoint2 = classbox2.createConnectionPoint(svg)
                 let newConnector = new Connector(svg, item.relationship.type, connectionPoint1, connectionPoint2)
                 connectors.push(newConnector)
+            } else if (item.messages) {
+                for (var j = 0; j < item.messages.length; j++) {
+                    let message = item.messages[j]
+                    let lifeline1
+                    let lifeline2
+                    let connectionPoint1
+                    let connectionPoint2
+                    let newConnector
+                    if (message.synchronousmessage) {
+                        lifeline1 = this.lifelines[message.synchronousmessage.caller]
+                        lifeline2 = this.lifelines[message.synchronousmessage.callee]
+                        connectionPoint1 = lifeline1.createConnectionPoint(svg)
+                        connectionPoint2 = lifeline2.createConnectionPoint(svg)
+                        newConnector = new Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, message.synchronousmessage.name)
+                    } else if (message.returnmessage) {
+                        lifeline1 = this.lifelines[message.returnmessage.callee]
+                        lifeline2 = this.lifelines[message.returnmessage.caller]
+                        connectionPoint1 = lifeline1.createConnectionPoint(svg)
+                        connectionPoint2 = lifeline2.createConnectionPoint(svg)
+                        newConnector = new Connector(svg, "returnmessage", connectionPoint1, connectionPoint2, "")
+                    }
+                    messages.push(newConnector)
+                }
             }
         }
 
-        dolayout(layoutManager, classboxes, null, connectors, null)
+        dolayout(layoutManager, classboxes, lifelines, connectors, messages)
 
-        draw(classboxes, null, connectors)
+        draw(classboxes, lifelines, connectors, messages)
     }
 
     drawComponentDiagram(svg, componentDiagram, style, layout) {
@@ -141,50 +168,6 @@ export class Diagram {
                 new Node(svg, item.node, style, layout)
             }
         }
-    }
-
-    drawSequenceDiagram(svg, sequenceDiagram, style, layout) {
-        let layoutManager = new LayoutManager(layout)
-      
-        let lifelines = []
-        let connectors = []
-
-        // Construct the elements
-        for (var i = 0; i < sequenceDiagram.length; i++) {
-            let item = sequenceDiagram[i]
-            if (item.lifeline) {
-                let newLifeline = new Lifeline(svg, item.lifeline.name, item.lifeline, style)
-                this.lifelines[item.lifeline.name] = newLifeline
-                lifelines.push(newLifeline)
-            } else if (item.messages) {
-                for (var j = 0; j < item.messages.length; j++) {
-                    let message = item.messages[j]
-                    let lifeline1
-                    let lifeline2
-                    let connectionPoint1
-                    let connectionPoint2
-                    let newConnector
-                    if (message.synchronousmessage) {
-                        lifeline1 = this.lifelines[message.synchronousmessage.caller]
-                        lifeline2 = this.lifelines[message.synchronousmessage.callee]
-                        connectionPoint1 = lifeline1.createConnectionPoint(svg)
-                        connectionPoint2 = lifeline2.createConnectionPoint(svg)
-                        newConnector = new Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, message.synchronousmessage.name)
-                    } else if (message.returnmessage) {
-                        lifeline1 = this.lifelines[message.returnmessage.callee]
-                        lifeline2 = this.lifelines[message.returnmessage.caller]
-                        connectionPoint1 = lifeline1.createConnectionPoint(svg)
-                        connectionPoint2 = lifeline2.createConnectionPoint(svg)
-                        newConnector = new Connector(svg, "returnmessage", connectionPoint1, connectionPoint2, "")
-                    }
-                    connectors.push(newConnector)
-                }
-            }
-        }
-
-        dolayout(layoutManager, null, lifelines, null, connectors)
-
-        draw(null, lifelines, connectors)
     }
 
     drawUseCaseDiagram(svg, useCaseDiagram, layout) {
@@ -229,7 +212,7 @@ function dolayout(layoutManager, classboxes, lifelines, connectors, messages) {
     }
 }
 
-function draw(classboxes, lifelines, connectors) {
+function draw(classboxes, lifelines, connectors, messages) {
     if (classboxes != null) {
         for (var i = 0; i < classboxes.length; i++) {
             let classbox = classboxes[i]
@@ -246,6 +229,11 @@ function draw(classboxes, lifelines, connectors) {
     }
     for (var i = 0; i < connectors.length; i++) {
         let connector = connectors[i]
+        connector.getLayers().getLayer("shape").write()
+        connector.getLayers().getLayer("text").write()
+    }
+    for (var i = 0; i < messages.length; i++) {
+        let connector = messages[i]
         connector.getLayers().getLayer("shape").write()
         connector.getLayers().getLayer("text").write()
     }
