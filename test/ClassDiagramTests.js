@@ -18,6 +18,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("createFromJSON test 3", ClassDiagramCreateFromJSONTest3, classDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 4", ClassDiagramCreateFromJSONTest4, classDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 5", ClassDiagramCreateFromJSONTest5, classDiagramSequence)
+    new tf.FileComparisonTest("createFromJSON test 6", ClassDiagramCreateFromJSONTest6, classDiagramSequence)
 }
 
 function ClassDiagramCreationTest1(resolve) {
@@ -197,6 +198,70 @@ function ClassDiagramCreateFromJSONTest5(resolve, reject, test) {
 
         test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest5.html")
         test.setReferenceFilePath(__dirname + "/reference/classdiagramtests/ClassDiagramCreateFromJSONTest5.html")
+
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
+}
+
+function ClassDiagramCreateFromJSONTest6(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let layout = {
+        "elements": {
+            "ContainingClass": { "x": 0, "y": 0 },
+            "ContainedClass": { "x": 200, "y": 0 }
+        }
+    }
+
+    let classDiagram = new UMLWebWidget.Diagram()
+    classDiagram.createFromJSON(svg, {
+        "elements":
+            [
+                { 
+                    "class":
+                        {
+                            "name": "ContainingClass",
+                             "attributes":
+                                 [
+                                 ],
+                             "operations":
+                                 [
+                                 ]
+                        }
+                },
+                { 
+                    "class":
+                        {
+                            "name": "ContainedClass",
+                             "attributes":
+                                 [
+                                 ],
+                             "operations":
+                                 [
+                                 ]
+                        }
+                },
+                {
+                    "relationship":
+                    {
+                        "type": "composition",
+                        "containingclass": "ContainingClass",
+                        "containedclass": "ContainedClass"
+                    }
+                }
+            ]
+    },
+    layout)
+
+    let elementKeys = Object.keys(classDiagram.diagramDescription)
+    let classboxesKeys = Object.keys(classDiagram.classboxes)
+    if ((elementKeys.length == 1) && (classboxesKeys.length == 2)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest6.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest6.html")
+        test.setReferenceFilePath(__dirname + "/reference/classdiagramtests/ClassDiagramCreateFromJSONTest6.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
