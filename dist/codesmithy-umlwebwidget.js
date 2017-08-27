@@ -1067,16 +1067,12 @@ class LayoutManager {
             nextYPosition = Math.max(nextYPosition, lifelines[i].getLineTopPosition().y + 20)
         }
         for (var i = 0; i < connectors.length; i++) {
-            console.log("layout" + i)
             let connector = connectors[i]
             let lifeline1 = connector.connectionPoint1.element
             let lifeline2 = connector.connectionPoint2.element
             connector.connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
             connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
             nextYPosition += 30 //newConnector.svg.bbox().height
-
-           console.log("(" + connector.connectionPoint1.x + ", " + connector.connectionPoint1.y + ")")
-           console.log("(" + connector.connectionPoint2.x + ", " + connector.connectionPoint2.y + ")")
               
     /*     let startX = caller.svg.bbox().cx
         let endX = callee.svg.bbox().cx*/
