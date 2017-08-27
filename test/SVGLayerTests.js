@@ -136,6 +136,7 @@ function SVGLayerClearTest3(resolve, reject, test) {
     let layer = new UMLWebWidget.SVGLayer(svg)
     layer.text("Hello World!").move(0, 0)
     layer.clear()
+    layer.text("Hello World again!").move(0, 0)
 
     layer.write()
 
