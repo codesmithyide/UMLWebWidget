@@ -18,6 +18,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("merge test 1", SVGLayerMergeTest1, svgLayerSequence)
 
     new tf.FileComparisonTest("clear test 1", SVGLayerClearTest1, svgLayerSequence)
+    new tf.FileComparisonTest("clear test 2", SVGLayerClearTest2, svgLayerSequence)
 }
 
 function SVGLayerCreationTest1(resolve) {
@@ -95,15 +96,33 @@ function SVGLayerMergeTest1(resolve, reject, test) {
 function SVGLayerClearTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
-    let layer1 = new UMLWebWidget.SVGLayer(svg)
-    layer1.clear()
+    let layer = new UMLWebWidget.SVGLayer(svg)
+    layer.clear()
 
-    layer1.write()
+    layer.write()
 
     TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerClearTest1.html")
     
     test.setOutputFilePath(__dirname + "/output/SVGLayerClearTest1.html")
     test.setReferenceFilePath(__dirname + "/reference/SVGLayerClearTest1.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+// Clear a layer that had a text element in it
+function SVGLayerClearTest2(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let layer = new UMLWebWidget.SVGLayer(svg)
+    layer.text("Hello World!").move(0, 0)
+    layer.clear()
+
+    layer.write()
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerClearTest2.html")
+    
+    test.setOutputFilePath(__dirname + "/output/SVGLayerClearTest2.html")
+    test.setReferenceFilePath(__dirname + "/reference/SVGLayerClearTest2.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
