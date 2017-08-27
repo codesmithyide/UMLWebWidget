@@ -16,6 +16,8 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("text test 3", SVGLayerTextTest3, svgLayerSequence)
 
     new tf.FileComparisonTest("merge test 1", SVGLayerMergeTest1, svgLayerSequence)
+
+    new tf.FileComparisonTest("clear test 1", SVGLayerClearTest1, svgLayerSequence)
 }
 
 function SVGLayerCreationTest1(resolve) {
@@ -83,8 +85,25 @@ function SVGLayerMergeTest1(resolve, reject, test) {
 
     TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerMergeTest1.html")
     
-    test.setOutputFilePath(__dirname + "/output/SVGLayerTextTest3.html")
-    test.setReferenceFilePath(__dirname + "/reference/SVGLayerTextTest3.html")
+    test.setOutputFilePath(__dirname + "/output/SVGLayerMergeTest1.html")
+    test.setReferenceFilePath(__dirname + "/reference/SVGLayerMergeTest1.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+// Clear an already empty layer
+function SVGLayerClearTest1(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let layer1 = new UMLWebWidget.SVGLayer(svg)
+    layer1.clear()
+
+    layer1.write()
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/SVGLayerClearTest1.html")
+    
+    test.setOutputFilePath(__dirname + "/output/SVGLayerClearTest1.html")
+    test.setReferenceFilePath(__dirname + "/reference/SVGLayerClearTest1.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
