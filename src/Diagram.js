@@ -114,19 +114,7 @@ export class Diagram {
             }
         }
 
-        // Perform the layout
-        for (var i = 0; i < classboxes.length; i++) {
-            layoutManager.setElementPosition(classboxes[i])
-        }
-        for (var i = 0; i < connectors.length; i++) {
-            let connectionPoint1 = connectors[i].connectionPoint1
-            let connectionPoint2 = connectors[i].connectionPoint2
-            let bbox1 = connectionPoint1.element.getConnectionPointsRectangle()
-            let bbox2 = connectionPoint2.element.getConnectionPointsRectangle()
-            let connectionPositions = layoutManager.getConnectionPositions(bbox1, bbox2)
-            connectionPoint1.setPosition(connectionPositions.start)
-            connectionPoint2.setPosition(connectionPositions.end)
-        }
+        dolayout(layoutManager, classboxes, null, connectors, null)
 
         draw(classboxes, null, connectors)
     }
@@ -194,12 +182,7 @@ export class Diagram {
             }
         }
 
-        // Perform the layout
-        for (var i = 0; i < lifelines.length; i++) {
-            layoutManager.setElementPosition(lifelines[i])
-        }
-
-        layoutManager.layoutMessages(lifelines, connectors)
+        dolayout(layoutManager, null, lifelines, null, connectors)
 
         draw(null, lifelines, connectors)
     }
@@ -217,6 +200,33 @@ export class Diagram {
         }
     }
 
+}
+
+function dolayout(layoutManager, classboxes, lifelines, connectors, messages) {
+    if (classboxes != null) {
+        for (var i = 0; i < classboxes.length; i++) {
+            layoutManager.setElementPosition(classboxes[i])
+        }
+    }
+    if (lifelines != null) {
+        for (var i = 0; i < lifelines.length; i++) {
+            layoutManager.setElementPosition(lifelines[i])
+        }
+    }
+    if (connectors != null) {
+        for (var i = 0; i < connectors.length; i++) {
+            let connectionPoint1 = connectors[i].connectionPoint1
+            let connectionPoint2 = connectors[i].connectionPoint2
+            let bbox1 = connectionPoint1.element.getConnectionPointsRectangle()
+            let bbox2 = connectionPoint2.element.getConnectionPointsRectangle()
+            let connectionPositions = layoutManager.getConnectionPositions(bbox1, bbox2)
+            connectionPoint1.setPosition(connectionPositions.start)
+            connectionPoint2.setPosition(connectionPositions.end)
+        }
+    }
+    if (messages != null) {
+        layoutManager.layoutMessages(lifelines, messages)
+    }
 }
 
 function draw(classboxes, lifelines, connectors) {
