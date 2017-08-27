@@ -835,10 +835,14 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
 }
 
 function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
-    let lineY = connectionPoint2.y + 6
-    lineGroup.line(connectionPoint1.x, connectionPoint1.y + 6, connectionPoint2.x, lineY).attr("stroke-dasharray", "4, 4")
-    lineGroup.line(connectionPoint2.x, lineY, connectionPoint2.x - 10, connectionPoint2.y)
-    lineGroup.line(connectionPoint2.x, lineY, connectionPoint2.x - 10, connectionPoint2.y + 12)
+    lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint1.y).attr("stroke-dasharray", "4, 4")
+    if (connectionPoint2.x >= connectionPoint1.x) {
+        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x - 10, connectionPoint2.y - 6)
+        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x - 10, connectionPoint2.y + 6)
+    } else {
+        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y - 6)
+        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y + 6)
+    }
 }
 
 // Orientation of the head (e.g. arrow or diamond)
@@ -1070,12 +1074,15 @@ class LayoutManager {
             let connector = connectors[i]
             let lifeline1 = connector.connectionPoint1.element
             let lifeline2 = connector.connectionPoint2.element
-            connector.connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
-            connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
-            nextYPosition += 30 //newConnector.svg.bbox().height
-              
-    /*     let startX = caller.svg.bbox().cx
-        let endX = callee.svg.bbox().cx*/
+            if (lifeline1 != lifeline2) {
+                connector.connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
+                connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
+                nextYPosition += 30 //newConnector.svg.bbox().height
+            } else {
+                connector.connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
+                connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 20)
+                nextYPosition += 30 //newConnector.svg.bbox().height
+            }
         }
         if (connectors.length > 0) {
             for (var i = 0; i < lifelines.length; i++) {
@@ -1210,7 +1217,7 @@ function createDef(self, lifelineDescription, style) {
         lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.connectionPoints[0].x, self.connectionPoints[0].y)
         if (self.connectionPoints.length > 1) {
             lifelineGroup
-                .rect(8, (self.connectionPoints[self.connectionPoints.length - 1].y - self.connectionPoints[self.connectionPoints.length - 1].y))
+                .rect(8, (self.connectionPoints[self.connectionPoints.length - 1].y - self.connectionPoints[0].y))
                 .move(self.connectionPoints[0].x - 4, self.connectionPoints[0].y)
         }
     }
