@@ -1054,8 +1054,8 @@ class LayoutManager {
         if (this.layout == null) {
             this.layout = { }
         }
-        if (this.layout.classboxpositions == null) {
-            this.layout.classboxpositions = { }
+        if (this.layout.elements == null) {
+            this.layout.elements = { }
         }
         if (this.layout.lifelinepositions == null) {
             this.layout.lifelinepositions = { }
@@ -1066,10 +1066,32 @@ class LayoutManager {
     }
 
     setElementPosition(element) {
-        if (this.layout.classboxpositions[element.id]) {
-            element.move(this.layout.classboxpositions[element.id].x, this.layout.classboxpositions[element.id].y)
+        if (this.layout.elements[element.id]) {
+            element.move(this.layout.elements[element.id].x, this.layout.elements[element.id].y)
         } else if (this.layout.lifelinepositions[element.id]) {
             element.move(this.layout.lifelinepositions[element.id].x, this.layout.lifelinepositions[element.id].y)
+        }
+    }
+
+    layoutConnectors(connectors) {
+        for (var i = 0; i < connectors.length; i++) {
+            let connectionPoint1 = connectors[i].connectionPoint1
+            let connectionPoint2 = connectors[i].connectionPoint2
+            let bbox1 = connectionPoint1.element.getConnectionPointsRectangle()
+            let bbox2 = connectionPoint2.element.getConnectionPointsRectangle()
+            let connectionPositions = this.getConnectionPositions(bbox1, bbox2)
+
+            let layoutOverride = this.layout.elements[connectionPoint1.element.classDescription.name + "-" + connectionPoint2.element.classDescription.name + "-aggregation"];
+            if (layoutOverride) {
+                if (layoutOverride.end) {
+                    if (layoutOverride.end == "right-center") {
+                        connectionPositions.end = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].RightCenter
+                    }
+                }
+            }
+
+            connectionPoint1.setPosition(connectionPositions.start)
+            connectionPoint2.setPosition(connectionPositions.end)
         }
     }
 
@@ -1123,18 +1145,6 @@ class LayoutManager {
             result.start = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].RightCenter
             result.end = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].LeftCenter
         }
-
-/*
-    
-    let layoutOverride = layout.connectorpositions[containedclassbox.classDescription.name + "-" + containingclassbox.classDescription.name + "-aggregation"];
-    if (layoutOverride) {
-        if (layoutOverride.end) {
-            if (layoutOverride.end == "RightCenter") {
-                connectionPositions.end = ConnectorPosition.RightCenter
-            }
-        }
-    }
-*/
 
         return result
     }
@@ -1589,15 +1599,7 @@ function dolayout(layoutManager, classboxes, lifelines, connectors, messages) {
         }
     }
     if (connectors != null) {
-        for (var i = 0; i < connectors.length; i++) {
-            let connectionPoint1 = connectors[i].connectionPoint1
-            let connectionPoint2 = connectors[i].connectionPoint2
-            let bbox1 = connectionPoint1.element.getConnectionPointsRectangle()
-            let bbox2 = connectionPoint2.element.getConnectionPointsRectangle()
-            let connectionPositions = layoutManager.getConnectionPositions(bbox1, bbox2)
-            connectionPoint1.setPosition(connectionPositions.start)
-            connectionPoint2.setPosition(connectionPositions.end)
-        }
+        layoutManager.layoutConnectors(connectors)
     }
     if (messages != null) {
         layoutManager.layoutMessages(lifelines, messages)

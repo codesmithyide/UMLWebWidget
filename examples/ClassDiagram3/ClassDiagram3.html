@@ -140,16 +140,14 @@
       var classDiagram = new CodeSmithyUMLWebWidget.Diagram({ width: 900, height: 400 })
 
       var layout = {
-        "classboxpositions": {
+        "elements": {
           "MyBaseClass": { "x": 12, "y": 1 },
           "MyDerivedClass": { "x": 220, "y": 1 },
           "MyContainedClass1": { "x": 100, "y": 160 },
           "MyContainedClass2": { "x": 313, "y": 160 },
-          "MyContainedClass3": { "x": 525, "y": 160 }
-        },
-        "connectorpositions": {
-          "MyContainedClass3-MyDerivedClass-aggregation": { "end": "RightCenter" }
-        }
+          "MyContainedClass3": { "x": 525, "y": 160 },
+          "MyContainedClass3-MyDerivedClass-aggregation": { "end": "right-center" }
+         }
       }
 
       classDiagram.createFromDiv("diagram1", layout)

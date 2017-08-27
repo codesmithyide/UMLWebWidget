@@ -88,7 +88,7 @@ function ClassDiagramCreateFromJSONTest4(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
     let layout = {
-        "classboxpositions": {
+        "elements": {
             "MyClass1": { "x": 0, "y": 0 },
             "MyClass2": { "x": 150, "y": 0 }
         }
@@ -144,7 +144,7 @@ function ClassDiagramCreateFromJSONTest5(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
     let layout = {
-        "classboxpositions": {
+        "elements": {
             "MyBaseClass": { "x": 0, "y": 0 },
             "MyDerivedClass": { "x": 170, "y": 0 }
         }

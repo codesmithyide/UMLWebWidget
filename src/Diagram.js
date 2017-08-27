@@ -197,15 +197,7 @@ function dolayout(layoutManager, classboxes, lifelines, connectors, messages) {
         }
     }
     if (connectors != null) {
-        for (var i = 0; i < connectors.length; i++) {
-            let connectionPoint1 = connectors[i].connectionPoint1
-            let connectionPoint2 = connectors[i].connectionPoint2
-            let bbox1 = connectionPoint1.element.getConnectionPointsRectangle()
-            let bbox2 = connectionPoint2.element.getConnectionPointsRectangle()
-            let connectionPositions = layoutManager.getConnectionPositions(bbox1, bbox2)
-            connectionPoint1.setPosition(connectionPositions.start)
-            connectionPoint2.setPosition(connectionPositions.end)
-        }
+        layoutManager.layoutConnectors(connectors)
     }
     if (messages != null) {
         layoutManager.layoutMessages(lifelines, messages)
