@@ -171,15 +171,22 @@ export class Diagram {
     }
 
     drawUseCaseDiagram(svg, useCaseDiagram, layout) {
+        let layoutManager = new LayoutManager(layout)
+
         for (var i = 0; i < useCaseDiagram.length; i++) {
             let item = useCaseDiagram[i]
             if (item.actor) {
-                let newActor = new Actor(svg, item.actor.name, item.actor, layout)
+                let newActor = new Actor(svg, item.actor.name, item.actor)
                 this.actors[item.actor.name] = newActor
+                layoutManager.setElementPosition(newActor)
                 newActor.getLayers().getLayer("shape").write()
                 newActor.getLayers().getLayer("text").write()
             } else if (item.usecase) {
-                this.usecases[item.usecase.title] = new UseCase(svg, item.usecase, layout)
+                let newUseCase = new UseCase(svg, item.usecase.title, item.usecase)
+                this.usecases[item.usecase.title] = newUseCase
+                layoutManager.setElementPosition(newUseCase)
+                newUseCase.getLayers().getLayer("shape").write()
+                newUseCase.getLayers().getLayer("text").write()
             } else if (item.association) {
                 createUseCaseConnector(this, svg, this.actors[item.association.actor], this.usecases[item.association.usecase]).draw()
             }
