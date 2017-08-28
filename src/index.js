@@ -12,6 +12,7 @@ import { LayoutManager } from "./LayoutManager.js"
 import { ClassBox } from "./ClassBox.js"
 import { Lifeline } from "./Lifeline.js"
 import { Actor } from "./Actor.js"
+import { UseCase } from "./UseCase.js"
 import { SVGLayer } from "./SVGLayer.js"
 import { SVGLayerSet } from "./SVGLayerSet.js"
 
@@ -28,6 +29,7 @@ export {
     ClassBox,
     Lifeline,
     Actor,
+    UseCase,
     SVGLayer,
     SVGLayerSet
 }

@@ -18,20 +18,21 @@ class Actor extends DiagramElement {
     }
 
     update() {
+        let borderAdjustment = {
+            top: this.y,
+            left: this.x
+        }
+        
         let shapeGroup = this.shapeLayer.group().addClass("UMLActor")
         let textGroup = this.textLayer.group()
-        let textDef = textGroup.text(this.actorDescription.name).move(0, 35)
+        let textDef = textGroup.text(this.actorDescription.name).move(borderAdjustment.left, borderAdjustment.top + 35)
         let width = textDef.bbox().width
         let offset = ((width - 16) / 2)
-        shapeGroup.circle(12).move(2 + offset, 1)
-        shapeGroup.line(8 + offset, 13, 8 + offset, 26)
-        shapeGroup.line(offset, 18, 16 + offset, 18)
-        shapeGroup.line(8 + offset, 26, offset, 33)
-        shapeGroup.line(8 + offset, 26, 16 + offset, 33)
-
-        //if (layout.actorpositions[actorDescription.name]) {
-        //    svg.move(layout.actorpositions[actorDescription.name].x, layout.actorpositions[actorDescription.name].y)
-        //}
+        shapeGroup.circle(12).move(borderAdjustment.left + 2 + offset, borderAdjustment.top + 1)
+        shapeGroup.line(borderAdjustment.left + 8 + offset, borderAdjustment.top + 13, borderAdjustment.left + 8 + offset, borderAdjustment.top + 26)
+        shapeGroup.line(borderAdjustment.left + offset, borderAdjustment.top + 18, borderAdjustment.left + 16 + offset, borderAdjustment.top + 18)
+        shapeGroup.line(borderAdjustment.left + 8 + offset, borderAdjustment.top + 26, borderAdjustment.left + offset, borderAdjustment.top + 33)
+        shapeGroup.line(borderAdjustment.left + 8 + offset, borderAdjustment.top + 26, borderAdjustment.left + 16 + offset, borderAdjustment.top + 33)
 
         this.uptodate = true
     }

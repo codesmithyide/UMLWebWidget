@@ -45,7 +45,16 @@ function UseCaseDiagramCreateFromJSONTest1(resolve, reject, test) {
 }
 
 function UseCaseDiagramCreateFromJSONTest2(resolve, reject, test) {
-    let svg = SVG(window.document.createElement("div"))
+    let svg = SVG(window.document.createElement("div")).size(600, 300)
+
+    let layout = {
+        "elements": {
+            "Customer": { "x": 10, "y": 1 },
+            "Shopkeeper": { "x": 1, "y": 75 },
+            "Till": { "x": 33, "y": 150 }
+        }
+    }
+
     let useCaseDiagram = new UMLWebWidget.Diagram()
     useCaseDiagram.createFromJSON(svg, {
         "usecasediagram":
@@ -69,7 +78,9 @@ function UseCaseDiagramCreateFromJSONTest2(resolve, reject, test) {
                       }
               }
           ]
-    })
+    },
+    layout)
+
     let elementKeys = Object.keys(useCaseDiagram.diagramDescription)
     let actorsKeys = Object.keys(useCaseDiagram.actors)
     let usecasesKeys = Object.keys(useCaseDiagram.usecases)
