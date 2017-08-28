@@ -24,7 +24,8 @@ class UseCase extends DiagramElement {
         }
 
         let shapeGroup = this.shapeLayer.group().addClass("UMLUseCase")
-        let textDef = this.textLayer.text(this.useCaseDescription.title)
+        let textGroup = this.textLayer.group()
+        let textDef = textGroup.text(this.useCaseDescription.title)
         shapeGroup.ellipse(1.2*textDef.bbox().width, 3*textDef.bbox().height).move(borderAdjustment.left + 1, borderAdjustment.top + 1)
         textDef.move(borderAdjustment.left + 1 + 0.1*textDef.bbox().width, borderAdjustment.top + 1 + textDef.bbox().height)
     }
