@@ -104,7 +104,8 @@ function UseCaseDiagramCreateFromJSONTest3(resolve, reject, test) {
         "elements": {
             "Customer": { "x": 10, "y": 1 },
             "Shopkeeper": { "x": 1, "y": 75 },
-            "Till": { "x": 33, "y": 150 }
+            "Till": { "x": 33, "y": 150 },
+            "Pay for merchandise": { "x": 140, "y": 75 }
         }
     }
 
