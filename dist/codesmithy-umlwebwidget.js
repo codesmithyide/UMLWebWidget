@@ -1669,22 +1669,49 @@ class Diagram {
     drawUseCaseDiagram(svg, useCaseDiagram, layout) {
         let layoutManager = new __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__["a" /* LayoutManager */](layout)
 
+        let actors = []
+        let usecases = []
+
         for (var i = 0; i < useCaseDiagram.length; i++) {
             let item = useCaseDiagram[i]
             if (item.actor) {
                 let newActor = new __WEBPACK_IMPORTED_MODULE_8__Actor_js__["a" /* Actor */](svg, item.actor.name, item.actor)
                 this.actors[item.actor.name] = newActor
-                layoutManager.setElementPosition(newActor)
-                newActor.getLayers().getLayer("shape").write()
-                newActor.getLayers().getLayer("text").write()
+                actors.push(newActor)
             } else if (item.usecase) {
                 let newUseCase = new __WEBPACK_IMPORTED_MODULE_9__UseCase_js__["a" /* UseCase */](svg, item.usecase.title, item.usecase)
                 this.usecases[item.usecase.title] = newUseCase
-                layoutManager.setElementPosition(newUseCase)
-                newUseCase.getLayers().getLayer("shape").write()
-                newUseCase.getLayers().getLayer("text").write()
+                usecases.push(newUseCase)
             } else if (item.association) {
-                createUseCaseConnector(this, svg, this.actors[item.association.actor], this.usecases[item.association.usecase]).draw()
+                new __WEBPACK_IMPORTED_MODULE_12__UseCaseAssociationConnector_js__["a" /* UseCaseAssociationConnector */](svg, this.actors[item.association.actor], this.usecases[item.association.usecase]).draw()
+            }
+        }
+
+        if (actors != null) {
+            for (var i = 0; i < actors.length; i++) {
+               layoutManager.setElementPosition(actors[i])
+            }
+        }
+
+        if (usecases != null) {
+            for (var i = 0; i < usecases.length; i++) {
+               layoutManager.setElementPosition(usecases[i])
+            }
+        }
+
+        if (actors != null) {
+            for (var i = 0; i < actors.length; i++) {
+                let actor = actors[i]
+                actor.getLayers().getLayer("shape").write()
+                actor.getLayers().getLayer("text").write()
+            }
+        }
+
+        if (usecases != null) {
+            for (var i = 0; i < usecases.length; i++) {
+                let usecase = usecases[i]
+                usecase.getLayers().getLayer("shape").write()
+                usecase.getLayers().getLayer("text").write()
             }
         }
     }
@@ -1737,10 +1764,6 @@ function draw(classboxes, lifelines, connectors, messages) {
         connector.getLayers().getLayer("shape").write()
         connector.getLayers().getLayer("text").write()
     }
-}
-
-function createUseCaseConnector(self, svg, actor, usecase) {
-    return new __WEBPACK_IMPORTED_MODULE_12__UseCaseAssociationConnector_js__["a" /* UseCaseAssociationConnector */](svg, actor, usecase)
 }
 
 
