@@ -430,7 +430,7 @@ function ConnectorGetLayersTest19(resolve, reject, test) {
     let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
     connectionPoint1.move(20, 30)
     let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null)
-    connectionPoint2.move(20, 50)
+    connectionPoint2.move(70, 30)
     let connector = new UMLWebWidget.Connector(svg, "usecaseassociation", connectionPoint1, connectionPoint2)
 
     let layers = connector.getLayers()
