@@ -31,6 +31,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("getLayers test 16", ConnectorGetLayersTest16, connectorSequence)
     new tf.FileComparisonTest("getLayers test 17", ConnectorGetLayersTest17, connectorSequence)
     new tf.FileComparisonTest("getLayers test 18", ConnectorGetLayersTest18, connectorSequence)
+    new tf.FileComparisonTest("getLayers test 19", ConnectorGetLayersTest19, connectorSequence)
 }
 
 function ConnectorCreationTest1(resolve) {
@@ -419,6 +420,27 @@ function ConnectorGetLayersTest18(resolve, reject, test) {
 
     test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest18.html")
     test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest18.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+function ConnectorGetLayersTest19(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
+    connectionPoint1.move(20, 30)
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null)
+    connectionPoint2.move(20, 50)
+    let connector = new UMLWebWidget.Connector(svg, "usecaseassociation", connectionPoint1, connectionPoint2)
+
+    let layers = connector.getLayers()
+    layers.getLayer("shape").write()
+    layers.getLayer("text").write()
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/connectortests/ConnectorGetLayersTest19.html", true)
+
+    test.setOutputFilePath(__dirname + "/output/connectortests/ConnectorGetLayersTest19.html")
+    test.setReferenceFilePath(__dirname + "/reference/connectortests/ConnectorGetLayersTest19.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
