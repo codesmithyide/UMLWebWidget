@@ -58,7 +58,7 @@ export class Component {
             y: 0
         }
 
-        if (layout.componentpositions[componentDescription.name]) {
+        if ((layout != null) && layout.componentpositions[componentDescription.name]) {
             position = layout.componentpositions[componentDescription.name]
         }
 

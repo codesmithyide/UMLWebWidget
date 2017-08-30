@@ -13,6 +13,7 @@ import { ClassBox } from "./ClassBox.js"
 import { Lifeline } from "./Lifeline.js"
 import { Actor } from "./Actor.js"
 import { UseCase } from "./UseCase.js"
+import { Component } from "./Component.js"
 import { SVGLayer } from "./SVGLayer.js"
 import { SVGLayerSet } from "./SVGLayerSet.js"
 
@@ -30,6 +31,7 @@ export {
     Lifeline,
     Actor,
     UseCase,
+    Component,
     SVGLayer,
     SVGLayerSet
 }
