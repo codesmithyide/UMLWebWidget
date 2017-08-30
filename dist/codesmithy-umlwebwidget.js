@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 21);
+/******/ 	return __webpack_require__(__webpack_require__.s = 20);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -172,6 +172,82 @@ class DiagramElement {
 
 /***/ }),
 /* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConnectionPoint; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__ = __webpack_require__(2);
+
+
+
+
+
+/**
+  <p>
+    The point where an element and a connector meet.
+  </p>
+
+  <p>
+    Although it derives from {@link DiagramElement} this
+    element will probably be invisible to the user. 
+    However it may be useful to make the connection points
+    visible under some circumstances like for instance when
+    the diagram is being edited.
+  </p>
+
+  @extends DiagramElement
+  @property {DiagramElement} this.element - The element.
+  @property {ConnectionPointPosition} this.position - The position
+    of the connection point relative to the element.
+*/
+class ConnectionPoint extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
+
+    constructor(svg, element, position = __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].BottomCenter) {
+        super(svg)
+        this.element = element
+        this.position = position
+    }
+
+    setPosition(position) {
+        this.position = position
+
+        let x = 0
+        let y = 0
+        let boundingbox = this.element.getConnectionPointsRectangle()
+
+        switch (this.position) {
+            case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].TopCenter:
+                x = boundingbox.cx
+                y = boundingbox.y
+                break
+
+            case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].RightCenter:
+                x = (boundingbox.x + boundingbox.width)
+                y = boundingbox.cy
+                break
+
+            case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].BottomCenter:
+                x = boundingbox.cx
+                y = (boundingbox.y + boundingbox.height)
+                break
+
+            case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].LeftCenter:
+                x = boundingbox.x
+                y = boundingbox.cy
+                break
+        }
+
+        this.move(x, y)
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -277,82 +353,6 @@ let staticBottomCenter = new ConnectionPointPosition("bottom-center")
 let staticBottomLeft = new ConnectionPointPosition("bottom-left")
 let staticLeftCenter = new ConnectionPointPosition("left-center")
 let staticTopLeft = new ConnectionPointPosition("top-left")
-
-
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConnectionPoint; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__ = __webpack_require__(1);
-
-
-
-
-
-/**
-  <p>
-    The point where an element and a connector meet.
-  </p>
-
-  <p>
-    Although it derives from {@link DiagramElement} this
-    element will probably be invisible to the user. 
-    However it may be useful to make the connection points
-    visible under some circumstances like for instance when
-    the diagram is being edited.
-  </p>
-
-  @extends DiagramElement
-  @property {DiagramElement} this.element - The element.
-  @property {ConnectionPointPosition} this.position - The position
-    of the connection point relative to the element.
-*/
-class ConnectionPoint extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
-
-    constructor(svg, element, position = __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].BottomCenter) {
-        super(svg)
-        this.element = element
-        this.position = position
-    }
-
-    setPosition(position) {
-        this.position = position
-
-        let x = 0
-        let y = 0
-        let boundingbox = this.element.getConnectionPointsRectangle()
-
-        switch (this.position) {
-            case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].TopCenter:
-                x = boundingbox.cx
-                y = boundingbox.y
-                break
-
-            case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].RightCenter:
-                x = (boundingbox.x + boundingbox.width)
-                y = boundingbox.cy
-                break
-
-            case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].BottomCenter:
-                x = boundingbox.cx
-                y = (boundingbox.y + boundingbox.height)
-                break
-
-            case __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].LeftCenter:
-                x = boundingbox.x
-                y = boundingbox.cy
-                break
-        }
-
-        this.move(x, y)
-    }
-
-}
 
 
 
@@ -566,6 +566,8 @@ class SVGLayerSet {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Actor; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__ = __webpack_require__(1);
+
 
 
 
@@ -583,6 +585,11 @@ class Actor extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diag
         this.textLayer = this.layers.createLayer("text")
         this.id = id
         this.actorDescription = actorDescription
+    }
+
+    createConnectionPoint(svg) {
+        let newPoint = new __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__["a" /* ConnectionPoint */](svg, this)
+        return newPoint
     }
 
     update() {
@@ -617,7 +624,7 @@ class Actor extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diag
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ClassBox; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SVGLayerSet_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ConnectionPoint_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ConnectionPoint_js__ = __webpack_require__(1);
 
 
 
@@ -785,7 +792,7 @@ function visibilityStringToSymbol(visibility) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Connector; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__ = __webpack_require__(2);
 
 
 
@@ -836,6 +843,9 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         } else if (this.type == "returnmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLReturnMessage")
             drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
+        } else if (this.type == "usecaseassociation") {
+            let lineGroup = this.shapeLayer.group().addClass("UMLUseCaseAssociation")
+            drawUseCaseAssociation(lineGroup, this.connectionPoint1, this.connectionPoint2)
         }
         this.uptodate = true
     }
@@ -901,6 +911,10 @@ function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
         lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y - 6)
         lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y + 6)
     }
+}
+
+function drawUseCaseAssociation(lineGroup, connectionPoint1, connectionPoint2) {
+    lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y)
 }
 
 // Orientation of the head (e.g. arrow or diamond)
@@ -1091,7 +1105,7 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__ = __webpack_require__(2);
 
 
 
@@ -1210,7 +1224,7 @@ class LayoutManager {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Lifeline; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__ = __webpack_require__(1);
 
 
 
@@ -1436,6 +1450,8 @@ class UMLWebWidgetError extends Error {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UseCase; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__ = __webpack_require__(1);
+
 
 
 
@@ -1453,6 +1469,11 @@ class UseCase extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Di
         this.textLayer = this.layers.createLayer("text")
         this.id = id
         this.useCaseDescription = useCaseDescription
+    }
+
+    createConnectionPoint(svg) {
+        let newPoint = new __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__["a" /* ConnectionPoint */](svg, this)
+        return newPoint
     }
 
     update() {
@@ -1492,9 +1513,7 @@ class UseCase extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Di
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__UseCaseAssociationConnector_js__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__SVGLayer_js__ = __webpack_require__(3);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SVGLayer_js__ = __webpack_require__(3);
 
 
 
@@ -1683,7 +1702,11 @@ class Diagram {
                 this.usecases[item.usecase.title] = newUseCase
                 usecases.push(newUseCase)
             } else if (item.association) {
-                new __WEBPACK_IMPORTED_MODULE_12__UseCaseAssociationConnector_js__["a" /* UseCaseAssociationConnector */](svg, this.actors[item.association.actor], this.usecases[item.association.usecase]).draw()
+                let connectionPoint1 = this.actors[item.association.actor].createConnectionPoint(svg)
+                let connectionPoint2 = this.usecases[item.association.usecase].createConnectionPoint(svg)
+                let newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "usecaseassociation", connectionPoint1, connectionPoint2)
+                newConnector.getLayers().getLayer("shape").write()
+                newConnector.getLayers().getLayer("text").write()
             }
         }
 
@@ -2077,51 +2100,13 @@ class SocketConnector {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-class UseCaseAssociationConnector {
-
-    constructor(svg, classbox1, classbox2, text, layout) {
-        this.classbox1 = classbox1
-        this.classbox2 = classbox2
-        this.text = text
-        this.layout = layout
-        this.svg = svg.group()
-        this.svg.addClass("UMLUseCaseAssociation")
-    }
-
-    draw() {
-        this.svg.clear()
-        this.svg.line(this.classbox1.svg.bbox().x + this.classbox1.svg.bbox().width, this.classbox1.svg.bbox().cy, this.classbox2.svg.bbox().x, this.classbox2.svg.bbox().cy)
-    }
-      
-    move(y) {
-        this.svg.each(function(i, children) {
-            this.dy(y)
-        })
-    }
-
-    hide() {
-        this.svg.hide()
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = UseCaseAssociationConnector;
-
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ConnectionPoint_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ConnectionPointPosition_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ConnectionPoint_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ConnectionPointPosition_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__DiagramElement_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Connector_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__LayoutManager_js__ = __webpack_require__(8);

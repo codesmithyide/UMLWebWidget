@@ -12,7 +12,6 @@ import { Actor } from "./Actor.js"
 import { UseCase } from "./UseCase.js"
 import { Connector } from "./Connector.js"
 import { AssemblyConnector } from "./AssemblyConnector.js"
-import { UseCaseAssociationConnector } from "./UseCaseAssociationConnector.js"
 import { SVGLayer } from "./SVGLayer.js"
 
 /**
@@ -187,7 +186,11 @@ export class Diagram {
                 this.usecases[item.usecase.title] = newUseCase
                 usecases.push(newUseCase)
             } else if (item.association) {
-                new UseCaseAssociationConnector(svg, this.actors[item.association.actor], this.usecases[item.association.usecase]).draw()
+                let connectionPoint1 = this.actors[item.association.actor].createConnectionPoint(svg)
+                let connectionPoint2 = this.usecases[item.association.usecase].createConnectionPoint(svg)
+                let newConnector = new Connector(svg, "usecaseassociation", connectionPoint1, connectionPoint2)
+                newConnector.getLayers().getLayer("shape").write()
+                newConnector.getLayers().getLayer("text").write()
             }
         }
 

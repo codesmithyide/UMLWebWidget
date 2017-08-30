@@ -48,6 +48,9 @@ class Connector extends DiagramElement {
         } else if (this.type == "returnmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLReturnMessage")
             drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
+        } else if (this.type == "usecaseassociation") {
+            let lineGroup = this.shapeLayer.group().addClass("UMLUseCaseAssociation")
+            drawUseCaseAssociation(lineGroup, this.connectionPoint1, this.connectionPoint2)
         }
         this.uptodate = true
     }
@@ -113,6 +116,10 @@ function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
         lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y - 6)
         lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y + 6)
     }
+}
+
+function drawUseCaseAssociation(lineGroup, connectionPoint1, connectionPoint2) {
+    lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y)
 }
 
 // Orientation of the head (e.g. arrow or diamond)

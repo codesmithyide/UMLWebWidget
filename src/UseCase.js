@@ -1,6 +1,7 @@
 'use strict'
 
 import { DiagramElement } from "./DiagramElement.js"
+import { ConnectionPoint } from "./ConnectionPoint.js"
 
 /**
   A use case on a use case diagram.
@@ -15,6 +16,11 @@ class UseCase extends DiagramElement {
         this.textLayer = this.layers.createLayer("text")
         this.id = id
         this.useCaseDescription = useCaseDescription
+    }
+
+    createConnectionPoint(svg) {
+        let newPoint = new ConnectionPoint(svg, this)
+        return newPoint
     }
 
     update() {
