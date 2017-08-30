@@ -824,29 +824,38 @@ class Stereotype {
 
 }
 
+/**
+  A component on a component diagram.
+
+  @extends DiagramElement
+*/
 class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
-    constructor(svg, componentDescription, style, layout) {
+    constructor(svg, id, componentDescription, style, layout) {
         super(svg)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
+        this.id = id
         this.componentDescription = componentDescription
+        this.style = style
         this.ballConnectors = [ ]
         this.socketConnectors = [ ]
+    }
 
-        var componentWithConnectorsGroup = svg.group().addClass("UMLComponent")
+    update() {
+        var componentWithConnectorsGroup = this.shapeLayer.group().addClass("UMLComponent")
 
         let offset = 0
-        if (componentDescription.interfaces) {
-            for (let i = 0; i < componentDescription.interfaces.length; i++) {
-                let ballConnector = new __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__["a" /* BallConnector */](svg.defs(), componentWithConnectorsGroup, componentDescription.interfaces[i].name)
+        if (this.componentDescription.interfaces) {
+            for (let i = 0; i < this.componentDescription.interfaces.length; i++) {
+                let ballConnector = new __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__["a" /* BallConnector */](svg.defs(), componentWithConnectorsGroup, this.componentDescription.interfaces[i].name)
                 this.ballConnectors.push(ballConnector)
                 offset = Math.max(offset, ballConnector.width)
             }
         }
-        if (componentDescription.dependencies) {
-            for (let i = 0; i < componentDescription.dependencies.length; i++) {
-                let socketConnector = new __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__["a" /* SocketConnector */](svg.defs(), componentWithConnectorsGroup, componentDescription.dependencies[i].name)
+        if (this.componentDescription.dependencies) {
+            for (let i = 0; i < this.componentDescription.dependencies.length; i++) {
+                let socketConnector = new __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__["a" /* SocketConnector */](svg.defs(), componentWithConnectorsGroup, this.componentDescription.dependencies[i].name)
                 this.socketConnectors.push(socketConnector)
             }
         }
@@ -858,28 +867,30 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
             y: 0
         }
 
+/*
         if ((layout != null) && layout.componentpositions[componentDescription.name]) {
             position = layout.componentpositions[componentDescription.name]
-        }
+        }*/
 
         let currentDimensions = {
             width: 0,
             height: 0
         }
 
-        currentDimensions.height = style.getTopMargin("component")
+        currentDimensions.height = this.style.getTopMargin("component")
 
         let stereotype = new Stereotype(componentGroup)
         currentDimensions.height += stereotype.height
 
-        var componentNameDef = componentGroup.defs().text(componentDescription.name).addClass("UMLComponentName").move(position.x + offset + style.getLeftMargin("component"), position.y + currentDimensions.height)
+        var componentNameGroup = this.textLayer.group().addClass("UMLComponentName")
+        var componentNameDef = componentNameGroup.text(this.componentDescription.name).addClass("UMLComponentName").move(position.x + offset + this.style.getLeftMargin("component"), position.y + currentDimensions.height)
         currentDimensions.width = Math.max(currentDimensions.width, componentNameDef.bbox().width)
-        currentDimensions.height += (componentNameDef.bbox().height + style.getBottomMargin("component"))
+        currentDimensions.height += (componentNameDef.bbox().height + this.style.getBottomMargin("component"))
 
-        currentDimensions.width += (style.getLeftMargin("component") + style.getRightMargin("component"))
+        currentDimensions.width += (this.style.getLeftMargin("component") + this.style.getRightMargin("component"))
     
         componentGroup.rect(currentDimensions.width, currentDimensions.height).move(position.x + offset, position.y)
-        stereotype.move(position.x + offset + (currentDimensions.width - style.getRightMargin("component") - stereotype.width), position.y + style.getTopMargin("component"))
+        stereotype.move(position.x + offset + (currentDimensions.width - this.style.getRightMargin("component") - stereotype.width), position.y + this.style.getTopMargin("component"))
         stereotype.draw()
         componentGroup.use(componentNameDef)
 
@@ -1794,7 +1805,10 @@ class Diagram {
         for (var i = 0; i < componentDiagram.length; i++) {
             let item = componentDiagram[i]
             if (item.component) {
-                this.components[item.component.name] = new __WEBPACK_IMPORTED_MODULE_5__Component_js__["a" /* Component */](svg, item.component, style, layout)
+                let newComponent = new __WEBPACK_IMPORTED_MODULE_5__Component_js__["a" /* Component */](svg, item.component.name, item.component, style, layout)
+                this.components[item.component.name] = newComponent
+                newComponent.getLayers().getLayer("shape").write()
+                newComponent.getLayers().getLayer("text").write()
             } else if (item.assemblyconnector) {
                 let consumerComponent = this.components[item.assemblyconnector.consumer]
                 let providerComponent = this.components[item.assemblyconnector.provider]

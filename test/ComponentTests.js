@@ -22,7 +22,7 @@ function ComponentCreationTest1(resolve) {
         "name": "ControlPanel"
     }
     let style = new UMLWebWidget.Style()
-    let component = new UMLWebWidget.Component(svg, componentDescription, style)
+    let component = new UMLWebWidget.Component(svg, componentDescription.name, componentDescription, style)
     resolve(tf.TestResultOutcome.ePassed)
 }
 
@@ -34,7 +34,7 @@ function ComponentGetLayersTest1(resolve, reject, test) {
     }
 
     let style = new UMLWebWidget.Style()
-    let component = new UMLWebWidget.Component(svg, componentDescription, style)
+    let component = new UMLWebWidget.Component(svg, componentDescription.name, componentDescription, style)
 
     let layers = component.getLayers()
     layers.getLayer("shape").write()

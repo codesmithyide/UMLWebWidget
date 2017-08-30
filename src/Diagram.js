@@ -149,7 +149,10 @@ export class Diagram {
         for (var i = 0; i < componentDiagram.length; i++) {
             let item = componentDiagram[i]
             if (item.component) {
-                this.components[item.component.name] = new Component(svg, item.component, style, layout)
+                let newComponent = new Component(svg, item.component.name, item.component, style, layout)
+                this.components[item.component.name] = newComponent
+                newComponent.getLayers().getLayer("shape").write()
+                newComponent.getLayers().getLayer("text").write()
             } else if (item.assemblyconnector) {
                 let consumerComponent = this.components[item.assemblyconnector.consumer]
                 let providerComponent = this.components[item.assemblyconnector.provider]
