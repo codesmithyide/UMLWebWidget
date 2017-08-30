@@ -790,8 +790,11 @@ function visibilityStringToSymbol(visibility) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__ = __webpack_require__(19);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Component; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__ = __webpack_require__(19);
+
 
 
 
@@ -821,9 +824,12 @@ class Stereotype {
 
 }
 
-class Component {
+class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
     constructor(svg, componentDescription, style, layout) {
+        super(svg)
+        this.shapeLayer = this.layers.createLayer("shape")
+        this.textLayer = this.layers.createLayer("text")
         this.componentDescription = componentDescription
         this.ballConnectors = [ ]
         this.socketConnectors = [ ]
@@ -833,14 +839,14 @@ class Component {
         let offset = 0
         if (componentDescription.interfaces) {
             for (let i = 0; i < componentDescription.interfaces.length; i++) {
-                let ballConnector = new __WEBPACK_IMPORTED_MODULE_0__BallConnector_js__["a" /* BallConnector */](svg.defs(), componentWithConnectorsGroup, componentDescription.interfaces[i].name)
+                let ballConnector = new __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__["a" /* BallConnector */](svg.defs(), componentWithConnectorsGroup, componentDescription.interfaces[i].name)
                 this.ballConnectors.push(ballConnector)
                 offset = Math.max(offset, ballConnector.width)
             }
         }
         if (componentDescription.dependencies) {
             for (let i = 0; i < componentDescription.dependencies.length; i++) {
-                let socketConnector = new __WEBPACK_IMPORTED_MODULE_1__SocketConnector_js__["a" /* SocketConnector */](svg.defs(), componentWithConnectorsGroup, componentDescription.dependencies[i].name)
+                let socketConnector = new __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__["a" /* SocketConnector */](svg.defs(), componentWithConnectorsGroup, componentDescription.dependencies[i].name)
                 this.socketConnectors.push(socketConnector)
             }
         }
@@ -866,7 +872,7 @@ class Component {
         let stereotype = new Stereotype(componentGroup)
         currentDimensions.height += stereotype.height
 
-        var componentNameDef = componentGroup.defs().text(componentDescription.name)/*.addClass("UMLComponentName")*/.move(position.x + offset + style.getLeftMargin("component"), position.y + currentDimensions.height)
+        var componentNameDef = componentGroup.defs().text(componentDescription.name).addClass("UMLComponentName").move(position.x + offset + style.getLeftMargin("component"), position.y + currentDimensions.height)
         currentDimensions.width = Math.max(currentDimensions.width, componentNameDef.bbox().width)
         currentDimensions.height += (componentNameDef.bbox().height + style.getBottomMargin("component"))
 
@@ -904,7 +910,7 @@ class Component {
     }
 
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = Component;
+
 
 
 

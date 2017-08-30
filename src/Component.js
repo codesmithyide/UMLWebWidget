@@ -1,5 +1,6 @@
 'use strict'
 
+import { DiagramElement } from "./DiagramElement.js"
 import { BallConnector } from "./BallConnector.js"
 import { SocketConnector } from "./SocketConnector.js"
 
@@ -27,9 +28,12 @@ class Stereotype {
 
 }
 
-export class Component {
+class Component extends DiagramElement {
 
     constructor(svg, componentDescription, style, layout) {
+        super(svg)
+        this.shapeLayer = this.layers.createLayer("shape")
+        this.textLayer = this.layers.createLayer("text")
         this.componentDescription = componentDescription
         this.ballConnectors = [ ]
         this.socketConnectors = [ ]
@@ -110,3 +114,5 @@ export class Component {
     }
 
 }
+
+export { Component }
