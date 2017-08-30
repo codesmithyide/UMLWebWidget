@@ -67,8 +67,8 @@ class Component extends DiagramElement {
         var componentGroup = componentWithConnectorsGroup.group()
 
         let position = {
-            x: 0,
-            y: 0
+            x: 1,
+            y: 1
         }
 
 /*
@@ -96,11 +96,7 @@ class Component extends DiagramElement {
         componentGroup.rect(currentDimensions.width, currentDimensions.height).move(position.x + offset, position.y)
         stereotype.move(position.x + offset + (currentDimensions.width - this.style.getRightMargin("component") - stereotype.width), position.y + this.style.getTopMargin("component"))
         stereotype.draw()
-        componentGroup.use(componentNameDef)
-
-        // Offset by 1 to leave some space because the border stroke width is 2
-        componentGroup.move(1, 1)
-
+        
         for (let i = 0; i < this.ballConnectors.length; i++) {
             this.ballConnectors[i].moveConnectionPoint(position.x, position.y + currentDimensions.height/2)
             this.ballConnectors[i].draw()
