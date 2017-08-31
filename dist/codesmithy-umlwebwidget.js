@@ -82,7 +82,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DiagramElement; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__ = __webpack_require__(3);
 
 
 
@@ -362,6 +362,88 @@ let staticTopLeft = new ConnectionPointPosition("top-left")
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SVGLayerSet; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__ = __webpack_require__(4);
+
+
+
+
+/**
+  <p>
+    A set of layers.
+  </p>
+*/
+class SVGLayerSet {
+
+    /**
+      Creates a new SVGLayerSet instance.
+
+      @param {SVG} svg - The root SVG document.
+    */
+    constructor(svg) {
+        this.svg = svg
+        this.layers = { }
+    }
+
+    /**
+      Gets a layer.
+
+      @param {string} name - The name of the layer.
+      @returns {SVGLayer|null} The layer or null if no layer
+        with such name exists.
+    */
+    getLayer(name) {
+        return this.layers[name]
+    }
+
+    /**
+      Creates a new layer.
+
+      @param {string} name - The name of the layer.
+      @returns {SVGLayer} The new layer.
+    */
+    createLayer(name) {
+        let newLayer = new __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__["a" /* SVGLayer */](this.svg)
+        this.layers[name] = newLayer
+        return newLayer
+    }
+
+    /**
+      Merge another set into this one. Layers
+      with the same name will be merged together
+      with the elements of the set given as argument
+      being appended.
+
+      @param {SVGLayerSet} layerSet - The other layer set.
+    */
+    merge(layerSet) {
+        let self = this
+        let keys = Object.keys(self.layers)
+        keys.forEach(function(key) {
+            self.layers[key].merge(layerSet.layers[key])
+        })
+    }
+
+    /**
+      Calls {@link SVGLayer#clear} on each layer in the set.
+    */
+    clearEachLayer() {
+        let self = this
+        let keys = Object.keys(self.layers)
+        keys.forEach(function(key) {
+            self.layers[key].clear()
+        })
+    }
+}
+
+
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SVGLayer; });
 
 
@@ -401,6 +483,12 @@ class SVGLayer {
         let groupDef = this.svg.defs().group()
         this.defs.push(groupDef)
         return groupDef
+    }
+
+    circle(radius) {
+        let circleDef = this.svg.defs().circle(radius)
+        this.defs.push(circleDef)
+        return circleDef
     }
 
     /**
@@ -478,88 +566,6 @@ class SVGLayer {
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SVGLayerSet; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__ = __webpack_require__(3);
-
-
-
-
-/**
-  <p>
-    A set of layers.
-  </p>
-*/
-class SVGLayerSet {
-
-    /**
-      Creates a new SVGLayerSet instance.
-
-      @param {SVG} svg - The root SVG document.
-    */
-    constructor(svg) {
-        this.svg = svg
-        this.layers = { }
-    }
-
-    /**
-      Gets a layer.
-
-      @param {string} name - The name of the layer.
-      @returns {SVGLayer|null} The layer or null if no layer
-        with such name exists.
-    */
-    getLayer(name) {
-        return this.layers[name]
-    }
-
-    /**
-      Creates a new layer.
-
-      @param {string} name - The name of the layer.
-      @returns {SVGLayer} The new layer.
-    */
-    createLayer(name) {
-        let newLayer = new __WEBPACK_IMPORTED_MODULE_0__SVGLayer_js__["a" /* SVGLayer */](this.svg)
-        this.layers[name] = newLayer
-        return newLayer
-    }
-
-    /**
-      Merge another set into this one. Layers
-      with the same name will be merged together
-      with the elements of the set given as argument
-      being appended.
-
-      @param {SVGLayerSet} layerSet - The other layer set.
-    */
-    merge(layerSet) {
-        let self = this
-        let keys = Object.keys(self.layers)
-        keys.forEach(function(key) {
-            self.layers[key].merge(layerSet.layers[key])
-        })
-    }
-
-    /**
-      Calls {@link SVGLayer#clear} on each layer in the set.
-    */
-    clearEachLayer() {
-        let self = this
-        let keys = Object.keys(self.layers)
-        keys.forEach(function(key) {
-            self.layers[key].clear()
-        })
-    }
-}
-
-
-
-
-/***/ }),
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -623,7 +629,7 @@ class Actor extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diag
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ClassBox; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SVGLayerSet_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SVGLayerSet_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ConnectionPoint_js__ = __webpack_require__(1);
 
 
@@ -835,6 +841,7 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         super(svg)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
+        this.svg = svg
         this.id = id
         this.componentDescription = componentDescription
         this.style = style
@@ -843,24 +850,22 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
     }
 
     update() {
-        var componentWithConnectorsGroup = this.shapeLayer.group().addClass("UMLComponent")
+        var componentGroup = this.shapeLayer.group().addClass("UMLComponent")
 
         let offset = 0
         if (this.componentDescription.interfaces) {
             for (let i = 0; i < this.componentDescription.interfaces.length; i++) {
-                let ballConnector = new __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__["a" /* BallConnector */](svg.defs(), componentWithConnectorsGroup, this.componentDescription.interfaces[i].name)
+                let ballConnector = new __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__["a" /* BallConnector */](this.shapeLayer, componentWithConnectorsGroup, this.componentDescription.interfaces[i].name)
                 this.ballConnectors.push(ballConnector)
                 offset = Math.max(offset, ballConnector.width)
             }
         }
         if (this.componentDescription.dependencies) {
             for (let i = 0; i < this.componentDescription.dependencies.length; i++) {
-                let socketConnector = new __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__["a" /* SocketConnector */](svg.defs(), componentWithConnectorsGroup, this.componentDescription.dependencies[i].name)
+                let socketConnector = new __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__["a" /* SocketConnector */](this.svg, this.componentDescription.dependencies[i].name)
                 this.socketConnectors.push(socketConnector)
             }
         }
-
-        var componentGroup = componentWithConnectorsGroup.group()
 
         let position = {
             x: 1,
@@ -900,7 +905,7 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
 
         for (let i = 0; i < this.socketConnectors.length; i++) {
             this.socketConnectors[i].moveConnectionPoint(position.x + currentDimensions.width + offset, position.y + currentDimensions.height/2)
-            this.socketConnectors[i].draw()
+            this.layers.merge(this.socketConnectors[i].getLayers())
         }
     }
 
@@ -1649,7 +1654,7 @@ class UseCase extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Di
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SVGLayer_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SVGLayer_js__ = __webpack_require__(4);
 
 
 
@@ -2064,24 +2069,40 @@ class Node {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__ = __webpack_require__(3);
+
+
 
 
 var textDef = Symbol()
 
 class SocketConnector {
 
-    constructor(svgDefs, svgParentGroup, text) {
-        this.svgParentGroup = svgParentGroup
+    constructor(svg, text) {
+        this.svg = svg
+        this.layers = new __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__["a" /* SVGLayerSet */](svg)
+        this.shapeLayer = this.layers.createLayer("shape")
+        this.textLayer = this.layers.createLayer("text")
+        this.uptodate = false
         this.x = 0
         this.y = 0
-        this[textDef] = svgDefs.text(text).move(0, 0)
+        this.textGroup = this.textLayer.group()
+        this[textDef] = this.textGroup.text(text).move(0, 0)
         this.width = this[textDef].bbox().width + 5
+    }
+
+    getLayers() {
+        if (!this.uptodate) {
+            this.update()
+        }
+        return this.layers
     }
 
     // Move the connector so that the top left
     // corner of the bounding box is at position
     // (x, y)
     move(x, y) {
+        this.uptodate = false
         this.x = x
         this.y = y
     }
@@ -2089,17 +2110,20 @@ class SocketConnector {
     // Move the connector so that its connection
     // point is at position (x, y)
     moveConnectionPoint(x, y) {
+        this.uptodate = false
         let connectorOffsetY = this[textDef].bbox().height + 6
         y -= connectorOffsetY
         this.move(x, y)
     }
 
-    draw() {
-        this.svgParentGroup.use(this[textDef]).move(this.x + 5, this.y)
-        this.svgParentGroup.line(this.x, this.y + this[textDef].bbox().height + 8, this.x + (this.width / 2), this.y + this[textDef].bbox().height + 8)
-        let clippath = this.svgParentGroup.clip()
+    update() {
+        this[textDef].move(this.x + 5, this.y)
+        let lineGroup = this.shapeLayer.group().addClass("UMLComponent")
+        lineGroup.line(this.x, this.y + this[textDef].bbox().height + 8, this.x + (this.width / 2), this.y + this[textDef].bbox().height + 8)
+        let clippath = this.svg.clip()
         clippath.rect(10, 17).move(this.x + (this.width / 2) - 1, this.y + this[textDef].bbox().height, 0)
-        this.svgParentGroup.circle(15).move(this.x + (this.width / 2), this.y + this[textDef].bbox().height + 1).clipWith(clippath)
+        lineGroup.circle(15).move(this.x + (this.width / 2), this.y + this[textDef].bbox().height + 1).clipWith(clippath)
+        this.uptodate = true
     }
 
     getAssemblyConnectionPoint() {
@@ -2131,8 +2155,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__Actor_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__UseCase_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__Component_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__SVGLayer_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__SVGLayerSet_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__SVGLayer_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__SVGLayerSet_js__ = __webpack_require__(3);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "UMLWebWidgetError", function() { return __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Settings", function() { return __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Style", function() { return __WEBPACK_IMPORTED_MODULE_2__Style_js__["a"]; });

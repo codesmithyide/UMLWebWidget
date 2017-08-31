@@ -39,6 +39,7 @@ class Component extends DiagramElement {
         super(svg)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
+        this.svg = svg
         this.id = id
         this.componentDescription = componentDescription
         this.style = style
@@ -47,24 +48,22 @@ class Component extends DiagramElement {
     }
 
     update() {
-        var componentWithConnectorsGroup = this.shapeLayer.group().addClass("UMLComponent")
+        var componentGroup = this.shapeLayer.group().addClass("UMLComponent")
 
         let offset = 0
         if (this.componentDescription.interfaces) {
             for (let i = 0; i < this.componentDescription.interfaces.length; i++) {
-                let ballConnector = new BallConnector(svg.defs(), componentWithConnectorsGroup, this.componentDescription.interfaces[i].name)
+                let ballConnector = new BallConnector(this.shapeLayer, componentWithConnectorsGroup, this.componentDescription.interfaces[i].name)
                 this.ballConnectors.push(ballConnector)
                 offset = Math.max(offset, ballConnector.width)
             }
         }
         if (this.componentDescription.dependencies) {
             for (let i = 0; i < this.componentDescription.dependencies.length; i++) {
-                let socketConnector = new SocketConnector(svg.defs(), componentWithConnectorsGroup, this.componentDescription.dependencies[i].name)
+                let socketConnector = new SocketConnector(this.svg, this.componentDescription.dependencies[i].name)
                 this.socketConnectors.push(socketConnector)
             }
         }
-
-        var componentGroup = componentWithConnectorsGroup.group()
 
         let position = {
             x: 1,
@@ -104,7 +103,7 @@ class Component extends DiagramElement {
 
         for (let i = 0; i < this.socketConnectors.length; i++) {
             this.socketConnectors[i].moveConnectionPoint(position.x + currentDimensions.width + offset, position.y + currentDimensions.height/2)
-            this.socketConnectors[i].draw()
+            this.layers.merge(this.socketConnectors[i].getLayers())
         }
     }
 

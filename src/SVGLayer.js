@@ -38,6 +38,12 @@ class SVGLayer {
         return groupDef
     }
 
+    circle(radius) {
+        let circleDef = this.svg.defs().circle(radius)
+        this.defs.push(circleDef)
+        return circleDef
+    }
+
     /**
       Adds a line to the layer.
 
