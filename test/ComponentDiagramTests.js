@@ -12,6 +12,7 @@ module.exports = function(theTestHarness) {
     TestUtils.createDirectory(__dirname + "/output/componentdiagramtests")
 
     new tf.FileComparisonTest("createFromJSON test 1", ComponentDiagramCreateFromJSONTest1, componentDiagramSequence)
+    new tf.FileComparisonTest("createFromJSON test 2", ComponentDiagramCreateFromJSONTest2, componentDiagramSequence)
 }
 
 function ComponentDiagramCreateFromJSONTest1(resolve, reject, test) {
@@ -35,6 +36,40 @@ function ComponentDiagramCreateFromJSONTest1(resolve, reject, test) {
 
         test.setOutputFilePath(__dirname + "/output/componentdiagramtests/ComponentDiagramCreateFromJSONTest1.html")
         test.setReferenceFilePath(__dirname + "/reference/componentdiagramtests/ComponentDiagramCreateFromJSONTest1.html")
+
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
+}
+
+function ComponentDiagramCreateFromJSONTest2(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+    let componentDiagram = new UMLWebWidget.Diagram()
+    componentDiagram.createFromJSON(svg, {
+        "componentdiagram":
+          [
+              { 
+                  "component":
+                      {
+                          "name": "ControlPanel"
+                      }
+              },
+              {
+                  "component":
+                      {
+                          "name": "WebServer"
+                      }
+              }
+          ]
+    })
+    let elementKeys = Object.keys(componentDiagram.diagramDescription)
+    let componentsKeys = Object.keys(componentDiagram.components)
+    if ((elementKeys.length == 1) && (componentsKeys.length == 2)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/componentdiagramtests/ComponentDiagramCreateFromJSONTest2.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/componentdiagramtests/ComponentDiagramCreateFromJSONTest2.html")
+        test.setReferenceFilePath(__dirname + "/reference/componentdiagramtests/ComponentDiagramCreateFromJSONTest2.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
