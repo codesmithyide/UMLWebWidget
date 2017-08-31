@@ -14,6 +14,7 @@ module.exports = function(theTestHarness) {
     new tf.FunctionBasedTest("Creation test 1", ComponentCreationTest1, componentSequence)
 
     new tf.FileComparisonTest("getLayers test 1", ComponentGetLayersTest1, componentSequence)
+    new tf.FileComparisonTest("getLayers test 2", ComponentGetLayersTest2, componentSequence)
 }
 
 function ComponentCreationTest1(resolve) {
@@ -44,6 +45,32 @@ function ComponentGetLayersTest1(resolve, reject, test) {
 
     test.setOutputFilePath(__dirname + "/output/componenttests/ComponentGetLayersTest1.html")
     test.setReferenceFilePath(__dirname + "/reference/componenttests/ComponentGetLayersTest1.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+function ComponentGetLayersTest2(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let componentDescription = {
+        "name": "ControlPanel",
+        "dependencies":
+            [
+                { "name": "INetwork" }
+            ]
+    }
+
+    let style = new UMLWebWidget.Style()
+    let component = new UMLWebWidget.Component(svg, componentDescription.name, componentDescription, style)
+
+    let layers = component.getLayers()
+    layers.getLayer("shape").write()
+    layers.getLayer("text").write()
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/componenttests/ComponentGetLayersTest2.html", true)
+
+    test.setOutputFilePath(__dirname + "/output/componenttests/ComponentGetLayersTest2.html")
+    test.setReferenceFilePath(__dirname + "/reference/componenttests/ComponentGetLayersTest2.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
