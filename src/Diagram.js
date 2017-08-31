@@ -146,21 +146,38 @@ export class Diagram {
     }
 
     drawComponentDiagram(svg, componentDiagram, style, layout) {
+        let layoutManager = new LayoutManager(layout)
+
+        let components = []
+
         for (var i = 0; i < componentDiagram.length; i++) {
             let item = componentDiagram[i]
             if (item.component) {
                 let newComponent = new Component(svg, item.component.name, item.component, style, layout)
                 this.components[item.component.name] = newComponent
-                newComponent.getLayers().getLayer("shape").write()
-                newComponent.getLayers().getLayer("text").write()
+                components.push(newComponent)
             } else if (item.assemblyconnector) {
                 let consumerComponent = this.components[item.assemblyconnector.consumer]
                 let providerComponent = this.components[item.assemblyconnector.provider]
                 let newConnector = new AssemblyConnector(svg)
-                newConnector.move(consumerComponent.getSocketConnectionPoint("").x, consumerComponent.getSocketConnectionPoint("").y, providerComponent.getBallConnectionPoint("").x, providerComponent.getBallConnectionPoint("").y)
-                newConnector.draw()
+                //newConnector.move(consumerComponent.getSocketConnectionPoint("").x, consumerComponent.getSocketConnectionPoint("").y, providerComponent.getBallConnectionPoint("").x, providerComponent.getBallConnectionPoint("").y)
+                //newConnector.draw()
             }
-        } 
+        }
+
+        if (components != null) {
+            for (var i = 0; i < components.length; i++) {
+                layoutManager.setElementPosition(components[i])
+            }
+        }
+
+        if (components != null) {
+            for (var i = 0; i < components.length; i++) {
+                let component = components[i]
+                component.getLayers().getLayer("shape").write()
+                component.getLayers().getLayer("text").write()
+            }
+        }
     }
 
     drawDeploymentDiagram(svg, deploymentDiagram, style, layout) {

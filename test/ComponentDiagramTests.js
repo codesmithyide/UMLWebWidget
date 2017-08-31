@@ -45,6 +45,14 @@ function ComponentDiagramCreateFromJSONTest1(resolve, reject, test) {
 
 function ComponentDiagramCreateFromJSONTest2(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
+
+    let layout = {
+        "elements": {
+            "ControlPanel": { "x": 10, "y": 1 },
+            "WebServer": { "x": 200, "y": 1 }
+        }
+    }
+
     let componentDiagram = new UMLWebWidget.Diagram()
     componentDiagram.createFromJSON(svg, {
         "componentdiagram":
@@ -62,7 +70,9 @@ function ComponentDiagramCreateFromJSONTest2(resolve, reject, test) {
                       }
               }
           ]
-    })
+    },
+    layout)
+
     let elementKeys = Object.keys(componentDiagram.diagramDescription)
     let componentsKeys = Object.keys(componentDiagram.components)
     if ((elementKeys.length == 1) && (componentsKeys.length == 2)) {

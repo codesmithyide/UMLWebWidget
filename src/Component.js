@@ -66,14 +66,9 @@ class Component extends DiagramElement {
         }
 
         let position = {
-            x: 1,
-            y: 1
+            x: this.x + 1,
+            y: this.y + 1
         }
-
-/*
-        if ((layout != null) && layout.componentpositions[componentDescription.name]) {
-            position = layout.componentpositions[componentDescription.name]
-        }*/
 
         let currentDimensions = {
             width: 0,
