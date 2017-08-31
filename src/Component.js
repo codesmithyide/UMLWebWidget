@@ -53,7 +53,7 @@ class Component extends DiagramElement {
         let offset = 0
         if (this.componentDescription.interfaces) {
             for (let i = 0; i < this.componentDescription.interfaces.length; i++) {
-                let ballConnector = new BallConnector(this.shapeLayer, componentWithConnectorsGroup, this.componentDescription.interfaces[i].name)
+                let ballConnector = new BallConnector(this.svg, this.componentDescription.interfaces[i].name)
                 this.ballConnectors.push(ballConnector)
                 offset = Math.max(offset, ballConnector.width)
             }
@@ -98,7 +98,7 @@ class Component extends DiagramElement {
         
         for (let i = 0; i < this.ballConnectors.length; i++) {
             this.ballConnectors[i].moveConnectionPoint(position.x, position.y + currentDimensions.height/2)
-            this.ballConnectors[i].draw()
+            this.layers.merge(this.ballConnectors[i].getLayers())
         }
 
         for (let i = 0; i < this.socketConnectors.length; i++) {
