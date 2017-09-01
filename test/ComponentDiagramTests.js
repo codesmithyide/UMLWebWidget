@@ -14,6 +14,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("createFromJSON test 1", ComponentDiagramCreateFromJSONTest1, componentDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 2", ComponentDiagramCreateFromJSONTest2, componentDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 3", ComponentDiagramCreateFromJSONTest3, componentDiagramSequence)
+    new tf.FileComparisonTest("createFromJSON test 4", ComponentDiagramCreateFromJSONTest4, componentDiagramSequence)
 }
 
 function ComponentDiagramCreateFromJSONTest1(resolve, reject, test) {
@@ -137,6 +138,70 @@ function ComponentDiagramCreateFromJSONTest3(resolve, reject, test) {
 
         test.setOutputFilePath(__dirname + "/output/componentdiagramtests/ComponentDiagramCreateFromJSONTest3.html")
         test.setReferenceFilePath(__dirname + "/reference/componentdiagramtests/ComponentDiagramCreateFromJSONTest3.html")
+
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
+}
+
+function ComponentDiagramCreateFromJSONTest4(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let layout = {
+        "elements": {
+            "ControlPanel": { "x": 10, "y": 1 },
+            "WebServer": { "x": 200, "y": 1 }
+        }
+    }
+
+    let componentDiagram = new UMLWebWidget.Diagram()
+    componentDiagram.createFromJSON(svg, {
+        "componentdiagram":
+          [
+              { 
+                  "component":
+                      {
+                          "name": "ControlPanel",
+                          "dependencies":
+                              [
+                                  { "name": "IControl" }
+                              ]
+                      }
+              },
+              {
+                  "component":
+                      {
+                          "name": "WebServer",
+                          "dependencies":
+                              [
+                                  { "name": "INetwork" }
+                              ],
+                          "interfaces":
+                              [
+                                  { "name": "IControl" }
+                              ]
+                      }
+              },
+              {
+                  "assemblyconnector":
+                      {
+                          "interface": "IControl",
+                          "consumer": "ControlPanel",
+                          "provider": "WebServer"
+                      }
+              }
+          ]
+    },
+    layout)
+
+    let elementKeys = Object.keys(componentDiagram.diagramDescription)
+    let componentsKeys = Object.keys(componentDiagram.components)
+    if ((elementKeys.length == 1) && (componentsKeys.length == 2)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/componentdiagramtests/ComponentDiagramCreateFromJSONTest4.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/componentdiagramtests/ComponentDiagramCreateFromJSONTest4.html")
+        test.setReferenceFilePath(__dirname + "/reference/componentdiagramtests/ComponentDiagramCreateFromJSONTest4.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
