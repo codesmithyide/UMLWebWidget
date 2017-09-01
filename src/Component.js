@@ -45,17 +45,11 @@ class Component extends DiagramElement {
         this.style = style
         this.ballConnectors = [ ]
         this.socketConnectors = [ ]
-    }
 
-    update() {
-        var componentGroup = this.shapeLayer.group().addClass("UMLComponent")
-
-        let offset = 0
         if (this.componentDescription.interfaces) {
             for (let i = 0; i < this.componentDescription.interfaces.length; i++) {
                 let ballConnector = new BallConnector(this.svg, this.componentDescription.interfaces[i].name)
                 this.ballConnectors.push(ballConnector)
-                offset = Math.max(offset, ballConnector.width)
             }
         }
         if (this.componentDescription.dependencies) {
@@ -63,6 +57,15 @@ class Component extends DiagramElement {
                 let socketConnector = new SocketConnector(this.svg, this.componentDescription.dependencies[i].name)
                 this.socketConnectors.push(socketConnector)
             }
+        }
+    }
+
+    update() {
+        var componentGroup = this.shapeLayer.group().addClass("UMLComponent")
+
+        let offset = 0
+        for (let i = 0; i < this.ballConnectors.length; i++) {
+            offset = Math.max(offset, this.ballConnectors[i].width)
         }
 
         let position = {

@@ -160,7 +160,7 @@ export class Diagram {
                 let consumerComponent = this.components[item.assemblyconnector.consumer]
                 let providerComponent = this.components[item.assemblyconnector.provider]
                 let newConnector = new AssemblyConnector(svg)
-                //newConnector.move(consumerComponent.getSocketConnectionPoint("").x, consumerComponent.getSocketConnectionPoint("").y, providerComponent.getBallConnectionPoint("").x, providerComponent.getBallConnectionPoint("").y)
+                newConnector.move(consumerComponent.getSocketConnectionPoint("").x, consumerComponent.getSocketConnectionPoint("").y, providerComponent.getBallConnectionPoint("").x, providerComponent.getBallConnectionPoint("").y)
                 //newConnector.draw()
             }
         }
