@@ -1,8 +1,19 @@
 'use strict'
 
-export class Node {
+import { DiagramElement } from "./DiagramElement.js"
+
+/**
+  A node on a deployment diagram.
+
+  @extends DiagramElement
+*/
+class Node extends DiagramElement {
 
     constructor(svg, nodeDescription, style, layout) {
+        super(svg)
+        this.shapeLayer = this.layers.createLayer("shape")
+        this.textLayer = this.layers.createLayer("text")
+
         this.nodeDescription = nodeDescription
         
         var nodeGroup = svg.group().addClass("UMLNode")
@@ -37,3 +48,5 @@ export class Node {
     }
 
 }
+
+export { Node }
