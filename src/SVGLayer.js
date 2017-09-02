@@ -55,6 +55,12 @@ class SVGLayer {
         return lineDef
     }
 
+    polygon(description) {
+        let polygonDef = this.svg.defs().polygon(description)
+        this.defs.push(polygonDef)
+        return polygonDef
+    }
+
     /**
       Adds a rectangle to the layer.
 

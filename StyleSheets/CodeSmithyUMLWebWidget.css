@@ -49,6 +49,13 @@
    fill: #f1f4ff;
 }
 
+.CodeSmithyUMLWebWidget .UMLNode polygon {
+   stroke-linejoin: bevel;
+   stroke: #595959;
+   stroke-width: 2;
+   fill: #f1f4ff;
+}
+
 .CodeSmithyUMLWebWidget .UMLActor line {
    stroke: #595959;
    stroke-width: 2;

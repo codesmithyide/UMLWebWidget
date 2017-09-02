@@ -502,6 +502,12 @@ class SVGLayer {
         return lineDef
     }
 
+    polygon(description) {
+        let polygonDef = this.svg.defs().polygon(description)
+        this.defs.push(polygonDef)
+        return polygonDef
+    }
+
     /**
       Adds a rectangle to the layer.
 
@@ -1524,7 +1530,8 @@ class Node extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diagr
     
         currentDimensions.height = this.style.getTopMargin("node")
 
-        var nodeNameDef = this.textLayer.text(this.nodeDescription.name).addClass("UMLNodeName").move(borderAdjustment.left + this.style.getLeftMargin("node"), borderAdjustment.top + currentDimensions.height)
+        let nodeNameGroup = this.textLayer.group().addClass("UMLNodeName")
+        var nodeNameDef = nodeNameGroup.text(this.nodeDescription.name).move(borderAdjustment.left + this.style.getLeftMargin("node"), borderAdjustment.top + currentDimensions.height + 10)
         currentDimensions.width = Math.max(currentDimensions.width, nodeNameDef.bbox().width)
         currentDimensions.height += (nodeNameDef.bbox().height + this.style.getBottomMargin("node"))
 
@@ -1533,8 +1540,18 @@ class Node extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diagr
         }
 
         currentDimensions.width += (this.style.getLeftMargin("node") + this.style.getRightMargin("node"))
-    
-        nodeGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
+
+        let pt1 = (borderAdjustment.left + 12) + "," + borderAdjustment.top
+        let pt2 = (borderAdjustment.left + currentDimensions.width + 10) + "," + borderAdjustment.top
+        let pt3 = (borderAdjustment.left + currentDimensions.width) + "," + (borderAdjustment.top + 10)
+        let pt4 = (borderAdjustment.left) + "," + (borderAdjustment.top + 10)
+        nodeGroup.polygon(pt1 + " " + pt2 + " " + pt3 + " " + pt4)
+
+        let pt5 = (borderAdjustment.left + currentDimensions.width) + "," + (borderAdjustment.top + currentDimensions.height + 10)
+        let pt6 = (borderAdjustment.left + currentDimensions.width + 10) + "," + (borderAdjustment.top + currentDimensions.height - 1)
+        nodeGroup.polygon(pt2 + " " + pt3 + " " + pt5 + " " + pt6)      
+
+        nodeGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top + 10)
 
         this.uptodate = true
     }
