@@ -9,11 +9,11 @@ import { DiagramElement } from "./DiagramElement.js"
 */
 class Node extends DiagramElement {
 
-    constructor(svg, nodeDescription, style, layout) {
+    constructor(svg, id, nodeDescription, style) {
         super(svg)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
-
+        this.id = id
         this.nodeDescription = nodeDescription
         
         var nodeGroup = svg.group().addClass("UMLNode")
@@ -41,10 +41,10 @@ class Node extends DiagramElement {
         // Offset by 1 to leave some space because the border stroke width is 2
         nodeGroup.move(1,1)
 
-        if (layout.nodes[nodeDescription.name]) {
+        /*if (layout.nodes[nodeDescription.name]) {
             let position = layout.nodes[nodeDescription.name].position
             nodeGroup.move(position.x, position.y)
-        }
+        }*/
     }
 
 }
