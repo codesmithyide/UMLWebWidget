@@ -11,7 +11,6 @@ import { Node } from "./Node.js"
 import { Actor } from "./Actor.js"
 import { UseCase } from "./UseCase.js"
 import { Connector } from "./Connector.js"
-import { AssemblyConnector } from "./AssemblyConnector.js"
 import { SVGLayer } from "./SVGLayer.js"
 
 /**
@@ -149,6 +148,7 @@ export class Diagram {
         let layoutManager = new LayoutManager(layout)
 
         let components = []
+        let connectors = []
 
         for (var i = 0; i < componentDiagram.length; i++) {
             let item = componentDiagram[i]
@@ -159,9 +159,10 @@ export class Diagram {
             } else if (item.assemblyconnector) {
                 let consumerComponent = this.components[item.assemblyconnector.consumer]
                 let providerComponent = this.components[item.assemblyconnector.provider]
-                let newConnector = new AssemblyConnector(svg)
-                newConnector.move(consumerComponent.getSocketConnectionPoint("").x, consumerComponent.getSocketConnectionPoint("").y, providerComponent.getBallConnectionPoint("").x, providerComponent.getBallConnectionPoint("").y)
-                //newConnector.draw()
+                let connectionPoint1 = consumerComponent.createConnectionPoint(svg)
+                let connectionPoint2 = providerComponent.createConnectionPoint(svg)
+                let newConnector = new Connector(svg, "assemblyconnector", connectionPoint1, connectionPoint2)
+                connectors.push(newConnector)
             }
         }
 
@@ -170,12 +171,26 @@ export class Diagram {
                 layoutManager.setElementPosition(components[i])
             }
         }
+        if (connectors != null) {
+            for (var i = 0; i < connectors.length; i++) {
+                 let connector = connectors[i]
+                 connector.connectionPoint1.move(connector.connectionPoint1.element.getSocketConnectionPoint("").x, connector.connectionPoint1.element.getSocketConnectionPoint("").y)
+                 connector.connectionPoint2.move(connector.connectionPoint2.element.getBallConnectionPoint("").x, connector.connectionPoint2.element.getBallConnectionPoint("").y)
+            }
+        }
 
         if (components != null) {
             for (var i = 0; i < components.length; i++) {
                 let component = components[i]
                 component.getLayers().getLayer("shape").write()
                 component.getLayers().getLayer("text").write()
+            }
+        }
+        if (connectors != null) {
+            for (var i = 0; i < connectors.length; i++) {
+                let connector = connectors[i]
+                connector.getLayers().getLayer("shape").write()
+                connector.getLayers().getLayer("text").write()
             }
         }
     }

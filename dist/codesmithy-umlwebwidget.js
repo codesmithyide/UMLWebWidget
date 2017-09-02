@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 20);
+/******/ 	return __webpack_require__(__webpack_require__.s = 19);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -798,8 +798,10 @@ function visibilityStringToSymbol(visibility) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Component; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ConnectionPoint_js__ = __webpack_require__(1);
+
 
 
 
@@ -862,7 +864,14 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         }
     }
 
+    createConnectionPoint(svg) {
+        let newPoint = new __WEBPACK_IMPORTED_MODULE_3__ConnectionPoint_js__["a" /* ConnectionPoint */](svg, this)
+        return newPoint
+    }
+
     update() {
+        this.layers.clearEachLayer()
+
         var componentGroup = this.shapeLayer.group().addClass("UMLComponent")
 
         let offset = 0
@@ -910,12 +919,18 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
     }
 
     getBallConnectionPoint(name) {
+        if (!this.uptodate) {
+            this.update()
+        }
         for (let i = 0; i < this.ballConnectors.length; i++) {
             return this.ballConnectors[i].getAssemblyConnectionPoint()
         }
     }
 
     getSocketConnectionPoint(name) {
+        if (!this.uptodate) {
+            this.update()
+        }
         for (let i = 0; i < this.socketConnectors.length; i++) {
             return this.socketConnectors[i].getAssemblyConnectionPoint()
         }
@@ -987,6 +1002,9 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         } else if (this.type == "usecaseassociation") {
             let lineGroup = this.shapeLayer.group().addClass("UMLUseCaseAssociation")
             drawUseCaseAssociation(lineGroup, this.connectionPoint1, this.connectionPoint2)
+        } else if (this.type == "assemblyconnector") {
+            let lineGroup = this.shapeLayer.group().addClass("UMLAssemblyConnector")
+            drawAssemblyConnector(lineGroup, this.connectionPoint1, this.connectionPoint2)
         }
         this.uptodate = true
     }
@@ -1056,6 +1074,12 @@ function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
 
 function drawUseCaseAssociation(lineGroup, connectionPoint1, connectionPoint2) {
     lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y)
+}
+
+function drawAssemblyConnector(lineGroup, connectionPoint1, connectionPoint2) {
+    lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
+    lineGroup.line(connectionPoint2.x - 13, connectionPoint2.y + 5, connectionPoint2.x, connectionPoint2.y)
+    lineGroup.line(connectionPoint2.x - 13, connectionPoint2.y - 5, connectionPoint2.x, connectionPoint2.y)
 }
 
 // Orientation of the head (e.g. arrow or diamond)
@@ -1649,13 +1673,11 @@ class UseCase extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Di
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Component_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SVGLayer_js__ = __webpack_require__(4);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__SVGLayer_js__ = __webpack_require__(4);
 
 
 
@@ -1806,6 +1828,7 @@ class Diagram {
         let layoutManager = new __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__["a" /* LayoutManager */](layout)
 
         let components = []
+        let connectors = []
 
         for (var i = 0; i < componentDiagram.length; i++) {
             let item = componentDiagram[i]
@@ -1816,9 +1839,10 @@ class Diagram {
             } else if (item.assemblyconnector) {
                 let consumerComponent = this.components[item.assemblyconnector.consumer]
                 let providerComponent = this.components[item.assemblyconnector.provider]
-                let newConnector = new __WEBPACK_IMPORTED_MODULE_11__AssemblyConnector_js__["a" /* AssemblyConnector */](svg)
-                newConnector.move(consumerComponent.getSocketConnectionPoint("").x, consumerComponent.getSocketConnectionPoint("").y, providerComponent.getBallConnectionPoint("").x, providerComponent.getBallConnectionPoint("").y)
-                //newConnector.draw()
+                let connectionPoint1 = consumerComponent.createConnectionPoint(svg)
+                let connectionPoint2 = providerComponent.createConnectionPoint(svg)
+                let newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "assemblyconnector", connectionPoint1, connectionPoint2)
+                connectors.push(newConnector)
             }
         }
 
@@ -1827,12 +1851,26 @@ class Diagram {
                 layoutManager.setElementPosition(components[i])
             }
         }
+        if (connectors != null) {
+            for (var i = 0; i < connectors.length; i++) {
+                 let connector = connectors[i]
+                 connector.connectionPoint1.move(connector.connectionPoint1.element.getSocketConnectionPoint("").x, connector.connectionPoint1.element.getSocketConnectionPoint("").y)
+                 connector.connectionPoint2.move(connector.connectionPoint2.element.getBallConnectionPoint("").x, connector.connectionPoint2.element.getBallConnectionPoint("").y)
+            }
+        }
 
         if (components != null) {
             for (var i = 0; i < components.length; i++) {
                 let component = components[i]
                 component.getLayers().getLayer("shape").write()
                 component.getLayers().getLayer("text").write()
+            }
+        }
+        if (connectors != null) {
+            for (var i = 0; i < connectors.length; i++) {
+                let connector = connectors[i]
+                connector.getLayers().getLayer("shape").write()
+                connector.getLayers().getLayer("text").write()
             }
         }
     }
@@ -1956,38 +1994,6 @@ function draw(classboxes, lifelines, connectors, messages) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-class AssemblyConnector {
-
-    constructor(svgParentGroup) {
-        this.svgParentGroup = svgParentGroup
-        this.startPoint = { x: 0, y: 0 }
-        this.endPoint = { x: 0, y: 0 }
-    }
-
-    move(x1, y1, x2, y2) {
-        this.startPoint = { x: x1, y: y1 }
-        this.endPoint = { x: x2, y: y2 }
-    }
-
-    draw() {
-        let assemblyConnectorGroup = this.svgParentGroup.group().addClass("UMLAssemblyConnector")
-        assemblyConnectorGroup.line(this.startPoint.x, this.startPoint.y, this.endPoint.x, this.endPoint.y).attr("stroke-dasharray", "8, 4")
-        assemblyConnectorGroup.line(this.endPoint.x - 13, this.endPoint.y + 5, this.endPoint.x, this.endPoint.y)
-        assemblyConnectorGroup.line(this.endPoint.x - 13, this.endPoint.y - 5, this.endPoint.x, this.endPoint.y)
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = AssemblyConnector;
-
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__ = __webpack_require__(2);
 
 
@@ -2036,6 +2042,7 @@ class BallConnector {
     }
 
     update() {
+        this.shapeLayer.clear()
         this[textDef].move(this.x, this.y)
         let lineGroup = this.shapeLayer.group().addClass("UMLComponent")
         lineGroup.circle(10).move(this.x + (this.width)/2 - 5, this.y + 22)
@@ -2052,7 +2059,7 @@ class BallConnector {
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2100,7 +2107,7 @@ class Node {
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2152,6 +2159,7 @@ class SocketConnector {
     }
 
     update() {
+        this.shapeLayer.clear()
         this[textDef].move(this.x + 5, this.y)
         let lineGroup = this.shapeLayer.group().addClass("UMLComponent")
         lineGroup.line(this.x, this.y + this[textDef].bbox().height + 8, this.x + (this.width / 2), this.y + this[textDef].bbox().height + 8)
@@ -2171,7 +2179,7 @@ class SocketConnector {
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

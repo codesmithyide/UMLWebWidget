@@ -45,6 +45,7 @@ export class SocketConnector {
     }
 
     update() {
+        this.shapeLayer.clear()
         this[textDef].move(this.x + 5, this.y)
         let lineGroup = this.shapeLayer.group().addClass("UMLComponent")
         lineGroup.line(this.x, this.y + this[textDef].bbox().height + 8, this.x + (this.width / 2), this.y + this[textDef].bbox().height + 8)

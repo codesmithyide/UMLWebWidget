@@ -45,6 +45,7 @@ export class BallConnector {
     }
 
     update() {
+        this.shapeLayer.clear()
         this[textDef].move(this.x, this.y)
         let lineGroup = this.shapeLayer.group().addClass("UMLComponent")
         lineGroup.circle(10).move(this.x + (this.width)/2 - 5, this.y + 22)

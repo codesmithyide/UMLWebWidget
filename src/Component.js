@@ -3,6 +3,7 @@
 import { DiagramElement } from "./DiagramElement.js"
 import { BallConnector } from "./BallConnector.js"
 import { SocketConnector } from "./SocketConnector.js"
+import { ConnectionPoint } from "./ConnectionPoint.js"
 
 class Stereotype {
 
@@ -60,7 +61,14 @@ class Component extends DiagramElement {
         }
     }
 
+    createConnectionPoint(svg) {
+        let newPoint = new ConnectionPoint(svg, this)
+        return newPoint
+    }
+
     update() {
+        this.layers.clearEachLayer()
+
         var componentGroup = this.shapeLayer.group().addClass("UMLComponent")
 
         let offset = 0
@@ -108,12 +116,18 @@ class Component extends DiagramElement {
     }
 
     getBallConnectionPoint(name) {
+        if (!this.uptodate) {
+            this.update()
+        }
         for (let i = 0; i < this.ballConnectors.length; i++) {
             return this.ballConnectors[i].getAssemblyConnectionPoint()
         }
     }
 
     getSocketConnectionPoint(name) {
+        if (!this.uptodate) {
+            this.update()
+        }
         for (let i = 0; i < this.socketConnectors.length; i++) {
             return this.socketConnectors[i].getAssemblyConnectionPoint()
         }
