@@ -36,7 +36,7 @@ class Stereotype {
 */
 class Component extends DiagramElement {
 
-    constructor(svg, id, componentDescription, style, layout) {
+    constructor(svg, id, componentDescription, style) {
         super(svg)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")

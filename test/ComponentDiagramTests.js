@@ -21,7 +21,7 @@ function ComponentDiagramCreateFromJSONTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
     let componentDiagram = new UMLWebWidget.Diagram()
     componentDiagram.createFromJSON(svg, {
-        "componentdiagram":
+        "elements":
           [
               { 
                   "component":
@@ -57,7 +57,7 @@ function ComponentDiagramCreateFromJSONTest2(resolve, reject, test) {
 
     let componentDiagram = new UMLWebWidget.Diagram()
     componentDiagram.createFromJSON(svg, {
-        "componentdiagram":
+        "elements":
           [
               { 
                   "component":
@@ -101,7 +101,7 @@ function ComponentDiagramCreateFromJSONTest3(resolve, reject, test) {
 
     let componentDiagram = new UMLWebWidget.Diagram()
     componentDiagram.createFromJSON(svg, {
-        "componentdiagram":
+        "elements":
           [
               { 
                   "component":
@@ -157,7 +157,7 @@ function ComponentDiagramCreateFromJSONTest4(resolve, reject, test) {
 
     let componentDiagram = new UMLWebWidget.Diagram()
     componentDiagram.createFromJSON(svg, {
-        "componentdiagram":
+        "elements":
           [
               { 
                   "component":

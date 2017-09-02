@@ -845,7 +845,7 @@ class Stereotype {
 */
 class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
-    constructor(svg, id, componentDescription, style, layout) {
+    constructor(svg, id, componentDescription, style) {
         super(svg)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
@@ -1829,8 +1829,6 @@ class Diagram {
 
         if (this.diagramDescription.elements) {
             this.drawDiagram(svg, this.diagramDescription.elements, style, layout)
-        } else if (this.diagramDescription.componentdiagram) {
-            this.drawComponentDiagram(svg, this.diagramDescription.componentdiagram, style, layout)
         } else if (this.diagramDescription.deploymentdiagram) {
             this.drawDeploymentDiagram(svg, this.diagramDescription.deploymentdiagram, style, layout)
         } else if (this.diagramDescription.usecasediagram) {
@@ -1843,8 +1841,10 @@ class Diagram {
 
         let classboxes = []
         let lifelines = []
+        let components = []
         let connectors = []
         let messages = []
+        let assemblyconnectors = []
 
         // Construct the elements
         for (var i = 0; i < description.length; i++) {
@@ -1858,6 +1858,10 @@ class Diagram {
                 let newLifeline = new __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__["a" /* Lifeline */](svg, item.lifeline.name, item.lifeline, style)
                 this.lifelines[item.lifeline.name] = newLifeline
                 lifelines.push(newLifeline)
+            } else if (item.component) {
+                let newComponent = new __WEBPACK_IMPORTED_MODULE_5__Component_js__["a" /* Component */](svg, item.component.name, item.component, style)
+                this.components[item.component.name] = newComponent
+                components.push(newComponent)
             } else if (item.relationship) {
                 let classbox1
                 let classbox2
@@ -1895,33 +1899,13 @@ class Diagram {
                     }
                     messages.push(newConnector)
                 }
-            }
-        }
-
-        dolayout(layoutManager, classboxes, lifelines, connectors, messages)
-
-        draw(classboxes, lifelines, connectors, messages)
-    }
-
-    drawComponentDiagram(svg, componentDiagram, style, layout) {
-        let layoutManager = new __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__["a" /* LayoutManager */](layout)
-
-        let components = []
-        let connectors = []
-
-        for (var i = 0; i < componentDiagram.length; i++) {
-            let item = componentDiagram[i]
-            if (item.component) {
-                let newComponent = new __WEBPACK_IMPORTED_MODULE_5__Component_js__["a" /* Component */](svg, item.component.name, item.component, style, layout)
-                this.components[item.component.name] = newComponent
-                components.push(newComponent)
             } else if (item.assemblyconnector) {
                 let consumerComponent = this.components[item.assemblyconnector.consumer]
                 let providerComponent = this.components[item.assemblyconnector.provider]
                 let connectionPoint1 = consumerComponent.createConnectionPoint(svg)
                 let connectionPoint2 = providerComponent.createConnectionPoint(svg)
                 let newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "assemblyconnector", connectionPoint1, connectionPoint2)
-                connectors.push(newConnector)
+                assemblyconnectors.push(newConnector)
             }
         }
 
@@ -1930,13 +1914,14 @@ class Diagram {
                 layoutManager.setElementPosition(components[i])
             }
         }
-        if (connectors != null) {
-            for (var i = 0; i < connectors.length; i++) {
-                 let connector = connectors[i]
+        if (assemblyconnectors != null) {
+            for (var i = 0; i < assemblyconnectors.length; i++) {
+                 let connector = assemblyconnectors[i]
                  connector.connectionPoint1.move(connector.connectionPoint1.element.getSocketConnectionPoint("").x, connector.connectionPoint1.element.getSocketConnectionPoint("").y)
                  connector.connectionPoint2.move(connector.connectionPoint2.element.getBallConnectionPoint("").x, connector.connectionPoint2.element.getBallConnectionPoint("").y)
             }
         }
+        dolayout(layoutManager, classboxes, lifelines, connectors, messages)
 
         if (components != null) {
             for (var i = 0; i < components.length; i++) {
@@ -1945,13 +1930,14 @@ class Diagram {
                 component.getLayers().getLayer("text").write()
             }
         }
-        if (connectors != null) {
-            for (var i = 0; i < connectors.length; i++) {
-                let connector = connectors[i]
+        if (assemblyconnectors != null) {
+            for (var i = 0; i < assemblyconnectors.length; i++) {
+                let connector = assemblyconnectors[i]
                 connector.getLayers().getLayer("shape").write()
                 connector.getLayers().getLayer("text").write()
             }
         }
+        draw(classboxes, lifelines, connectors, messages)
     }
 
     drawDeploymentDiagram(svg, deploymentDiagram, style, layout) {
