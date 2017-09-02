@@ -196,16 +196,29 @@ export class Diagram {
     }
 
     drawDeploymentDiagram(svg, deploymentDiagram, style, layout) {
+        let layoutManager = new LayoutManager(layout)
+
+        let nodes = []
+
         for (var i = 0; i < deploymentDiagram.length; i++) {
             let item = deploymentDiagram[i]
             if (item.node) {
                 let newNode = new Node(svg, item.node.name, item.node, style)
-                if ((layout != null) && layout.nodes[item.node.name]) {
-                    let position = layout.nodes[item.node.name].position
-                    newNode.move(position.x, position.y)
-                }
-                newNode.getLayers().getLayer("shape").write()
-                newNode.getLayers().getLayer("text").write()
+                nodes.push(newNode)
+            }
+        }
+
+        if (nodes != null) {
+            for (var i = 0; i < nodes.length; i++) {
+                layoutManager.setElementPosition(nodes[i])
+            }
+        }
+
+        if (nodes != null) {
+            for (var i = 0; i < nodes.length; i++) {
+                let node = nodes[i]
+                node.getLayers().getLayer("shape").write()
+                node.getLayers().getLayer("text").write()
             }
         }
     }
