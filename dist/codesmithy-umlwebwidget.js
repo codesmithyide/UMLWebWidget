@@ -1959,7 +1959,7 @@ class Diagram {
             let item = deploymentDiagram[i]
             if (item.node) {
                 let newNode = new __WEBPACK_IMPORTED_MODULE_7__Node_js__["a" /* Node */](svg, item.node.name, item.node, style)
-                if (layout.nodes[item.node.name]) {
+                if ((layout != null) && layout.nodes[item.node.name]) {
                     let position = layout.nodes[item.node.name].position
                     newNode.move(position.x, position.y)
                 }
