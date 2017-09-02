@@ -199,7 +199,13 @@ export class Diagram {
         for (var i = 0; i < deploymentDiagram.length; i++) {
             let item = deploymentDiagram[i]
             if (item.node) {
-                new Node(svg, item.node, style, layout)
+                let newNode = new Node(svg, item.node.name, item.node, style)
+                if (layout.nodes[item.node.name]) {
+                    let position = layout.nodes[item.node.name].position
+                    newNode.move(position.x, position.y)
+                }
+                newNode.getLayers().getLayer("shape").write()
+                newNode.getLayers().getLayer("text").write()
             }
         }
     }

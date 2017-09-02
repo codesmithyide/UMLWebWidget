@@ -15,36 +15,37 @@ class Node extends DiagramElement {
         this.textLayer = this.layers.createLayer("text")
         this.id = id
         this.nodeDescription = nodeDescription
-        
-        var nodeGroup = svg.group().addClass("UMLNode")
+        this.style = style
+    }
+
+    update() {
+        var nodeGroup = this.shapeLayer.group().addClass("UMLNode")
     
         let currentDimensions = { 
             width: 0,
             height: 0
         }
-    
-        currentDimensions.height = style.getTopMargin("node")
 
-        var nodeNameDef = svg.defs().text(nodeDescription.name).addClass("UMLNodeName").move(style.getLeftMargin("node"), currentDimensions.height)
+        let borderAdjustment = {
+            top: this.y + 1,
+            left: this.x + 1
+        }
+    
+        currentDimensions.height = this.style.getTopMargin("node")
+
+        var nodeNameDef = this.textLayer.text(this.nodeDescription.name).addClass("UMLNodeName").move(borderAdjustment.left + this.style.getLeftMargin("node"), borderAdjustment.top + currentDimensions.height)
         currentDimensions.width = Math.max(currentDimensions.width, nodeNameDef.bbox().width)
-        currentDimensions.height += (nodeNameDef.bbox().height + style.getBottomMargin("node"))
+        currentDimensions.height += (nodeNameDef.bbox().height + this.style.getBottomMargin("node"))
 
         if (currentDimensions.width > nodeNameDef.bbox().width) {
             nodeNameDef.dx((currentDimensions.width - nodeNameDef.bbox().width)/2)
         }
 
-        currentDimensions.width += (style.getLeftMargin("node") + style.getRightMargin("node"))
+        currentDimensions.width += (this.style.getLeftMargin("node") + this.style.getRightMargin("node"))
     
-        nodeGroup.rect(currentDimensions.width, currentDimensions.height).move(0,0)
-        nodeGroup.use(nodeNameDef)
+        nodeGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
 
-        // Offset by 1 to leave some space because the border stroke width is 2
-        nodeGroup.move(1,1)
-
-        /*if (layout.nodes[nodeDescription.name]) {
-            let position = layout.nodes[nodeDescription.name].position
-            nodeGroup.move(position.x, position.y)
-        }*/
+        this.uptodate = true
     }
 
 }
