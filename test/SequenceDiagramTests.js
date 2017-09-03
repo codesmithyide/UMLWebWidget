@@ -50,8 +50,8 @@ function SequenceDiagramCreateFromJSONTest2(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "x": 1, "y": 1 },
-            "Shopkeeper": { "x": 150, "y": 1 }
+            "Customer": { "position": { "x": 1, "y": 1 } },
+            "Shopkeeper": { "position": { "x": 150, "y": 1 } }
         }
     }
 
@@ -93,8 +93,8 @@ function SequenceDiagramCreateFromJSONTest3(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "x": 1, "y": 1 },
-            "Shopkeeper": { "x": 150, "y": 1 }
+            "Customer": { "position": { "x": 1, "y": 1 } },
+            "Shopkeeper": { "position": { "x": 150, "y": 1 } }
         }
     }
 
@@ -149,9 +149,9 @@ function SequenceDiagramCreateFromJSONTest4(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "x": 1, "y": 1 },
-            "Shopkeeper": { "x": 150, "y": 1 },
-            "Till": { "x": 320, "y": 1 }
+            "Customer": { "position": { "x": 1, "y": 1 } },
+            "Shopkeeper": { "position": { "x": 150, "y": 1 } },
+            "Till": { "position": { "x": 320, "y": 1 } }
         }
     }
 
@@ -220,9 +220,9 @@ function SequenceDiagramCreateFromJSONTest5(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "x": 1, "y": 1 },
-            "Shopkeeper": { "x": 150, "y": 1 },
-            "Till": { "x": 320, "y": 1 }
+            "Customer": { "position": { "x": 1, "y": 1 } },
+            "Shopkeeper": { "position": { "x": 150, "y": 1 } },
+            "Till": { "position": { "x": 320, "y": 1 } }
         }
     }
 

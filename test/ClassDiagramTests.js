@@ -88,8 +88,8 @@ function ClassDiagramCreateFromJSONTest4(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "MyClass1": { "x": 0, "y": 0 },
-            "MyClass2": { "x": 150, "y": 0 }
+            "MyClass1": { "position": { "x": 0, "y": 0 } },
+            "MyClass2": { "position": { "x": 150, "y": 0 } }
         }
     }
 
@@ -143,8 +143,8 @@ function ClassDiagramCreateFromJSONTest5(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "MyBaseClass": { "x": 0, "y": 0 },
-            "MyDerivedClass": { "x": 170, "y": 0 }
+            "MyBaseClass": { "position": { "x": 0, "y": 0 } },
+            "MyDerivedClass": { "position": { "x": 170, "y": 0 } }
         }
     }
 
@@ -206,8 +206,8 @@ function ClassDiagramCreateFromJSONTest6(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ContainingClass": { "x": 0, "y": 0 },
-            "ContainedClass": { "x": 200, "y": 0 }
+            "ContainingClass": { "position": { "x": 0, "y": 0 } },
+            "ContainedClass": { "position": { "x": 200, "y": 0 } }
         }
     }
 
@@ -269,8 +269,8 @@ function ClassDiagramCreateFromJSONTest7(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ContainingClass": { "x": 0, "y": 0 },
-            "ContainedClass": { "x": 200, "y": 0 }
+            "ContainingClass": { "position": { "x": 0, "y": 0 } },
+            "ContainedClass": { "position": { "x": 200, "y": 0 } }
         }
     }
 

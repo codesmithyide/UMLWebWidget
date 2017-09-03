@@ -13,9 +13,6 @@ class LayoutManager {
         if (this.layout.elements == null) {
             this.layout.elements = { }
         }
-        if (this.layout.lifelinepositions == null) {
-            this.layout.lifelinepositions = { }
-        }
         if (this.layout.connectorpositions == null) {
             this.layout.connectorpositions = { }
         }
@@ -32,8 +29,11 @@ class LayoutManager {
     }
 
     setElementPosition(element) {
-        if (this.layout.elements[element.id]) {
-            element.move(this.layout.elements[element.id].x, this.layout.elements[element.id].y)
+        let elementLayout = this.layout.elements[element.id]
+        if (elementLayout) {
+            if (elementLayout.position) {
+                element.move(elementLayout.position.x, elementLayout.position.y)
+            }
         }
     }
 
