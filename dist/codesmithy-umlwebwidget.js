@@ -1852,8 +1852,6 @@ class Diagram {
 
         if (this.diagramDescription.elements) {
             this.drawDiagram(svg, this.diagramDescription.elements, style, layout)
-        } else if (this.diagramDescription.deploymentdiagram) {
-            this.drawDeploymentDiagram(svg, this.diagramDescription.deploymentdiagram, style, layout)
         } else if (this.diagramDescription.usecasediagram) {
             this.drawUseCaseDiagram(svg, this.diagramDescription.usecasediagram, layout)
         }
@@ -1865,6 +1863,7 @@ class Diagram {
         let classboxes = []
         let lifelines = []
         let components = []
+        let nodes = []
         let connectors = []
         let messages = []
         let assemblyconnectors = []
@@ -1925,22 +1924,7 @@ class Diagram {
                 let connectionPoint2 = providerComponent.createInterfaceConnectionPoint(svg, item.assemblyconnector.interface)
                 let newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "assemblyconnector", connectionPoint1, connectionPoint2)
                 assemblyconnectors.push(newConnector)
-            }
-        }
-
-        dolayout(layoutManager, classboxes, lifelines, components, connectors, messages, assemblyconnectors)
-
-        draw(classboxes, lifelines, components, connectors, messages, assemblyconnectors)
-    }
-
-    drawDeploymentDiagram(svg, deploymentDiagram, style, layout) {
-        let layoutManager = new __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__["a" /* LayoutManager */](layout)
-
-        let nodes = []
-
-        for (var i = 0; i < deploymentDiagram.length; i++) {
-            let item = deploymentDiagram[i]
-            if (item.node) {
+            } else if (item.node) {
                 let newNode = new __WEBPACK_IMPORTED_MODULE_7__Node_js__["a" /* Node */](svg, item.node.name, item.node, style)
                 nodes.push(newNode)
             }
@@ -1951,6 +1935,7 @@ class Diagram {
                 layoutManager.setElementPosition(nodes[i])
             }
         }
+        dolayout(layoutManager, classboxes, lifelines, components, connectors, messages, assemblyconnectors)
 
         if (nodes != null) {
             for (var i = 0; i < nodes.length; i++) {
@@ -1959,6 +1944,7 @@ class Diagram {
                 node.getLayers().getLayer("text").write()
             }
         }
+        draw(classboxes, lifelines, components, connectors, messages, assemblyconnectors)
     }
 
     drawUseCaseDiagram(svg, useCaseDiagram, layout) {

@@ -19,7 +19,7 @@ function DeploymentDiagramCreateFromJSONTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
     let deploymentDiagram = new UMLWebWidget.Diagram()
     deploymentDiagram.createFromJSON(svg, { 
-        "deploymentdiagram":
+        "elements":
             [
                 {
                     "node":
@@ -54,7 +54,7 @@ function DeploymentDiagramCreateFromJSONTest2(resolve, reject, test) {
 
     let deploymentDiagram = new UMLWebWidget.Diagram()
     deploymentDiagram.createFromJSON(svg, { 
-        "deploymentdiagram":
+        "elements":
             [
                 {
                     "node":
