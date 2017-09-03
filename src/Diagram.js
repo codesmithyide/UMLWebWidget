@@ -46,6 +46,8 @@ export class Diagram {
         // The list of all UML use cases present on the
         // diagram
         this.usecases = new Map()
+
+        this.messages = [ ]
     }
 
     // Create a diagram from a div element in the HTML document.
@@ -76,26 +78,26 @@ export class Diagram {
     drawDiagram(svg, description, style, layout) {
         let layoutManager = new LayoutManager(layout)
 
-        let lifelines = []
         let components = []
         let nodes = []
         let actors = []
         let usecases = []
         let connectors = []
-        let messages = []
         let assemblyconnectors = []
 
         // Construct the elements
         for (var i = 0; i < description.length; i++) {
             let item = description[i]
             if (item.class) {
-                let className = item.class.name
-                let newClassBox = new ClassBox(svg, className, item.class, this.settings.canMove, style)
-                this.classboxes.set(className, newClassBox)
+                this.classboxes.set(
+                    item.class.name,
+                    new ClassBox(svg, item.class.name, item.class, this.settings.canMove, style)
+                )
             } else if (item.lifeline) {
-                let newLifeline = new Lifeline(svg, item.lifeline.name, item.lifeline, style)
-                this.lifelines[item.lifeline.name] = newLifeline
-                lifelines.push(newLifeline)
+                this.lifelines.set(
+                    item.lifeline.name,
+                    new Lifeline(svg, item.lifeline.name, item.lifeline, style)
+                )
             } else if (item.component) {
                 let newComponent = new Component(svg, item.component.name, item.component, style)
                 this.components[item.component.name] = newComponent
@@ -130,19 +132,19 @@ export class Diagram {
                     let message = item.messages[j]
                     let newConnector
                     if (message.synchronousmessage) {
-                        let lifeline1 = this.lifelines[message.synchronousmessage.caller]
-                        let lifeline2 = this.lifelines[message.synchronousmessage.callee]
+                        let lifeline1 = this.lifelines.get(message.synchronousmessage.caller)
+                        let lifeline2 = this.lifelines.get(message.synchronousmessage.callee)
                         let connectionPoint1 = lifeline1.createConnectionPoint(svg)
                         let connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = new Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, message.synchronousmessage.name)
                     } else if (message.returnmessage) {
-                        let lifeline1 = this.lifelines[message.returnmessage.callee]
-                        let lifeline2 = this.lifelines[message.returnmessage.caller]
+                        let lifeline1 = this.lifelines.get(message.returnmessage.callee)
+                        let lifeline2 = this.lifelines.get(message.returnmessage.caller)
                         let connectionPoint1 = lifeline1.createConnectionPoint(svg)
                         let connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = new Connector(svg, "returnmessage", connectionPoint1, connectionPoint2, "")
                     }
-                    messages.push(newConnector)
+                    this.messages.push(newConnector)
                 }
             } else if (item.assemblyconnector) {
                 let consumerComponent = this.components[item.assemblyconnector.consumer]
@@ -161,19 +163,14 @@ export class Diagram {
         }
 
         layoutManager.doLayout(this)
-        dolayout(layoutManager, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors)
+        dolayout(layoutManager, components, nodes, actors, usecases, connectors, assemblyconnectors)
 
-        draw(this.classboxes.values(), lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors)
+        draw(this.classboxes.values(), this.lifelines.values(), components, nodes, actors, usecases, connectors, this.messages, assemblyconnectors)
     }
 
 }
 
-function dolayout(layoutManager, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
-    if (lifelines != null) {
-        for (var i = 0; i < lifelines.length; i++) {
-            layoutManager.setElementPosition(lifelines[i])
-        }
-    }
+function dolayout(layoutManager, components, nodes, actors, usecases, connectors, assemblyconnectors) {
     if (components != null) {
         for (var i = 0; i < components.length; i++) {
             layoutManager.setElementPosition(components[i])
@@ -197,9 +194,6 @@ function dolayout(layoutManager, lifelines, components, nodes, actors, usecases,
     if (connectors != null) {
         layoutManager.layoutConnectors(connectors)
     }
-    if (messages != null) {
-        layoutManager.layoutMessages(lifelines, messages)
-    }
     if (assemblyconnectors != null) {
         for (var i = 0; i < assemblyconnectors.length; i++) {
             let connector = assemblyconnectors[i]
@@ -217,8 +211,7 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
         }
     }
     if (lifelines != null) {
-        for (var i = 0; i < lifelines.length; i++) {
-            let lifeline = lifelines[i]
+        for (let lifeline of lifelines) {
             lifeline.getLayers().getLayer("shape").write()
             lifeline.getLayers().getLayer("text").write()
         }

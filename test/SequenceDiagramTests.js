@@ -33,8 +33,7 @@ function SequenceDiagramCreateFromJSONTest1(resolve, reject, test) {
           ]
     })
     let elementKeys = Object.keys(sequenceDiagram.diagramDescription)
-    let lifelinesKeys = Object.keys(sequenceDiagram.lifelines)
-    if ((elementKeys.length == 1) && (lifelinesKeys.length == 1)) {
+    if ((elementKeys.length == 1) && (sequenceDiagram.lifelines.size == 1)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest1.html", true)
 
         test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest1.html")
@@ -50,7 +49,7 @@ function SequenceDiagramCreateFromJSONTest2(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
     let layout = {
-        "lifelinepositions": {
+        "elements": {
             "Customer": { "x": 1, "y": 1 },
             "Shopkeeper": { "x": 150, "y": 1 }
         }
@@ -77,8 +76,7 @@ function SequenceDiagramCreateFromJSONTest2(resolve, reject, test) {
     layout)
 
     let elementKeys = Object.keys(sequenceDiagram.diagramDescription)
-    let lifelinesKeys = Object.keys(sequenceDiagram.lifelines)
-    if ((elementKeys.length == 1) && (lifelinesKeys.length == 2)) {
+    if ((elementKeys.length == 1) && (sequenceDiagram.lifelines.size == 2)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest2.html", true)
 
         test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest2.html")
@@ -94,7 +92,7 @@ function SequenceDiagramCreateFromJSONTest3(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
     let layout = {
-        "lifelinepositions": {
+        "elements": {
             "Customer": { "x": 1, "y": 1 },
             "Shopkeeper": { "x": 150, "y": 1 }
         }
@@ -134,8 +132,7 @@ function SequenceDiagramCreateFromJSONTest3(resolve, reject, test) {
     layout)
 
     let elementKeys = Object.keys(sequenceDiagram.diagramDescription)
-    let lifelinesKeys = Object.keys(sequenceDiagram.lifelines)
-    if ((elementKeys.length == 1) && (lifelinesKeys.length == 2)) {
+    if ((elementKeys.length == 1) && (sequenceDiagram.lifelines.size == 2)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest3.html", true)
 
         test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest3.html")
@@ -151,7 +148,7 @@ function SequenceDiagramCreateFromJSONTest4(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
     let layout = {
-        "lifelinepositions": {
+        "elements": {
             "Customer": { "x": 1, "y": 1 },
             "Shopkeeper": { "x": 150, "y": 1 },
             "Till": { "x": 320, "y": 1 }
@@ -206,8 +203,7 @@ function SequenceDiagramCreateFromJSONTest4(resolve, reject, test) {
     layout)
 
     let elementKeys = Object.keys(sequenceDiagram.diagramDescription)
-    let lifelinesKeys = Object.keys(sequenceDiagram.lifelines)
-    if ((elementKeys.length == 1) && (lifelinesKeys.length == 3)) {
+    if ((elementKeys.length == 1) && (sequenceDiagram.lifelines.size == 3)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest4.html", true)
 
         test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest4.html")
@@ -223,7 +219,7 @@ function SequenceDiagramCreateFromJSONTest5(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div")).size(600, 300)
 
     let layout = {
-        "lifelinepositions": {
+        "elements": {
             "Customer": { "x": 1, "y": 1 },
             "Shopkeeper": { "x": 150, "y": 1 },
             "Till": { "x": 320, "y": 1 }
@@ -300,8 +296,7 @@ function SequenceDiagramCreateFromJSONTest5(resolve, reject, test) {
     layout)
 
     let elementKeys = Object.keys(sequenceDiagram.diagramDescription)
-    let lifelinesKeys = Object.keys(sequenceDiagram.lifelines)
-    if ((elementKeys.length == 1) && (lifelinesKeys.length == 3)) {
+    if ((elementKeys.length == 1) && (sequenceDiagram.lifelines.size == 3)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest5.html", true)
 
         test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest5.html")

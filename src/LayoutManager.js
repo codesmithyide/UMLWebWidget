@@ -25,13 +25,15 @@ class LayoutManager {
         for (let classbox of diagram.classboxes.values()) {
             this.setElementPosition(classbox)
         }
+        for (let lifeline of diagram.lifelines.values()) {
+            this.setElementPosition(lifeline)
+        }
+        this.layoutMessages(diagram.lifelines, diagram.messages)
     }
 
     setElementPosition(element) {
         if (this.layout.elements[element.id]) {
             element.move(this.layout.elements[element.id].x, this.layout.elements[element.id].y)
-        } else if (this.layout.lifelinepositions[element.id]) {
-            element.move(this.layout.lifelinepositions[element.id].x, this.layout.lifelinepositions[element.id].y)
         }
     }
 
@@ -59,8 +61,8 @@ class LayoutManager {
 
     layoutMessages(lifelines, connectors) {
         let nextYPosition = 0
-        for (var i = 0; i < lifelines.length; i++) {
-            nextYPosition = Math.max(nextYPosition, lifelines[i].getLineTopPosition().y + 20)
+        for (let lifeline of lifelines.values()) {
+            nextYPosition = Math.max(nextYPosition, lifeline.getLineTopPosition().y + 20)
         }
         for (var i = 0; i < connectors.length; i++) {
             let connector = connectors[i]
@@ -82,8 +84,8 @@ class LayoutManager {
             }
         }
         if (connectors.length > 0) {
-            for (var i = 0; i < lifelines.length; i++) {
-                lifelines[i].uptodate = false
+            for (let lifeline of lifelines.values()) {
+                lifeline.uptodate = false
             }
         }
     }
