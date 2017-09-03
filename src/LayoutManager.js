@@ -28,6 +28,9 @@ class LayoutManager {
         for (let component of diagram.components.values()) {
             this.setElementPosition(component)
         }
+        for (let node of diagram.nodes.values()) {
+            this.setElementPosition(node)
+        }
         this.layoutMessages(diagram.lifelines, diagram.messages)
     }
 

@@ -1331,6 +1331,9 @@ class LayoutManager {
         for (let component of diagram.components.values()) {
             this.setElementPosition(component)
         }
+        for (let node of diagram.nodes.values()) {
+            this.setElementPosition(node)
+        }
         this.layoutMessages(diagram.lifelines, diagram.messages)
     }
 
@@ -1826,13 +1829,15 @@ class Diagram {
         // diagram
         this.classboxes = new Map()
 
+        // The list of all UML lifelines present on the
+        // diagram
+        this.lifelines = new Map()
+
         // The list of all UML components present on the
         // diagram
         this.components = new Map()
 
-        // The list of all UML lifelines present on the
-        // diagram
-        this.lifelines = new Map()
+        this.nodes = new Map()
 
         // The list of all UML actors present on the
         // diagram
@@ -1873,7 +1878,6 @@ class Diagram {
     drawDiagram(svg, description, style, layout) {
         let layoutManager = new __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__["a" /* LayoutManager */](layout)
 
-        let nodes = []
         let actors = []
         let usecases = []
         let connectors = []
@@ -1898,8 +1902,10 @@ class Diagram {
                      new __WEBPACK_IMPORTED_MODULE_5__Component_js__["a" /* Component */](svg, item.component.name, item.component, style)
                 )
             } else if (item.node) {
-                let newNode = new __WEBPACK_IMPORTED_MODULE_7__Node_js__["a" /* Node */](svg, item.node.name, item.node, style)
-                nodes.push(newNode)
+                this.nodes.set(
+                    item.node.name,
+                    new __WEBPACK_IMPORTED_MODULE_7__Node_js__["a" /* Node */](svg, item.node.name, item.node, style)
+                )
             } else if (item.actor) {
                 let newActor = new __WEBPACK_IMPORTED_MODULE_8__Actor_js__["a" /* Actor */](svg, item.actor.name, item.actor)
                 this.actors[item.actor.name] = newActor
@@ -1958,19 +1964,14 @@ class Diagram {
         }
 
         layoutManager.doLayout(this)
-        dolayout(layoutManager, nodes, actors, usecases, connectors, assemblyconnectors)
+        dolayout(layoutManager, actors, usecases, connectors, assemblyconnectors)
 
-        draw(this.classboxes.values(), this.lifelines.values(), this.components.values(), nodes, actors, usecases, connectors, this.messages, assemblyconnectors)
+        draw(this.classboxes.values(), this.lifelines.values(), this.components.values(), this.nodes.values(), actors, usecases, connectors, this.messages, assemblyconnectors)
     }
 
 }
 
-function dolayout(layoutManager, nodes, actors, usecases, connectors, assemblyconnectors) {
-    if (nodes != null) {
-        for (var i = 0; i < nodes.length; i++) {
-            layoutManager.setElementPosition(nodes[i])
-        }
-    }
+function dolayout(layoutManager, actors, usecases, connectors, assemblyconnectors) {
     if (actors != null) {
         for (var i = 0; i < actors.length; i++) {
         layoutManager.setElementPosition(actors[i])
@@ -2013,8 +2014,7 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
         }
     }
     if (nodes != null) {
-        for (var i = 0; i < nodes.length; i++) {
-            let node = nodes[i]
+        for (let node of nodes) {
             node.getLayers().getLayer("shape").write()
             node.getLayers().getLayer("text").write()
         }

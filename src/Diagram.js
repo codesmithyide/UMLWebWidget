@@ -31,13 +31,15 @@ class Diagram {
         // diagram
         this.classboxes = new Map()
 
+        // The list of all UML lifelines present on the
+        // diagram
+        this.lifelines = new Map()
+
         // The list of all UML components present on the
         // diagram
         this.components = new Map()
 
-        // The list of all UML lifelines present on the
-        // diagram
-        this.lifelines = new Map()
+        this.nodes = new Map()
 
         // The list of all UML actors present on the
         // diagram
@@ -78,7 +80,6 @@ class Diagram {
     drawDiagram(svg, description, style, layout) {
         let layoutManager = new LayoutManager(layout)
 
-        let nodes = []
         let actors = []
         let usecases = []
         let connectors = []
@@ -103,8 +104,10 @@ class Diagram {
                      new Component(svg, item.component.name, item.component, style)
                 )
             } else if (item.node) {
-                let newNode = new Node(svg, item.node.name, item.node, style)
-                nodes.push(newNode)
+                this.nodes.set(
+                    item.node.name,
+                    new Node(svg, item.node.name, item.node, style)
+                )
             } else if (item.actor) {
                 let newActor = new Actor(svg, item.actor.name, item.actor)
                 this.actors[item.actor.name] = newActor
@@ -163,19 +166,14 @@ class Diagram {
         }
 
         layoutManager.doLayout(this)
-        dolayout(layoutManager, nodes, actors, usecases, connectors, assemblyconnectors)
+        dolayout(layoutManager, actors, usecases, connectors, assemblyconnectors)
 
-        draw(this.classboxes.values(), this.lifelines.values(), this.components.values(), nodes, actors, usecases, connectors, this.messages, assemblyconnectors)
+        draw(this.classboxes.values(), this.lifelines.values(), this.components.values(), this.nodes.values(), actors, usecases, connectors, this.messages, assemblyconnectors)
     }
 
 }
 
-function dolayout(layoutManager, nodes, actors, usecases, connectors, assemblyconnectors) {
-    if (nodes != null) {
-        for (var i = 0; i < nodes.length; i++) {
-            layoutManager.setElementPosition(nodes[i])
-        }
-    }
+function dolayout(layoutManager, actors, usecases, connectors, assemblyconnectors) {
     if (actors != null) {
         for (var i = 0; i < actors.length; i++) {
         layoutManager.setElementPosition(actors[i])
@@ -218,8 +216,7 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
         }
     }
     if (nodes != null) {
-        for (var i = 0; i < nodes.length; i++) {
-            let node = nodes[i]
+        for (let node of nodes) {
             node.getLayers().getLayer("shape").write()
             node.getLayers().getLayer("text").write()
         }
