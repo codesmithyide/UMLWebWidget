@@ -50,9 +50,9 @@ function UseCaseDiagramCreateFromJSONTest2(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "x": 10, "y": 1 },
-            "Shopkeeper": { "x": 1, "y": 75 },
-            "Till": { "x": 33, "y": 150 }
+            "Customer": { "position": { "x": 10, "y": 1 } },
+            "Shopkeeper": { "position": { "x": 1, "y": 75 } },
+            "Till": { "position": { "x": 33, "y": 150 } }
         }
     }
 
@@ -102,10 +102,10 @@ function UseCaseDiagramCreateFromJSONTest3(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "x": 10, "y": 1 },
-            "Shopkeeper": { "x": 1, "y": 75 },
-            "Till": { "x": 33, "y": 150 },
-            "Pay for merchandise": { "x": 140, "y": 75 }
+            "Customer": { "position": { "x": 10, "y": 1 } },
+            "Shopkeeper": { "position": { "x": 1, "y": 75 } },
+            "Till": { "position": { "x": 33, "y": 150 } },
+            "Pay for merchandise": { "position": { "x": 140, "y": 75 } }
         }
     }
 

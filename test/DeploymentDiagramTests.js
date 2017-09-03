@@ -47,8 +47,8 @@ function DeploymentDiagramCreateFromJSONTest2(resolve, reject, test) {
 
     let layout = {
         elements: {
-            WebServer: { x: 1, y: 1 },
-            DatabaseServer: { x:150, y: 1 }
+            WebServer: { "position": { x: 1, y: 1 } },
+            DatabaseServer: { "position": { x:150, y: 1 } }
         }
     }
 
