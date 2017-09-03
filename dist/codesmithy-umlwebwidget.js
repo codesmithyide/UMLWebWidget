@@ -1852,8 +1852,6 @@ class Diagram {
 
         if (this.diagramDescription.elements) {
             this.drawDiagram(svg, this.diagramDescription.elements, style, layout)
-        } else if (this.diagramDescription.usecasediagram) {
-            this.drawUseCaseDiagram(svg, this.diagramDescription.usecasediagram, layout)
         }
     }
 
@@ -1864,6 +1862,8 @@ class Diagram {
         let lifelines = []
         let components = []
         let nodes = []
+        let actors = []
+        let usecases = []
         let connectors = []
         let messages = []
         let assemblyconnectors = []
@@ -1884,6 +1884,17 @@ class Diagram {
                 let newComponent = new __WEBPACK_IMPORTED_MODULE_5__Component_js__["a" /* Component */](svg, item.component.name, item.component, style)
                 this.components[item.component.name] = newComponent
                 components.push(newComponent)
+            } else if (item.node) {
+                let newNode = new __WEBPACK_IMPORTED_MODULE_7__Node_js__["a" /* Node */](svg, item.node.name, item.node, style)
+                nodes.push(newNode)
+            } else if (item.actor) {
+                let newActor = new __WEBPACK_IMPORTED_MODULE_8__Actor_js__["a" /* Actor */](svg, item.actor.name, item.actor)
+                this.actors[item.actor.name] = newActor
+                actors.push(newActor)
+            } else if (item.usecase) {
+                let newUseCase = new __WEBPACK_IMPORTED_MODULE_9__UseCase_js__["a" /* UseCase */](svg, item.usecase.title, item.usecase)
+                this.usecases[item.usecase.title] = newUseCase
+                usecases.push(newUseCase)
             } else if (item.relationship) {
                 let classbox1
                 let classbox2
@@ -1924,33 +1935,6 @@ class Diagram {
                 let connectionPoint2 = providerComponent.createInterfaceConnectionPoint(svg, item.assemblyconnector.interface)
                 let newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "assemblyconnector", connectionPoint1, connectionPoint2)
                 assemblyconnectors.push(newConnector)
-            } else if (item.node) {
-                let newNode = new __WEBPACK_IMPORTED_MODULE_7__Node_js__["a" /* Node */](svg, item.node.name, item.node, style)
-                nodes.push(newNode)
-            }
-        }
-
-        dolayout(layoutManager, classboxes, lifelines, components, nodes, connectors, messages, assemblyconnectors)
-
-        draw(classboxes, lifelines, components, nodes, connectors, messages, assemblyconnectors)
-    }
-
-    drawUseCaseDiagram(svg, useCaseDiagram, layout) {
-        let layoutManager = new __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__["a" /* LayoutManager */](layout)
-
-        let actors = []
-        let usecases = []
-
-        for (var i = 0; i < useCaseDiagram.length; i++) {
-            let item = useCaseDiagram[i]
-            if (item.actor) {
-                let newActor = new __WEBPACK_IMPORTED_MODULE_8__Actor_js__["a" /* Actor */](svg, item.actor.name, item.actor)
-                this.actors[item.actor.name] = newActor
-                actors.push(newActor)
-            } else if (item.usecase) {
-                let newUseCase = new __WEBPACK_IMPORTED_MODULE_9__UseCase_js__["a" /* UseCase */](svg, item.usecase.title, item.usecase)
-                this.usecases[item.usecase.title] = newUseCase
-                usecases.push(newUseCase)
             } else if (item.association) {
                 let connectionPoint1 = this.actors[item.association.actor].createConnectionPoint(svg)
                 let connectionPoint2 = this.usecases[item.association.usecase].createConnectionPoint(svg)
@@ -1971,6 +1955,7 @@ class Diagram {
                layoutManager.setElementPosition(usecases[i])
             }
         }
+        dolayout(layoutManager, classboxes, lifelines, components, nodes, connectors, messages, assemblyconnectors)
 
         if (actors != null) {
             for (var i = 0; i < actors.length; i++) {
@@ -1987,6 +1972,7 @@ class Diagram {
                 usecase.getLayers().getLayer("text").write()
             }
         }
+        draw(classboxes, lifelines, components, nodes, connectors, messages, assemblyconnectors)
     }
 
 }
