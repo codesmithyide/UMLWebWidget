@@ -1944,42 +1944,16 @@ class Diagram {
             }
         }
 
-        if (actors != null) {
-            for (var i = 0; i < actors.length; i++) {
-               layoutManager.setElementPosition(actors[i])
-            }
-        }
+        dolayout(layoutManager, classboxes, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors)
 
-        if (usecases != null) {
-            for (var i = 0; i < usecases.length; i++) {
-               layoutManager.setElementPosition(usecases[i])
-            }
-        }
-        dolayout(layoutManager, classboxes, lifelines, components, nodes, connectors, messages, assemblyconnectors)
-
-        if (actors != null) {
-            for (var i = 0; i < actors.length; i++) {
-                let actor = actors[i]
-                actor.getLayers().getLayer("shape").write()
-                actor.getLayers().getLayer("text").write()
-            }
-        }
-
-        if (usecases != null) {
-            for (var i = 0; i < usecases.length; i++) {
-                let usecase = usecases[i]
-                usecase.getLayers().getLayer("shape").write()
-                usecase.getLayers().getLayer("text").write()
-            }
-        }
-        draw(classboxes, lifelines, components, nodes, connectors, messages, assemblyconnectors)
+        draw(classboxes, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors)
     }
 
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Diagram;
 
 
-function dolayout(layoutManager, classboxes, lifelines, components, nodes, connectors, messages, assemblyconnectors) {
+function dolayout(layoutManager, classboxes, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
     if (classboxes != null) {
         for (var i = 0; i < classboxes.length; i++) {
             layoutManager.setElementPosition(classboxes[i])
@@ -2000,6 +1974,16 @@ function dolayout(layoutManager, classboxes, lifelines, components, nodes, conne
             layoutManager.setElementPosition(nodes[i])
         }
     }
+    if (actors != null) {
+        for (var i = 0; i < actors.length; i++) {
+        layoutManager.setElementPosition(actors[i])
+        }
+    }
+    if (usecases != null) {
+        for (var i = 0; i < usecases.length; i++) {
+            layoutManager.setElementPosition(usecases[i])
+        }
+    }
     if (connectors != null) {
         layoutManager.layoutConnectors(connectors)
     }
@@ -2015,7 +1999,7 @@ function dolayout(layoutManager, classboxes, lifelines, components, nodes, conne
     }
 }
 
-function draw(classboxes, lifelines, components, nodes, connectors, messages, assemblyconnectors) {
+function draw(classboxes, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
     if (classboxes != null) {
         for (var i = 0; i < classboxes.length; i++) {
             let classbox = classboxes[i]
@@ -2042,6 +2026,20 @@ function draw(classboxes, lifelines, components, nodes, connectors, messages, as
             let node = nodes[i]
             node.getLayers().getLayer("shape").write()
             node.getLayers().getLayer("text").write()
+        }
+    }
+    if (actors != null) {
+        for (var i = 0; i < actors.length; i++) {
+            let actor = actors[i]
+            actor.getLayers().getLayer("shape").write()
+            actor.getLayers().getLayer("text").write()
+        }
+    }
+    if (usecases != null) {
+        for (var i = 0; i < usecases.length; i++) {
+            let usecase = usecases[i]
+            usecase.getLayers().getLayer("shape").write()
+            usecase.getLayers().getLayer("text").write()
         }
     }
     for (var i = 0; i < connectors.length; i++) {
