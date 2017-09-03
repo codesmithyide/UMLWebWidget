@@ -25,7 +25,7 @@ export class Diagram {
         // The description of the UML diagram in JSON
         // format. This will then be parsed to create
         // the graphical form.
-        this.diagramDescription = new Map()
+        this.diagramDescription = { }
 
         // The list of all UML class boxes present on the
         // diagram
@@ -76,7 +76,6 @@ export class Diagram {
     drawDiagram(svg, description, style, layout) {
         let layoutManager = new LayoutManager(layout)
 
-        let classboxes = []
         let lifelines = []
         let components = []
         let nodes = []
@@ -92,8 +91,7 @@ export class Diagram {
             if (item.class) {
                 let className = item.class.name
                 let newClassBox = new ClassBox(svg, className, item.class, this.settings.canMove, style)
-                this.classboxes[className] = newClassBox
-                classboxes.push(newClassBox)                
+                this.classboxes.set(className, newClassBox)
             } else if (item.lifeline) {
                 let newLifeline = new Lifeline(svg, item.lifeline.name, item.lifeline, style)
                 this.lifelines[item.lifeline.name] = newLifeline
@@ -117,11 +115,11 @@ export class Diagram {
                 let classbox1
                 let classbox2
                 if (item.relationship.type == "inheritance") {
-                    classbox1 = this.classboxes[item.relationship.derivedclass]
-                    classbox2 = this.classboxes[item.relationship.baseclass] 
+                    classbox1 = this.classboxes.get(item.relationship.derivedclass)
+                    classbox2 = this.classboxes.get(item.relationship.baseclass)
                 } else if ((item.relationship.type == "composition") || (item.relationship.type == "aggregation")) {
-                    classbox1 = this.classboxes[item.relationship.containedclass]
-                    classbox2 = this.classboxes[item.relationship.containingclass]
+                    classbox1 = this.classboxes.get(item.relationship.containedclass)
+                    classbox2 = this.classboxes.get(item.relationship.containingclass)
                 }
                 let connectionPoint1 = classbox1.createConnectionPoint(svg)
                 let connectionPoint2 = classbox2.createConnectionPoint(svg)
@@ -162,17 +160,17 @@ export class Diagram {
             }
         }
 
-        dolayout(layoutManager, classboxes, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors)
+        dolayout(layoutManager, this.classboxes.values(), lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors)
 
-        draw(classboxes, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors)
+        draw(this.classboxes.values(), lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors)
     }
 
 }
 
 function dolayout(layoutManager, classboxes, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
     if (classboxes != null) {
-        for (var i = 0; i < classboxes.length; i++) {
-            layoutManager.setElementPosition(classboxes[i])
+        for (let classbox of classboxes) {
+            layoutManager.setElementPosition(classbox)
         }
     }
     if (lifelines != null) {
@@ -217,8 +215,7 @@ function dolayout(layoutManager, classboxes, lifelines, components, nodes, actor
 
 function draw(classboxes, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
     if (classboxes != null) {
-        for (var i = 0; i < classboxes.length; i++) {
-            let classbox = classboxes[i]
+        for (let classbox of classboxes) {
             classbox.getLayers().getLayer("shape").write()
             classbox.getLayers().getLayer("text").write()
         }

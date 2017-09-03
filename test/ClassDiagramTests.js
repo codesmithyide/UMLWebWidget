@@ -31,8 +31,7 @@ function ClassDiagramCreateFromJSONTest1(resolve) {
     let classDiagram = new UMLWebWidget.Diagram()
     classDiagram.createFromJSON()
     let descriptionKeys = Object.keys(classDiagram.diagramDescription)
-    let classboxesKeys = Object.keys(classDiagram.classboxes)
-    if ((descriptionKeys.length == 0) && (classboxesKeys.length == 0)) {
+    if ((descriptionKeys.length == 0) && (classDiagram.classboxes.size == 0)) {
         resolve(tf.TestResultOutcome.ePassed)
     } else {
         resolve(tf.TestResultOutcome.eFailed)
@@ -44,8 +43,7 @@ function ClassDiagramCreateFromJSONTest2(resolve) {
     classDiagram.createFromJSON(null, {
     })
     let elementKeys = Object.keys(classDiagram.diagramDescription)
-    let classboxesKeys = Object.keys(classDiagram.classboxes)
-    if ((elementKeys.length == 0) && (classboxesKeys.length == 0)) {
+    if ((elementKeys.length == 0) && (classDiagram.classboxes.size == 0)) {
         resolve(tf.TestResultOutcome.ePassed)
     } else {
         resolve(tf.TestResultOutcome.eFailed)
@@ -73,8 +71,7 @@ function ClassDiagramCreateFromJSONTest3(resolve, reject, test) {
             ]
     })
     let elementKeys = Object.keys(classDiagram.diagramDescription)
-    let classboxesKeys = Object.keys(classDiagram.classboxes)
-    if ((elementKeys.length == 1) && (classboxesKeys.length == 1)) {
+    if ((elementKeys.length == 1) && (classDiagram.classboxes.size == 1)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest3.html", true)
 
         test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest3.html")
@@ -129,8 +126,7 @@ function ClassDiagramCreateFromJSONTest4(resolve, reject, test) {
     layout)
 
     let elementKeys = Object.keys(classDiagram.diagramDescription)
-    let classboxesKeys = Object.keys(classDiagram.classboxes)
-    if ((elementKeys.length == 1) && (classboxesKeys.length == 2)) {
+    if ((elementKeys.length == 1) && (classDiagram.classboxes.size == 2)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest4.html", true)
 
         test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest4.html")
@@ -193,8 +189,7 @@ function ClassDiagramCreateFromJSONTest5(resolve, reject, test) {
     layout)
 
     let elementKeys = Object.keys(classDiagram.diagramDescription)
-    let classboxesKeys = Object.keys(classDiagram.classboxes)
-    if ((elementKeys.length == 1) && (classboxesKeys.length == 2)) {
+    if ((elementKeys.length == 1) && (classDiagram.classboxes.size == 2)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest5.html", true)
 
         test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest5.html")
@@ -257,8 +252,7 @@ function ClassDiagramCreateFromJSONTest6(resolve, reject, test) {
     layout)
 
     let elementKeys = Object.keys(classDiagram.diagramDescription)
-    let classboxesKeys = Object.keys(classDiagram.classboxes)
-    if ((elementKeys.length == 1) && (classboxesKeys.length == 2)) {
+    if ((elementKeys.length == 1) && (classDiagram.classboxes.size == 2)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest6.html", true)
 
         test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest6.html")
@@ -321,8 +315,7 @@ function ClassDiagramCreateFromJSONTest7(resolve, reject, test) {
     layout)
 
     let elementKeys = Object.keys(classDiagram.diagramDescription)
-    let classboxesKeys = Object.keys(classDiagram.classboxes)
-    if ((elementKeys.length == 1) && (classboxesKeys.length == 2)) {
+    if ((elementKeys.length == 1) && (classDiagram.classboxes.size == 2)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest7.html", true)
 
         test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest7.html")
