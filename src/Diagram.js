@@ -148,21 +148,9 @@ export class Diagram {
             }
         }
 
-        if (nodes != null) {
-            for (var i = 0; i < nodes.length; i++) {
-                layoutManager.setElementPosition(nodes[i])
-            }
-        }
-        dolayout(layoutManager, classboxes, lifelines, components, connectors, messages, assemblyconnectors)
+        dolayout(layoutManager, classboxes, lifelines, components, nodes, connectors, messages, assemblyconnectors)
 
-        if (nodes != null) {
-            for (var i = 0; i < nodes.length; i++) {
-                let node = nodes[i]
-                node.getLayers().getLayer("shape").write()
-                node.getLayers().getLayer("text").write()
-            }
-        }
-        draw(classboxes, lifelines, components, connectors, messages, assemblyconnectors)
+        draw(classboxes, lifelines, components, nodes, connectors, messages, assemblyconnectors)
     }
 
     drawUseCaseDiagram(svg, useCaseDiagram, layout) {
@@ -221,7 +209,7 @@ export class Diagram {
 
 }
 
-function dolayout(layoutManager, classboxes, lifelines, components, connectors, messages, assemblyconnectors) {
+function dolayout(layoutManager, classboxes, lifelines, components, nodes, connectors, messages, assemblyconnectors) {
     if (classboxes != null) {
         for (var i = 0; i < classboxes.length; i++) {
             layoutManager.setElementPosition(classboxes[i])
@@ -235,6 +223,11 @@ function dolayout(layoutManager, classboxes, lifelines, components, connectors, 
     if (components != null) {
         for (var i = 0; i < components.length; i++) {
             layoutManager.setElementPosition(components[i])
+        }
+    }
+    if (nodes != null) {
+        for (var i = 0; i < nodes.length; i++) {
+            layoutManager.setElementPosition(nodes[i])
         }
     }
     if (connectors != null) {
@@ -252,7 +245,7 @@ function dolayout(layoutManager, classboxes, lifelines, components, connectors, 
     }
 }
 
-function draw(classboxes, lifelines, components, connectors, messages, assemblyconnectors) {
+function draw(classboxes, lifelines, components, nodes, connectors, messages, assemblyconnectors) {
     if (classboxes != null) {
         for (var i = 0; i < classboxes.length; i++) {
             let classbox = classboxes[i]
@@ -272,6 +265,13 @@ function draw(classboxes, lifelines, components, connectors, messages, assemblyc
             let component = components[i]
             component.getLayers().getLayer("shape").write()
             component.getLayers().getLayer("text").write()
+        }
+    }
+    if (nodes != null) {
+        for (var i = 0; i < nodes.length; i++) {
+            let node = nodes[i]
+            node.getLayers().getLayer("shape").write()
+            node.getLayers().getLayer("text").write()
         }
     }
     for (var i = 0; i < connectors.length; i++) {
