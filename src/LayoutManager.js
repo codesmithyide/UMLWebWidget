@@ -31,6 +31,12 @@ class LayoutManager {
         for (let node of diagram.nodes.values()) {
             this.setElementPosition(node)
         }
+        for (let actor of diagram.actors.values()) {
+            this.setElementPosition(actor)
+        }
+        for (let usecase of diagram.usecases.values()) {
+            this.setElementPosition(usecase)
+        }
         this.layoutMessages(diagram.lifelines, diagram.messages)
     }
 

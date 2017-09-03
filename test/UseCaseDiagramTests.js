@@ -31,9 +31,7 @@ function UseCaseDiagramCreateFromJSONTest1(resolve, reject, test) {
           ]
     })
     let elementKeys = Object.keys(useCaseDiagram.diagramDescription)
-    let actorsKeys = Object.keys(useCaseDiagram.actors)
-    let usecasesKeys = Object.keys(useCaseDiagram.usecases)
-    if ((elementKeys.length == 1) && (actorsKeys.length == 1) && (usecasesKeys.length == 0)) {
+    if ((elementKeys.length == 1) && (useCaseDiagram.actors.size == 1) && (useCaseDiagram.usecases.size == 0)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/usecasediagramtests/UseCaseDiagramCreateFromJSONTest1.html", true)
 
         test.setOutputFilePath(__dirname + "/output/usecasediagramtests/UseCaseDiagramCreateFromJSONTest1.html")
@@ -83,9 +81,7 @@ function UseCaseDiagramCreateFromJSONTest2(resolve, reject, test) {
     layout)
 
     let elementKeys = Object.keys(useCaseDiagram.diagramDescription)
-    let actorsKeys = Object.keys(useCaseDiagram.actors)
-    let usecasesKeys = Object.keys(useCaseDiagram.usecases)
-    if ((elementKeys.length == 1) && (actorsKeys.length == 3) && (usecasesKeys.length == 0)) {
+    if ((elementKeys.length == 1) && (useCaseDiagram.actors.size == 3) && (useCaseDiagram.usecases.size == 0)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/usecasediagramtests/UseCaseDiagramCreateFromJSONTest2.html", true)
 
         test.setOutputFilePath(__dirname + "/output/usecasediagramtests/UseCaseDiagramCreateFromJSONTest2.html")
@@ -142,9 +138,7 @@ function UseCaseDiagramCreateFromJSONTest3(resolve, reject, test) {
     layout)
 
     let elementKeys = Object.keys(useCaseDiagram.diagramDescription)
-    let actorsKeys = Object.keys(useCaseDiagram.actors)
-    let usecasesKeys = Object.keys(useCaseDiagram.usecases)
-    if ((elementKeys.length == 1) && (actorsKeys.length == 3) && (usecasesKeys.length == 1)) {
+    if ((elementKeys.length == 1) && (useCaseDiagram.actors.size == 3) && (useCaseDiagram.usecases.size == 1)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/usecasediagramtests/UseCaseDiagramCreateFromJSONTest3.html", true)
 
         test.setOutputFilePath(__dirname + "/output/usecasediagramtests/UseCaseDiagramCreateFromJSONTest3.html")

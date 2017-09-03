@@ -1334,6 +1334,12 @@ class LayoutManager {
         for (let node of diagram.nodes.values()) {
             this.setElementPosition(node)
         }
+        for (let actor of diagram.actors.values()) {
+            this.setElementPosition(actor)
+        }
+        for (let usecase of diagram.usecases.values()) {
+            this.setElementPosition(usecase)
+        }
         this.layoutMessages(diagram.lifelines, diagram.messages)
     }
 
@@ -1878,8 +1884,6 @@ class Diagram {
     drawDiagram(svg, description, style, layout) {
         let layoutManager = new __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__["a" /* LayoutManager */](layout)
 
-        let actors = []
-        let usecases = []
         let connectors = []
         let assemblyconnectors = []
 
@@ -1907,13 +1911,15 @@ class Diagram {
                     new __WEBPACK_IMPORTED_MODULE_7__Node_js__["a" /* Node */](svg, item.node.name, item.node, style)
                 )
             } else if (item.actor) {
-                let newActor = new __WEBPACK_IMPORTED_MODULE_8__Actor_js__["a" /* Actor */](svg, item.actor.name, item.actor)
-                this.actors[item.actor.name] = newActor
-                actors.push(newActor)
+                this.actors.set(
+                    item.actor.name,
+                    new __WEBPACK_IMPORTED_MODULE_8__Actor_js__["a" /* Actor */](svg, item.actor.name, item.actor)
+                )
             } else if (item.usecase) {
-                let newUseCase = new __WEBPACK_IMPORTED_MODULE_9__UseCase_js__["a" /* UseCase */](svg, item.usecase.title, item.usecase)
-                this.usecases[item.usecase.title] = newUseCase
-                usecases.push(newUseCase)
+                this.usecases.set(
+                    item.usecase.title,
+                    new __WEBPACK_IMPORTED_MODULE_9__UseCase_js__["a" /* UseCase */](svg, item.usecase.title, item.usecase)
+                )
             } else if (item.relationship) {
                 let classbox1
                 let classbox2
@@ -1955,8 +1961,8 @@ class Diagram {
                 let newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "assemblyconnector", connectionPoint1, connectionPoint2)
                 assemblyconnectors.push(newConnector)
             } else if (item.association) {
-                let connectionPoint1 = this.actors[item.association.actor].createConnectionPoint(svg)
-                let connectionPoint2 = this.usecases[item.association.usecase].createConnectionPoint(svg)
+                let connectionPoint1 = this.actors.get(item.association.actor).createConnectionPoint(svg)
+                let connectionPoint2 = this.usecases.get(item.association.usecase).createConnectionPoint(svg)
                 let newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "usecaseassociation", connectionPoint1, connectionPoint2)
                 newConnector.getLayers().getLayer("shape").write()
                 newConnector.getLayers().getLayer("text").write()
@@ -1964,24 +1970,15 @@ class Diagram {
         }
 
         layoutManager.doLayout(this)
-        dolayout(layoutManager, actors, usecases, connectors, assemblyconnectors)
+        dolayout(layoutManager, connectors, assemblyconnectors)
 
-        draw(this.classboxes.values(), this.lifelines.values(), this.components.values(), this.nodes.values(), actors, usecases, connectors, this.messages, assemblyconnectors)
+        draw(this.classboxes.values(), this.lifelines.values(), this.components.values(), this.nodes.values(), 
+            this.actors.values(), this.usecases.values(), connectors, this.messages, assemblyconnectors)
     }
 
 }
 
-function dolayout(layoutManager, actors, usecases, connectors, assemblyconnectors) {
-    if (actors != null) {
-        for (var i = 0; i < actors.length; i++) {
-        layoutManager.setElementPosition(actors[i])
-        }
-    }
-    if (usecases != null) {
-        for (var i = 0; i < usecases.length; i++) {
-            layoutManager.setElementPosition(usecases[i])
-        }
-    }
+function dolayout(layoutManager, connectors, assemblyconnectors) {
     if (connectors != null) {
         layoutManager.layoutConnectors(connectors)
     }
@@ -2020,15 +2017,13 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
         }
     }
     if (actors != null) {
-        for (var i = 0; i < actors.length; i++) {
-            let actor = actors[i]
+        for (let actor of actors) {
             actor.getLayers().getLayer("shape").write()
             actor.getLayers().getLayer("text").write()
         }
     }
     if (usecases != null) {
-        for (var i = 0; i < usecases.length; i++) {
-            let usecase = usecases[i]
+        for (let usecase of usecases) {
             usecase.getLayers().getLayer("shape").write()
             usecase.getLayers().getLayer("text").write()
         }
