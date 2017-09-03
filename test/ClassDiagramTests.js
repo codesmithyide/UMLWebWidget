@@ -20,6 +20,8 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("createFromJSON test 5", ClassDiagramCreateFromJSONTest5, classDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 6", ClassDiagramCreateFromJSONTest6, classDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 7", ClassDiagramCreateFromJSONTest7, classDiagramSequence)
+
+    new tf.FileComparisonTest("connector layout test 1", ClassDiagramConnectorLayoutTest1, classDiagramSequence)
 }
 
 function ClassDiagramCreationTest1(resolve) {
@@ -83,6 +85,7 @@ function ClassDiagramCreateFromJSONTest3(resolve, reject, test) {
     }
 }
 
+// A class diagram with 2 classes without any relationships
 function ClassDiagramCreateFromJSONTest4(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
@@ -138,6 +141,7 @@ function ClassDiagramCreateFromJSONTest4(resolve, reject, test) {
     }
 }
 
+// A class diagram with a base class and a derived class
 function ClassDiagramCreateFromJSONTest5(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
@@ -201,6 +205,7 @@ function ClassDiagramCreateFromJSONTest5(resolve, reject, test) {
     }
 }
 
+// A class diagram with 2 classes and a composition relationship
 function ClassDiagramCreateFromJSONTest6(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
@@ -264,6 +269,7 @@ function ClassDiagramCreateFromJSONTest6(resolve, reject, test) {
     }
 }
 
+// A class diagram with 2 classes and an aggregation relationship
 function ClassDiagramCreateFromJSONTest7(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
@@ -320,6 +326,39 @@ function ClassDiagramCreateFromJSONTest7(resolve, reject, test) {
 
         test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramCreateFromJSONTest7.html")
         test.setReferenceFilePath(__dirname + "/reference/classdiagramtests/ClassDiagramCreateFromJSONTest7.html")
+
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
+}
+
+function ClassDiagramConnectorLayoutTest1(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+    let classDiagram = new UMLWebWidget.Diagram()
+    classDiagram.createFromJSON(svg, {
+        "elements":
+            [
+                { 
+                    "class":
+                        {
+                            "name": "MyClass",
+                             "attributes":
+                                 [
+                                 ],
+                             "operations":
+                                 [
+                                 ]
+                        }
+                }
+            ]
+    })
+    let elementKeys = Object.keys(classDiagram.diagramDescription)
+    if ((elementKeys.length == 1) && (classDiagram.classboxes.size == 1)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramConnectorLayoutTest1.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramConnectorLayoutTest1.html")
+        test.setReferenceFilePath(__dirname + "/reference/classdiagramtests/ClassDiagramConnectorLayoutTest1.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
