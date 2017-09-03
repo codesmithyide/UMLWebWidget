@@ -1902,20 +1902,18 @@ class Diagram {
             } else if (item.messages) {
                 for (var j = 0; j < item.messages.length; j++) {
                     let message = item.messages[j]
-                    let connectionPoint1
-                    let connectionPoint2
                     let newConnector
                     if (message.synchronousmessage) {
                         let lifeline1 = this.lifelines[message.synchronousmessage.caller]
                         let lifeline2 = this.lifelines[message.synchronousmessage.callee]
-                        connectionPoint1 = lifeline1.createConnectionPoint(svg)
-                        connectionPoint2 = lifeline2.createConnectionPoint(svg)
+                        let connectionPoint1 = lifeline1.createConnectionPoint(svg)
+                        let connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "synchronousmessage", connectionPoint1, connectionPoint2, message.synchronousmessage.name)
                     } else if (message.returnmessage) {
                         let lifeline1 = this.lifelines[message.returnmessage.callee]
                         let lifeline2 = this.lifelines[message.returnmessage.caller]
-                        connectionPoint1 = lifeline1.createConnectionPoint(svg)
-                        connectionPoint2 = lifeline2.createConnectionPoint(svg)
+                        let connectionPoint1 = lifeline1.createConnectionPoint(svg)
+                        let connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "returnmessage", connectionPoint1, connectionPoint2, "")
                     }
                     messages.push(newConnector)
@@ -1930,35 +1928,9 @@ class Diagram {
             }
         }
 
-        if (components != null) {
-            for (var i = 0; i < components.length; i++) {
-                layoutManager.setElementPosition(components[i])
-            }
-        }
-        if (assemblyconnectors != null) {
-            for (var i = 0; i < assemblyconnectors.length; i++) {
-                 let connector = assemblyconnectors[i]
-                 connector.connectionPoint1.move(connector.connectionPoint1.element.component.getSocketConnectionPoint("").x, connector.connectionPoint1.element.component.getSocketConnectionPoint("").y)
-                 connector.connectionPoint2.move(connector.connectionPoint2.element.component.getBallConnectionPoint("").x, connector.connectionPoint2.element.component.getBallConnectionPoint("").y)
-            }
-        }
-        dolayout(layoutManager, classboxes, lifelines, connectors, messages)
+        dolayout(layoutManager, classboxes, lifelines, components, connectors, messages, assemblyconnectors)
 
-        if (components != null) {
-            for (var i = 0; i < components.length; i++) {
-                let component = components[i]
-                component.getLayers().getLayer("shape").write()
-                component.getLayers().getLayer("text").write()
-            }
-        }
-        if (assemblyconnectors != null) {
-            for (var i = 0; i < assemblyconnectors.length; i++) {
-                let connector = assemblyconnectors[i]
-                connector.getLayers().getLayer("shape").write()
-                connector.getLayers().getLayer("text").write()
-            }
-        }
-        draw(classboxes, lifelines, connectors, messages)
+        draw(classboxes, lifelines, components, connectors, messages, assemblyconnectors)
     }
 
     drawDeploymentDiagram(svg, deploymentDiagram, style, layout) {
@@ -2047,7 +2019,7 @@ class Diagram {
 /* harmony export (immutable) */ __webpack_exports__["a"] = Diagram;
 
 
-function dolayout(layoutManager, classboxes, lifelines, connectors, messages) {
+function dolayout(layoutManager, classboxes, lifelines, components, connectors, messages, assemblyconnectors) {
     if (classboxes != null) {
         for (var i = 0; i < classboxes.length; i++) {
             layoutManager.setElementPosition(classboxes[i])
@@ -2058,15 +2030,27 @@ function dolayout(layoutManager, classboxes, lifelines, connectors, messages) {
             layoutManager.setElementPosition(lifelines[i])
         }
     }
+    if (components != null) {
+        for (var i = 0; i < components.length; i++) {
+            layoutManager.setElementPosition(components[i])
+        }
+    }
     if (connectors != null) {
         layoutManager.layoutConnectors(connectors)
     }
     if (messages != null) {
         layoutManager.layoutMessages(lifelines, messages)
     }
+    if (assemblyconnectors != null) {
+        for (var i = 0; i < assemblyconnectors.length; i++) {
+            let connector = assemblyconnectors[i]
+            connector.connectionPoint1.move(connector.connectionPoint1.element.component.getSocketConnectionPoint("").x, connector.connectionPoint1.element.component.getSocketConnectionPoint("").y)
+            connector.connectionPoint2.move(connector.connectionPoint2.element.component.getBallConnectionPoint("").x, connector.connectionPoint2.element.component.getBallConnectionPoint("").y)
+        }
+    }
 }
 
-function draw(classboxes, lifelines, connectors, messages) {
+function draw(classboxes, lifelines, components, connectors, messages, assemblyconnectors) {
     if (classboxes != null) {
         for (var i = 0; i < classboxes.length; i++) {
             let classbox = classboxes[i]
@@ -2081,6 +2065,13 @@ function draw(classboxes, lifelines, connectors, messages) {
             lifeline.getLayers().getLayer("text").write()
         }
     }
+    if (components != null) {
+        for (var i = 0; i < components.length; i++) {
+            let component = components[i]
+            component.getLayers().getLayer("shape").write()
+            component.getLayers().getLayer("text").write()
+        }
+    }
     for (var i = 0; i < connectors.length; i++) {
         let connector = connectors[i]
         connector.getLayers().getLayer("shape").write()
@@ -2090,6 +2081,13 @@ function draw(classboxes, lifelines, connectors, messages) {
         let connector = messages[i]
         connector.getLayers().getLayer("shape").write()
         connector.getLayers().getLayer("text").write()
+    }
+    if (assemblyconnectors != null) {
+        for (var i = 0; i < assemblyconnectors.length; i++) {
+            let connector = assemblyconnectors[i]
+            connector.getLayers().getLayer("shape").write()
+            connector.getLayers().getLayer("text").write()
+        }
     }
 }
 
