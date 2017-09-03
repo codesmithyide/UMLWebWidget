@@ -49,20 +49,20 @@ class Component extends DiagramElement {
 
         if (this.componentDescription.interfaces) {
             for (let i = 0; i < this.componentDescription.interfaces.length; i++) {
-                let ballConnector = new BallConnector(this.svg, this.componentDescription.interfaces[i].name)
+                let ballConnector = new BallConnector(this.svg, this, this.componentDescription.interfaces[i].name)
                 this.ballConnectors.push(ballConnector)
             }
         }
         if (this.componentDescription.dependencies) {
             for (let i = 0; i < this.componentDescription.dependencies.length; i++) {
-                let socketConnector = new SocketConnector(this.svg, this.componentDescription.dependencies[i].name)
+                let socketConnector = new SocketConnector(this.svg, this, this.componentDescription.dependencies[i].name)
                 this.socketConnectors.push(socketConnector)
             }
         }
     }
 
     getSocketConnector(name) {
-        for (var i = 0; i < this.socketConnectors; i++) {
+        for (var i = 0; i < this.socketConnectors.length; i++) {
             if (this.socketConnectors[i].name == name) {
                 return this.socketConnectors[i]
             }
@@ -71,7 +71,7 @@ class Component extends DiagramElement {
     }
 
     getBallConnector(name) {
-        for (var i = 0; i < this.ballConnectors; i++) {
+        for (var i = 0; i < this.ballConnectors.length; i++) {
             if (this.ballConnectors[i].name == name) {
                 return this.ballConnectors[i]
             }
@@ -80,12 +80,12 @@ class Component extends DiagramElement {
     }
 
     createDependencyConnectionPoint(svg, interfaceName) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this.getSocketConnector(interfaceName))
         return newPoint
     }
 
     createInterfaceConnectionPoint(svg, interfaceName) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this.getBallConnector(interfaceName))
         return newPoint
     }
 

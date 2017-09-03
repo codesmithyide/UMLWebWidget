@@ -858,20 +858,20 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
 
         if (this.componentDescription.interfaces) {
             for (let i = 0; i < this.componentDescription.interfaces.length; i++) {
-                let ballConnector = new __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__["a" /* BallConnector */](this.svg, this.componentDescription.interfaces[i].name)
+                let ballConnector = new __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__["a" /* BallConnector */](this.svg, this, this.componentDescription.interfaces[i].name)
                 this.ballConnectors.push(ballConnector)
             }
         }
         if (this.componentDescription.dependencies) {
             for (let i = 0; i < this.componentDescription.dependencies.length; i++) {
-                let socketConnector = new __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__["a" /* SocketConnector */](this.svg, this.componentDescription.dependencies[i].name)
+                let socketConnector = new __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__["a" /* SocketConnector */](this.svg, this, this.componentDescription.dependencies[i].name)
                 this.socketConnectors.push(socketConnector)
             }
         }
     }
 
     getSocketConnector(name) {
-        for (var i = 0; i < this.socketConnectors; i++) {
+        for (var i = 0; i < this.socketConnectors.length; i++) {
             if (this.socketConnectors[i].name == name) {
                 return this.socketConnectors[i]
             }
@@ -880,7 +880,7 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
     }
 
     getBallConnector(name) {
-        for (var i = 0; i < this.ballConnectors; i++) {
+        for (var i = 0; i < this.ballConnectors.length; i++) {
             if (this.ballConnectors[i].name == name) {
                 return this.ballConnectors[i]
             }
@@ -889,12 +889,12 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
     }
 
     createDependencyConnectionPoint(svg, interfaceName) {
-        let newPoint = new __WEBPACK_IMPORTED_MODULE_3__ConnectionPoint_js__["a" /* ConnectionPoint */](svg, this)
+        let newPoint = new __WEBPACK_IMPORTED_MODULE_3__ConnectionPoint_js__["a" /* ConnectionPoint */](svg, this.getSocketConnector(interfaceName))
         return newPoint
     }
 
     createInterfaceConnectionPoint(svg, interfaceName) {
-        let newPoint = new __WEBPACK_IMPORTED_MODULE_3__ConnectionPoint_js__["a" /* ConnectionPoint */](svg, this)
+        let newPoint = new __WEBPACK_IMPORTED_MODULE_3__ConnectionPoint_js__["a" /* ConnectionPoint */](svg, this.getBallConnector(interfaceName))
         return newPoint
     }
 
@@ -1938,8 +1938,8 @@ class Diagram {
         if (assemblyconnectors != null) {
             for (var i = 0; i < assemblyconnectors.length; i++) {
                  let connector = assemblyconnectors[i]
-                 connector.connectionPoint1.move(connector.connectionPoint1.element.getSocketConnectionPoint("").x, connector.connectionPoint1.element.getSocketConnectionPoint("").y)
-                 connector.connectionPoint2.move(connector.connectionPoint2.element.getBallConnectionPoint("").x, connector.connectionPoint2.element.getBallConnectionPoint("").y)
+                 connector.connectionPoint1.move(connector.connectionPoint1.element.component.getSocketConnectionPoint("").x, connector.connectionPoint1.element.component.getSocketConnectionPoint("").y)
+                 connector.connectionPoint2.move(connector.connectionPoint2.element.component.getBallConnectionPoint("").x, connector.connectionPoint2.element.component.getBallConnectionPoint("").y)
             }
         }
         dolayout(layoutManager, classboxes, lifelines, connectors, messages)
@@ -2108,7 +2108,7 @@ var textDef = Symbol()
 
 class BallConnector {
 
-    constructor(svg, name) {
+    constructor(svg, component, name) {
         this.svg = svg
         this.layers = new __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__["a" /* SVGLayerSet */](svg)
         this.shapeLayer = this.layers.createLayer("shape")
@@ -2116,6 +2116,7 @@ class BallConnector {
         this.uptodate = false
         this.x = 0
         this.y = 0
+        this.component = component
         this.name = name
         this.textGroup = this.textLayer.group()
         this[textDef] = this.textGroup.text(this.name).move(0, 0) 
@@ -2178,7 +2179,7 @@ var textDef = Symbol()
 
 class SocketConnector {
 
-    constructor(svg, name) {
+    constructor(svg, component, name) {
         this.svg = svg
         this.layers = new __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__["a" /* SVGLayerSet */](svg)
         this.shapeLayer = this.layers.createLayer("shape")
@@ -2186,6 +2187,7 @@ class SocketConnector {
         this.uptodate = false
         this.x = 0
         this.y = 0
+        this.component = component
         this.name = name
         this.textGroup = this.textLayer.group()
         this[textDef] = this.textGroup.text(this.name).move(0, 0)

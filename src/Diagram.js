@@ -156,8 +156,8 @@ export class Diagram {
         if (assemblyconnectors != null) {
             for (var i = 0; i < assemblyconnectors.length; i++) {
                  let connector = assemblyconnectors[i]
-                 connector.connectionPoint1.move(connector.connectionPoint1.element.getSocketConnectionPoint("").x, connector.connectionPoint1.element.getSocketConnectionPoint("").y)
-                 connector.connectionPoint2.move(connector.connectionPoint2.element.getBallConnectionPoint("").x, connector.connectionPoint2.element.getBallConnectionPoint("").y)
+                 connector.connectionPoint1.move(connector.connectionPoint1.element.component.getSocketConnectionPoint("").x, connector.connectionPoint1.element.component.getSocketConnectionPoint("").y)
+                 connector.connectionPoint2.move(connector.connectionPoint2.element.component.getBallConnectionPoint("").x, connector.connectionPoint2.element.component.getBallConnectionPoint("").y)
             }
         }
         dolayout(layoutManager, classboxes, lifelines, connectors, messages)

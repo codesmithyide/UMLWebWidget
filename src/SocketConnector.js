@@ -6,7 +6,7 @@ var textDef = Symbol()
 
 export class SocketConnector {
 
-    constructor(svg, name) {
+    constructor(svg, component, name) {
         this.svg = svg
         this.layers = new SVGLayerSet(svg)
         this.shapeLayer = this.layers.createLayer("shape")
@@ -14,6 +14,7 @@ export class SocketConnector {
         this.uptodate = false
         this.x = 0
         this.y = 0
+        this.component = component
         this.name = name
         this.textGroup = this.textLayer.group()
         this[textDef] = this.textGroup.text(this.name).move(0, 0)
