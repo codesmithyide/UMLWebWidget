@@ -25,27 +25,27 @@ export class Diagram {
         // The description of the UML diagram in JSON
         // format. This will then be parsed to create
         // the graphical form.
-        this.diagramDescription = { }
+        this.diagramDescription = new Map()
 
         // The list of all UML class boxes present on the
         // diagram
-        this.classboxes = { }
+        this.classboxes = new Map()
 
         // The list of all UML components present on the
         // diagram
-        this.components = { }
+        this.components = new Map()
 
         // The list of all UML lifelines present on the
         // diagram
-        this.lifelines = { }
+        this.lifelines = new Map()
 
         // The list of all UML actors present on the
         // diagram
-        this.actors = { }
+        this.actors = new Map()
 
         // The list of all UML use cases present on the
         // diagram
-        this.usecases = { }
+        this.usecases = new Map()
     }
 
     // Create a diagram from a div element in the HTML document.
