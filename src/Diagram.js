@@ -17,7 +17,7 @@ import { SVGLayer } from "./SVGLayer.js"
   This class is the entry point for all the functionality provided
   by the CodeSmithy UMLWebWidget.
 */
-export class Diagram {
+class Diagram {
 
     constructor(settings) {
         this.settings = new Settings(settings)
@@ -78,7 +78,6 @@ export class Diagram {
     drawDiagram(svg, description, style, layout) {
         let layoutManager = new LayoutManager(layout)
 
-        let components = []
         let nodes = []
         let actors = []
         let usecases = []
@@ -99,9 +98,10 @@ export class Diagram {
                     new Lifeline(svg, item.lifeline.name, item.lifeline, style)
                 )
             } else if (item.component) {
-                let newComponent = new Component(svg, item.component.name, item.component, style)
-                this.components[item.component.name] = newComponent
-                components.push(newComponent)
+                this.components.set(
+                     item.component.name,
+                     new Component(svg, item.component.name, item.component, style)
+                )
             } else if (item.node) {
                 let newNode = new Node(svg, item.node.name, item.node, style)
                 nodes.push(newNode)
@@ -147,8 +147,8 @@ export class Diagram {
                     this.messages.push(newConnector)
                 }
             } else if (item.assemblyconnector) {
-                let consumerComponent = this.components[item.assemblyconnector.consumer]
-                let providerComponent = this.components[item.assemblyconnector.provider]
+                let consumerComponent = this.components.get(item.assemblyconnector.consumer)
+                let providerComponent = this.components.get(item.assemblyconnector.provider)
                 let connectionPoint1 = consumerComponent.createDependencyConnectionPoint(svg, item.assemblyconnector.interface)
                 let connectionPoint2 = providerComponent.createInterfaceConnectionPoint(svg, item.assemblyconnector.interface)
                 let newConnector = new Connector(svg, "assemblyconnector", connectionPoint1, connectionPoint2)
@@ -163,19 +163,14 @@ export class Diagram {
         }
 
         layoutManager.doLayout(this)
-        dolayout(layoutManager, components, nodes, actors, usecases, connectors, assemblyconnectors)
+        dolayout(layoutManager, nodes, actors, usecases, connectors, assemblyconnectors)
 
-        draw(this.classboxes.values(), this.lifelines.values(), components, nodes, actors, usecases, connectors, this.messages, assemblyconnectors)
+        draw(this.classboxes.values(), this.lifelines.values(), this.components.values(), nodes, actors, usecases, connectors, this.messages, assemblyconnectors)
     }
 
 }
 
-function dolayout(layoutManager, components, nodes, actors, usecases, connectors, assemblyconnectors) {
-    if (components != null) {
-        for (var i = 0; i < components.length; i++) {
-            layoutManager.setElementPosition(components[i])
-        }
-    }
+function dolayout(layoutManager, nodes, actors, usecases, connectors, assemblyconnectors) {
     if (nodes != null) {
         for (var i = 0; i < nodes.length; i++) {
             layoutManager.setElementPosition(nodes[i])
@@ -217,8 +212,7 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
         }
     }
     if (components != null) {
-        for (var i = 0; i < components.length; i++) {
-            let component = components[i]
+        for (let component of components) {
             component.getLayers().getLayer("shape").write()
             component.getLayers().getLayer("text").write()
         }
@@ -262,3 +256,5 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
         }
     }
 }
+
+export { Diagram }

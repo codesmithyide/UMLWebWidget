@@ -1328,6 +1328,9 @@ class LayoutManager {
         for (let lifeline of diagram.lifelines.values()) {
             this.setElementPosition(lifeline)
         }
+        for (let component of diagram.components.values()) {
+            this.setElementPosition(component)
+        }
         this.layoutMessages(diagram.lifelines, diagram.messages)
     }
 
@@ -1777,6 +1780,7 @@ class UseCase extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Di
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Diagram; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(13);
@@ -1869,7 +1873,6 @@ class Diagram {
     drawDiagram(svg, description, style, layout) {
         let layoutManager = new __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__["a" /* LayoutManager */](layout)
 
-        let components = []
         let nodes = []
         let actors = []
         let usecases = []
@@ -1890,9 +1893,10 @@ class Diagram {
                     new __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__["a" /* Lifeline */](svg, item.lifeline.name, item.lifeline, style)
                 )
             } else if (item.component) {
-                let newComponent = new __WEBPACK_IMPORTED_MODULE_5__Component_js__["a" /* Component */](svg, item.component.name, item.component, style)
-                this.components[item.component.name] = newComponent
-                components.push(newComponent)
+                this.components.set(
+                     item.component.name,
+                     new __WEBPACK_IMPORTED_MODULE_5__Component_js__["a" /* Component */](svg, item.component.name, item.component, style)
+                )
             } else if (item.node) {
                 let newNode = new __WEBPACK_IMPORTED_MODULE_7__Node_js__["a" /* Node */](svg, item.node.name, item.node, style)
                 nodes.push(newNode)
@@ -1938,8 +1942,8 @@ class Diagram {
                     this.messages.push(newConnector)
                 }
             } else if (item.assemblyconnector) {
-                let consumerComponent = this.components[item.assemblyconnector.consumer]
-                let providerComponent = this.components[item.assemblyconnector.provider]
+                let consumerComponent = this.components.get(item.assemblyconnector.consumer)
+                let providerComponent = this.components.get(item.assemblyconnector.provider)
                 let connectionPoint1 = consumerComponent.createDependencyConnectionPoint(svg, item.assemblyconnector.interface)
                 let connectionPoint2 = providerComponent.createInterfaceConnectionPoint(svg, item.assemblyconnector.interface)
                 let newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "assemblyconnector", connectionPoint1, connectionPoint2)
@@ -1954,21 +1958,14 @@ class Diagram {
         }
 
         layoutManager.doLayout(this)
-        dolayout(layoutManager, components, nodes, actors, usecases, connectors, assemblyconnectors)
+        dolayout(layoutManager, nodes, actors, usecases, connectors, assemblyconnectors)
 
-        draw(this.classboxes.values(), this.lifelines.values(), components, nodes, actors, usecases, connectors, this.messages, assemblyconnectors)
+        draw(this.classboxes.values(), this.lifelines.values(), this.components.values(), nodes, actors, usecases, connectors, this.messages, assemblyconnectors)
     }
 
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = Diagram;
 
-
-function dolayout(layoutManager, components, nodes, actors, usecases, connectors, assemblyconnectors) {
-    if (components != null) {
-        for (var i = 0; i < components.length; i++) {
-            layoutManager.setElementPosition(components[i])
-        }
-    }
+function dolayout(layoutManager, nodes, actors, usecases, connectors, assemblyconnectors) {
     if (nodes != null) {
         for (var i = 0; i < nodes.length; i++) {
             layoutManager.setElementPosition(nodes[i])
@@ -2010,8 +2007,7 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
         }
     }
     if (components != null) {
-        for (var i = 0; i < components.length; i++) {
-            let component = components[i]
+        for (let component of components) {
             component.getLayers().getLayer("shape").write()
             component.getLayers().getLayer("text").write()
         }
@@ -2055,6 +2051,8 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
         }
     }
 }
+
+
 
 
 /***/ }),

@@ -32,8 +32,7 @@ function ComponentDiagramCreateFromJSONTest1(resolve, reject, test) {
           ]
     })
     let elementKeys = Object.keys(componentDiagram.diagramDescription)
-    let componentsKeys = Object.keys(componentDiagram.components)
-    if ((elementKeys.length == 1) && (componentsKeys.length == 1)) {
+    if ((elementKeys.length == 1) && (componentDiagram.components.size == 1)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/componentdiagramtests/ComponentDiagramCreateFromJSONTest1.html", true)
 
         test.setOutputFilePath(__dirname + "/output/componentdiagramtests/ComponentDiagramCreateFromJSONTest1.html")
@@ -76,8 +75,7 @@ function ComponentDiagramCreateFromJSONTest2(resolve, reject, test) {
     layout)
 
     let elementKeys = Object.keys(componentDiagram.diagramDescription)
-    let componentsKeys = Object.keys(componentDiagram.components)
-    if ((elementKeys.length == 1) && (componentsKeys.length == 2)) {
+    if ((elementKeys.length == 1) && (componentDiagram.components.size == 2)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/componentdiagramtests/ComponentDiagramCreateFromJSONTest2.html", true)
 
         test.setOutputFilePath(__dirname + "/output/componentdiagramtests/ComponentDiagramCreateFromJSONTest2.html")
@@ -132,8 +130,7 @@ function ComponentDiagramCreateFromJSONTest3(resolve, reject, test) {
     layout)
 
     let elementKeys = Object.keys(componentDiagram.diagramDescription)
-    let componentsKeys = Object.keys(componentDiagram.components)
-    if ((elementKeys.length == 1) && (componentsKeys.length == 2)) {
+    if ((elementKeys.length == 1) && (componentDiagram.components.size == 2)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/componentdiagramtests/ComponentDiagramCreateFromJSONTest3.html", true)
 
         test.setOutputFilePath(__dirname + "/output/componentdiagramtests/ComponentDiagramCreateFromJSONTest3.html")
@@ -196,8 +193,7 @@ function ComponentDiagramCreateFromJSONTest4(resolve, reject, test) {
     layout)
 
     let elementKeys = Object.keys(componentDiagram.diagramDescription)
-    let componentsKeys = Object.keys(componentDiagram.components)
-    if ((elementKeys.length == 1) && (componentsKeys.length == 2)) {
+    if ((elementKeys.length == 1) && (componentDiagram.components.size == 2)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/componentdiagramtests/ComponentDiagramCreateFromJSONTest4.html", true)
 
         test.setOutputFilePath(__dirname + "/output/componentdiagramtests/ComponentDiagramCreateFromJSONTest4.html")
