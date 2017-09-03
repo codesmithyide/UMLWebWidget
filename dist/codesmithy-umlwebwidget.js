@@ -1299,6 +1299,7 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LayoutManager; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__ = __webpack_require__(3);
 
 
@@ -1320,6 +1321,12 @@ class LayoutManager {
         }
         if (this.layout.connectorpositions == null) {
             this.layout.connectorpositions = { }
+        }
+    }
+
+    doLayout(diagram) {
+        for (let classbox of diagram.classboxes.values()) {
+            this.setElementPosition(classbox)
         }
     }
 
@@ -1407,7 +1414,7 @@ class LayoutManager {
         return result
     }
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = LayoutManager;
+
 
 
 
@@ -1942,7 +1949,8 @@ class Diagram {
             }
         }
 
-        dolayout(layoutManager, this.classboxes.values(), lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors)
+        layoutManager.doLayout(this)
+        dolayout(layoutManager, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors)
 
         draw(this.classboxes.values(), lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors)
     }
@@ -1951,12 +1959,7 @@ class Diagram {
 /* harmony export (immutable) */ __webpack_exports__["a"] = Diagram;
 
 
-function dolayout(layoutManager, classboxes, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
-    if (classboxes != null) {
-        for (let classbox of classboxes) {
-            layoutManager.setElementPosition(classbox)
-        }
-    }
+function dolayout(layoutManager, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
     if (lifelines != null) {
         for (var i = 0; i < lifelines.length; i++) {
             layoutManager.setElementPosition(lifelines[i])

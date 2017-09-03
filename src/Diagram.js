@@ -160,19 +160,15 @@ export class Diagram {
             }
         }
 
-        dolayout(layoutManager, this.classboxes.values(), lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors)
+        layoutManager.doLayout(this)
+        dolayout(layoutManager, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors)
 
         draw(this.classboxes.values(), lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors)
     }
 
 }
 
-function dolayout(layoutManager, classboxes, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
-    if (classboxes != null) {
-        for (let classbox of classboxes) {
-            layoutManager.setElementPosition(classbox)
-        }
-    }
+function dolayout(layoutManager, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
     if (lifelines != null) {
         for (var i = 0; i < lifelines.length; i++) {
             layoutManager.setElementPosition(lifelines[i])

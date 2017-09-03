@@ -3,7 +3,7 @@
 import { ConnectionPointPosition } from "./ConnectionPointPosition.js"
 
 /** Sets the position of the elements on the diagram. */
-export class LayoutManager {
+class LayoutManager {
 
     constructor(layout) {
         this.layout = layout
@@ -18,6 +18,12 @@ export class LayoutManager {
         }
         if (this.layout.connectorpositions == null) {
             this.layout.connectorpositions = { }
+        }
+    }
+
+    doLayout(diagram) {
+        for (let classbox of diagram.classboxes.values()) {
+            this.setElementPosition(classbox)
         }
     }
 
@@ -105,3 +111,5 @@ export class LayoutManager {
         return result
     }
 }
+
+export { LayoutManager }
