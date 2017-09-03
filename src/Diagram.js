@@ -120,20 +120,18 @@ export class Diagram {
             } else if (item.messages) {
                 for (var j = 0; j < item.messages.length; j++) {
                     let message = item.messages[j]
-                    let lifeline1
-                    let lifeline2
                     let connectionPoint1
                     let connectionPoint2
                     let newConnector
                     if (message.synchronousmessage) {
-                        lifeline1 = this.lifelines[message.synchronousmessage.caller]
-                        lifeline2 = this.lifelines[message.synchronousmessage.callee]
+                        let lifeline1 = this.lifelines[message.synchronousmessage.caller]
+                        let lifeline2 = this.lifelines[message.synchronousmessage.callee]
                         connectionPoint1 = lifeline1.createConnectionPoint(svg)
                         connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = new Connector(svg, "synchronousmessage", connectionPoint1, connectionPoint2, message.synchronousmessage.name)
                     } else if (message.returnmessage) {
-                        lifeline1 = this.lifelines[message.returnmessage.callee]
-                        lifeline2 = this.lifelines[message.returnmessage.caller]
+                        let lifeline1 = this.lifelines[message.returnmessage.callee]
+                        let lifeline2 = this.lifelines[message.returnmessage.caller]
                         connectionPoint1 = lifeline1.createConnectionPoint(svg)
                         connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = new Connector(svg, "returnmessage", connectionPoint1, connectionPoint2, "")
@@ -143,8 +141,8 @@ export class Diagram {
             } else if (item.assemblyconnector) {
                 let consumerComponent = this.components[item.assemblyconnector.consumer]
                 let providerComponent = this.components[item.assemblyconnector.provider]
-                let connectionPoint1 = consumerComponent.createConnectionPoint(svg)
-                let connectionPoint2 = providerComponent.createConnectionPoint(svg)
+                let connectionPoint1 = consumerComponent.createDependencyConnectionPoint(svg, item.assemblyconnector.interface)
+                let connectionPoint2 = providerComponent.createInterfaceConnectionPoint(svg, item.assemblyconnector.interface)
                 let newConnector = new Connector(svg, "assemblyconnector", connectionPoint1, connectionPoint2)
                 assemblyconnectors.push(newConnector)
             }

@@ -870,7 +870,30 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         }
     }
 
-    createConnectionPoint(svg) {
+    getSocketConnector(name) {
+        for (var i = 0; i < this.socketConnectors; i++) {
+            if (this.socketConnectors[i].name == name) {
+                return this.socketConnectors[i]
+            }
+        }
+        return null
+    }
+
+    getBallConnector(name) {
+        for (var i = 0; i < this.ballConnectors; i++) {
+            if (this.ballConnectors[i].name == name) {
+                return this.ballConnectors[i]
+            }
+        }
+        return null
+    }
+
+    createDependencyConnectionPoint(svg, interfaceName) {
+        let newPoint = new __WEBPACK_IMPORTED_MODULE_3__ConnectionPoint_js__["a" /* ConnectionPoint */](svg, this)
+        return newPoint
+    }
+
+    createInterfaceConnectionPoint(svg, interfaceName) {
         let newPoint = new __WEBPACK_IMPORTED_MODULE_3__ConnectionPoint_js__["a" /* ConnectionPoint */](svg, this)
         return newPoint
     }
@@ -1879,20 +1902,18 @@ class Diagram {
             } else if (item.messages) {
                 for (var j = 0; j < item.messages.length; j++) {
                     let message = item.messages[j]
-                    let lifeline1
-                    let lifeline2
                     let connectionPoint1
                     let connectionPoint2
                     let newConnector
                     if (message.synchronousmessage) {
-                        lifeline1 = this.lifelines[message.synchronousmessage.caller]
-                        lifeline2 = this.lifelines[message.synchronousmessage.callee]
+                        let lifeline1 = this.lifelines[message.synchronousmessage.caller]
+                        let lifeline2 = this.lifelines[message.synchronousmessage.callee]
                         connectionPoint1 = lifeline1.createConnectionPoint(svg)
                         connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "synchronousmessage", connectionPoint1, connectionPoint2, message.synchronousmessage.name)
                     } else if (message.returnmessage) {
-                        lifeline1 = this.lifelines[message.returnmessage.callee]
-                        lifeline2 = this.lifelines[message.returnmessage.caller]
+                        let lifeline1 = this.lifelines[message.returnmessage.callee]
+                        let lifeline2 = this.lifelines[message.returnmessage.caller]
                         connectionPoint1 = lifeline1.createConnectionPoint(svg)
                         connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "returnmessage", connectionPoint1, connectionPoint2, "")
@@ -1902,8 +1923,8 @@ class Diagram {
             } else if (item.assemblyconnector) {
                 let consumerComponent = this.components[item.assemblyconnector.consumer]
                 let providerComponent = this.components[item.assemblyconnector.provider]
-                let connectionPoint1 = consumerComponent.createConnectionPoint(svg)
-                let connectionPoint2 = providerComponent.createConnectionPoint(svg)
+                let connectionPoint1 = consumerComponent.createDependencyConnectionPoint(svg, item.assemblyconnector.interface)
+                let connectionPoint2 = providerComponent.createInterfaceConnectionPoint(svg, item.assemblyconnector.interface)
                 let newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "assemblyconnector", connectionPoint1, connectionPoint2)
                 assemblyconnectors.push(newConnector)
             }
@@ -2087,7 +2108,7 @@ var textDef = Symbol()
 
 class BallConnector {
 
-    constructor(svg, text) {
+    constructor(svg, name) {
         this.svg = svg
         this.layers = new __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__["a" /* SVGLayerSet */](svg)
         this.shapeLayer = this.layers.createLayer("shape")
@@ -2095,8 +2116,9 @@ class BallConnector {
         this.uptodate = false
         this.x = 0
         this.y = 0
+        this.name = name
         this.textGroup = this.textLayer.group()
-        this[textDef] = this.textGroup.text(text).move(0, 0) 
+        this[textDef] = this.textGroup.text(this.name).move(0, 0) 
         this.width = this[textDef].bbox().width + 5
     }
 
@@ -2156,7 +2178,7 @@ var textDef = Symbol()
 
 class SocketConnector {
 
-    constructor(svg, text) {
+    constructor(svg, name) {
         this.svg = svg
         this.layers = new __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__["a" /* SVGLayerSet */](svg)
         this.shapeLayer = this.layers.createLayer("shape")
@@ -2164,8 +2186,9 @@ class SocketConnector {
         this.uptodate = false
         this.x = 0
         this.y = 0
+        this.name = name
         this.textGroup = this.textLayer.group()
-        this[textDef] = this.textGroup.text(text).move(0, 0)
+        this[textDef] = this.textGroup.text(this.name).move(0, 0)
         this.width = this[textDef].bbox().width + 5
     }
 

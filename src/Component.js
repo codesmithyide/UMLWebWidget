@@ -61,7 +61,30 @@ class Component extends DiagramElement {
         }
     }
 
-    createConnectionPoint(svg) {
+    getSocketConnector(name) {
+        for (var i = 0; i < this.socketConnectors; i++) {
+            if (this.socketConnectors[i].name == name) {
+                return this.socketConnectors[i]
+            }
+        }
+        return null
+    }
+
+    getBallConnector(name) {
+        for (var i = 0; i < this.ballConnectors; i++) {
+            if (this.ballConnectors[i].name == name) {
+                return this.ballConnectors[i]
+            }
+        }
+        return null
+    }
+
+    createDependencyConnectionPoint(svg, interfaceName) {
+        let newPoint = new ConnectionPoint(svg, this)
+        return newPoint
+    }
+
+    createInterfaceConnectionPoint(svg, interfaceName) {
         let newPoint = new ConnectionPoint(svg, this)
         return newPoint
     }
