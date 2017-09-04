@@ -582,11 +582,11 @@ function ClassDiagramConnectorLayoutTest3(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Base": { "position": { "x": 150, "y": 125 } },
+            "Base": { "position": { "x": 150, "y": 65 } },
             "Derived1": { "position": { "x": 0, "y": 0 } },
             "Derived2": { "position": { "x": 260, "y": 0 } },
-            "Derived3": { "position": { "x": 0, "y": 250 } },
-            "Derived4": { "position": { "x": 260, "y": 250 } }
+            "Derived3": { "position": { "x": 0, "y": 130 } },
+            "Derived4": { "position": { "x": 260, "y": 130 } }
         }
     }
 
