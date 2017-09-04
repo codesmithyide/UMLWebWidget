@@ -287,13 +287,26 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
     switch (orientation) {
         case ConnectorHeadOrientation.Up:
         case ConnectorHeadOrientation.Down:
-            if (endPoint.x == startPoint.x) {
-                svg.line(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
-            } else {
-                let middleY = (endPoint.y + ((startPoint.y - endPoint.y)/2))
-                svg.line(startPoint.x, startPoint.y, startPoint.x, middleY)
-                svg.line(startPoint.x, middleY, endPoint.x, middleY)
-                svg.line(endPoint.x, middleY, endPoint.x, endPoint.y)                 
+            let shape = getConnectorLineShape(startPoint, endPoint, orientation)
+            switch (shape) {
+                case ConnectorLineShape.Straight:
+                    svg.line(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
+                    break
+
+                case ConnectorLineShape.TopRightCorner:
+                case ConnectorLineShape.TopLeftCorner:
+                case ConnectorLineShape.BottomRightCorner:
+                case ConnectorLineShape.BottomLeftCorner:
+                    svg.line(startPoint.x, startPoint.y, endPoint.x, startPoint.y)
+                    svg.line(endPoint.x, startPoint.y, endPoint.x, endPoint.y)
+                    break
+
+                case ConnectorLineShape.HorizontalStep:
+                    let middleY = (endPoint.y + ((startPoint.y - endPoint.y)/2))
+                    svg.line(startPoint.x, startPoint.y, startPoint.x, middleY)
+                    svg.line(startPoint.x, middleY, endPoint.x, middleY)
+                    svg.line(endPoint.x, middleY, endPoint.x, endPoint.y)
+                    break
             }
             break
 
@@ -309,6 +322,36 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
             }
             break
     }
+}
+
+// Orientation of the head (e.g. arrow or diamond)
+// of a connector
+var ConnectorLineShape = {
+    Straight: 0,
+    TopRightCorner: 1,
+    TopLeftCorner: 2,
+    BottomRightCorner: 3,
+    BottomLeftCorner: 4,
+    HorizontalStep: 5,
+    VerticalStep: 6
+}
+
+function getConnectorLineShape(startPoint, endPoint, orientation) {
+    let result = ConnectorLineShape.Straight
+    if (endPoint.x == startPoint.x) {
+        result = ConnectorLineShape.Straight
+    } else if ((orientation == ConnectorHeadOrientation.Down) && (startPoint.position == ConnectionPointPosition.RightCenter)) {
+        result = ConnectorLineShape.TopRightCorner
+    } else if ((orientation == ConnectorHeadOrientation.Down) && (startPoint.position == ConnectionPointPosition.LeftCenter)) {
+        result = ConnectorLineShape.TopLeftCorner
+    } else if ((orientation == ConnectorHeadOrientation.Up) && (startPoint.position == ConnectionPointPosition.RightCenter)) {
+        result = ConnectorLineShape.BottomRightCorner
+    } else if ((orientation == ConnectorHeadOrientation.Up) && (startPoint.position == ConnectionPointPosition.LeftCenter)) {
+        result = ConnectorLineShape.BottomLeftCorner
+    } else {
+        result = ConnectorLineShape.HorizontalStep
+    }
+    return result
 }
 
 export { Connector }

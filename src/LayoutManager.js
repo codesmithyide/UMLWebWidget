@@ -51,17 +51,33 @@ class LayoutManager {
 
     layoutConnectors(connectors) {
         for (var i = 0; i < connectors.length; i++) {
-            let connectionPoint1 = connectors[i].connectionPoint1
-            let connectionPoint2 = connectors[i].connectionPoint2
+            let connector = connectors[i]
+            let connectionPoint1 = connector.connectionPoint1
+            let connectionPoint2 = connector.connectionPoint2
             let bbox1 = connectionPoint1.element.getConnectionPointsRectangle()
             let bbox2 = connectionPoint2.element.getConnectionPointsRectangle()
             let connectionPositions = this.getConnectionPositions(bbox1, bbox2)
 
-            let layoutOverride = this.layout.elements[connectionPoint1.element.classDescription.name + "-" + connectionPoint2.element.classDescription.name + "-aggregation"];
+            let connectorId = connectionPoint1.element.classDescription.name + "-" + connectionPoint2.element.classDescription.name + "-" + connector.type
+            let layoutOverride = this.layout.elements[connectorId]
             if (layoutOverride) {
                 if (layoutOverride.end) {
-                    if (layoutOverride.end == "right-center") {
-                        connectionPositions.end = ConnectionPointPosition.RightCenter
+                    switch (layoutOverride.end) {
+                        case "top-center":
+                            connectionPositions.end = ConnectionPointPosition.TopCenter
+                            break
+
+                        case "right-center":
+                            connectionPositions.end = ConnectionPointPosition.RightCenter
+                            break
+
+                       case "bottom-center":
+                            connectionPositions.end = ConnectionPointPosition.BottomCenter
+                            break
+
+                        case "left-center":
+                            connectionPositions.end = ConnectionPointPosition.LeftCenter
+                            break
                     }
                 }
             }

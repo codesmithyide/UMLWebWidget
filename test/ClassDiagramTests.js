@@ -708,7 +708,11 @@ function ClassDiagramConnectorLayoutTest4(resolve, reject, test) {
             "Derived1": { "position": { "x": 0, "y": 0 } },
             "Derived2": { "position": { "x": 260, "y": 0 } },
             "Derived3": { "position": { "x": 0, "y": 130 } },
-            "Derived4": { "position": { "x": 260, "y": 130 } }
+            "Derived4": { "position": { "x": 260, "y": 130 } },
+            "Derived1-Base-inheritance": { "end": "top-center" },
+            "Derived2-Base-inheritance": { "end": "top-center" },
+            "Derived3-Base-inheritance": { "end": "bottom-center" },
+            "Derived4-Base-inheritance": { "end": "bottom-center" }
         }
     }
 

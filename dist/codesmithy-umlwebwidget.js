@@ -754,17 +754,33 @@ class LayoutManager {
 
     layoutConnectors(connectors) {
         for (var i = 0; i < connectors.length; i++) {
-            let connectionPoint1 = connectors[i].connectionPoint1
-            let connectionPoint2 = connectors[i].connectionPoint2
+            let connector = connectors[i]
+            let connectionPoint1 = connector.connectionPoint1
+            let connectionPoint2 = connector.connectionPoint2
             let bbox1 = connectionPoint1.element.getConnectionPointsRectangle()
             let bbox2 = connectionPoint2.element.getConnectionPointsRectangle()
             let connectionPositions = this.getConnectionPositions(bbox1, bbox2)
 
-            let layoutOverride = this.layout.elements[connectionPoint1.element.classDescription.name + "-" + connectionPoint2.element.classDescription.name + "-aggregation"];
+            let connectorId = connectionPoint1.element.classDescription.name + "-" + connectionPoint2.element.classDescription.name + "-" + connector.type
+            let layoutOverride = this.layout.elements[connectorId]
             if (layoutOverride) {
                 if (layoutOverride.end) {
-                    if (layoutOverride.end == "right-center") {
-                        connectionPositions.end = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].RightCenter
+                    switch (layoutOverride.end) {
+                        case "top-center":
+                            connectionPositions.end = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].TopCenter
+                            break
+
+                        case "right-center":
+                            connectionPositions.end = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].RightCenter
+                            break
+
+                       case "bottom-center":
+                            connectionPositions.end = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].BottomCenter
+                            break
+
+                        case "left-center":
+                            connectionPositions.end = __WEBPACK_IMPORTED_MODULE_0__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].LeftCenter
+                            break
                     }
                 }
             }
@@ -1754,13 +1770,26 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
     switch (orientation) {
         case ConnectorHeadOrientation.Up:
         case ConnectorHeadOrientation.Down:
-            if (endPoint.x == startPoint.x) {
-                svg.line(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
-            } else {
-                let middleY = (endPoint.y + ((startPoint.y - endPoint.y)/2))
-                svg.line(startPoint.x, startPoint.y, startPoint.x, middleY)
-                svg.line(startPoint.x, middleY, endPoint.x, middleY)
-                svg.line(endPoint.x, middleY, endPoint.x, endPoint.y)                 
+            let shape = getConnectorLineShape(startPoint, endPoint, orientation)
+            switch (shape) {
+                case ConnectorLineShape.Straight:
+                    svg.line(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
+                    break
+
+                case ConnectorLineShape.TopRightCorner:
+                case ConnectorLineShape.TopLeftCorner:
+                case ConnectorLineShape.BottomRightCorner:
+                case ConnectorLineShape.BottomLeftCorner:
+                    svg.line(startPoint.x, startPoint.y, endPoint.x, startPoint.y)
+                    svg.line(endPoint.x, startPoint.y, endPoint.x, endPoint.y)
+                    break
+
+                case ConnectorLineShape.HorizontalStep:
+                    let middleY = (endPoint.y + ((startPoint.y - endPoint.y)/2))
+                    svg.line(startPoint.x, startPoint.y, startPoint.x, middleY)
+                    svg.line(startPoint.x, middleY, endPoint.x, middleY)
+                    svg.line(endPoint.x, middleY, endPoint.x, endPoint.y)
+                    break
             }
             break
 
@@ -1776,6 +1805,36 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
             }
             break
     }
+}
+
+// Orientation of the head (e.g. arrow or diamond)
+// of a connector
+var ConnectorLineShape = {
+    Straight: 0,
+    TopRightCorner: 1,
+    TopLeftCorner: 2,
+    BottomRightCorner: 3,
+    BottomLeftCorner: 4,
+    HorizontalStep: 5,
+    VerticalStep: 6
+}
+
+function getConnectorLineShape(startPoint, endPoint, orientation) {
+    let result = ConnectorLineShape.Straight
+    if (endPoint.x == startPoint.x) {
+        result = ConnectorLineShape.Straight
+    } else if ((orientation == ConnectorHeadOrientation.Down) && (startPoint.position == __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].RightCenter)) {
+        result = ConnectorLineShape.TopRightCorner
+    } else if ((orientation == ConnectorHeadOrientation.Down) && (startPoint.position == __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].LeftCenter)) {
+        result = ConnectorLineShape.TopLeftCorner
+    } else if ((orientation == ConnectorHeadOrientation.Up) && (startPoint.position == __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].RightCenter)) {
+        result = ConnectorLineShape.BottomRightCorner
+    } else if ((orientation == ConnectorHeadOrientation.Up) && (startPoint.position == __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].LeftCenter)) {
+        result = ConnectorLineShape.BottomLeftCorner
+    } else {
+        result = ConnectorLineShape.HorizontalStep
+    }
+    return result
 }
 
 
