@@ -830,15 +830,15 @@ function ClassDiagramConnectorLayoutTest5(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Base": { "position": { "x": 150, "y": 65 } },
+            "Base": { "position": { "x": 150, "y": 125 } },
             "Derived1": { "position": { "x": 0, "y": 0 } },
             "Derived2": { "position": { "x": 260, "y": 0 } },
-            "Derived3": { "position": { "x": 0, "y": 130 } },
-            "Derived4": { "position": { "x": 260, "y": 130 } },
-            "Derived1-Base-inheritance": { "end": "top-center" },
-            "Derived2-Base-inheritance": { "end": "top-center" },
-            "Derived3-Base-inheritance": { "end": "bottom-center" },
-            "Derived4-Base-inheritance": { "end": "bottom-center" }
+            "Derived3": { "position": { "x": 0, "y": 250 } },
+            "Derived4": { "position": { "x": 260, "y": 250 } },
+            "Derived1-Base-inheritance": { "end": "left-center" },
+            "Derived2-Base-inheritance": { "end": "right-center" },
+            "Derived3-Base-inheritance": { "end": "left-center" },
+            "Derived4-Base-inheritance": { "end": "right-center" }
         }
     }
 

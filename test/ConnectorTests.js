@@ -127,7 +127,7 @@ function ConnectorGetLayersTest4(resolve, reject, test) {
 function ConnectorGetLayersTest5(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
-    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
+    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.RightCenter)
     connectionPoint1.move(20, 20)
     let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.LeftCenter)
     connectionPoint2.move(60, 30)
@@ -148,7 +148,7 @@ function ConnectorGetLayersTest5(resolve, reject, test) {
 function ConnectorGetLayersTest6(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
-    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null)
+    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.RightCenter)
     connectionPoint1.move(20, 30)
     let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, null, UMLWebWidget.ConnectionPointPosition.LeftCenter)
     connectionPoint2.move(60, 20)

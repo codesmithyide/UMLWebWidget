@@ -1770,8 +1770,8 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
     switch (orientation) {
         case ConnectorHeadOrientation.Up:
         case ConnectorHeadOrientation.Down:
-            let shape = getConnectorLineShape(startPoint, endPoint, orientation)
-            switch (shape) {
+            let shape1 = getConnectorLineShape1(startPoint, endPoint, orientation)
+            switch (shape1) {
                 case ConnectorLineShape.Straight:
                     svg.line(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
                     break
@@ -1795,13 +1795,26 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
 
         case ConnectorHeadOrientation.Left:
         case ConnectorHeadOrientation.Right:
-            if (endPoint.y == startPoint.y) {
-                svg.line(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
-            } else {
-                let middleX = (endPoint.x + ((startPoint.x - endPoint.x)/2))
-                svg.line(startPoint.x, startPoint.y, middleX, startPoint.y)
-                svg.line(middleX, startPoint.y, middleX, endPoint.y)
-                svg.line(middleX, endPoint.y, endPoint.x, endPoint.y)
+            let shape2 = getConnectorLineShape2(startPoint, endPoint, orientation)
+            switch (shape2) {
+                case ConnectorLineShape.Straight:
+                    svg.line(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
+                    break
+
+                case ConnectorLineShape.TopRightCorner:
+                case ConnectorLineShape.TopLeftCorner:
+                case ConnectorLineShape.BottomRightCorner:
+                case ConnectorLineShape.BottomLeftCorner:
+                    svg.line(startPoint.x, startPoint.y, startPoint.x, endPoint.y)
+                    svg.line(startPoint.x, endPoint.y, endPoint.x, endPoint.y)
+                    break
+
+                case ConnectorLineShape.VerticalStep:
+                    let middleX = (endPoint.x + ((startPoint.x - endPoint.x)/2))
+                    svg.line(startPoint.x, startPoint.y, middleX, startPoint.y)
+                    svg.line(middleX, startPoint.y, middleX, endPoint.y)
+                    svg.line(middleX, endPoint.y, endPoint.x, endPoint.y)
+                    break
             }
             break
     }
@@ -1819,7 +1832,7 @@ var ConnectorLineShape = {
     VerticalStep: 6
 }
 
-function getConnectorLineShape(startPoint, endPoint, orientation) {
+function getConnectorLineShape1(startPoint, endPoint, orientation) {
     let result = ConnectorLineShape.Straight
     if (endPoint.x == startPoint.x) {
         result = ConnectorLineShape.Straight
@@ -1833,6 +1846,24 @@ function getConnectorLineShape(startPoint, endPoint, orientation) {
         result = ConnectorLineShape.BottomLeftCorner
     } else {
         result = ConnectorLineShape.HorizontalStep
+    }
+    return result
+}
+
+function getConnectorLineShape2(startPoint, endPoint, orientation) {
+    let result = ConnectorLineShape.Straight
+    if (endPoint.y == startPoint.y) {
+        result = ConnectorLineShape.Straight
+    } else if ((orientation == ConnectorHeadOrientation.Right) && (startPoint.position == __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].BottomCenter)) {
+        result = ConnectorLineShape.BottomLeftCorner
+    } else if ((orientation == ConnectorHeadOrientation.Right) && (startPoint.position == __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].TopCenter)) {
+        result = ConnectorLineShape.TopLeftCorner
+    } else if ((orientation == ConnectorHeadOrientation.Left) && (startPoint.position == __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].BottomCenter)) {
+        result = ConnectorLineShape.BottomRightCorner
+    } else if ((orientation == ConnectorHeadOrientation.Left) && (startPoint.position == __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__["a" /* ConnectionPointPosition */].TopCenter)) {
+        result = ConnectorLineShape.TopRightCorner
+    } else {
+        result = ConnectorLineShape.VerticalStep
     }
     return result
 }
