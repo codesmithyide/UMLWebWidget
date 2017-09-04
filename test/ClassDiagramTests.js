@@ -334,7 +334,18 @@ function ClassDiagramCreateFromJSONTest7(resolve, reject, test) {
 }
 
 function ClassDiagramConnectorLayoutTest1(resolve, reject, test) {
-    let svg = SVG(window.document.createElement("div"))
+    let svg = SVG(window.document.createElement("div")).size(400, 400)
+
+    let layout = {
+        "elements": {
+            "Base": { "position": { "x": 150, "y": 125 } },
+            "Derived1": { "position": { "x": 134, "y": 0 } },
+            "Derived2": { "position": { "x": 0, "y": 125 } },
+            "Derived3": { "position": { "x": 260, "y": 125 } },
+            "Derived4": { "position": { "x": 134, "y": 250 } }
+        }
+    }
+
     let classDiagram = new UMLWebWidget.Diagram()
     classDiagram.createFromJSON(svg, {
         "elements":
@@ -342,7 +353,7 @@ function ClassDiagramConnectorLayoutTest1(resolve, reject, test) {
                 { 
                     "class":
                         {
-                            "name": "MyClass",
+                            "name": "Base",
                              "attributes":
                                  [
                                  ],
@@ -350,18 +361,95 @@ function ClassDiagramConnectorLayoutTest1(resolve, reject, test) {
                                  [
                                  ]
                         }
+                },
+                { 
+                    "class":
+                        {
+                            "name": "Derived1",
+                             "attributes":
+                                 [
+                                 ],
+                             "operations":
+                                 [
+                                 ]
+                        }
+                },
+                { 
+                    "class":
+                        {
+                            "name": "Derived2",
+                             "attributes":
+                                 [
+                                 ],
+                             "operations":
+                                 [
+                                 ]
+                        }
+                },
+                { 
+                    "class":
+                        {
+                            "name": "Derived3",
+                             "attributes":
+                                 [
+                                 ],
+                             "operations":
+                                 [
+                                 ]
+                        }
+                },
+                { 
+                    "class":
+                        {
+                            "name": "Derived4",
+                             "attributes":
+                                 [
+                                 ],
+                             "operations":
+                                 [
+                                 ]
+                        }
+                },
+                {
+                    "relationship":
+                    {
+                        "type": "inheritance",
+                        "baseclass": "Base",
+                        "derivedclass": "Derived1"
+                    }
+                },
+                {
+                    "relationship":
+                    {
+                        "type": "inheritance",
+                        "baseclass": "Base",
+                        "derivedclass": "Derived2"
+                    }
+                },
+                {
+                    "relationship":
+                    {
+                        "type": "inheritance",
+                        "baseclass": "Base",
+                        "derivedclass": "Derived3"
+                    }
+                },
+                {
+                    "relationship":
+                    {
+                        "type": "inheritance",
+                        "baseclass": "Base",
+                        "derivedclass": "Derived4"
+                    }
                 }
             ]
-    })
-    let elementKeys = Object.keys(classDiagram.diagramDescription)
-    if ((elementKeys.length == 1) && (classDiagram.classboxes.size == 1)) {
-        TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramConnectorLayoutTest1.html", true)
+    },
+    layout)
 
-        test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramConnectorLayoutTest1.html")
-        test.setReferenceFilePath(__dirname + "/reference/classdiagramtests/ClassDiagramConnectorLayoutTest1.html")
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramConnectorLayoutTest1.html", true)
 
-        resolve(tf.TestResultOutcome.ePassed)
-    } else {
-        resolve(tf.TestResultOutcome.eFailed)
-    }
+    test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramConnectorLayoutTest1.html")
+    test.setReferenceFilePath(__dirname + "/reference/classdiagramtests/ClassDiagramConnectorLayoutTest1.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
 }
