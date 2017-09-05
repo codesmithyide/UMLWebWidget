@@ -471,7 +471,7 @@ function SequenceDiagramCreateFromJSONTest8(resolve, reject, test) {
 }
 
 function SequenceDiagramCreateFromJSONTest9(resolve, reject, test) {
-    let svg = SVG(window.document.createElement("div"))
+    let svg = SVG(window.document.createElement("div")).size(400, 300)
 
     let layout = {
         "elements": {

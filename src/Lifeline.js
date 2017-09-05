@@ -22,7 +22,9 @@ class Lifeline extends DiagramElement {
         this.boxHeight = 0
         // -1 is considered an invalid value and so is an
         // indication there is no activity on the lifeline
-        this.activeLineStart = -1
+        this.executionSpecificationBarStart = -1
+        this.executionSpecificationBarEnd = -1
+        this.lineEnd = -1
         
         // List of connection points that are connected to
         // this lifeline
@@ -60,7 +62,15 @@ class Lifeline extends DiagramElement {
     }
 
     setActiveLineStart(y) {
-        this.activeLineStart = y
+        this.executionSpecificationBarStart = y
+    }
+
+    setExecutionSpecificationBarEnd(y) {
+        this.executionSpecificationBarEnd = y
+    }
+
+    setLineEnd(y) {
+        this.lineEnd = y
     }
 
     update() {
@@ -101,13 +111,16 @@ function createDef(self, lifelineDescription, style) {
 
     let overhang = style.getExecutionSpecificationBarOverhang()
 
-    if ((self.connectionPoints.length > 0) && (self.activeLineStart >= 0)) {
-        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.activeLineStart - overhang)
-        if (self.connectionPoints.length > 1) {
-            lifelineGroup
-                .rect(8, (self.connectionPoints[self.connectionPoints.length - 1].y - self.activeLineStart + (2 * overhang)))
-                .move(self.lineTopPosition.x - 4, self.activeLineStart - overhang)
+    if (self.executionSpecificationBarStart >= 0) {
+        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.executionSpecificationBarStart - overhang)
+        lifelineGroup
+            .rect(8, (self.executionSpecificationBarEnd - self.executionSpecificationBarStart + (2 * overhang)))
+            .move(self.lineTopPosition.x - 4, self.executionSpecificationBarStart - overhang)
+        if (self.executionSpecificationBarEnd != self.lineEnd) {
+            lifelineGroup.line(self.lineTopPosition.x, self.executionSpecificationBarEnd + overhang, self.lineTopPosition.x, self.lineEnd)
         }
+    } else if (self.lineEnd >= 0) {
+        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.lineEnd)
     }
 }
 

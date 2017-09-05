@@ -107,6 +107,10 @@ class LayoutManager {
                     firstMessage.set(lifeline2.id, false)
                     lifeline2.setActiveLineStart(nextYPosition)
                 }
+                lifeline1.setExecutionSpecificationBarEnd(nextYPosition)
+                lifeline1.setLineEnd(nextYPosition)
+                lifeline2.setExecutionSpecificationBarEnd(nextYPosition)
+                lifeline2.setLineEnd(nextYPosition)
                 if (lifeline1 != lifeline2) {
                     if (lifeline2.x >= lifeline1.x) {
                         connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
@@ -130,12 +134,14 @@ class LayoutManager {
                    firstMessage.set(lifeline1.id, false)
                    lifeline1.setActiveLineStart(y)
                 }
+                lifeline1.setExecutionSpecificationBarEnd(y)
+                lifeline1.setLineEnd(y)
                 nextYPosition += 50
             } else if (connector.type == "destructionmessage") {
                 if (firstMessage.get(lifeline2.id) == true) {
                     firstMessage.set(lifeline2.id, false)
-                    lifeline2.setActiveLineStart(nextYPosition)
                 }
+                lifeline2.setLineEnd(nextYPosition)
                 connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
                 nextYPosition += connector.getHeight()
             }

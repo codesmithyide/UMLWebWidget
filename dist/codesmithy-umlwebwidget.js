@@ -821,6 +821,10 @@ class LayoutManager {
                     firstMessage.set(lifeline2.id, false)
                     lifeline2.setActiveLineStart(nextYPosition)
                 }
+                lifeline1.setExecutionSpecificationBarEnd(nextYPosition)
+                lifeline1.setLineEnd(nextYPosition)
+                lifeline2.setExecutionSpecificationBarEnd(nextYPosition)
+                lifeline2.setLineEnd(nextYPosition)
                 if (lifeline1 != lifeline2) {
                     if (lifeline2.x >= lifeline1.x) {
                         connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
@@ -844,12 +848,14 @@ class LayoutManager {
                    firstMessage.set(lifeline1.id, false)
                    lifeline1.setActiveLineStart(y)
                 }
+                lifeline1.setExecutionSpecificationBarEnd(y)
+                lifeline1.setLineEnd(y)
                 nextYPosition += 50
             } else if (connector.type == "destructionmessage") {
                 if (firstMessage.get(lifeline2.id) == true) {
                     firstMessage.set(lifeline2.id, false)
-                    lifeline2.setActiveLineStart(nextYPosition)
                 }
+                lifeline2.setLineEnd(nextYPosition)
                 connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
                 nextYPosition += connector.getHeight()
             }
@@ -1262,7 +1268,9 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         this.boxHeight = 0
         // -1 is considered an invalid value and so is an
         // indication there is no activity on the lifeline
-        this.activeLineStart = -1
+        this.executionSpecificationBarStart = -1
+        this.executionSpecificationBarEnd = -1
+        this.lineEnd = -1
         
         // List of connection points that are connected to
         // this lifeline
@@ -1300,7 +1308,15 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
     }
 
     setActiveLineStart(y) {
-        this.activeLineStart = y
+        this.executionSpecificationBarStart = y
+    }
+
+    setExecutionSpecificationBarEnd(y) {
+        this.executionSpecificationBarEnd = y
+    }
+
+    setLineEnd(y) {
+        this.lineEnd = y
     }
 
     update() {
@@ -1341,13 +1357,16 @@ function createDef(self, lifelineDescription, style) {
 
     let overhang = style.getExecutionSpecificationBarOverhang()
 
-    if ((self.connectionPoints.length > 0) && (self.activeLineStart >= 0)) {
-        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.activeLineStart - overhang)
-        if (self.connectionPoints.length > 1) {
-            lifelineGroup
-                .rect(8, (self.connectionPoints[self.connectionPoints.length - 1].y - self.activeLineStart + (2 * overhang)))
-                .move(self.lineTopPosition.x - 4, self.activeLineStart - overhang)
+    if (self.executionSpecificationBarStart >= 0) {
+        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.executionSpecificationBarStart - overhang)
+        lifelineGroup
+            .rect(8, (self.executionSpecificationBarEnd - self.executionSpecificationBarStart + (2 * overhang)))
+            .move(self.lineTopPosition.x - 4, self.executionSpecificationBarStart - overhang)
+        if (self.executionSpecificationBarEnd != self.lineEnd) {
+            lifelineGroup.line(self.lineTopPosition.x, self.executionSpecificationBarEnd + overhang, self.lineTopPosition.x, self.lineEnd)
         }
+    } else if (self.lineEnd >= 0) {
+        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.lineEnd)
     }
 }
 
