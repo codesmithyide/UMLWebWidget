@@ -19,6 +19,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("createFromJSON test 6", SequenceDiagramCreateFromJSONTest6, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 7", SequenceDiagramCreateFromJSONTest7, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 8", SequenceDiagramCreateFromJSONTest8, sequenceDiagramSequence)
+    new tf.FileComparisonTest("createFromJSON test 9", SequenceDiagramCreateFromJSONTest9, sequenceDiagramSequence)
 }
 
 function SequenceDiagramCreateFromJSONTest1(resolve, reject, test) {
@@ -462,6 +463,74 @@ function SequenceDiagramCreateFromJSONTest8(resolve, reject, test) {
 
         test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest8.html")
         test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest8.html")
+
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
+}
+
+function SequenceDiagramCreateFromJSONTest9(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let layout = {
+        "elements": {
+            "Author": { "position": { "x": 1, "y": 1 } },
+            "Book": { "position": { "x": 150, "y": 1 } }
+        }
+    }
+
+    let sequenceDiagram = new UMLWebWidget.Diagram()
+    sequenceDiagram.createFromJSON(svg, {
+        "elements":
+            [
+                { 
+                    "lifeline":
+                        {
+                            "name": "Author"
+                        }
+                },
+                { 
+                    "lifeline":
+                        {
+                            "name": "Book"
+                        }
+                },
+                {
+                    "messages":
+                        [
+                            {
+                                "creationmessage":
+                                    {
+                                        "caller": "Author",
+                                        "callee": "Book"
+                                    }
+                            },
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "writeLine",
+                                        "caller": "Author",
+                                        "callee": "Book"
+                                    }
+                            },
+                            {
+                                "destructionmessage":
+                                    {
+                                        "callee": "Book"
+                                    }
+                            }
+                        ]
+                }
+            ]
+    },
+    layout)
+    let elementKeys = Object.keys(sequenceDiagram.diagramDescription)
+    if ((elementKeys.length == 1) && (sequenceDiagram.lifelines.size == 2)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest9.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest9.html")
+        test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest9.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
