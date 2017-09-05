@@ -48,6 +48,10 @@ class Connector extends DiagramElement {
         } else if (this.type == "returnmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLReturnMessage")
             drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
+        } else if (this.type == "creationmessage") {
+            let lineGroup = this.shapeLayer.group().addClass("UMLCreationMessage")
+            let textGroup = this.textLayer.group()
+            drawCreationMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == "usecaseassociation") {
             let lineGroup = this.shapeLayer.group().addClass("UMLUseCaseAssociation")
             drawUseCaseAssociation(lineGroup, this.connectionPoint1, this.connectionPoint2)
@@ -119,6 +123,10 @@ function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
         lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y - 6)
         lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y + 6)
     }
+}
+
+function drawCreationMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2) {
+    drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, "new")
 }
 
 function drawUseCaseAssociation(lineGroup, connectionPoint1, connectionPoint2) {

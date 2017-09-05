@@ -791,27 +791,49 @@ class LayoutManager {
     }
 
     layoutMessages(lifelines, connectors) {
+        let firstMessage = new Map()
         let nextYPosition = 0
         for (let lifeline of lifelines.values()) {
             nextYPosition = Math.max(nextYPosition, lifeline.getLineTopPosition().y + 20)
+            firstMessage.set(lifeline.id, true)
         }
         for (var i = 0; i < connectors.length; i++) {
             let connector = connectors[i]
             let lifeline1 = connector.connectionPoint1.element
             let lifeline2 = connector.connectionPoint2.element
-            if (lifeline1 != lifeline2) {
-                if (lifeline2.x >= lifeline1.x) {
-                    connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
-                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x - (lifeline2.getActiveLineWidth() / 2), nextYPosition)
-                } else {
-                    connector.connectionPoint1.move(lifeline1.getLineTopPosition().x - (lifeline1.getActiveLineWidth() / 2), nextYPosition)
-                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition)
+            if (connector.type != "creationmessage") {
+                if (firstMessage.get(lifeline1.id) == true) {
+                   firstMessage.set(lifeline1.id, false)
+                   lifeline1.setActiveLineStart(nextYPosition)
                 }
-                nextYPosition += connector.getHeight()
+                if (firstMessage.get(lifeline2.id) == true) {
+                    firstMessage.set(lifeline2.id, false)
+                    lifeline2.setActiveLineStart(nextYPosition)
+                }
+                if (lifeline1 != lifeline2) {
+                    if (lifeline2.x >= lifeline1.x) {
+                        connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
+                        connector.connectionPoint2.move(lifeline2.getLineTopPosition().x - (lifeline2.getActiveLineWidth() / 2), nextYPosition)
+                    } else {
+                        connector.connectionPoint1.move(lifeline1.getLineTopPosition().x - (lifeline1.getActiveLineWidth() / 2), nextYPosition)
+                        connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition)
+                    }
+                    nextYPosition += connector.getHeight()
+                } else {
+                    connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
+                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition + 20)
+                    nextYPosition += connector.getHeight()
+                }
             } else {
-                connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
-                connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition + 20)
-                nextYPosition += connector.getHeight()
+                lifeline2.move(lifeline2.x, nextYPosition)
+                let y = lifeline2.getCreationConnectionPointPosition().y
+                connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), y)
+                connector.connectionPoint2.move(lifeline2.getCreationConnectionPointPosition().x, y)
+                if (firstMessage.get(lifeline1.id) == true) {
+                   firstMessage.set(lifeline1.id, false)
+                   lifeline1.setActiveLineStart(y)
+                }
+                nextYPosition += 50
             }
         }
         if (connectors.length > 0) {
@@ -1219,6 +1241,10 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         this.style = style
 
         this.lineTopPosition = { x: 0, y: 0 }
+        this.boxHeight = 0
+        // -1 is considered an invalid value and so is an
+        // indication there is no activity on the lifeline
+        this.activeLineStart = -1
         
         // List of connection points that are connected to
         // this lifeline
@@ -1238,8 +1264,19 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         return this.lineTopPosition
     }
 
+    getCreationConnectionPointPosition() {
+        if (!this.uptodate) {
+            this.update()
+        }
+        return { x: this.x, y: (this.y + (this.boxHeight / 2)) }
+    }
+
     getActiveLineWidth() {
         return 8
+    }
+
+    setActiveLineStart(y) {
+        this.activeLineStart = y
     }
 
     update() {
@@ -1273,16 +1310,17 @@ function createDef(self, lifelineDescription, style) {
     currentDimensions.width += (style.getLeftMargin("lifeline") + style.getRightMargin("lifeline"))
     
     lifelineGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
+    self.boxHeight = currentDimensions.height
 
     self.lineTopPosition.x = (borderAdjustment.left + (currentDimensions.width / 2))
     self.lineTopPosition.y = (borderAdjustment.top + currentDimensions.height)
 
-    if (self.connectionPoints.length > 0) {
-        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.connectionPoints[0].y)
+    if ((self.connectionPoints.length > 0) && (self.activeLineStart >= 0)) {
+        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.activeLineStart)
         if (self.connectionPoints.length > 1) {
             lifelineGroup
-                .rect(8, (self.connectionPoints[self.connectionPoints.length - 1].y - self.connectionPoints[0].y))
-                .move(self.lineTopPosition.x - 4, self.connectionPoints[0].y)
+                .rect(8, (self.connectionPoints[self.connectionPoints.length - 1].y - self.activeLineStart))
+                .move(self.lineTopPosition.x - 4, self.activeLineStart)
         }
     }
 }
@@ -1531,6 +1569,10 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         } else if (this.type == "returnmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLReturnMessage")
             drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
+        } else if (this.type == "creationmessage") {
+            let lineGroup = this.shapeLayer.group().addClass("UMLCreationMessage")
+            let textGroup = this.textLayer.group()
+            drawCreationMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == "usecaseassociation") {
             let lineGroup = this.shapeLayer.group().addClass("UMLUseCaseAssociation")
             drawUseCaseAssociation(lineGroup, this.connectionPoint1, this.connectionPoint2)
@@ -1602,6 +1644,10 @@ function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
         lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y - 6)
         lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y + 6)
     }
+}
+
+function drawCreationMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2) {
+    drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, "new")
 }
 
 function drawUseCaseAssociation(lineGroup, connectionPoint1, connectionPoint2) {
@@ -2100,6 +2146,12 @@ class Diagram {
                         let connectionPoint1 = lifeline1.createConnectionPoint(svg)
                         let connectionPoint2 = lifeline2.createConnectionPoint(svg)
                         newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "returnmessage", connectionPoint1, connectionPoint2, "")
+                    } else if (message.creationmessage) {
+                        let lifeline1 = this.lifelines.get(message.creationmessage.caller)
+                        let lifeline2 = this.lifelines.get(message.creationmessage.callee)
+                        let connectionPoint1 = lifeline1.createConnectionPoint(svg)
+                        let connectionPoint2 = lifeline2.createConnectionPoint(svg)
+                        newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "creationmessage", connectionPoint1, connectionPoint2, "")
                     }
                     this.messages.push(newConnector)
                 }

@@ -88,27 +88,49 @@ class LayoutManager {
     }
 
     layoutMessages(lifelines, connectors) {
+        let firstMessage = new Map()
         let nextYPosition = 0
         for (let lifeline of lifelines.values()) {
             nextYPosition = Math.max(nextYPosition, lifeline.getLineTopPosition().y + 20)
+            firstMessage.set(lifeline.id, true)
         }
         for (var i = 0; i < connectors.length; i++) {
             let connector = connectors[i]
             let lifeline1 = connector.connectionPoint1.element
             let lifeline2 = connector.connectionPoint2.element
-            if (lifeline1 != lifeline2) {
-                if (lifeline2.x >= lifeline1.x) {
-                    connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
-                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x - (lifeline2.getActiveLineWidth() / 2), nextYPosition)
-                } else {
-                    connector.connectionPoint1.move(lifeline1.getLineTopPosition().x - (lifeline1.getActiveLineWidth() / 2), nextYPosition)
-                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition)
+            if (connector.type != "creationmessage") {
+                if (firstMessage.get(lifeline1.id) == true) {
+                   firstMessage.set(lifeline1.id, false)
+                   lifeline1.setActiveLineStart(nextYPosition)
                 }
-                nextYPosition += connector.getHeight()
+                if (firstMessage.get(lifeline2.id) == true) {
+                    firstMessage.set(lifeline2.id, false)
+                    lifeline2.setActiveLineStart(nextYPosition)
+                }
+                if (lifeline1 != lifeline2) {
+                    if (lifeline2.x >= lifeline1.x) {
+                        connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
+                        connector.connectionPoint2.move(lifeline2.getLineTopPosition().x - (lifeline2.getActiveLineWidth() / 2), nextYPosition)
+                    } else {
+                        connector.connectionPoint1.move(lifeline1.getLineTopPosition().x - (lifeline1.getActiveLineWidth() / 2), nextYPosition)
+                        connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition)
+                    }
+                    nextYPosition += connector.getHeight()
+                } else {
+                    connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
+                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition + 20)
+                    nextYPosition += connector.getHeight()
+                }
             } else {
-                connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
-                connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition + 20)
-                nextYPosition += connector.getHeight()
+                lifeline2.move(lifeline2.x, nextYPosition)
+                let y = lifeline2.getCreationConnectionPointPosition().y
+                connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), y)
+                connector.connectionPoint2.move(lifeline2.getCreationConnectionPointPosition().x, y)
+                if (firstMessage.get(lifeline1.id) == true) {
+                   firstMessage.set(lifeline1.id, false)
+                   lifeline1.setActiveLineStart(y)
+                }
+                nextYPosition += 50
             }
         }
         if (connectors.length > 0) {

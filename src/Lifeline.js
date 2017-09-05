@@ -19,6 +19,10 @@ class Lifeline extends DiagramElement {
         this.style = style
 
         this.lineTopPosition = { x: 0, y: 0 }
+        this.boxHeight = 0
+        // -1 is considered an invalid value and so is an
+        // indication there is no activity on the lifeline
+        this.activeLineStart = -1
         
         // List of connection points that are connected to
         // this lifeline
@@ -38,8 +42,19 @@ class Lifeline extends DiagramElement {
         return this.lineTopPosition
     }
 
+    getCreationConnectionPointPosition() {
+        if (!this.uptodate) {
+            this.update()
+        }
+        return { x: this.x, y: (this.y + (this.boxHeight / 2)) }
+    }
+
     getActiveLineWidth() {
         return 8
+    }
+
+    setActiveLineStart(y) {
+        this.activeLineStart = y
     }
 
     update() {
@@ -73,16 +88,17 @@ function createDef(self, lifelineDescription, style) {
     currentDimensions.width += (style.getLeftMargin("lifeline") + style.getRightMargin("lifeline"))
     
     lifelineGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
+    self.boxHeight = currentDimensions.height
 
     self.lineTopPosition.x = (borderAdjustment.left + (currentDimensions.width / 2))
     self.lineTopPosition.y = (borderAdjustment.top + currentDimensions.height)
 
-    if (self.connectionPoints.length > 0) {
-        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.connectionPoints[0].y)
+    if ((self.connectionPoints.length > 0) && (self.activeLineStart >= 0)) {
+        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.activeLineStart)
         if (self.connectionPoints.length > 1) {
             lifelineGroup
-                .rect(8, (self.connectionPoints[self.connectionPoints.length - 1].y - self.connectionPoints[0].y))
-                .move(self.lineTopPosition.x - 4, self.connectionPoints[0].y)
+                .rect(8, (self.connectionPoints[self.connectionPoints.length - 1].y - self.activeLineStart))
+                .move(self.lineTopPosition.x - 4, self.activeLineStart)
         }
     }
 }

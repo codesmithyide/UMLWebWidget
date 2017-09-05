@@ -402,6 +402,14 @@ function SequenceDiagramCreateFromJSONTest7(resolve, reject, test) {
                                         "caller": "Author",
                                         "callee": "Book"
                                     }
+                            },
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "writeLine",
+                                        "caller": "Author",
+                                        "callee": "Book"
+                                    }
                             }
                         ]
                 }
