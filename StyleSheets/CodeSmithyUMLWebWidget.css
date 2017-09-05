@@ -149,6 +149,11 @@
    stroke-width: 2;
 }
 
+.CodeSmithyUMLWebWidget .UMLDestructionMessage line {
+   stroke: #676767;
+   stroke-width: 3;
+}
+
 .CodeSmithyUMLWebWidget .UMLUseCaseAssociation line {
    stroke: #454545;
    stroke-width: 2;

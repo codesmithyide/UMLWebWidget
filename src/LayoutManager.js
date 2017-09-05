@@ -98,7 +98,7 @@ class LayoutManager {
             let connector = connectors[i]
             let lifeline1 = connector.connectionPoint1.element
             let lifeline2 = connector.connectionPoint2.element
-            if (connector.type != "creationmessage") {
+            if ((connector.type != "creationmessage") && (connector.type != "destructionmessage")) {
                 if (firstMessage.get(lifeline1.id) == true) {
                    firstMessage.set(lifeline1.id, false)
                    lifeline1.setActiveLineStart(nextYPosition)
@@ -121,7 +121,7 @@ class LayoutManager {
                     connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition + 20)
                     nextYPosition += connector.getHeight()
                 }
-            } else {
+            } else if (connector.type == "creationmessage") {
                 lifeline2.move(lifeline2.x, nextYPosition)
                 let y = lifeline2.getCreationConnectionPointPosition().y
                 connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), y)
@@ -131,6 +131,13 @@ class LayoutManager {
                    lifeline1.setActiveLineStart(y)
                 }
                 nextYPosition += 50
+            } else if (connector.type == "destructionmessage") {
+                if (firstMessage.get(lifeline2.id) == true) {
+                    firstMessage.set(lifeline2.id, false)
+                    lifeline2.setActiveLineStart(nextYPosition)
+                }
+                connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
+                nextYPosition += connector.getHeight()
             }
         }
         if (connectors.length > 0) {

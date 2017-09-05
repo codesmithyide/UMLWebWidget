@@ -436,14 +436,25 @@ function SequenceDiagramCreateFromJSONTest8(resolve, reject, test) {
     let sequenceDiagram = new UMLWebWidget.Diagram()
     sequenceDiagram.createFromJSON(svg, {
         "elements":
-          [
-              { 
-                  "lifeline":
-                      {
-                          "name": "Book"
-                      }
-              }
-          ]
+            [
+                { 
+                    "lifeline":
+                        {
+                            "name": "Book"
+                        }
+                },
+                {
+                    "messages":
+                        [
+                            {
+                                "destructionmessage":
+                                    {
+                                        "callee": "Book"
+                                    }
+                            }
+                        ]
+                }
+            ]
     })
     let elementKeys = Object.keys(sequenceDiagram.diagramDescription)
     if ((elementKeys.length == 1) && (sequenceDiagram.lifelines.size == 1)) {
