@@ -18,6 +18,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("createFromJSON test 5", SequenceDiagramCreateFromJSONTest5, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 6", SequenceDiagramCreateFromJSONTest6, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 7", SequenceDiagramCreateFromJSONTest7, sequenceDiagramSequence)
+    new tf.FileComparisonTest("createFromJSON test 8", SequenceDiagramCreateFromJSONTest8, sequenceDiagramSequence)
 }
 
 function SequenceDiagramCreateFromJSONTest1(resolve, reject, test) {
@@ -423,6 +424,33 @@ function SequenceDiagramCreateFromJSONTest7(resolve, reject, test) {
 
         test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest7.html")
         test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest7.html")
+
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
+}
+
+function SequenceDiagramCreateFromJSONTest8(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+    let sequenceDiagram = new UMLWebWidget.Diagram()
+    sequenceDiagram.createFromJSON(svg, {
+        "elements":
+          [
+              { 
+                  "lifeline":
+                      {
+                          "name": "Book"
+                      }
+              }
+          ]
+    })
+    let elementKeys = Object.keys(sequenceDiagram.diagramDescription)
+    if ((elementKeys.length == 1) && (sequenceDiagram.lifelines.size == 1)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest8.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest8.html")
+        test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest8.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
