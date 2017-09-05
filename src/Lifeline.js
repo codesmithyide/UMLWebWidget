@@ -42,6 +42,12 @@ class Lifeline extends DiagramElement {
         return this.lineTopPosition
     }
 
+    getFirstConnectionPointPosition() {
+        let position = this.getLineTopPosition()
+        position.y += (this.style.getExecutionSpecificationBarMargin() + this.style.getExecutionSpecificationBarOverhang())
+        return position
+    }
+
     getCreationConnectionPointPosition() {
         if (!this.uptodate) {
             this.update()
@@ -50,7 +56,7 @@ class Lifeline extends DiagramElement {
     }
 
     getActiveLineWidth() {
-        return 8
+        return this.style.getExecutionSpecificationBarWidth()
     }
 
     setActiveLineStart(y) {
@@ -93,12 +99,14 @@ function createDef(self, lifelineDescription, style) {
     self.lineTopPosition.x = (borderAdjustment.left + (currentDimensions.width / 2))
     self.lineTopPosition.y = (borderAdjustment.top + currentDimensions.height)
 
+    let overhang = style.getExecutionSpecificationBarOverhang()
+
     if ((self.connectionPoints.length > 0) && (self.activeLineStart >= 0)) {
-        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.activeLineStart)
+        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.activeLineStart - overhang)
         if (self.connectionPoints.length > 1) {
             lifelineGroup
-                .rect(8, (self.connectionPoints[self.connectionPoints.length - 1].y - self.activeLineStart))
-                .move(self.lineTopPosition.x - 4, self.activeLineStart)
+                .rect(8, (self.connectionPoints[self.connectionPoints.length - 1].y - self.activeLineStart + (2 * overhang)))
+                .move(self.lineTopPosition.x - 4, self.activeLineStart - overhang)
         }
     }
 }

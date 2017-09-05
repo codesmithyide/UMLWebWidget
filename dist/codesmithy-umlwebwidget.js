@@ -657,10 +657,9 @@ class Style {
                 "margin-bottom": 9
             },
             "lifeline": {
-                "margin-left": 12,
-                "margin-right": 12,
-                "margin-top": 9,
-                "margin-bottom": 9
+                "execution-specification-bar-width": 8,
+                "execution-specification-bar-overhang": 5,
+                "execution-specification-bar-margin": 15
             }
         }
     }
@@ -679,6 +678,18 @@ class Style {
 
     getRightMargin(element) {
         return this.getValueOrDefault(this, element, "margin-right")
+    }
+
+    getExecutionSpecificationBarWidth() {
+        return this.style.lifeline["execution-specification-bar-width"]
+    }
+
+    getExecutionSpecificationBarOverhang() {
+        return this.style.lifeline["execution-specification-bar-overhang"]
+    }
+
+    getExecutionSpecificationBarMargin() {
+        return this.style.lifeline["execution-specification-bar-margin"]
     }
 
     getValueOrDefault(self, element, style) {
@@ -794,7 +805,7 @@ class LayoutManager {
         let firstMessage = new Map()
         let nextYPosition = 0
         for (let lifeline of lifelines.values()) {
-            nextYPosition = Math.max(nextYPosition, lifeline.getLineTopPosition().y + 20)
+            nextYPosition = Math.max(nextYPosition, lifeline.getFirstConnectionPointPosition().y)
             firstMessage.set(lifeline.id, true)
         }
         for (var i = 0; i < connectors.length; i++) {
@@ -1271,6 +1282,12 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         return this.lineTopPosition
     }
 
+    getFirstConnectionPointPosition() {
+        let position = this.getLineTopPosition()
+        position.y += (this.style.getExecutionSpecificationBarMargin() + this.style.getExecutionSpecificationBarOverhang())
+        return position
+    }
+
     getCreationConnectionPointPosition() {
         if (!this.uptodate) {
             this.update()
@@ -1279,7 +1296,7 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
     }
 
     getActiveLineWidth() {
-        return 8
+        return this.style.getExecutionSpecificationBarWidth()
     }
 
     setActiveLineStart(y) {
@@ -1322,12 +1339,14 @@ function createDef(self, lifelineDescription, style) {
     self.lineTopPosition.x = (borderAdjustment.left + (currentDimensions.width / 2))
     self.lineTopPosition.y = (borderAdjustment.top + currentDimensions.height)
 
+    let overhang = style.getExecutionSpecificationBarOverhang()
+
     if ((self.connectionPoints.length > 0) && (self.activeLineStart >= 0)) {
-        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.activeLineStart)
+        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.activeLineStart - overhang)
         if (self.connectionPoints.length > 1) {
             lifelineGroup
-                .rect(8, (self.connectionPoints[self.connectionPoints.length - 1].y - self.activeLineStart))
-                .move(self.lineTopPosition.x - 4, self.activeLineStart)
+                .rect(8, (self.connectionPoints[self.connectionPoints.length - 1].y - self.activeLineStart + (2 * overhang)))
+                .move(self.lineTopPosition.x - 4, self.activeLineStart - overhang)
         }
     }
 }

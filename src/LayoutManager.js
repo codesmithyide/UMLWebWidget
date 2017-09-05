@@ -91,7 +91,7 @@ class LayoutManager {
         let firstMessage = new Map()
         let nextYPosition = 0
         for (let lifeline of lifelines.values()) {
-            nextYPosition = Math.max(nextYPosition, lifeline.getLineTopPosition().y + 20)
+            nextYPosition = Math.max(nextYPosition, lifeline.getFirstConnectionPointPosition().y)
             firstMessage.set(lifeline.id, true)
         }
         for (var i = 0; i < connectors.length; i++) {
