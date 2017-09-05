@@ -17,6 +17,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("createFromJSON test 4", SequenceDiagramCreateFromJSONTest4, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 5", SequenceDiagramCreateFromJSONTest5, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 6", SequenceDiagramCreateFromJSONTest6, sequenceDiagramSequence)
+    new tf.FileComparisonTest("createFromJSON test 7", SequenceDiagramCreateFromJSONTest7, sequenceDiagramSequence)
 }
 
 function SequenceDiagramCreateFromJSONTest1(resolve, reject, test) {
@@ -315,28 +316,40 @@ function SequenceDiagramCreateFromJSONTest6(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 1, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 150, "y": 1 } }
+            "Author": { "position": { "x": 1, "y": 1 } },
+            "Book": { "position": { "x": 150, "y": 1 } }
         }
     }
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
     sequenceDiagram.createFromJSON(svg, {
         "elements":
-          [
-              { 
-                  "lifeline":
-                      {
-                          "name": "Customer"
-                      }
-              },
-              {
-                  "lifeline":
-                      {
-                          "name": "Shopkeeper"
-                      }
-              }
-          ]
+            [
+                { 
+                    "lifeline":
+                        {
+                            "name": "Author"
+                        }
+                },
+                {
+                    "lifeline":
+                        {
+                            "name": "Book"
+                        }
+                },
+                {
+                    "messages":
+                        [
+                            {
+                                "creationmessage":
+                                    {
+                                        "caller": "Author",
+                                        "callee": "Book"
+                                    }
+                            }
+                        ]
+                }
+            ]
     },
     layout)
 
@@ -346,6 +359,62 @@ function SequenceDiagramCreateFromJSONTest6(resolve, reject, test) {
 
         test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest6.html")
         test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest6.html")
+
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
+}
+
+// Test an object creation message
+function SequenceDiagramCreateFromJSONTest7(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let layout = {
+        "elements": {
+            "Author": { "position": { "x": 1, "y": 1 } },
+            "Book": { "position": { "x": 150, "y": 1 } }
+        }
+    }
+
+    let sequenceDiagram = new UMLWebWidget.Diagram()
+    sequenceDiagram.createFromJSON(svg, {
+        "elements":
+            [
+                { 
+                    "lifeline":
+                        {
+                            "name": "Author"
+                        }
+                },
+                {
+                    "lifeline":
+                        {
+                            "name": "Book"
+                        }
+                },
+                {
+                    "messages":
+                        [
+                            {
+                                "creationmessage":
+                                    {
+                                        "caller": "Author",
+                                        "callee": "Book"
+                                    }
+                            }
+                        ]
+                }
+            ]
+    },
+    layout)
+
+    let elementKeys = Object.keys(sequenceDiagram.diagramDescription)
+    if ((elementKeys.length == 1) && (sequenceDiagram.lifelines.size == 2)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest7.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest7.html")
+        test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest7.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
