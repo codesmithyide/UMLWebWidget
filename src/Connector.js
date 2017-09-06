@@ -84,7 +84,7 @@ function drawCompositionOrAggregationRelationship(lineGroup, connectionPoint1, c
 }
 
 function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, text) {
-    if (connectionPoint1.x != connectionPoint2.x) {
+    if (connectionPoint1.x < connectionPoint2.x) {
         if ((textGroup != null) && (text != null) && (text != "")) {
             let textElement = textGroup.text(text)
             
@@ -100,6 +100,23 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
         let polygonDescription = "" + (connectionPoint2.x - 12) + "," + (connectionPoint2.y - 6) + " " +
             connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x - 12) + "," + (connectionPoint2.y + 6)
+        lineGroup.polygon(polygonDescription)
+    } else if (connectionPoint1.x > connectionPoint2.x) {
+        if ((textGroup != null) && (text != null) && (text != "")) {
+            let textElement = textGroup.text(text)
+            
+            let width = (connectionPoint1.x - connectionPoint2.x)
+            if (textElement.bbox().width < width) {
+                textElement.move((connectionPoint2.x + ((width - textElement.bbox().width) / 2)), connectionPoint2.y - textElement.bbox().height + 2)
+            } else {
+                textElement.move(connectionPoint2.x + 2, connectionPoint2.y - 6 - textElement.bbox().height + 2)
+            }
+        }
+
+        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x + 12, connectionPoint2.y)
+        let polygonDescription = "" + (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
+            connectionPoint2.x + "," + connectionPoint2.y + " " +
+            (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
         lineGroup.polygon(polygonDescription)
     } else {
         if ((textGroup != null) && (text != null) && (text != "")) {

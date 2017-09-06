@@ -539,6 +539,9 @@ function SequenceDiagramCreateFromJSONTest9(resolve, reject, test) {
     }
 }
 
+// This is a diagram with messages from right to left, this is
+// the same diagram as SequenceDiagramCreateFromJSONTest5 but
+// with the lifeline in the opposite order
 function SequenceDiagramCreateFromJSONTest10(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div")).size(600, 300)
 
