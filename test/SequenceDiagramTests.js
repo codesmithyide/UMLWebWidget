@@ -21,6 +21,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("createFromJSON test 8", SequenceDiagramCreateFromJSONTest8, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 9", SequenceDiagramCreateFromJSONTest9, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 10", SequenceDiagramCreateFromJSONTest10, sequenceDiagramSequence)
+    new tf.FileComparisonTest("createFromJSON test 11", SequenceDiagramCreateFromJSONTest11, sequenceDiagramSequence)
 }
 
 function SequenceDiagramCreateFromJSONTest1(resolve, reject, test) {
@@ -541,7 +542,7 @@ function SequenceDiagramCreateFromJSONTest9(resolve, reject, test) {
 
 // This is a diagram with messages from right to left, this is
 // the same diagram as SequenceDiagramCreateFromJSONTest5 but
-// with the lifeline in the opposite order
+// with the lifelines in the opposite order
 function SequenceDiagramCreateFromJSONTest10(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div")).size(600, 300)
 
@@ -628,6 +629,49 @@ function SequenceDiagramCreateFromJSONTest10(resolve, reject, test) {
 
         test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest10.html")
         test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest10.html")
+
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
+}
+
+function SequenceDiagramCreateFromJSONTest11(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let layout = {
+        "elements": {
+            "Customer": { "position": { "x": 1, "y": 1 } },
+            "Shopkeeper": { "position": { "x": 150, "y": 1 } }
+        }
+    }
+
+    let sequenceDiagram = new UMLWebWidget.Diagram()
+    sequenceDiagram.createFromJSON(svg, {
+        "elements":
+          [
+              { 
+                  "lifeline":
+                      {
+                          "name": "Customer"
+                      }
+              },
+              {
+                  "lifeline":
+                      {
+                          "name": "Shopkeeper"
+                      }
+              }
+          ]
+    },
+    layout)
+
+    let elementKeys = Object.keys(sequenceDiagram.diagramDescription)
+    if ((elementKeys.length == 1) && (sequenceDiagram.lifelines.size == 2)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest11.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest11.html")
+        test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest11.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
