@@ -20,6 +20,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("createFromJSON test 7", SequenceDiagramCreateFromJSONTest7, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 8", SequenceDiagramCreateFromJSONTest8, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 9", SequenceDiagramCreateFromJSONTest9, sequenceDiagramSequence)
+    new tf.FileComparisonTest("createFromJSON test 10", SequenceDiagramCreateFromJSONTest10, sequenceDiagramSequence)
 }
 
 function SequenceDiagramCreateFromJSONTest1(resolve, reject, test) {
@@ -531,6 +532,99 @@ function SequenceDiagramCreateFromJSONTest9(resolve, reject, test) {
 
         test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest9.html")
         test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest9.html")
+
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
+}
+
+function SequenceDiagramCreateFromJSONTest10(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div")).size(600, 300)
+
+    let layout = {
+        "elements": {
+            "Customer": { "position": { "x": 320, "y": 1 } },
+            "Shopkeeper": { "position": { "x": 150, "y": 1 } },
+            "Till": { "position": { "x": 1, "y": 1 } }
+        }
+    }
+
+    let sequenceDiagram = new UMLWebWidget.Diagram()
+    sequenceDiagram.createFromJSON(svg, {
+        "elements":
+            [
+                { 
+                    "lifeline":
+                        {
+                            "name": "Customer"
+                        }
+                },
+                {
+                    "lifeline":
+                        {
+                            "name": "Shopkeeper"
+                        }
+                },
+                { 
+                    "lifeline":
+                        {
+                            "name": "Till"
+                        }
+                },
+                {
+                    "messages":
+                        [
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "pay",
+                                        "caller": "Customer",
+                                        "callee": "Shopkeeper"
+                                    }
+                            },
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "open",
+                                        "caller": "Shopkeeper",
+                                        "callee": "Till"
+                                    }
+                            },
+                            {
+                                "returnmessage":
+                                    {
+                                        "caller": "Shopkeeper",
+                                        "callee": "Till"
+                                    }
+                            },
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "countMoney",
+                                        "caller": "Shopkeeper",
+                                        "callee": "Shopkeeper"
+                                    }
+                            },
+                            {
+                                "returnmessage":
+                                {
+                                    "caller": "Customer",
+                                    "callee": "Shopkeeper"
+                                }
+                            }
+                        ]
+                }
+            ]
+    },
+    layout)
+
+    let elementKeys = Object.keys(sequenceDiagram.diagramDescription)
+    if ((elementKeys.length == 1) && (sequenceDiagram.lifelines.size == 3)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest10.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest10.html")
+        test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest10.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
