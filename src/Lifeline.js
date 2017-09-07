@@ -153,28 +153,27 @@ function createDef(self, lifelineDescription, style) {
 
     let overhang = style.getExecutionSpecificationBarOverhang()
 
-    // Draw line from box to first occurrence on the lifeline
-    if (self.levels.length > 0) {
-        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.levels[0][0] - overhang)
-    }
     if (self.levels.length == 1) {
         if (self.levels[0][1] == 1) {
+            lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.levels[0][0] - overhang)
             lifelineGroup
                 .rect(8, (2 * overhang))
                 .move(self.lineTopPosition.x - 4, self.levels[0][0] - overhang)
         } else {
              lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.levels[0][0])
         }
-    }
-    let previousOverhang = 0
-    for (let i = 1; i < self.levels.length; i++) {
-        if (self.levels[i-1][1] == 1) {
-            lifelineGroup
-                .rect(8, (self.levels[i][0] - self.levels[i-1][0] + (2 * overhang)))
-                .move(self.lineTopPosition.x - 4, self.levels[i-1][0] - overhang)
-            previousOverhang  = overhang
-        } else {
-            lifelineGroup.line(self.lineTopPosition.x, self.levels[i-1][0] + previousOverhang, self.lineTopPosition.x, self.levels[i][0])
+    } else if (self.levels.length > 1) {
+        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.levels[0][0] - overhang)
+        let previousOverhang = 0
+        for (let i = 1; i < self.levels.length; i++) {
+            if (self.levels[i-1][1] == 1) {
+                lifelineGroup
+                    .rect(8, (self.levels[i][0] - self.levels[i-1][0] + (2 * overhang)))
+                    .move(self.lineTopPosition.x - 4, self.levels[i-1][0] - overhang)
+                previousOverhang  = overhang
+            } else {
+                lifelineGroup.line(self.lineTopPosition.x, self.levels[i-1][0] + previousOverhang, self.lineTopPosition.x, self.levels[i][0])
+            }
         }
     }
 }
