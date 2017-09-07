@@ -88,29 +88,22 @@ class LayoutManager {
     }
 
     layoutMessages(lifelines, connectors) {
-        let firstMessage = new Map()
         let nextYPosition = 0
         for (let lifeline of lifelines.values()) {
             nextYPosition = Math.max(nextYPosition, lifeline.getFirstConnectionPointPosition().y)
-            firstMessage.set(lifeline.id, true)
         }
         for (var i = 0; i < connectors.length; i++) {
             let connector = connectors[i]
             let lifeline1 = connector.connectionPoint1.element
             let lifeline2 = connector.connectionPoint2.element
             if ((connector.type != "creationmessage") && (connector.type != "destructionmessage")) {
-                if (firstMessage.get(lifeline1.id) == true) {
-                   firstMessage.set(lifeline1.id, false)
-                   lifeline1.setActiveLineStart(nextYPosition)
-                }
-                if (firstMessage.get(lifeline2.id) == true) {
-                    firstMessage.set(lifeline2.id, false)
-                    lifeline2.setActiveLineStart(nextYPosition)
-                }
-                lifeline1.setExecutionSpecificationBarEnd(nextYPosition)
-                lifeline1.setLineEnd(nextYPosition)
-                lifeline2.setExecutionSpecificationBarEnd(nextYPosition)
-                lifeline2.setLineEnd(nextYPosition)
+                if (connector.type == "returnmessage") {
+                    lifeline1.addReturnOccurrence(nextYPosition)
+                    lifeline2.addReturnCalleeOccurrence(nextYPosition)
+                } else {
+                    lifeline1.addCallerOccurrence(nextYPosition)
+                    lifeline2.addCalleeOccurrence(nextYPosition)
+                }             
                 if (lifeline1 != lifeline2) {
                     if (lifeline2.x >= lifeline1.x) {
                         connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
@@ -130,19 +123,14 @@ class LayoutManager {
                 let y = lifeline2.getCreationConnectionPointPosition().y
                 connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), y)
                 connector.connectionPoint2.move(lifeline2.getCreationConnectionPointPosition().x, y)
-                if (firstMessage.get(lifeline1.id) == true) {
-                   firstMessage.set(lifeline1.id, false)
-                   lifeline1.setActiveLineStart(y)
-                }
-                lifeline1.setExecutionSpecificationBarEnd(y)
-                lifeline1.setLineEnd(y)
+                lifeline1.addCallerOccurrence(y)
                 nextYPosition += 50
             } else if (connector.type == "destructionmessage") {
-                if (firstMessage.get(lifeline2.id) == true) {
-                    firstMessage.set(lifeline2.id, false)
+                if (lifeline2.addDestructionOccurrence(nextYPosition, connector.connectionPoint2)) {
+                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 25)
+                } else {
+                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
                 }
-                lifeline2.setLineEnd(nextYPosition)
-                connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
                 nextYPosition += connector.getHeight()
             }
         }

@@ -802,29 +802,22 @@ class LayoutManager {
     }
 
     layoutMessages(lifelines, connectors) {
-        let firstMessage = new Map()
         let nextYPosition = 0
         for (let lifeline of lifelines.values()) {
             nextYPosition = Math.max(nextYPosition, lifeline.getFirstConnectionPointPosition().y)
-            firstMessage.set(lifeline.id, true)
         }
         for (var i = 0; i < connectors.length; i++) {
             let connector = connectors[i]
             let lifeline1 = connector.connectionPoint1.element
             let lifeline2 = connector.connectionPoint2.element
             if ((connector.type != "creationmessage") && (connector.type != "destructionmessage")) {
-                if (firstMessage.get(lifeline1.id) == true) {
-                   firstMessage.set(lifeline1.id, false)
-                   lifeline1.setActiveLineStart(nextYPosition)
-                }
-                if (firstMessage.get(lifeline2.id) == true) {
-                    firstMessage.set(lifeline2.id, false)
-                    lifeline2.setActiveLineStart(nextYPosition)
-                }
-                lifeline1.setExecutionSpecificationBarEnd(nextYPosition)
-                lifeline1.setLineEnd(nextYPosition)
-                lifeline2.setExecutionSpecificationBarEnd(nextYPosition)
-                lifeline2.setLineEnd(nextYPosition)
+                if (connector.type == "returnmessage") {
+                    lifeline1.addReturnOccurrence(nextYPosition)
+                    lifeline2.addReturnCalleeOccurrence(nextYPosition)
+                } else {
+                    lifeline1.addCallerOccurrence(nextYPosition)
+                    lifeline2.addCalleeOccurrence(nextYPosition)
+                }             
                 if (lifeline1 != lifeline2) {
                     if (lifeline2.x >= lifeline1.x) {
                         connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
@@ -844,19 +837,14 @@ class LayoutManager {
                 let y = lifeline2.getCreationConnectionPointPosition().y
                 connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), y)
                 connector.connectionPoint2.move(lifeline2.getCreationConnectionPointPosition().x, y)
-                if (firstMessage.get(lifeline1.id) == true) {
-                   firstMessage.set(lifeline1.id, false)
-                   lifeline1.setActiveLineStart(y)
-                }
-                lifeline1.setExecutionSpecificationBarEnd(y)
-                lifeline1.setLineEnd(y)
+                lifeline1.addCallerOccurrence(y)
                 nextYPosition += 50
             } else if (connector.type == "destructionmessage") {
-                if (firstMessage.get(lifeline2.id) == true) {
-                    firstMessage.set(lifeline2.id, false)
+                if (lifeline2.addDestructionOccurrence(nextYPosition, connector.connectionPoint2)) {
+                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 25)
+                } else {
+                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
                 }
-                lifeline2.setLineEnd(nextYPosition)
-                connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
                 nextYPosition += connector.getHeight()
             }
         }
@@ -1266,11 +1254,8 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
 
         this.lineTopPosition = { x: 0, y: 0 }
         this.boxHeight = 0
-        // -1 is considered an invalid value and so is an
-        // indication there is no activity on the lifeline
-        this.executionSpecificationBarStart = -1
-        this.executionSpecificationBarEnd = -1
-        this.lineEnd = -1
+
+        this.levels = [ ]
         
         // List of connection points that are connected to
         // this lifeline
@@ -1307,16 +1292,61 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         return this.style.getExecutionSpecificationBarWidth()
     }
 
-    setActiveLineStart(y) {
-        this.executionSpecificationBarStart = y
+    addCallerOccurrence(y) {
+        this.levels.push([y, 1])
+        if (this.levels.length >= 3) {
+            let length = this.levels.length
+            this.levels[length - 2][0] = this.levels[length - 1][0]
+            this.levels.pop()
+        }
     }
 
-    setExecutionSpecificationBarEnd(y) {
-        this.executionSpecificationBarEnd = y
+    addCalleeOccurrence(y) {
+        if (this.levels.length == 0) {
+            this.levels.push([y, 1])
+        } else {
+            this.levels.push([y, this.levels[this.levels.length - 1][1] + 1])
+        }
+        if (this.levels.length >= 3) {
+            let length = this.levels.length
+            this.levels[length - 2][0] = this.levels[length - 1][0]
+            this.levels.pop()
+        }
     }
 
-    setLineEnd(y) {
-        this.lineEnd = y
+    addReturnOccurrence(y) {
+        this.levels.push([y, 0])
+        if (this.levels.length >= 3) {
+            let length = this.levels.length
+            this.levels[length - 2][0] = this.levels[length - 1][0]
+            this.levels.pop()
+        }
+    }
+
+    addReturnCalleeOccurrence(y) {
+        if (this.levels.length == 0) {
+            this.levels.push([y, 1])
+        } else {
+            this.levels.push([y, this.levels[this.levels.length - 1][1] + 1])
+        }
+        if (this.levels.length >= 3) {
+            let length = this.levels.length
+            this.levels[length - 2][0] = this.levels[length - 1][0]
+            this.levels.pop()
+        }
+    }
+
+    addDestructionOccurrence(y, connectionPoint) {
+        let result = false
+        if (this.levels.length != 0) {
+            if (this.levels[this.levels.length - 1][1] == 1) {
+                this.levels.push([y, 0])
+                y += 25
+                result = true
+            }
+        }
+        this.levels.push([y, 0])
+        return result
     }
 
     update() {
@@ -1357,16 +1387,29 @@ function createDef(self, lifelineDescription, style) {
 
     let overhang = style.getExecutionSpecificationBarOverhang()
 
-    if (self.executionSpecificationBarStart >= 0) {
-        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.executionSpecificationBarStart - overhang)
-        lifelineGroup
-            .rect(8, (self.executionSpecificationBarEnd - self.executionSpecificationBarStart + (2 * overhang)))
-            .move(self.lineTopPosition.x - 4, self.executionSpecificationBarStart - overhang)
-        if (self.executionSpecificationBarEnd != self.lineEnd) {
-            lifelineGroup.line(self.lineTopPosition.x, self.executionSpecificationBarEnd + overhang, self.lineTopPosition.x, self.lineEnd)
+    // Draw line from box to first occurrence on the lifeline
+    if (self.levels.length > 0) {
+        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.levels[0][0] - overhang)
+    }
+    if (self.levels.length == 1) {
+        if (self.levels[0][1] == 1) {
+            lifelineGroup
+                .rect(8, (2 * overhang))
+                .move(self.lineTopPosition.x - 4, self.levels[0][0] - overhang)
+        } else {
+             lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.levels[0][0])
         }
-    } else if (self.lineEnd >= 0) {
-        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.lineEnd)
+    }
+    let previousOverhang = 0
+    for (let i = 1; i < self.levels.length; i++) {
+        if (self.levels[i-1][1] == 1) {
+            lifelineGroup
+                .rect(8, (self.levels[i][0] - self.levels[i-1][0] + (2 * overhang)))
+                .move(self.lineTopPosition.x - 4, self.levels[i-1][0] - overhang)
+            previousOverhang  = overhang
+        } else {
+            lifelineGroup.line(self.lineTopPosition.x, self.levels[i-1][0] + previousOverhang, self.lineTopPosition.x, self.levels[i][0])
+        }
     }
 }
 
