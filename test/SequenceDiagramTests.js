@@ -637,7 +637,7 @@ function SequenceDiagramCreateFromJSONTest10(resolve, reject, test) {
 }
 
 function SequenceDiagramCreateFromJSONTest11(resolve, reject, test) {
-    let svg = SVG(window.document.createElement("div"))
+    let svg = SVG(window.document.createElement("div")).size(400, 300)
 
     let layout = {
         "elements": {
@@ -649,20 +649,55 @@ function SequenceDiagramCreateFromJSONTest11(resolve, reject, test) {
     let sequenceDiagram = new UMLWebWidget.Diagram()
     sequenceDiagram.createFromJSON(svg, {
         "elements":
-          [
-              { 
-                  "lifeline":
-                      {
-                          "name": "Customer"
-                      }
-              },
-              {
-                  "lifeline":
-                      {
-                          "name": "Shopkeeper"
-                      }
-              }
-          ]
+            [
+                { 
+                    "lifeline":
+                        {
+                            "name": "Customer"
+                        }
+                },
+                {
+                    "lifeline":
+                        {
+                            "name": "Shopkeeper"
+                        }
+                },
+                {
+                    "messages":
+                        [
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "pay",
+                                        "caller": "Customer",
+                                        "callee": "Shopkeeper"
+                                    }
+                            },
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "give change",
+                                        "caller": "Shopkeeper",
+                                        "callee": "Customer"
+                                    }
+                            },
+                            {
+                                "returnmessage":
+                                    {
+                                        "caller": "Shopkeeper",
+                                        "callee": "Customer"
+                                    }
+                            },
+                            {
+                                "returnmessage":
+                                    {
+                                        "caller": "Customer",
+                                        "callee": "Shopkeeper"
+                                    }
+                            }
+                        ]
+                }
+            ]
     },
     layout)
 
