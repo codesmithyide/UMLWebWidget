@@ -26,11 +26,12 @@ class Lifeline extends DiagramElement {
         // List of connection points that are connected to
         // this lifeline
         this.connectionPoints = [ ]
+        this.adjustmentNeeded = false
     }
 
-    createConnectionPoint(svg) {
+    createConnectionPoint(svg, type) {
         let newPoint = new ConnectionPoint(svg, this)
-        this.connectionPoints.push(newPoint)
+        this.connectionPoints.push({ point: newPoint, type: type })
         return newPoint
     }
 
@@ -103,16 +104,17 @@ class Lifeline extends DiagramElement {
     }
 
     addDestructionOccurrence(y, connectionPoint) {
-        let result = false
-        if (this.levels.length != 0) {
-            if (this.levels[this.levels.length - 1][1] == 1) {
-                this.levels.push([y, 0])
-                y += 25
-                result = true
+        this.levels.push([y, 0])
+    }
+
+    needToAdjustDestructionPosition() {
+        if (this.connectionPoints.length > 1) {
+            if ((this.connectionPoints[this.connectionPoints.length - 1].type != "return-start") &&
+                (this.connectionPoints[this.connectionPoints.length - 1].type != "creation-end")) {
+                this.adjustmentNeeded = true
             }
         }
-        this.levels.push([y, 0])
-        return result
+        return this.adjustmentNeeded
     }
 
     update() {
@@ -152,6 +154,39 @@ function createDef(self, lifelineDescription, style) {
     self.lineTopPosition.y = (borderAdjustment.top + currentDimensions.height)
 
     let overhang = style.getExecutionSpecificationBarOverhang()
+
+    self.levels = [ ]
+    for (let i = 0; i < self.connectionPoints.length; i++) {
+        let connectionPoint = self.connectionPoints[i]
+        switch (connectionPoint.type) {
+            case "synchronous-start":
+                self.addCallerOccurrence(connectionPoint.point.y)
+                break
+
+            case "synchronous-end":
+                self.addCalleeOccurrence(connectionPoint.point.y)
+                break
+
+            case "return-start":
+                self.addReturnOccurrence(connectionPoint.point.y)
+                break
+
+            case "return-end":
+                self.addReturnCalleeOccurrence(connectionPoint.point.y)
+                break
+
+            case "creation-start":
+                self.addCallerOccurrence(connectionPoint.point.y)
+                break
+
+            case "destruction-end":
+                if (self.adjustmentNeeded) {
+                    self.addReturnOccurrence(connectionPoint.point.y - 25)
+                }
+                self.addDestructionOccurrence(connectionPoint.point.y)
+                break
+        }
+    }
 
     if (self.levels.length == 1) {
         if (self.levels[0][1] == 1) {

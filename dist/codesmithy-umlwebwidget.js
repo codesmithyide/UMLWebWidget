@@ -811,13 +811,6 @@ class LayoutManager {
             let lifeline1 = connector.connectionPoint1.element
             let lifeline2 = connector.connectionPoint2.element
             if ((connector.type != "creationmessage") && (connector.type != "destructionmessage")) {
-                if (connector.type == "returnmessage") {
-                    lifeline1.addReturnOccurrence(nextYPosition)
-                    lifeline2.addReturnCalleeOccurrence(nextYPosition)
-                } else {
-                    lifeline1.addCallerOccurrence(nextYPosition)
-                    lifeline2.addCalleeOccurrence(nextYPosition)
-                }             
                 if (lifeline1 != lifeline2) {
                     if (lifeline2.x >= lifeline1.x) {
                         connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
@@ -837,10 +830,9 @@ class LayoutManager {
                 let y = lifeline2.getCreationConnectionPointPosition().y
                 connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), y)
                 connector.connectionPoint2.move(lifeline2.getCreationConnectionPointPosition().x, y)
-                lifeline1.addCallerOccurrence(y)
                 nextYPosition += 50
             } else if (connector.type == "destructionmessage") {
-                if (lifeline2.addDestructionOccurrence(nextYPosition, connector.connectionPoint2)) {
+                if (lifeline2.needToAdjustDestructionPosition()) {
                     connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 25)
                 } else {
                     connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
@@ -1260,11 +1252,12 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         // List of connection points that are connected to
         // this lifeline
         this.connectionPoints = [ ]
+        this.adjustmentNeeded = false
     }
 
-    createConnectionPoint(svg) {
+    createConnectionPoint(svg, type) {
         let newPoint = new __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__["a" /* ConnectionPoint */](svg, this)
-        this.connectionPoints.push(newPoint)
+        this.connectionPoints.push({ point: newPoint, type: type })
         return newPoint
     }
 
@@ -1337,16 +1330,17 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
     }
 
     addDestructionOccurrence(y, connectionPoint) {
-        let result = false
-        if (this.levels.length != 0) {
-            if (this.levels[this.levels.length - 1][1] == 1) {
-                this.levels.push([y, 0])
-                y += 25
-                result = true
+        this.levels.push([y, 0])
+    }
+
+    needToAdjustDestructionPosition() {
+        if (this.connectionPoints.length > 1) {
+            if ((this.connectionPoints[this.connectionPoints.length - 1].type != "return-start") &&
+                (this.connectionPoints[this.connectionPoints.length - 1].type != "creation-end")) {
+                this.adjustmentNeeded = true
             }
         }
-        this.levels.push([y, 0])
-        return result
+        return this.adjustmentNeeded
     }
 
     update() {
@@ -1386,6 +1380,39 @@ function createDef(self, lifelineDescription, style) {
     self.lineTopPosition.y = (borderAdjustment.top + currentDimensions.height)
 
     let overhang = style.getExecutionSpecificationBarOverhang()
+
+    self.levels = [ ]
+    for (let i = 0; i < self.connectionPoints.length; i++) {
+        let connectionPoint = self.connectionPoints[i]
+        switch (connectionPoint.type) {
+            case "synchronous-start":
+                self.addCallerOccurrence(connectionPoint.point.y)
+                break
+
+            case "synchronous-end":
+                self.addCalleeOccurrence(connectionPoint.point.y)
+                break
+
+            case "return-start":
+                self.addReturnOccurrence(connectionPoint.point.y)
+                break
+
+            case "return-end":
+                self.addReturnCalleeOccurrence(connectionPoint.point.y)
+                break
+
+            case "creation-start":
+                self.addCallerOccurrence(connectionPoint.point.y)
+                break
+
+            case "destruction-end":
+                if (self.adjustmentNeeded) {
+                    self.addReturnOccurrence(connectionPoint.point.y - 25)
+                }
+                self.addDestructionOccurrence(connectionPoint.point.y)
+                break
+        }
+    }
 
     if (self.levels.length == 1) {
         if (self.levels[0][1] == 1) {
@@ -2260,24 +2287,24 @@ class Diagram {
                     if (message.synchronousmessage) {
                         let lifeline1 = this.lifelines.get(message.synchronousmessage.caller)
                         let lifeline2 = this.lifelines.get(message.synchronousmessage.callee)
-                        let connectionPoint1 = lifeline1.createConnectionPoint(svg)
-                        let connectionPoint2 = lifeline2.createConnectionPoint(svg)
+                        let connectionPoint1 = lifeline1.createConnectionPoint(svg, "synchronous-start")
+                        let connectionPoint2 = lifeline2.createConnectionPoint(svg, "synchronous-end")
                         newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "synchronousmessage", connectionPoint1, connectionPoint2, message.synchronousmessage.name)
                     } else if (message.returnmessage) {
                         let lifeline1 = this.lifelines.get(message.returnmessage.callee)
                         let lifeline2 = this.lifelines.get(message.returnmessage.caller)
-                        let connectionPoint1 = lifeline1.createConnectionPoint(svg)
-                        let connectionPoint2 = lifeline2.createConnectionPoint(svg)
+                        let connectionPoint1 = lifeline1.createConnectionPoint(svg, "return-start")
+                        let connectionPoint2 = lifeline2.createConnectionPoint(svg, "return-end")
                         newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "returnmessage", connectionPoint1, connectionPoint2, "")
                     } else if (message.creationmessage) {
                         let lifeline1 = this.lifelines.get(message.creationmessage.caller)
                         let lifeline2 = this.lifelines.get(message.creationmessage.callee)
-                        let connectionPoint1 = lifeline1.createConnectionPoint(svg)
-                        let connectionPoint2 = lifeline2.createConnectionPoint(svg)
+                        let connectionPoint1 = lifeline1.createConnectionPoint(svg, "creation-start")
+                        let connectionPoint2 = lifeline2.createConnectionPoint(svg, "creation-end")
                         newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "creationmessage", connectionPoint1, connectionPoint2, "")
                     } else if (message.destructionmessage) {
                         let lifeline2 = this.lifelines.get(message.destructionmessage.callee)
-                        let connectionPoint2 = lifeline2.createConnectionPoint(svg)
+                        let connectionPoint2 = lifeline2.createConnectionPoint(svg, "destruction-end")
                         newConnector = new __WEBPACK_IMPORTED_MODULE_10__Connector_js__["a" /* Connector */](svg, "destructionmessage", connectionPoint2, connectionPoint2, "")
                     }
                     this.messages.push(newConnector)
