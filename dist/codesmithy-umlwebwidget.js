@@ -1247,8 +1247,6 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         this.lineTopPosition = { x: 0, y: 0 }
         this.boxHeight = 0
 
-        this.levels = [ ]
-        
         // List of connection points that are connected to
         // this lifeline
         this.connectionPoints = [ ]
@@ -1283,54 +1281,6 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
 
     getActiveLineWidth() {
         return this.style.getExecutionSpecificationBarWidth()
-    }
-
-    addCallerOccurrence(y) {
-        this.levels.push([y, 1])
-        if (this.levels.length >= 3) {
-            let length = this.levels.length
-            this.levels[length - 2][0] = this.levels[length - 1][0]
-            this.levels.pop()
-        }
-    }
-
-    addCalleeOccurrence(y) {
-        if (this.levels.length == 0) {
-            this.levels.push([y, 1])
-        } else {
-            this.levels.push([y, this.levels[this.levels.length - 1][1] + 1])
-        }
-        if (this.levels.length >= 3) {
-            let length = this.levels.length
-            this.levels[length - 2][0] = this.levels[length - 1][0]
-            this.levels.pop()
-        }
-    }
-
-    addReturnOccurrence(y) {
-        this.levels.push([y, 0])
-        if (this.levels.length >= 3) {
-            let length = this.levels.length
-            this.levels[length - 2][0] = this.levels[length - 1][0]
-            this.levels.pop()
-        }
-    }
-
-    addReturnCalleeOccurrence(y) {
-        if (this.levels.length == 0) {
-            this.levels.push([y, 1])
-        } else {
-            this.levels.push([y, this.levels[this.levels.length - 1][1] + 1])
-        }
-        if (this.levels.length >= 3) {
-            let length = this.levels.length
-            this.levels[length - 2][0] = this.levels[length - 1][0]
-            this.levels.pop()
-        }
-    }
-
-    addDestructionOccurrence(y, connectionPoint) {
-        this.levels.push([y, 0])
     }
 
     needToAdjustDestructionPosition() {
@@ -1381,62 +1331,110 @@ function createDef(self, lifelineDescription, style) {
 
     let overhang = style.getExecutionSpecificationBarOverhang()
 
-    self.levels = [ ]
+    let levels = [ ]
     for (let i = 0; i < self.connectionPoints.length; i++) {
         let connectionPoint = self.connectionPoints[i]
         switch (connectionPoint.type) {
             case "synchronous-start":
-                self.addCallerOccurrence(connectionPoint.point.y)
+                addCallerOccurrence(levels, connectionPoint.point.y)
                 break
 
             case "synchronous-end":
-                self.addCalleeOccurrence(connectionPoint.point.y)
+                addCalleeOccurrence(levels, connectionPoint.point.y)
                 break
 
             case "return-start":
-                self.addReturnOccurrence(connectionPoint.point.y)
+                addReturnOccurrence(levels, connectionPoint.point.y)
                 break
 
             case "return-end":
-                self.addReturnCalleeOccurrence(connectionPoint.point.y)
+                addReturnCalleeOccurrence(levels, connectionPoint.point.y)
                 break
 
             case "creation-start":
-                self.addCallerOccurrence(connectionPoint.point.y)
+                addCallerOccurrence(levels, connectionPoint.point.y)
                 break
 
             case "destruction-end":
                 if (self.adjustmentNeeded) {
-                    self.addReturnOccurrence(connectionPoint.point.y - 25)
+                    addReturnOccurrence(levels, connectionPoint.point.y - 25)
                 }
-                self.addDestructionOccurrence(connectionPoint.point.y)
+                addDestructionOccurrence(levels, connectionPoint.point.y)
                 break
         }
     }
 
-    if (self.levels.length == 1) {
-        if (self.levels[0][1] == 1) {
-            lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.levels[0][0] - overhang)
+    if (levels.length == 1) {
+        if (levels[0][1] == 1) {
+            lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, levels[0][0] - overhang)
             lifelineGroup
                 .rect(8, (2 * overhang))
-                .move(self.lineTopPosition.x - 4, self.levels[0][0] - overhang)
+                .move(self.lineTopPosition.x - 4, levels[0][0] - overhang)
         } else {
-             lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.levels[0][0])
+             lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, levels[0][0])
         }
-    } else if (self.levels.length > 1) {
-        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, self.levels[0][0] - overhang)
+    } else if (levels.length > 1) {
+        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, levels[0][0] - overhang)
         let previousOverhang = 0
-        for (let i = 1; i < self.levels.length; i++) {
-            if (self.levels[i-1][1] == 1) {
+        for (let i = 1; i < levels.length; i++) {
+            if (levels[i-1][1] == 1) {
                 lifelineGroup
-                    .rect(8, (self.levels[i][0] - self.levels[i-1][0] + (2 * overhang)))
-                    .move(self.lineTopPosition.x - 4, self.levels[i-1][0] - overhang)
+                    .rect(8, (levels[i][0] - levels[i-1][0] + (2 * overhang)))
+                    .move(self.lineTopPosition.x - 4, levels[i-1][0] - overhang)
                 previousOverhang  = overhang
             } else {
-                lifelineGroup.line(self.lineTopPosition.x, self.levels[i-1][0] + previousOverhang, self.lineTopPosition.x, self.levels[i][0])
+                lifelineGroup.line(self.lineTopPosition.x, levels[i-1][0] + previousOverhang, self.lineTopPosition.x, levels[i][0])
             }
         }
     }
+}
+
+function addCallerOccurrence(levels, y) {
+    levels.push([y, 1])
+    if (levels.length >= 3) {
+        let length = levels.length
+        levels[length - 2][0] = levels[length - 1][0]
+        levels.pop()
+    }
+}
+
+function addCalleeOccurrence(levels, y) {
+    if (levels.length == 0) {
+        levels.push([y, 1])
+    } else {
+        levels.push([y, levels[levels.length - 1][1] + 1])
+    }
+    if (levels.length >= 3) {
+        let length = levels.length
+        levels[length - 2][0] = levels[length - 1][0]
+        levels.pop()
+    }
+}
+
+function addReturnOccurrence(levels, y) {
+    levels.push([y, 0])
+    if (levels.length >= 3) {
+        let length = levels.length
+        levels[length - 2][0] = levels[length - 1][0]
+        levels.pop()
+    }
+}
+
+function addReturnCalleeOccurrence(levels, y) {
+    if (levels.length == 0) {
+        levels.push([y, 1])
+    } else {
+        levels.push([y, levels[levels.length - 1][1] + 1])
+    }
+    if (levels.length >= 3) {
+        let length = levels.length
+        levels[length - 2][0] = levels[length - 1][0]
+        levels.pop()
+    }
+}
+
+function addDestructionOccurrence(levels, y) {
+    levels.push([y, 0])
 }
 
 
