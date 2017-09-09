@@ -23,6 +23,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("createFromJSON test 10", SequenceDiagramCreateFromJSONTest10, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 11", SequenceDiagramCreateFromJSONTest11, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 12", SequenceDiagramCreateFromJSONTest12, sequenceDiagramSequence)
+    new tf.FileComparisonTest("createFromJSON test 13", SequenceDiagramCreateFromJSONTest13, sequenceDiagramSequence)
 }
 
 function SequenceDiagramCreateFromJSONTest1(resolve, reject, test) {
@@ -806,6 +807,109 @@ function SequenceDiagramCreateFromJSONTest12(resolve, reject, test) {
 
         test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest12.html")
         test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest12.html")
+
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
+}
+
+// Same as SequenceDiagramCreateFromJSONTest12 but with more calls
+// after the call with the callback
+function SequenceDiagramCreateFromJSONTest13(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div")).size(400, 300)
+
+    let layout = {
+        "elements": {
+            "Customer": { "position": { "x": 1, "y": 1 } },
+            "Shopkeeper": { "position": { "x": 150, "y": 1 } }
+        }
+    }
+
+    let sequenceDiagram = new UMLWebWidget.Diagram()
+    sequenceDiagram.createFromJSON(svg, {
+        "elements":
+            [
+                { 
+                    "lifeline":
+                        {
+                            "name": "Customer"
+                        }
+                },
+                {
+                    "lifeline":
+                        {
+                            "name": "Shopkeeper"
+                        }
+                },
+                {
+                    "messages":
+                        [
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "confirmprice",
+                                        "caller": "Customer",
+                                        "callee": "Shopkeeper"
+                                    }
+                            },
+                            {
+                                "returnmessage":
+                                    {
+                                        "caller": "Customer",
+                                        "callee": "Shopkeeper"
+                                    }
+                            },
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "pay",
+                                        "caller": "Customer",
+                                        "callee": "Shopkeeper"
+                                    }
+                            },
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "give change",
+                                        "caller": "Shopkeeper",
+                                        "callee": "Customer"
+                                    }
+                            },
+                            {
+                                "returnmessage":
+                                    {
+                                        "caller": "Shopkeeper",
+                                        "callee": "Customer"
+                                    }
+                            },
+                            {
+                                "returnmessage":
+                                    {
+                                        "caller": "Customer",
+                                        "callee": "Shopkeeper"
+                                    }
+                            },
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "give tip",
+                                        "caller": "Customer",
+                                        "callee": "Shopkeeper"
+                                    }
+                            }
+                        ]
+                }
+            ]
+    },
+    layout)
+
+    let elementKeys = Object.keys(sequenceDiagram.diagramDescription)
+    if ((elementKeys.length == 1) && (sequenceDiagram.lifelines.size == 2)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest13.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest13.html")
+        test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest13.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
