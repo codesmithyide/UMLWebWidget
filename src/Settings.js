@@ -27,6 +27,7 @@ class Settings {
         this.height = 200
         this.canMove = false
         this.canResize = false
+        this.logLevel = "none"
         this.debug = false
 
         if (jsonSettings) {
@@ -40,6 +41,9 @@ class Settings {
                 if (jsonSettings.interactive.canMove) {
                     this.canMove = jsonSettings.interactive.canMove
                 }
+            }
+            if (jsonSettings.logLevel != null) {
+                this.logLevel = jsonSettings.logLevel
             }
         }
     }

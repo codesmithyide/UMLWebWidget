@@ -21,9 +21,9 @@ import { Log } from "./Log.js"
 class Diagram {
 
     constructor(settings) {
-        this.log = new Log()
         this.settings = new Settings(settings)
-
+        this.log = new Log(this.settings.logLevel)
+        
         // The description of the UML diagram in JSON
         // format. This will then be parsed to create
         // the graphical form.
@@ -96,7 +96,7 @@ class Diagram {
             } else if (item.lifeline) {
                 this.lifelines.set(
                     item.lifeline.name,
-                    new Lifeline(svg, item.lifeline.name, item.lifeline, style)
+                    new Lifeline(svg, item.lifeline.name, item.lifeline, style, this.log)
                 )
             } else if (item.component) {
                 this.components.set(

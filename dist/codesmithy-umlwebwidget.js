@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -619,6 +619,7 @@ class Settings {
         this.height = 200
         this.canMove = false
         this.canResize = false
+        this.logLevel = "none"
         this.debug = false
 
         if (jsonSettings) {
@@ -632,6 +633,9 @@ class Settings {
                 if (jsonSettings.interactive.canMove) {
                     this.canMove = jsonSettings.interactive.canMove
                 }
+            }
+            if (jsonSettings.logLevel != null) {
+                this.logLevel = jsonSettings.logLevel
             }
         }
     }
@@ -1053,8 +1057,8 @@ function visibilityStringToSymbol(visibility) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Component; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ConnectionPoint_js__ = __webpack_require__(1);
 
 
@@ -1241,7 +1245,7 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
 */
 class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
-    constructor(svg, id, lifelineDescription, style) {
+    constructor(svg, id, lifelineDescription, style, log) {
         super(svg)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
@@ -1249,6 +1253,7 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         this.id = id
         this.lifelineDescription = lifelineDescription
         this.style = style
+        this.log = log
 
         this.lineTopPosition = { x: 0, y: 0 }
         this.boxHeight = 0
@@ -1300,6 +1305,7 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
     }
 
     update() {
+        this.log.info("Lifeline " + this.id + ": updating")
         this.layers.clearEachLayer()
         createDef(this, this.lifelineDescription, this.style)
         this.uptodate = true
@@ -1370,6 +1376,13 @@ function createDef(self, lifelineDescription, style) {
         }
     }
 
+    let debugMessage = "Lifeline " + self.id + ": levels: ["
+    for (let level of levels) {
+         debugMessage += " " + level[1]
+    }
+    debugMessage += " ]"
+    self.log.debug(debugMessage)
+
     if (levels.length == 1) {
         if (levels[0][1] > 0) {
             lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, levels[0][0] - overhang)
@@ -1381,7 +1394,6 @@ function createDef(self, lifelineDescription, style) {
         }
     } else if (levels.length > 1) {
         lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, levels[0][0] - overhang)
-        let previousOverhang = 0
         let maxDepth = 0
         for (let i = 0; i < levels.length; i++) {
             maxDepth = Math.max(maxDepth, levels[i][1])
@@ -1393,19 +1405,29 @@ function createDef(self, lifelineDescription, style) {
             layers.push(new __WEBPACK_IMPORTED_MODULE_2__SVGLayer_js__["a" /* SVGLayer */](self.svg))
         }
         for (let i = 1; i < levels.length; i++) {
+
+            // At each iteration we try to process/draw the previous changes in
+            // depth: (i-1)
+
             // The nesting level of the segment we are currently trying to draw
             let currentNestingLevel = levels[i-1][1]
             let nextNestingLevel = levels[i][1]
+
+            self.log.trace("Lifeline " + self.id + ": handling depth change " + i + " from " 
+                + currentNestingLevel + " to " + nextNestingLevel)
+
             if (currentNestingLevel == 0) {
                 // Segments outside any execution specification bar can always
                 // be drawn immediately since there isn't any nesting possible
                 // in that case
-                layers[currentNestingLevel].line(self.lineTopPosition.x, levels[i-1][0] + previousOverhang, self.lineTopPosition.x, levels[i][0])
+                self.log.trace("Lifeline " + self.id + ": drawing line")
+                layers[currentNestingLevel].line(self.lineTopPosition.x, levels[i-1][0], self.lineTopPosition.x, levels[i][0])
             } else if (nextNestingLevel > currentNestingLevel) {
                 // If the depth is increasing we need to hold off on drawing the
                 // previous segment since we are going to draw a nested execution
                 // specification bar, we store the start of the deferred segment
                 // for later use
+                self.log.trace("Lifeline " + self.id + ": deferring drawing")
                 levelStart[currentNestingLevel] = levels[i-1][0]
             } else if (nextNestingLevel <= currentNestingLevel) {
                 // If the depth stays the same it means we are at the end of the lifeline
@@ -1415,13 +1437,30 @@ function createDef(self, lifelineDescription, style) {
                 // If the depth is decreasing we can draw the segment since we are
                 // at the end of a nested or non-nested execution specification bar
 
+                self.log.trace("Lifeline " + self.id + ": drawing rectangle")
+
+                let start = levels[i-1][0];
+                if (levelStart[currentNestingLevel] != -1) {
+                    start = levelStart[currentNestingLevel]
+                }
+
                 let offset = ((currentNestingLevel - 1) * 5)
                 layers[currentNestingLevel]
-                    .rect(8, (levels[i][0] - levels[i-1][0] + (2 * overhang)))
-                    .move(self.lineTopPosition.x - 4 + offset, levels[i-1][0] - overhang)
-                previousOverhang = overhang
+                    .rect(8, (levels[i][0] - start + (2 * overhang)))
+                    .move(self.lineTopPosition.x - 4 + offset, start - overhang)
+                levelStart[currentNestingLevel] = -1
             }
         }
+
+        // If the last change is an increase form 0 to 1 it means we have an
+        // isolated message right at the end of the lifeline which is not a
+        // destruction occurrence.
+        if ((levels[levels.length - 2][1] == 0) && (levels[levels.length - 1][1] > 0)) {
+            layers[levels[levels.length - 1][1]]
+                .rect(8, (2 * overhang))
+                .move(self.lineTopPosition.x - 4, levels[levels.length - 1][0] - overhang)
+        }
+       
         // Since we are at the end of the line draw all the segments that are
         // still deferred
         let end = levels[levels.length - 1][0]
@@ -2117,11 +2156,72 @@ function getConnectorLineShape2(startPoint, endPoint, orientation) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Log; });
+
+
+class Log {
+
+    constructor(level) {
+        switch (level) {
+            case "none":
+                this.level = 0
+                break
+
+            case "error":
+                this.level = 1
+                break
+
+            case "warn":
+                this.level = 2
+                break
+
+            case "info":
+                this.level = 3
+                break
+
+            case "debug":
+                this.level = 4
+                break
+
+            case "trace":
+                this.level = 5
+                break
+        }
+    }
+
+    info(message) {
+        if (this.level >= 3) {
+            console.log(message)
+        }
+    }
+
+    debug(message) {
+        if (this.level >= 4) {
+            console.log(message)
+        }
+    }
+
+    trace(message) {
+        if (this.level >= 5) {
+            console.log(message)
+        }
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ConnectionPoint_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ConnectionPointPosition_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__DiagramElement_js__ = __webpack_require__(0);
@@ -2133,9 +2233,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__UseCase_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__Component_js__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__Node_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__Note_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__Note_js__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__SVGLayer_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__SVGLayerSet_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__Log_js__ = __webpack_require__(16);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "UMLWebWidgetError", function() { return __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Settings", function() { return __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Style", function() { return __WEBPACK_IMPORTED_MODULE_2__Style_js__["a"]; });
@@ -2154,6 +2255,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Note", function() { return __WEBPACK_IMPORTED_MODULE_15__Note_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayer", function() { return __WEBPACK_IMPORTED_MODULE_16__SVGLayer_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SVGLayerSet", function() { return __WEBPACK_IMPORTED_MODULE_17__SVGLayerSet_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Log", function() { return __WEBPACK_IMPORTED_MODULE_18__Log_js__["a"]; });
+
 
 
 
@@ -2179,7 +2282,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2196,6 +2299,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__SVGLayer_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__Log_js__ = __webpack_require__(16);
+
 
 
 
@@ -2219,7 +2324,8 @@ class Diagram {
 
     constructor(settings) {
         this.settings = new __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a" /* Settings */](settings)
-
+        this.log = new __WEBPACK_IMPORTED_MODULE_12__Log_js__["a" /* Log */](this.settings.logLevel)
+        
         // The description of the UML diagram in JSON
         // format. This will then be parsed to create
         // the graphical form.
@@ -2292,7 +2398,7 @@ class Diagram {
             } else if (item.lifeline) {
                 this.lifelines.set(
                     item.lifeline.name,
-                    new __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__["a" /* Lifeline */](svg, item.lifeline.name, item.lifeline, style)
+                    new __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__["a" /* Lifeline */](svg, item.lifeline.name, item.lifeline, style, this.log)
                 )
             } else if (item.component) {
                 this.components.set(
@@ -2455,7 +2561,7 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2526,7 +2632,7 @@ class BallConnector {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2600,7 +2706,7 @@ class SocketConnector {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
