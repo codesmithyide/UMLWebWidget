@@ -88,10 +88,13 @@ class SVGLayer {
       action performed on the layer. In the current implementation there
       is no way to undo the write.
     */
-    write() {
+    write(container) {
         let self = this
+        if (container == null) {
+            container = self.svg
+        }
         self.defs.forEach(function(def) {
-            def.clone(self.svg)
+            def.clone(container)
             def.remove()
         })
     }
