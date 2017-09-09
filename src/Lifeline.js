@@ -202,7 +202,7 @@ function createDef(self, lifelineDescription, style) {
                     .move(self.lineTopPosition.x - 4, levelStart[i] - overhang)
             }
         }
-        for (let i = 1; i < layers.length; i++) {
+        for (let i = 0; i < layers.length; i++) {
             layers[i].write(lifelineGroup)
         }
     }
