@@ -532,10 +532,13 @@ class SVGLayer {
       action performed on the layer. In the current implementation there
       is no way to undo the write.
     */
-    write() {
+    write(container) {
         let self = this
+        if (container == null) {
+            container = self.svg
+        }
         self.defs.forEach(function(def) {
-            def.clone(self.svg)
+            def.clone(container)
             def.remove()
         })
     }
@@ -1224,6 +1227,8 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Lifeline; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SVGLayer_js__ = __webpack_require__(4);
+
 
 
 
@@ -1240,6 +1245,7 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         super(svg)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
+        this.svg = svg
         this.id = id
         this.lifelineDescription = lifelineDescription
         this.style = style
@@ -1365,7 +1371,7 @@ function createDef(self, lifelineDescription, style) {
     }
 
     if (levels.length == 1) {
-        if (levels[0][1] == 1) {
+        if (levels[0][1] > 0) {
             lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, levels[0][0] - overhang)
             lifelineGroup
                 .rect(8, (2 * overhang))
@@ -1376,26 +1382,65 @@ function createDef(self, lifelineDescription, style) {
     } else if (levels.length > 1) {
         lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, levels[0][0] - overhang)
         let previousOverhang = 0
+        let maxDepth = 0
+        for (let i = 0; i < levels.length; i++) {
+            maxDepth = Math.max(maxDepth, levels[i][1])
+        }
+        let levelStart = [ ]
+        let layers = [ ]
+        for (let i = 0; i <= maxDepth; i++) {
+            levelStart.push(-1)
+            layers.push(new __WEBPACK_IMPORTED_MODULE_2__SVGLayer_js__["a" /* SVGLayer */](self.svg))
+        }
         for (let i = 1; i < levels.length; i++) {
-            if (levels[i-1][1] == 1) {
-                lifelineGroup
+            // The nesting level of the segment we are currently trying to draw
+            let currentNestingLevel = levels[i-1][1]
+            let nextNestingLevel = levels[i][1]
+            if (currentNestingLevel == 0) {
+                // Segments outside any execution specification bar can always
+                // be drawn immediately since there isn't any nesting possible
+                // in that case
+                layers[currentNestingLevel].line(self.lineTopPosition.x, levels[i-1][0] + previousOverhang, self.lineTopPosition.x, levels[i][0])
+            } else if (nextNestingLevel > currentNestingLevel) {
+                // If the depth is increasing we need to hold off on drawing the
+                // previous segment since we are going to draw a nested execution
+                // specification bar, we store the start of the deferred segment
+                // for later use
+                levelStart[currentNestingLevel] = levels[i-1][0]
+            } else if (nextNestingLevel <= currentNestingLevel) {
+                // If the depth stays the same it means we are at the end of the lifeline
+                // (remember we eliminate redundant points so the end of the lifeline is
+                // is the only case where we'd have two adjacent points of same depth)
+                
+                // If the depth is decreasing we can draw the segment since we are
+                // at the end of a nested or non-nested execution specification bar
+
+                let offset = ((currentNestingLevel - 1) * 5)
+                layers[currentNestingLevel]
                     .rect(8, (levels[i][0] - levels[i-1][0] + (2 * overhang)))
-                    .move(self.lineTopPosition.x - 4, levels[i-1][0] - overhang)
-                previousOverhang  = overhang
-            } else {
-                lifelineGroup.line(self.lineTopPosition.x, levels[i-1][0] + previousOverhang, self.lineTopPosition.x, levels[i][0])
+                    .move(self.lineTopPosition.x - 4 + offset, levels[i-1][0] - overhang)
+                previousOverhang = overhang
             }
+        }
+        // Since we are at the end of the line draw all the segments that are
+        // still deferred
+        let end = levels[levels.length - 1][0]
+        for (let i = 0; i < levelStart.length; i++) {
+            if (levelStart[i] != -1) {
+                layers[i]
+                    .rect(8, (end - levelStart[i] + (2 * overhang)))
+                    .move(self.lineTopPosition.x - 4, levelStart[i] - overhang)
+            }
+        }
+        for (let i = 1; i < layers.length; i++) {
+            layers[i].write(lifelineGroup)
         }
     }
 }
 
 function addCallerOccurrence(levels, y) {
     levels.push([y, 1])
-    if (levels.length >= 3) {
-        let length = levels.length
-        levels[length - 2][0] = levels[length - 1][0]
-        levels.pop()
-    }
+    concatenateLevels(levels)
 }
 
 function addCalleeOccurrence(levels, y) {
@@ -1404,37 +1449,42 @@ function addCalleeOccurrence(levels, y) {
     } else {
         levels.push([y, levels[levels.length - 1][1] + 1])
     }
-    if (levels.length >= 3) {
-        let length = levels.length
-        levels[length - 2][0] = levels[length - 1][0]
-        levels.pop()
-    }
+    concatenateLevels(levels)
 }
 
 function addReturnOccurrence(levels, y) {
-    levels.push([y, 0])
-    if (levels.length >= 3) {
-        let length = levels.length
-        levels[length - 2][0] = levels[length - 1][0]
-        levels.pop()
+    let newLevel = 0
+    let length = levels.length
+    if (length > 0) {
+        newLevel = Math.max(0, (levels[length - 1][1] - 1))
     }
+    levels.push([y, newLevel])
+    concatenateLevels(levels)
 }
 
 function addReturnCalleeOccurrence(levels, y) {
-    if (levels.length == 0) {
+    let length = levels.length
+    if (length == 0) {
         levels.push([y, 1])
     } else {
-        levels.push([y, levels[levels.length - 1][1] + 1])
+        levels.push([y, levels[length - 1][1]])
     }
-    if (levels.length >= 3) {
-        let length = levels.length
-        levels[length - 2][0] = levels[length - 1][0]
-        levels.pop()
-    }
+    concatenateLevels(levels)
 }
 
 function addDestructionOccurrence(levels, y) {
     levels.push([y, 0])
+}
+
+function concatenateLevels(levels) {
+    let length = levels.length
+    if (length >= 3) {
+        if (levels[length - 3][1] == levels[length - 2][1]) {
+            levels[length - 2][0] = levels[length - 1][0]
+            levels[length - 2][1] = levels[length - 1][1]
+            levels.pop()
+        }
+    }
 }
 
 
