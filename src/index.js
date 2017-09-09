@@ -18,6 +18,7 @@ import { Node } from "./Node.js"
 import { Note } from "./Note.js"
 import { SVGLayer } from "./SVGLayer.js"
 import { SVGLayerSet } from "./SVGLayerSet.js"
+import { Log } from "./Log.js"
 
 export {
     UMLWebWidgetError,
@@ -37,5 +38,6 @@ export {
     Node,
     Note,
     SVGLayer,
-    SVGLayerSet
+    SVGLayerSet,
+    Log
 }

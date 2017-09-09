@@ -12,6 +12,7 @@ import { Actor } from "./Actor.js"
 import { UseCase } from "./UseCase.js"
 import { Connector } from "./Connector.js"
 import { SVGLayer } from "./SVGLayer.js"
+import { Log } from "./Log.js"
 
 /**
   This class is the entry point for all the functionality provided
@@ -20,6 +21,7 @@ import { SVGLayer } from "./SVGLayer.js"
 class Diagram {
 
     constructor(settings) {
+        this.log = new Log()
         this.settings = new Settings(settings)
 
         // The description of the UML diagram in JSON
