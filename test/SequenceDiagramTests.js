@@ -923,8 +923,8 @@ function SequenceDiagramCreateFromJSONTest14(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 1, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 150, "y": 1 } }
+            "Mail Server": { "position": { "x": 1, "y": 1 } },
+            "DNS": { "position": { "x": 150, "y": 1 } }
         }
     }
 

@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 18);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1057,8 +1057,8 @@ function visibilityStringToSymbol(visibility) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Component; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ConnectionPoint_js__ = __webpack_require__(1);
 
 
@@ -1232,6 +1232,8 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SVGLayer_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LifelineLayoutManager_js__ = __webpack_require__(12);
+
 
 
 
@@ -1343,35 +1345,37 @@ function createDef(self, lifelineDescription, style) {
 
     let overhang = style.getExecutionSpecificationBarOverhang()
 
+    let lifelineLayout = new __WEBPACK_IMPORTED_MODULE_3__LifelineLayoutManager_js__["a" /* LifelineLayoutManager */]()
+
     let levels = [ ]
     for (let i = 0; i < self.connectionPoints.length; i++) {
         let connectionPoint = self.connectionPoints[i]
         switch (connectionPoint.type) {
             case "synchronous-start":
-                addCallerOccurrence(levels, connectionPoint.point.y)
+                lifelineLayout.addCallerOccurrence(levels, connectionPoint.point.y)
                 break
 
             case "synchronous-end":
-                addCalleeOccurrence(levels, connectionPoint.point.y)
+                lifelineLayout.addCalleeOccurrence(levels, connectionPoint.point.y)
                 break
 
             case "return-start":
-                addReturnOccurrence(levels, connectionPoint.point.y)
+                lifelineLayout.addReturnOccurrence(levels, connectionPoint.point.y)
                 break
 
             case "return-end":
-                addReturnCalleeOccurrence(levels, connectionPoint.point.y)
+                lifelineLayout.addReturnCalleeOccurrence(levels, connectionPoint.point.y)
                 break
 
             case "creation-start":
-                addCallerOccurrence(levels, connectionPoint.point.y)
+                lifelineLayout.addCallerOccurrence(levels, connectionPoint.point.y)
                 break
 
             case "destruction-end":
                 if (self.adjustmentNeeded) {
-                    addReturnOccurrence(levels, connectionPoint.point.y - 25)
+                    lifelineLayout.addReturnOccurrence(levels, connectionPoint.point.y - 25)
                 }
-                addDestructionOccurrence(levels, connectionPoint.point.y)
+                lifelineLayout.addDestructionOccurrence(levels, connectionPoint.point.y)
                 break
         }
     }
@@ -1477,42 +1481,60 @@ function createDef(self, lifelineDescription, style) {
     }
 }
 
-function addCallerOccurrence(levels, y) {
-    levels.push([y, 1])
-    concatenateLevels(levels)
-}
 
-function addCalleeOccurrence(levels, y) {
-    if (levels.length == 0) {
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LifelineLayoutManager; });
+
+
+class LifelineLayoutManager {
+
+    constructor() {
+    }
+
+    addCallerOccurrence(levels, y) {
         levels.push([y, 1])
-    } else {
-        levels.push([y, levels[levels.length - 1][1] + 1])
+        concatenateLevels(levels)
     }
-    concatenateLevels(levels)
-}
 
-function addReturnOccurrence(levels, y) {
-    let newLevel = 0
-    let length = levels.length
-    if (length > 0) {
-        newLevel = Math.max(0, (levels[length - 1][1] - 1))
+    addCalleeOccurrence(levels, y) {
+        if (levels.length == 0) {
+            levels.push([y, 1])
+        } else {
+            levels.push([y, levels[levels.length - 1][1] + 1])
+        }
+        concatenateLevels(levels)
     }
-    levels.push([y, newLevel])
-    concatenateLevels(levels)
-}
 
-function addReturnCalleeOccurrence(levels, y) {
-    let length = levels.length
-    if (length == 0) {
-        levels.push([y, 1])
-    } else {
-        levels.push([y, levels[length - 1][1]])
+    addReturnOccurrence(levels, y) {
+        let newLevel = 0
+        let length = levels.length
+        if (length > 0) {
+            newLevel = Math.max(0, (levels[length - 1][1] - 1))
+        }
+        levels.push([y, newLevel])
+        concatenateLevels(levels)
     }
-    concatenateLevels(levels)
-}
 
-function addDestructionOccurrence(levels, y) {
-    levels.push([y, 0])
+    addReturnCalleeOccurrence(levels, y) {
+        let length = levels.length
+        if (length == 0) {
+            levels.push([y, 1])
+        } else {
+            levels.push([y, levels[length - 1][1]])
+        }
+        concatenateLevels(levels)
+    }
+
+    addDestructionOccurrence(levels, y) {
+        levels.push([y, 0])
+    }
+
 }
 
 function concatenateLevels(levels) {
@@ -1530,7 +1552,7 @@ function concatenateLevels(levels) {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1603,7 +1625,7 @@ class Node extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diagr
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1660,7 +1682,7 @@ class Actor extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diag
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1713,7 +1735,7 @@ class UseCase extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Di
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2152,7 +2174,7 @@ function getConnectorLineShape2(startPoint, endPoint, orientation) {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2213,7 +2235,7 @@ class Log {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2221,24 +2243,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ConnectionPoint_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ConnectionPointPosition_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Connector_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Connector_js__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__LayoutManager_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__LifelineLayoutManager_js__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__LifelineLayoutManager_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__LifelineLayoutManager_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__LifelineLayoutManager_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ClassBox_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__Lifeline_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__Actor_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__UseCase_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__Actor_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__UseCase_js__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__Component_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__Node_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__Node_js__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__Note_js__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__SVGLayer_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__SVGLayerSet_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__Log_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__Log_js__ = __webpack_require__(17);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "UMLWebWidgetError", function() { return __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Settings", function() { return __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Style", function() { return __WEBPACK_IMPORTED_MODULE_2__Style_js__["a"]; });
@@ -2248,7 +2269,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ConnectionPoint", function() { return __WEBPACK_IMPORTED_MODULE_4__ConnectionPoint_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ConnectionPointPosition", function() { return __WEBPACK_IMPORTED_MODULE_5__ConnectionPointPosition_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "LayoutManager", function() { return __WEBPACK_IMPORTED_MODULE_8__LayoutManager_js__["a"]; });
-/* harmony reexport (binding) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_9__LifelineLayoutManager_js__, "LifelineLayoutManager")) __webpack_require__.d(__webpack_exports__, "LifelineLayoutManager", function() { return __WEBPACK_IMPORTED_MODULE_9__LifelineLayoutManager_js__["LifelineLayoutManager"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "LifelineLayoutManager", function() { return __WEBPACK_IMPORTED_MODULE_9__LifelineLayoutManager_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ClassBox", function() { return __WEBPACK_IMPORTED_MODULE_10__ClassBox_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Lifeline", function() { return __WEBPACK_IMPORTED_MODULE_11__Lifeline_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Actor", function() { return __WEBPACK_IMPORTED_MODULE_12__Actor_js__["a"]; });
@@ -2286,7 +2307,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2298,12 +2319,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Component_js__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Lifeline_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Node_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Actor_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__UseCase_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__SVGLayer_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__Log_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__Log_js__ = __webpack_require__(17);
 
 
 
@@ -2565,7 +2586,7 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2636,7 +2657,7 @@ class BallConnector {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2707,21 +2728,6 @@ class SocketConnector {
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = SocketConnector;
 
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-class LifelineLayoutManager {
-
-    constructor() {
-    }
-
-}
 
 
 /***/ }),
