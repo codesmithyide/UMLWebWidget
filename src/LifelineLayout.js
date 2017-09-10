@@ -5,6 +5,40 @@ class LifelineLayout {
     constructor() {
     }
 
+    dolayout(connectionPoints, levels, adjustmentNeeded) {
+        for (let i = 0; i < connectionPoints.length; i++) {
+            let connectionPoint = connectionPoints[i]
+            switch (connectionPoint.type) {
+                case "synchronous-start":
+                    this.addCallerOccurrence(levels, connectionPoint.point.y)
+                    break
+
+                case "synchronous-end":
+                    this.addCalleeOccurrence(levels, connectionPoint.point.y)
+                    break
+
+                case "return-start":
+                    this.addReturnOccurrence(levels, connectionPoint.point.y)
+                    break
+
+                case "return-end":
+                    this.addReturnCalleeOccurrence(levels, connectionPoint.point.y)
+                    break
+
+                case "creation-start":
+                    this.addCallerOccurrence(levels, connectionPoint.point.y)
+                    break
+
+                case "destruction-end":
+                    if (adjustmentNeeded) {
+                        this.addReturnOccurrence(levels, connectionPoint.point.y - 25)
+                    }
+                    this.addDestructionOccurrence(levels, connectionPoint.point.y)
+                    break
+            }
+        }
+    }
+
     addCallerOccurrence(levels, y) {
         levels.push([y, 1])
         concatenateLevels(levels)

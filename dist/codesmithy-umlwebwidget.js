@@ -1348,37 +1348,7 @@ function createDef(self, lifelineDescription, style) {
     let lifelineLayout = new __WEBPACK_IMPORTED_MODULE_3__LifelineLayout_js__["a" /* LifelineLayout */]()
 
     let levels = [ ]
-    for (let i = 0; i < self.connectionPoints.length; i++) {
-        let connectionPoint = self.connectionPoints[i]
-        switch (connectionPoint.type) {
-            case "synchronous-start":
-                lifelineLayout.addCallerOccurrence(levels, connectionPoint.point.y)
-                break
-
-            case "synchronous-end":
-                lifelineLayout.addCalleeOccurrence(levels, connectionPoint.point.y)
-                break
-
-            case "return-start":
-                lifelineLayout.addReturnOccurrence(levels, connectionPoint.point.y)
-                break
-
-            case "return-end":
-                lifelineLayout.addReturnCalleeOccurrence(levels, connectionPoint.point.y)
-                break
-
-            case "creation-start":
-                lifelineLayout.addCallerOccurrence(levels, connectionPoint.point.y)
-                break
-
-            case "destruction-end":
-                if (self.adjustmentNeeded) {
-                    lifelineLayout.addReturnOccurrence(levels, connectionPoint.point.y - 25)
-                }
-                lifelineLayout.addDestructionOccurrence(levels, connectionPoint.point.y)
-                break
-        }
-    }
+    lifelineLayout.dolayout(self.connectionPoints, levels, self.adjustmentNeeded)
 
     let debugMessage = "Lifeline " + self.id + ": levels: ["
     for (let level of levels) {
@@ -1495,6 +1465,40 @@ function createDef(self, lifelineDescription, style) {
 class LifelineLayout {
 
     constructor() {
+    }
+
+    dolayout(connectionPoints, levels, adjustmentNeeded) {
+        for (let i = 0; i < connectionPoints.length; i++) {
+            let connectionPoint = connectionPoints[i]
+            switch (connectionPoint.type) {
+                case "synchronous-start":
+                    this.addCallerOccurrence(levels, connectionPoint.point.y)
+                    break
+
+                case "synchronous-end":
+                    this.addCalleeOccurrence(levels, connectionPoint.point.y)
+                    break
+
+                case "return-start":
+                    this.addReturnOccurrence(levels, connectionPoint.point.y)
+                    break
+
+                case "return-end":
+                    this.addReturnCalleeOccurrence(levels, connectionPoint.point.y)
+                    break
+
+                case "creation-start":
+                    this.addCallerOccurrence(levels, connectionPoint.point.y)
+                    break
+
+                case "destruction-end":
+                    if (adjustmentNeeded) {
+                        this.addReturnOccurrence(levels, connectionPoint.point.y - 25)
+                    }
+                    this.addDestructionOccurrence(levels, connectionPoint.point.y)
+                    break
+            }
+        }
     }
 
     addCallerOccurrence(levels, y) {
