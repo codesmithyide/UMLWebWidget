@@ -24,6 +24,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("createFromJSON test 11", SequenceDiagramCreateFromJSONTest11, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 12", SequenceDiagramCreateFromJSONTest12, sequenceDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 13", SequenceDiagramCreateFromJSONTest13, sequenceDiagramSequence)
+    new tf.FileComparisonTest("createFromJSON test 14", SequenceDiagramCreateFromJSONTest14, sequenceDiagramSequence)
 }
 
 function SequenceDiagramCreateFromJSONTest1(resolve, reject, test) {
@@ -910,6 +911,70 @@ function SequenceDiagramCreateFromJSONTest13(resolve, reject, test) {
 
         test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest13.html")
         test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest13.html")
+
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
+}
+
+function SequenceDiagramCreateFromJSONTest14(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let layout = {
+        "elements": {
+            "Customer": { "position": { "x": 1, "y": 1 } },
+            "Shopkeeper": { "position": { "x": 150, "y": 1 } }
+        }
+    }
+
+    let sequenceDiagram = new UMLWebWidget.Diagram()
+    sequenceDiagram.createFromJSON(svg, {
+        "elements":
+            [
+                { 
+                    "lifeline":
+                        {
+                            "name": "Mail Server"
+                        }
+                },
+                {
+                    "lifeline":
+                        {
+                            "name": "DNS"
+                        }
+                },
+                {
+                    "messages":
+                        [
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "getremoteIP",
+                                        "caller": "Mail Server",
+                                        "callee": "Mail Server"
+                                    }
+                            },
+                            {
+                                "synchronousmessage":
+                                    {
+                                        "name": "getMXServers",
+                                        "caller": "Mail Server",
+                                        "callee": "DNS"
+                                    }
+                            }
+                        ]
+                }
+            ]
+    },
+    layout)
+
+    let elementKeys = Object.keys(sequenceDiagram.diagramDescription)
+    if ((elementKeys.length == 1) && (sequenceDiagram.lifelines.size == 2)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest14.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/sequencediagramtests/SequenceDiagramCreateFromJSONTest14.html")
+        test.setReferenceFilePath(__dirname + "/reference/sequencediagramtests/SequenceDiagramCreateFromJSONTest14.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
