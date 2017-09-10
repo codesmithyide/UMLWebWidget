@@ -9,7 +9,7 @@ import { ConnectionPointPosition } from "./ConnectionPointPosition.js"
 import { DiagramElement } from "./DiagramElement.js"
 import { Connector } from "./Connector.js"
 import { LayoutManager } from "./LayoutManager.js"
-import { LifelineLayoutManager } from "./LifelineLayoutManager.js"
+import { LifelineLayout } from "./LifelineLayout.js"
 import { ClassBox } from "./ClassBox.js"
 import { Lifeline } from "./Lifeline.js"
 import { Actor } from "./Actor.js"
@@ -31,9 +31,9 @@ export {
     ConnectionPoint,
     ConnectionPointPosition,
     LayoutManager,
-    LifelineLayoutManager,
     ClassBox,
     Lifeline,
+    LifelineLayout,
     Actor,
     UseCase,
     Component,

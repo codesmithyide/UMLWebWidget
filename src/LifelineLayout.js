@@ -1,6 +1,6 @@
 'use strict'
 
-class LifelineLayoutManager {
+class LifelineLayout {
 
     constructor() {
     }
@@ -56,4 +56,4 @@ function concatenateLevels(levels) {
     }
 }
 
-export { LifelineLayoutManager }
+export { LifelineLayout }

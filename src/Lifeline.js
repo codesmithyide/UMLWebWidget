@@ -3,7 +3,7 @@
 import { DiagramElement } from "./DiagramElement.js"
 import { ConnectionPoint } from "./ConnectionPoint.js"
 import { SVGLayer } from "./SVGLayer.js"
-import { LifelineLayoutManager } from "./LifelineLayoutManager.js"
+import { LifelineLayout } from "./LifelineLayout.js"
 
 /**
   A lifeline on a sequence diagram.
@@ -110,7 +110,7 @@ function createDef(self, lifelineDescription, style) {
 
     let overhang = style.getExecutionSpecificationBarOverhang()
 
-    let lifelineLayout = new LifelineLayoutManager()
+    let lifelineLayout = new LifelineLayout()
 
     let levels = [ ]
     for (let i = 0; i < self.connectionPoints.length; i++) {
