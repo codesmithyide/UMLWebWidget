@@ -20,6 +20,7 @@ import { Note } from "./Note.js"
 import { SVGLayer } from "./SVGLayer.js"
 import { SVGLayerSet } from "./SVGLayerSet.js"
 import { Log } from "./Log.js"
+import { Metrics } from "./Metrics.js"
 
 export {
     UMLWebWidgetError,
@@ -41,5 +42,6 @@ export {
     Note,
     SVGLayer,
     SVGLayerSet,
-    Log
+    Log,
+    Metrics
 }

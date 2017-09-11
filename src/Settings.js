@@ -11,7 +11,7 @@
     of errors. It is recommended to enable debug mode when updating a
     diagram and set it back to false afterwards.
 */
-class Settings {    
+class Settings {
 
     /** 
       Creates a new Settings instance with each property
