@@ -119,7 +119,8 @@ function createDef(self, lifelineDescription, style) {
     debugMessage += " ]"
     self.log.debug(debugMessage)
 
-    if (lifelineLayout.depthChanges.length == 1) {
+    let depthChangesLength = lifelineLayout.depthChanges.length
+    if (depthChangesLength == 1) {
         if (lifelineLayout.depthChanges[0][1] > 0) {
             lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, lifelineLayout.depthChanges[0][0] - overhang)
             lifelineGroup
@@ -128,11 +129,11 @@ function createDef(self, lifelineDescription, style) {
         } else {
              lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, lifelineLayout.depthChanges[0][0])
         }
-    } else if (lifelineLayout.depthChanges.length > 1) {
+    } else if (depthChangesLength > 1) {
         lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, lifelineLayout.depthChanges[0][0] - overhang)
         let maxDepth = 0
-        for (let i = 0; i < lifelineLayout.depthChanges.length; i++) {
-            maxDepth = Math.max(maxDepth, lifelineLayout.depthChanges[i][1])
+        for (let depthChange of lifelineLayout.depthChanges) {
+            maxDepth = Math.max(maxDepth, depthChange[1])
         }
         let levelStart = [ ]
         let layers = [ ]
@@ -140,7 +141,7 @@ function createDef(self, lifelineDescription, style) {
             levelStart.push(-1)
             layers.push(new SVGLayer(self.svg))
         }
-        for (let i = 1; i < lifelineLayout.depthChanges.length; i++) {
+        for (let i = 1; i < depthChangesLength; i++) {
 
             // At each iteration we try to process/draw the previous changes in
             // depth: (i-1)
@@ -191,16 +192,16 @@ function createDef(self, lifelineDescription, style) {
         // If the last change is an increase form 0 to 1 it means we have an
         // isolated message right at the end of the lifeline which is not a
         // destruction occurrence.
-        if ((lifelineLayout.depthChanges[lifelineLayout.depthChanges.length - 2][1] == 0) &&
-            (lifelineLayout.depthChanges[lifelineLayout.depthChanges.length - 1][1] > 0)) {
-            layers[lifelineLayout.depthChanges[lifelineLayout.depthChanges.length - 1][1]]
+        if ((lifelineLayout.depthChanges[depthChangesLength - 2][1] == 0) &&
+            (lifelineLayout.depthChanges[depthChangesLength - 1][1] > 0)) {
+            layers[lifelineLayout.depthChanges[depthChangesLength - 1][1]]
                 .rect(8, (2 * overhang))
-                .move(self.lineTopPosition.x - 4, lifelineLayout.depthChanges[lifelineLayout.depthChanges.length - 1][0] - overhang)
+                .move(self.lineTopPosition.x - 4, lifelineLayout.depthChanges[depthChangesLength - 1][0] - overhang)
         }
        
         // Since we are at the end of the line draw all the segments that are
         // still deferred
-        let end = lifelineLayout.depthChanges[lifelineLayout.depthChanges.length - 1][0]
+        let end = lifelineLayout.depthChanges[depthChangesLength - 1][0]
         for (let i = 0; i < levelStart.length; i++) {
             if (levelStart[i] != -1) {
                 layers[i]
