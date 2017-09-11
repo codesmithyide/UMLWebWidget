@@ -3,37 +3,38 @@
 class LifelineLayout {
 
     constructor() {
+        this.depthChanges = [ ]
     }
 
-    dolayout(connectionPoints, levels, adjustmentNeeded) {
+    dolayout(connectionPoints, adjustmentNeeded) {
         for (let i = 0; i < connectionPoints.length; i++) {
             let connectionPoint = connectionPoints[i]
             switch (connectionPoint.type) {
                 case "synchronous-start":
-                    addCallerOccurrence(levels, connectionPoint.point.y)
+                    addCallerOccurrence(this.depthChanges, connectionPoint.point.y)
                     break
 
                 case "synchronous-end":
-                    addCalleeOccurrence(levels, connectionPoint.point.y)
+                    addCalleeOccurrence(this.depthChanges, connectionPoint.point.y)
                     break
 
                 case "return-start":
-                    addReturnOccurrence(levels, connectionPoint.point.y)
+                    addReturnOccurrence(this.depthChanges, connectionPoint.point.y)
                     break
 
                 case "return-end":
-                    addReturnCalleeOccurrence(levels, connectionPoint.point.y)
+                    addReturnCalleeOccurrence(this.depthChanges, connectionPoint.point.y)
                     break
 
                 case "creation-start":
-                    addCallerOccurrence(levels, connectionPoint.point.y)
+                    addCallerOccurrence(this.depthChanges, connectionPoint.point.y)
                     break
 
                 case "destruction-end":
                     if (adjustmentNeeded) {
-                        addReturnOccurrence(levels, connectionPoint.point.y - 25)
+                        addReturnOccurrence(this.depthChanges, connectionPoint.point.y - 25)
                     }
-                    addDestructionOccurrence(levels, connectionPoint.point.y)
+                    addDestructionOccurrence(this.depthChanges, connectionPoint.point.y)
                     break
             }
         }
@@ -41,51 +42,51 @@ class LifelineLayout {
 
 }
 
-function addCallerOccurrence(levels, y) {
-    levels.push([y, 1])
-    concatenateLevels(levels)
+function addCallerOccurrence(depthChanges, y) {
+    depthChanges.push([y, 1])
+    concatenateLevels(depthChanges)
 }
 
-function addCalleeOccurrence(levels, y) {
-    if (levels.length == 0) {
-        levels.push([y, 1])
+function addCalleeOccurrence(depthChanges, y) {
+    if (depthChanges.length == 0) {
+        depthChanges.push([y, 1])
     } else {
-        levels.push([y, levels[levels.length - 1][1] + 1])
+        depthChanges.push([y, depthChanges[depthChanges.length - 1][1] + 1])
     }
-    concatenateLevels(levels)
+    concatenateLevels(depthChanges)
 }
 
-function addReturnOccurrence(levels, y) {
+function addReturnOccurrence(depthChanges, y) {
     let newLevel = 0
-    let length = levels.length
+    let length = depthChanges.length
     if (length > 0) {
-        newLevel = Math.max(0, (levels[length - 1][1] - 1))
+        newLevel = Math.max(0, (depthChanges[length - 1][1] - 1))
     }
-    levels.push([y, newLevel])
-    concatenateLevels(levels)
+    depthChanges.push([y, newLevel])
+    concatenateLevels(depthChanges)
 }
 
-function addReturnCalleeOccurrence(levels, y) {
-    let length = levels.length
+function addReturnCalleeOccurrence(depthChanges, y) {
+    let length = depthChanges.length
     if (length == 0) {
-        levels.push([y, 1])
+        depthChanges.push([y, 1])
     } else {
-        levels.push([y, levels[length - 1][1]])
+        depthChanges.push([y, depthChanges[length - 1][1]])
     }
-    concatenateLevels(levels)
+    concatenateLevels(depthChanges)
 }
 
-function addDestructionOccurrence(levels, y) {
-    levels.push([y, 0])
+function addDestructionOccurrence(depthChanges, y) {
+    depthChanges.push([y, 0])
 }
 
-function concatenateLevels(levels) {
-    let length = levels.length
+function concatenateLevels(depthChanges) {
+    let length = depthChanges.length
     if (length >= 3) {
-        if (levels[length - 3][1] == levels[length - 2][1]) {
-            levels[length - 2][0] = levels[length - 1][0]
-            levels[length - 2][1] = levels[length - 1][1]
-            levels.pop()
+        if (depthChanges[length - 3][1] == depthChanges[length - 2][1]) {
+            depthChanges[length - 2][0] = depthChanges[length - 1][0]
+            depthChanges[length - 2][1] = depthChanges[length - 1][1]
+            depthChanges.pop()
         }
     }
 }
