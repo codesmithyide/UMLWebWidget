@@ -71,11 +71,10 @@ class Lifeline extends DiagramElement {
         return this.adjustmentNeeded
     }
 
-    update() {
+    doUpdate() {
         this.log.info("Lifeline " + this.id + ": updating")
         this.layers.clearEachLayer()
         createDef(this, this.lifelineDescription, this.style)
-        this.uptodate = true
     }
 
 }

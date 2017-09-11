@@ -13,6 +13,7 @@ import { UseCase } from "./UseCase.js"
 import { Connector } from "./Connector.js"
 import { SVGLayer } from "./SVGLayer.js"
 import { Log } from "./Log.js"
+import { Metrics } from "./Metrics.js"
 
 /**
   This class is the entry point for all the functionality provided
@@ -23,6 +24,7 @@ class Diagram {
     constructor(settings) {
         this.settings = new Settings(settings)
         this.log = new Log(this.settings.logLevel)
+        this.metrics = new Metrics()
         
         // The description of the UML diagram in JSON
         // format. This will then be parsed to create

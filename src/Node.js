@@ -18,7 +18,7 @@ class Node extends DiagramElement {
         this.style = style
     }
 
-    update() {
+    doUpdate() {
         var nodeGroup = this.shapeLayer.group().addClass("UMLNode")
     
         let currentDimensions = { 
@@ -55,8 +55,6 @@ class Node extends DiagramElement {
         nodeGroup.polygon(pt2 + " " + pt3 + " " + pt5 + " " + pt6)      
 
         nodeGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top + 10)
-
-        this.uptodate = true
     }
 
 }

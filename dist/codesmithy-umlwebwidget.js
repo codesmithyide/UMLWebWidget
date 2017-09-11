@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 18);
+/******/ 	return __webpack_require__(__webpack_require__.s = 19);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -111,9 +111,7 @@ class DiagramElement {
         element.
     */
     getLayers() {
-        if (!this.uptodate) {
-            this.update()
-        }
+        this.update()
         return this.layers
     }
 
@@ -138,10 +136,15 @@ class DiagramElement {
       expressed as a rectangle.
     */
     getConnectionPointsRectangle() {
-        if (!this.uptodate) {
-            this.update()
-        }
+        this.update()
         return this.doGetConnectionPointsRectangle()
+    }
+
+    update() {
+        if (!this.uptodate) {
+            this.doUpdate()
+            this.uptodate = true
+        }
     }
 
     /**
@@ -150,7 +153,7 @@ class DiagramElement {
 
       @virtual
     */
-    update() {
+    doUpdate() {
     }
 
     /**
@@ -933,9 +936,8 @@ class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         return newPoint
     }
 
-    update() {
+    doUpdate() {
         createDef(this, this.classDescription, this.canMove, this.style)
-        this.uptodate = true
     }
 
     doGetConnectionPointsRectangle() {
@@ -1057,8 +1059,8 @@ function visibilityStringToSymbol(visibility) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Component; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ConnectionPoint_js__ = __webpack_require__(1);
 
 
@@ -1151,7 +1153,7 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         return newPoint
     }
 
-    update() {
+    doUpdate() {
         this.layers.clearEachLayer()
 
         var componentGroup = this.shapeLayer.group().addClass("UMLComponent")
@@ -1196,8 +1198,6 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
             this.socketConnectors[i].moveConnectionPoint(position.x + currentDimensions.width + offset, position.y + currentDimensions.height/2)
             this.layers.merge(this.socketConnectors[i].getLayers())
         }
-
-        this.uptodate = true
     }
 
     getBallConnectionPoint(name) {
@@ -1306,11 +1306,10 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         return this.adjustmentNeeded
     }
 
-    update() {
+    doUpdate() {
         this.log.info("Lifeline " + this.id + ": updating")
         this.layers.clearEachLayer()
         createDef(this, this.lifelineDescription, this.style)
-        this.uptodate = true
     }
 
 }
@@ -1582,7 +1581,7 @@ class Node extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diagr
         this.style = style
     }
 
-    update() {
+    doUpdate() {
         var nodeGroup = this.shapeLayer.group().addClass("UMLNode")
     
         let currentDimensions = { 
@@ -1619,8 +1618,6 @@ class Node extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diagr
         nodeGroup.polygon(pt2 + " " + pt3 + " " + pt5 + " " + pt6)      
 
         nodeGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top + 10)
-
-        this.uptodate = true
     }
 
 }
@@ -1661,7 +1658,7 @@ class Actor extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diag
         return newPoint
     }
 
-    update() {
+    doUpdate() {
         let borderAdjustment = {
             top: this.y,
             left: this.x
@@ -1677,8 +1674,6 @@ class Actor extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diag
         shapeGroup.line(borderAdjustment.left + offset, borderAdjustment.top + 18, borderAdjustment.left + 16 + offset, borderAdjustment.top + 18)
         shapeGroup.line(borderAdjustment.left + 8 + offset, borderAdjustment.top + 26, borderAdjustment.left + offset, borderAdjustment.top + 33)
         shapeGroup.line(borderAdjustment.left + 8 + offset, borderAdjustment.top + 26, borderAdjustment.left + 16 + offset, borderAdjustment.top + 33)
-
-        this.uptodate = true
     }
 }
 
@@ -1718,7 +1713,7 @@ class UseCase extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Di
         return newPoint
     }
 
-    update() {
+    doUpdate() {
         let borderAdjustment = {
             top: this.y,
             left: this.x
@@ -1729,8 +1724,6 @@ class UseCase extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Di
         let textDef = textGroup.text(this.useCaseDescription.title)
         shapeGroup.ellipse(1.2*textDef.bbox().width, 3*textDef.bbox().height).move(borderAdjustment.left + 1, borderAdjustment.top + 1)
         textDef.move(borderAdjustment.left + 1 + 0.1*textDef.bbox().width, borderAdjustment.top + 1 + textDef.bbox().height)
-
-        this.uptodate = true
     }
 
 }
@@ -1776,7 +1769,7 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         return this.height
     }
 
-    update() {
+    doUpdate() {
         if (this.type == "inheritance") {
             let lineGroup = this.shapeLayer.group().addClass("UMLInheritanceRelationship")
             drawInheritanceRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
@@ -1810,7 +1803,6 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
             let lineGroup = this.shapeLayer.group().addClass("UMLAssemblyConnector")
             drawAssemblyConnector(lineGroup, this.connectionPoint1, this.connectionPoint2)
         }
-        this.uptodate = true
     }
 
 }
@@ -2243,11 +2235,29 @@ class Log {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Metrics; });
+
+
+class Metrics {
+
+    constructor() {
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ConnectionPoint_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ConnectionPointPosition_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__DiagramElement_js__ = __webpack_require__(0);
@@ -2260,11 +2270,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__UseCase_js__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__Component_js__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__Node_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__Note_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__Note_js__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__SVGLayer_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__SVGLayerSet_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__Log_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__Metrics_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__Metrics_js__ = __webpack_require__(18);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "UMLWebWidgetError", function() { return __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Settings", function() { return __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Style", function() { return __WEBPACK_IMPORTED_MODULE_2__Style_js__["a"]; });
@@ -2314,7 +2324,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2332,6 +2342,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Connector_js__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__SVGLayer_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__Log_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__Metrics_js__ = __webpack_require__(18);
+
 
 
 
@@ -2357,6 +2369,7 @@ class Diagram {
     constructor(settings) {
         this.settings = new __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a" /* Settings */](settings)
         this.log = new __WEBPACK_IMPORTED_MODULE_12__Log_js__["a" /* Log */](this.settings.logLevel)
+        this.metrics = new __WEBPACK_IMPORTED_MODULE_13__Metrics_js__["a" /* Metrics */]()
         
         // The description of the UML diagram in JSON
         // format. This will then be parsed to create
@@ -2593,7 +2606,7 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2664,7 +2677,7 @@ class BallConnector {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2738,7 +2751,7 @@ class SocketConnector {
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2766,24 +2779,6 @@ class Note extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diagr
 
     update() {
         this.uptodate = true
-    }
-
-}
-
-
-
-
-/***/ }),
-/* 23 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Metrics; });
-
-
-class Metrics {
-
-    constructor() {
     }
 
 }

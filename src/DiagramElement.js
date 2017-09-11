@@ -29,9 +29,7 @@ class DiagramElement {
         element.
     */
     getLayers() {
-        if (!this.uptodate) {
-            this.update()
-        }
+        this.update()
         return this.layers
     }
 
@@ -56,10 +54,15 @@ class DiagramElement {
       expressed as a rectangle.
     */
     getConnectionPointsRectangle() {
-        if (!this.uptodate) {
-            this.update()
-        }
+        this.update()
         return this.doGetConnectionPointsRectangle()
+    }
+
+    update() {
+        if (!this.uptodate) {
+            this.doUpdate()
+            this.uptodate = true
+        }
     }
 
     /**
@@ -68,7 +71,7 @@ class DiagramElement {
 
       @virtual
     */
-    update() {
+    doUpdate() {
     }
 
     /**

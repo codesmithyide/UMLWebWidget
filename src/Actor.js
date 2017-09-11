@@ -23,7 +23,7 @@ class Actor extends DiagramElement {
         return newPoint
     }
 
-    update() {
+    doUpdate() {
         let borderAdjustment = {
             top: this.y,
             left: this.x
@@ -39,8 +39,6 @@ class Actor extends DiagramElement {
         shapeGroup.line(borderAdjustment.left + offset, borderAdjustment.top + 18, borderAdjustment.left + 16 + offset, borderAdjustment.top + 18)
         shapeGroup.line(borderAdjustment.left + 8 + offset, borderAdjustment.top + 26, borderAdjustment.left + offset, borderAdjustment.top + 33)
         shapeGroup.line(borderAdjustment.left + 8 + offset, borderAdjustment.top + 26, borderAdjustment.left + 16 + offset, borderAdjustment.top + 33)
-
-        this.uptodate = true
     }
 }
 

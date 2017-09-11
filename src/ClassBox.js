@@ -41,9 +41,8 @@ class ClassBox extends DiagramElement {
         return newPoint
     }
 
-    update() {
+    doUpdate() {
         createDef(this, this.classDescription, this.canMove, this.style)
-        this.uptodate = true
     }
 
     doGetConnectionPointsRectangle() {

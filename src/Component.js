@@ -89,7 +89,7 @@ class Component extends DiagramElement {
         return newPoint
     }
 
-    update() {
+    doUpdate() {
         this.layers.clearEachLayer()
 
         var componentGroup = this.shapeLayer.group().addClass("UMLComponent")
@@ -134,8 +134,6 @@ class Component extends DiagramElement {
             this.socketConnectors[i].moveConnectionPoint(position.x + currentDimensions.width + offset, position.y + currentDimensions.height/2)
             this.layers.merge(this.socketConnectors[i].getLayers())
         }
-
-        this.uptodate = true
     }
 
     getBallConnectionPoint(name) {

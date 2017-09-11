@@ -28,7 +28,7 @@ class Connector extends DiagramElement {
         return this.height
     }
 
-    update() {
+    doUpdate() {
         if (this.type == "inheritance") {
             let lineGroup = this.shapeLayer.group().addClass("UMLInheritanceRelationship")
             drawInheritanceRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
@@ -62,7 +62,6 @@ class Connector extends DiagramElement {
             let lineGroup = this.shapeLayer.group().addClass("UMLAssemblyConnector")
             drawAssemblyConnector(lineGroup, this.connectionPoint1, this.connectionPoint2)
         }
-        this.uptodate = true
     }
 
 }
