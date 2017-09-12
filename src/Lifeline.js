@@ -74,14 +74,18 @@ class Lifeline extends DiagramElement {
     doUpdate() {
         this.log.info("Lifeline " + this.id + ": updating")
         this.layers.clearEachLayer()
-        createDef(this, this.lifelineDescription, this.style)
+        let lifelineGroup = this.shapeLayer.group().addClass("UMLLifeline")
+
+        // The box need to be updated first because the position of the top of
+        // the line is computed as part of that update
+        updateBox(this, lifelineGroup, this.lifelineDescription, this.style, this.lineTopPosition)
+        updateLine(this, lifelineGroup, this.lifelineDescription, this.style)
     }
 
 }
 
-function createDef(self, lifelineDescription, style) {
-    var lifelineGroup = self.shapeLayer.group().addClass("UMLLifeline")
-
+// Create the box at the top of the lifeline
+function updateBox(self, lifelineGroup, lifelineDescription, style, lineTopPosition) {
     let currentDimensions = { 
         width: 0,
         height: 0
@@ -91,7 +95,7 @@ function createDef(self, lifelineDescription, style) {
         top: self.y + 1,
         left: self.x + 1
     }
-    
+
     currentDimensions.height = style.getTopMargin("lifeline")
 
     var instanceNameGroup = self.textLayer.group().addClass("UMLInstanceName")
@@ -104,9 +108,11 @@ function createDef(self, lifelineDescription, style) {
     lifelineGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
     self.boxHeight = currentDimensions.height
 
-    self.lineTopPosition.x = (borderAdjustment.left + (currentDimensions.width / 2))
-    self.lineTopPosition.y = (borderAdjustment.top + currentDimensions.height)
+    lineTopPosition.x = (borderAdjustment.left + (currentDimensions.width / 2))
+    lineTopPosition.y = (borderAdjustment.top + currentDimensions.height)
+}
 
+function updateLine(self, lifelineGroup, lifelineDescription, style) {
     let overhang = style.getExecutionSpecificationBarOverhang()
 
     let lifelineLayout = new LifelineLayout()
