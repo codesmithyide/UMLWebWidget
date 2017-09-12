@@ -79,7 +79,10 @@ class Lifeline extends DiagramElement {
         // The box need to be updated first because the position of the top of
         // the line is computed as part of that update
         updateBox(this, lifelineGroup, this.lifelineDescription, this.style, this.lineTopPosition)
-        updateLine(this, lifelineGroup, this.lifelineDescription, this.style)
+
+        let lifelineLayout = new LifelineLayout()
+        lifelineLayout.dolayout(this.connectionPoints, this.adjustmentNeeded)
+        updateLine(this, lifelineGroup, this.lifelineDescription, lifelineLayout.depthChanges, this.style)
     }
 
 }
@@ -112,22 +115,17 @@ function updateBox(self, lifelineGroup, lifelineDescription, style, lineTopPosit
     lineTopPosition.y = (borderAdjustment.top + currentDimensions.height)
 }
 
-function updateLine(self, lifelineGroup, lifelineDescription, style) {
+function updateLine(self, lifelineGroup, lifelineDescription, depthChanges, style) {
     let overhang = style.getExecutionSpecificationBarOverhang()
 
-    let lifelineLayout = new LifelineLayout()
-    lifelineLayout.dolayout(self.connectionPoints, self.adjustmentNeeded)
-
     let debugMessage = "Lifeline " + self.id + ": depth changes: ["
-    for (let depthChange of lifelineLayout.depthChanges) {
+    for (let depthChange of depthChanges) {
          debugMessage += " " + depthChange[1]
     }
     debugMessage += " ]"
     self.log.debug(debugMessage)
 
-    let depthChanges = lifelineLayout.depthChanges
-    let depthChangesLength = lifelineLayout.depthChanges.length
-    if (depthChangesLength == 1) {
+    if (depthChanges.length == 1) {
         if (depthChanges[0][1] > 0) {
             lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0] - overhang)
             lifelineGroup
@@ -136,7 +134,7 @@ function updateLine(self, lifelineGroup, lifelineDescription, style) {
         } else {
              lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0])
         }
-    } else if (depthChangesLength > 1) {
+    } else if (depthChanges.length > 1) {
         lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0] - overhang)
         let maxDepth = 0
         for (let depthChange of depthChanges) {
@@ -148,7 +146,7 @@ function updateLine(self, lifelineGroup, lifelineDescription, style) {
             levelStart.push(-1)
             layers.push(new SVGLayer(self.svg))
         }
-        for (let i = 1; i < depthChangesLength; i++) {
+        for (let i = 1; i < depthChanges.length; i++) {
 
             // At each iteration we try to process/draw the previous changes in
             // depth: (i-1)
@@ -199,16 +197,16 @@ function updateLine(self, lifelineGroup, lifelineDescription, style) {
         // If the last change is an increase form 0 to 1 it means we have an
         // isolated message right at the end of the lifeline which is not a
         // destruction occurrence.
-        if ((depthChanges[depthChangesLength - 2][1] == 0) &&
-            (depthChanges[depthChangesLength - 1][1] > 0)) {
-            layers[depthChanges[depthChangesLength - 1][1]]
+        if ((depthChanges[depthChanges.length - 2][1] == 0) &&
+            (depthChanges[depthChanges.length - 1][1] > 0)) {
+            layers[depthChanges[depthChanges.length - 1][1]]
                 .rect(8, (2 * overhang))
-                .move(self.lineTopPosition.x - 4, depthChanges[depthChangesLength - 1][0] - overhang)
+                .move(self.lineTopPosition.x - 4, depthChanges[depthChanges.length - 1][0] - overhang)
         }
        
         // Since we are at the end of the line draw all the segments that are
         // still deferred
-        let end = depthChanges[depthChangesLength - 1][0]
+        let end = depthChanges[depthChanges.length - 1][0]
         for (let i = 0; i < levelStart.length; i++) {
             if (levelStart[i] != -1) {
                 layers[i]
