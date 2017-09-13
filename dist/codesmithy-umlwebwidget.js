@@ -1288,6 +1288,7 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         // this lifeline
         this.connectionPoints = [ ]
         this.adjustmentNeeded = false
+        this.lifelineLayout = new __WEBPACK_IMPORTED_MODULE_3__LifelineLayout_js__["a" /* LifelineLayout */]()
     }
 
     /**
@@ -1356,9 +1357,9 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         // the line is computed as part of that update
         updateBox(this, lifelineGroup, this.lifelineDescription, this.style, this.lineTopPosition)
 
-        let lifelineLayout = new __WEBPACK_IMPORTED_MODULE_3__LifelineLayout_js__["a" /* LifelineLayout */]()
-        lifelineLayout.dolayout(this.connectionPoints, this.adjustmentNeeded)
-        updateLine(this, lifelineGroup, this.lifelineDescription, lifelineLayout.depthChanges, this.style)
+        
+        this.lifelineLayout.dolayout(this.connectionPoints, this.adjustmentNeeded)
+        updateLine(this, lifelineGroup, this.lifelineDescription, this.lifelineLayout.depthChanges, this.style)
     }
 
 }
@@ -1514,11 +1515,15 @@ function updateLine(self, lifelineGroup, lifelineDescription, depthChanges, styl
 */
 class LifelineLayout {
 
+    /**
+      Creates a new LifelineLayout instance.
+    */
     constructor() {
         this.depthChanges = [ ]
     }
 
     dolayout(connectionPoints, adjustmentNeeded) {
+        this.depthChanges.length = 0
         for (let i = 0; i < connectionPoints.length; i++) {
             let connectionPoint = connectionPoints[i]
             switch (connectionPoint.type) {

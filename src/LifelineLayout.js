@@ -7,11 +7,15 @@
 */
 class LifelineLayout {
 
+    /**
+      Creates a new LifelineLayout instance.
+    */
     constructor() {
         this.depthChanges = [ ]
     }
 
     dolayout(connectionPoints, adjustmentNeeded) {
+        this.depthChanges.length = 0
         for (let i = 0; i < connectionPoints.length; i++) {
             let connectionPoint = connectionPoints[i]
             switch (connectionPoint.type) {

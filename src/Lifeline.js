@@ -40,6 +40,7 @@ class Lifeline extends DiagramElement {
         // this lifeline
         this.connectionPoints = [ ]
         this.adjustmentNeeded = false
+        this.lifelineLayout = new LifelineLayout()
     }
 
     /**
@@ -108,9 +109,9 @@ class Lifeline extends DiagramElement {
         // the line is computed as part of that update
         updateBox(this, lifelineGroup, this.lifelineDescription, this.style, this.lineTopPosition)
 
-        let lifelineLayout = new LifelineLayout()
-        lifelineLayout.dolayout(this.connectionPoints, this.adjustmentNeeded)
-        updateLine(this, lifelineGroup, this.lifelineDescription, lifelineLayout.depthChanges, this.style)
+        
+        this.lifelineLayout.dolayout(this.connectionPoints, this.adjustmentNeeded)
+        updateLine(this, lifelineGroup, this.lifelineDescription, this.lifelineLayout.depthChanges, this.style)
     }
 
 }
