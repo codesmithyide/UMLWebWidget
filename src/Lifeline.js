@@ -25,11 +25,10 @@ class Lifeline extends DiagramElement {
       @param {SVG} svg - The root SVG document.
     */
     constructor(svg, id, lifelineDescription, style, log) {
-        super(svg)
+        super(svg, id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.svg = svg
-        this.id = id
         this.lifelineDescription = lifelineDescription
         this.style = style
         this.log = log

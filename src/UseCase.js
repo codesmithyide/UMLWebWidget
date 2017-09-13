@@ -11,10 +11,9 @@ import { ConnectionPoint } from "./ConnectionPoint.js"
 class UseCase extends DiagramElement {
 
     constructor(svg, id, useCaseDescription) {
-        super(svg)
+        super(svg, id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
-        this.id = id
         this.useCaseDescription = useCaseDescription
     }
 

@@ -14,7 +14,14 @@ var position = Symbol()
 */
 class DiagramElement {
 
-    constructor(svg) {
+    /**
+      Creates a new DiagramElement instance.
+
+      @param {SVG} svg - The root SVG document.
+      @param {string} id - A unique identifier for this element.
+    */
+    constructor(svg, id) {
+        this.id = id
         this.layers = new SVGLayerSet(svg)
         this.uptodate = false
         this[position] = { x: 0, y: 0 }

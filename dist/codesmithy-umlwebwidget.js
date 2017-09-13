@@ -96,7 +96,14 @@ var position = Symbol()
 */
 class DiagramElement {
 
-    constructor(svg) {
+    /**
+      Creates a new DiagramElement instance.
+
+      @param {SVG} svg - The root SVG document.
+      @param {string} id - A unique identifier for this element.
+    */
+    constructor(svg, id) {
+        this.id = id
         this.layers = new __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__["a" /* SVGLayerSet */](svg)
         this.uptodate = false
         this[position] = { x: 0, y: 0 }
@@ -919,10 +926,9 @@ class LayoutManager {
 class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
     constructor(svg, id, classDescription, canMove, style) {
-        super(svg)
+        super(svg, id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
-        this.id = id
         this.classDescription = classDescription
         this.canMove = canMove
         this.style = style
@@ -1109,11 +1115,10 @@ class Stereotype {
 class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
     constructor(svg, id, componentDescription, style) {
-        super(svg)
+        super(svg, id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.svg = svg
-        this.id = id
         this.componentDescription = componentDescription
         this.style = style
         this.ballConnectors = [ ]
@@ -1268,11 +1273,10 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
       @param {SVG} svg - The root SVG document.
     */
     constructor(svg, id, lifelineDescription, style, log) {
-        super(svg)
+        super(svg, id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.svg = svg
-        this.id = id
         this.lifelineDescription = lifelineDescription
         this.style = style
         this.log = log
@@ -1621,10 +1625,9 @@ function concatenateLevels(depthChanges) {
 class Node extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
     constructor(svg, id, nodeDescription, style) {
-        super(svg)
+        super(svg, id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
-        this.id = id
         this.nodeDescription = nodeDescription
         this.style = style
     }
@@ -1694,10 +1697,9 @@ class Node extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diagr
 class Actor extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
     constructor(svg, id, actorDescription) {
-        super(svg)
+        super(svg, id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
-        this.id = id
         this.actorDescription = actorDescription
     }
 
@@ -1749,10 +1751,9 @@ class Actor extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diag
 class UseCase extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
     constructor(svg, id, useCaseDescription) {
-        super(svg)
+        super(svg, id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
-        this.id = id
         this.useCaseDescription = useCaseDescription
     }
 
