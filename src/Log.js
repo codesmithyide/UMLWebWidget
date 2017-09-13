@@ -1,5 +1,9 @@
 'use strict'
 
+/**
+  A class used to log diagram events, mostly useful
+  for debugging only.
+*/
 class Log {
 
     constructor(level) {

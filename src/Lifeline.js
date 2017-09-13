@@ -12,6 +12,18 @@ import { LifelineLayout } from "./LifelineLayout.js"
 */
 class Lifeline extends DiagramElement {
 
+    /**
+      <p>Creates a new Lifeline instance.</p>
+
+      <p>
+        At construction time the messages related to this lifeline
+        are not known. They will be added later by calls to 
+        {@link Lifeline#createConnectionPoint}. Layout has to 
+        be performed after all messages have been added.
+      </p>
+
+      @param {SVG} svg - The root SVG document.
+    */
     constructor(svg, id, lifelineDescription, style, log) {
         super(svg)
         this.shapeLayer = this.layers.createLayer("shape")
@@ -31,6 +43,23 @@ class Lifeline extends DiagramElement {
         this.adjustmentNeeded = false
     }
 
+    /**
+      <p>
+        Creates a new connection point. Connection points are used
+        to link lifelines and messages.
+      </p>
+
+      <p>
+        Calls to this functions are also used to communicate to
+        the lifeline which messages it receives or sends. The order
+        of the calls therefore matters as the order of the messages
+        is assumed to be the order in which this function is called.
+      </p>
+
+      @param {SVG} svg - The root SVG document.
+      @param {string} type - The type of the message.
+      @returns {ConnectionPoint}
+    */
     createConnectionPoint(svg, type) {
         let newPoint = new ConnectionPoint(svg, this)
         this.connectionPoints.push({ point: newPoint, type: type })

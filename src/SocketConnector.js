@@ -4,7 +4,11 @@ import { SVGLayerSet } from "./SVGLayerSet.js"
 
 var textDef = Symbol()
 
-export class SocketConnector {
+/**
+  A socket connector to represent a dependency for a 
+  component.
+*/
+class SocketConnector {
 
     constructor(svg, component, name) {
         this.svg = svg
@@ -62,3 +66,5 @@ export class SocketConnector {
     }
 
 }
+
+export { SocketConnector }

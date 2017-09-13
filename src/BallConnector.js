@@ -4,7 +4,11 @@ import { SVGLayerSet } from "./SVGLayerSet.js"
 
 var textDef = Symbol()
 
-export class BallConnector {
+/**
+  A ball connector to represent an interface for a
+  component.
+*/
+class BallConnector {
 
     constructor(svg, component, name) {
         this.svg = svg
@@ -59,3 +63,5 @@ export class BallConnector {
     }
 
 }
+
+export { BallConnector }

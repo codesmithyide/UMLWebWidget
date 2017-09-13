@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+  This class computes and stores the depth levels for the execution
+  specifications of the lifeline based on the messages received and
+  sent.
+*/
 class LifelineLayout {
 
     constructor() {

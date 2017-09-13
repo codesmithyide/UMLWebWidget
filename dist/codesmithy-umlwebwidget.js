@@ -579,11 +579,19 @@ class SVGLayer {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UMLWebWidgetError; });
 
 
+/**
+  Errors related to diagram operations are
+  communicated via this class.
+
+  Note that by default errors are only shown
+  if debug mode is enabled in the {@link Settings}.
+*/
 class UMLWebWidgetError extends Error {    
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = UMLWebWidgetError;
+
 
 
 
@@ -1247,6 +1255,18 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
 */
 class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
+    /**
+      <p>Creates a new Lifeline instance.</p>
+
+      <p>
+        At construction time the messages related to this lifeline
+        are not known. They will be added later by calls to 
+        {@link Lifeline#createConnectionPoint}. Layout has to 
+        be performed after all messages have been added.
+      </p>
+
+      @param {SVG} svg - The root SVG document.
+    */
     constructor(svg, id, lifelineDescription, style, log) {
         super(svg)
         this.shapeLayer = this.layers.createLayer("shape")
@@ -1266,6 +1286,23 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         this.adjustmentNeeded = false
     }
 
+    /**
+      <p>
+        Creates a new connection point. Connection points are used
+        to link lifelines and messages.
+      </p>
+
+      <p>
+        Calls to this functions are also used to communicate to
+        the lifeline which messages it receives or sends. The order
+        of the calls therefore matters as the order of the messages
+        is assumed to be the order in which this function is called.
+      </p>
+
+      @param {SVG} svg - The root SVG document.
+      @param {string} type - The type of the message.
+      @returns {ConnectionPoint}
+    */
     createConnectionPoint(svg, type) {
         let newPoint = new __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__["a" /* ConnectionPoint */](svg, this)
         this.connectionPoints.push({ point: newPoint, type: type })
@@ -1466,6 +1503,11 @@ function updateLine(self, lifelineGroup, lifelineDescription, depthChanges, styl
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LifelineLayout; });
 
 
+/**
+  This class computes and stores the depth levels for the execution
+  specifications of the lifeline based on the messages received and
+  sent.
+*/
 class LifelineLayout {
 
     constructor() {
@@ -2183,6 +2225,10 @@ function getConnectorLineShape2(startPoint, endPoint, orientation) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Log; });
 
 
+/**
+  A class used to log diagram events, mostly useful
+  for debugging only.
+*/
 class Log {
 
     constructor(level) {
@@ -2244,6 +2290,10 @@ class Log {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Metrics; });
 
 
+/**
+  A class to collect metrics for performance
+  measurements.
+*/
 class Metrics {
 
     constructor() {
@@ -2616,6 +2666,7 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BallConnector; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__ = __webpack_require__(2);
 
 
@@ -2623,6 +2674,10 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
 
 var textDef = Symbol()
 
+/**
+  A ball connector to represent an interface for a
+  component.
+*/
 class BallConnector {
 
     constructor(svg, component, name) {
@@ -2678,7 +2733,7 @@ class BallConnector {
     }
 
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = BallConnector;
+
 
 
 
@@ -2687,6 +2742,7 @@ class BallConnector {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SocketConnector; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__ = __webpack_require__(2);
 
 
@@ -2694,6 +2750,10 @@ class BallConnector {
 
 var textDef = Symbol()
 
+/**
+  A socket connector to represent a dependency for a 
+  component.
+*/
 class SocketConnector {
 
     constructor(svg, component, name) {
@@ -2752,7 +2812,7 @@ class SocketConnector {
     }
 
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = SocketConnector;
+
 
 
 
