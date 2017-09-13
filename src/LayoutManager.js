@@ -90,6 +90,7 @@ class LayoutManager {
     layoutMessages(lifelines, connectors) {
         let nextYPosition = 0
         for (let lifeline of lifelines.values()) {
+            lifeline.doLayout()
             nextYPosition = Math.max(nextYPosition, lifeline.getFirstConnectionPointPosition().y)
         }
         for (var i = 0; i < connectors.length; i++) {
@@ -127,8 +128,7 @@ class LayoutManager {
             }
         }
         if (connectors.length > 0) {
-            for (let lifeline of lifelines.values()) {
-                lifeline.doLayout()
+            for (let lifeline of lifelines.values()) {                
                 lifeline.uptodate = false
             }
         }
