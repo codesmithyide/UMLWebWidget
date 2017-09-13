@@ -210,7 +210,6 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
     }
     if (lifelines != null) {
         for (let lifeline of lifelines) {
-            lifeline.doLayout()
             lifeline.getLayers().getLayer("shape").write()
             lifeline.getLayers().getLayer("text").write()
         }

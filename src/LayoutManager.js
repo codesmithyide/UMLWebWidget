@@ -128,6 +128,7 @@ class LayoutManager {
         }
         if (connectors.length > 0) {
             for (let lifeline of lifelines.values()) {
+                lifeline.doLayout()
                 lifeline.uptodate = false
             }
         }
