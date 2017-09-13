@@ -1348,6 +1348,10 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         return this.adjustmentNeeded
     }
 
+    doLayout() {
+        this.lifelineLayout.dolayout(this.connectionPoints, this.adjustmentNeeded)
+    }
+
     doUpdate() {
         this.log.info("Lifeline " + this.id + ": updating")
         this.layers.clearEachLayer()
@@ -1356,9 +1360,6 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         // The box need to be updated first because the position of the top of
         // the line is computed as part of that update
         updateBox(this, lifelineGroup, this.lifelineDescription, this.style, this.lineTopPosition)
-
-        
-        this.lifelineLayout.dolayout(this.connectionPoints, this.adjustmentNeeded)
         updateLine(this, lifelineGroup, this.lifelineDescription, this.lifelineLayout.depthChanges, this.style)
     }
 
@@ -2617,6 +2618,7 @@ function draw(classboxes, lifelines, components, nodes, actors, usecases, connec
     }
     if (lifelines != null) {
         for (let lifeline of lifelines) {
+            lifeline.doLayout()
             lifeline.getLayers().getLayer("shape").write()
             lifeline.getLayers().getLayer("text").write()
         }
