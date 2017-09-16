@@ -831,36 +831,32 @@ class LayoutManager {
         for (let lifeline of lifelines.values()) {
             nextYPosition = Math.max(nextYPosition, lifeline.getFirstConnectionPointPosition().y)
         }
-        for (var i = 0; i < connectors.length; i++) {
-            let connector = connectors[i]
-            let lifeline1 = connector.connectionPoint1.element
-            let lifeline2 = connector.connectionPoint2.element
+        for (let connector of connectors) {
+            let connectionPoint1 = connector.connectionPoint1
+            let connectionPoint2 = connector.connectionPoint2
+            let lifeline1 = connectionPoint1.element
+            let lifeline2 = connectionPoint2.element
             if ((connector.type != "creationmessage") && (connector.type != "destructionmessage")) {
                 if (lifeline1 != lifeline2) {
-                    if (lifeline2.x >= lifeline1.x) {
-                        connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
-                        connector.connectionPoint2.move(lifeline2.getLineTopPosition().x - (lifeline2.getActiveLineWidth() / 2), nextYPosition)
-                    } else {
-                        connector.connectionPoint1.move(lifeline1.getLineTopPosition().x - (lifeline1.getActiveLineWidth() / 2), nextYPosition)
-                        connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition)
-                    }
+                    connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
+                    connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
                     nextYPosition += connector.getHeight()
                 } else {
-                    connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
-                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition + 20)
+                    connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
+                    connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 20)
                     nextYPosition += connector.getHeight()
                 }
             } else if (connector.type == "creationmessage") {
                 lifeline2.move(lifeline2.x, nextYPosition)
                 let y = lifeline2.getCreationConnectionPointPosition().y
-                connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), y)
-                connector.connectionPoint2.move(lifeline2.getCreationConnectionPointPosition().x, y)
+                connectionPoint1.move(lifeline1.getLineTopPosition().x, y)
+                connectionPoint2.move(lifeline2.getCreationConnectionPointPosition().x, y)
                 nextYPosition += 50
             } else if (connector.type == "destructionmessage") {
                 if (lifeline2.needToAdjustDestructionPosition()) {
-                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 25)
+                    connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 25)
                 } else {
-                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
+                    connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
                 }
                 nextYPosition += connector.getHeight()
             }
@@ -870,6 +866,39 @@ class LayoutManager {
                 lifeline.doLayout()
                 lifeline.uptodate = false
             }
+        }
+
+        // Do a second pass to adjust the x position based on the width of the 
+        // line which varies because of execution specifications
+        for (let connector of connectors) {
+            let connectionPoint1 = connector.connectionPoint1
+            let connectionPoint2 = connector.connectionPoint2
+            let lifeline1 = connectionPoint1.element
+            let lifeline2 = connectionPoint2.element
+            if (lifeline1 == lifeline2) {
+                let y1 = connectionPoint1.y
+                let x1 = connectionPoint1.x + lifeline1.getHorizontalOffset(y1, "right")
+                connectionPoint1.move(x1, y1)
+                let y2 = connectionPoint2.y
+                let x2 = connectionPoint2.x + lifeline2.getHorizontalOffset(y2, "right")
+                connectionPoint2.move(x2, y2)
+            } else if (lifeline2.x >= lifeline1.x) {
+                let y1 = connectionPoint1.y
+                let x1 = connectionPoint1.x + lifeline1.getHorizontalOffset(y1, "right")
+                connectionPoint1.move(x1, y1)
+                let y2 = connectionPoint2.y
+                let x2 = connectionPoint2.x + lifeline2.getHorizontalOffset(y2, "left")
+                connectionPoint2.move(x2, y2)
+            } else {
+                let y1 = connectionPoint1.y
+                let x1 = connectionPoint1.x + lifeline1.getHorizontalOffset(y1, "left")
+                connectionPoint1.move(x1, y1)
+                let y2 = connectionPoint2.y
+                let x2 = connectionPoint2.x + lifeline2.getHorizontalOffset(y2, "right")
+                connectionPoint2.move(x2, y2)
+
+            }
+            connector.uptodate = false
         }
     }
 
@@ -1339,6 +1368,16 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
         return this.style.getExecutionSpecificationBarWidth()
     }
 
+    getHorizontalOffset(y, side) {
+        let result = 0
+        if (side == "right") {
+            result = (this.lifelineLayout.getDepth(y) * (this.getActiveLineWidth() / 2))
+        } else if (side == "left") {
+            result = -(this.lifelineLayout.getDepth(y) * (this.getActiveLineWidth() / 2))
+        }
+        return result
+    }
+
     needToAdjustDestructionPosition() {
         if (this.connectionPoints.length > 1) {
             if ((this.connectionPoints[this.connectionPoints.length - 1].type != "return-start") &&
@@ -1522,6 +1561,25 @@ class LifelineLayout {
     */
     constructor() {
         this.depthChanges = [ ]
+    }
+
+    getDepth(y) {
+        let result = 0
+        let previous = -1
+        for (let i = 0; 
+             ((i < this.depthChanges.length) && (y >= this.depthChanges[i][0]));
+             i++) {
+             result = this.depthChanges[i][1]
+             if (y > this.depthChanges[i][0]) {
+                 previous = i
+             } else {
+                 previous = (i-1)
+             }
+        }
+        if (previous >= 0) {
+            result = Math.max(result, this.depthChanges[previous][1])
+        }
+        return result
     }
 
     dolayout(connectionPoints, adjustmentNeeded) {
@@ -1820,12 +1878,13 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
 
     getHeight() {
         if (!this.uptodate) {
-            this.update()
+        //    this.update()
         }
         return this.height
     }
 
     doUpdate() {
+        this.layers.clearEachLayer()
         if (this.type == "inheritance") {
             let lineGroup = this.shapeLayer.group().addClass("UMLInheritanceRelationship")
             drawInheritanceRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
@@ -1880,7 +1939,20 @@ function drawCompositionOrAggregationRelationship(lineGroup, connectionPoint1, c
 }
 
 function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, text) {
-    if (connectionPoint1.x < connectionPoint2.x) {
+    if ((connectionPoint1.element != null) && (connectionPoint1.element == connectionPoint2.element)) {
+        if ((textGroup != null) && (text != null) && (text != "")) {
+            let textElement = textGroup.text(text)
+            textElement.move(connectionPoint1.x + 8, connectionPoint1.y - textElement.bbox().height - 3)
+        }
+
+        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint1.y)
+        lineGroup.line(connectionPoint1.x + 30, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint2.y)
+        lineGroup.line(connectionPoint1.x + 30, connectionPoint2.y, connectionPoint2.x + 12, connectionPoint2.y)
+        let polygonDescription = "" + connectionPoint2.x + "," + connectionPoint2.y + " " +
+            (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
+            (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
+        lineGroup.polygon(polygonDescription)
+    } else if (connectionPoint1.x < connectionPoint2.x) {
         if ((textGroup != null) && (text != null) && (text != "")) {
             let textElement = textGroup.text(text)
             
