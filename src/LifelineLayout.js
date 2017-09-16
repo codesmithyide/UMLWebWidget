@@ -14,6 +14,25 @@ class LifelineLayout {
         this.depthChanges = [ ]
     }
 
+    getDepth(y) {
+        let result = 0
+        let previous = -1
+        for (let i = 0; 
+             ((i < this.depthChanges.length) && (y >= this.depthChanges[i][0]));
+             i++) {
+             result = this.depthChanges[i][1]
+             if (y > this.depthChanges[i][0]) {
+                 previous = i
+             } else {
+                 previous = (i-1)
+             }
+        }
+        if (previous >= 0) {
+            result = Math.max(result, this.depthChanges[previous][1])
+        }
+        return result
+    }
+
     dolayout(connectionPoints, adjustmentNeeded) {
         this.depthChanges.length = 0
         for (let i = 0; i < connectionPoints.length; i++) {

@@ -90,6 +90,16 @@ class Lifeline extends DiagramElement {
         return this.style.getExecutionSpecificationBarWidth()
     }
 
+    getHorizontalOffset(y, side) {
+        let result = 0
+        if (side == "right") {
+            result = (this.lifelineLayout.getDepth(y) * (this.getActiveLineWidth() / 2))
+        } else if (side == "left") {
+            result = -(this.lifelineLayout.getDepth(y) * (this.getActiveLineWidth() / 2))
+        }
+        return result
+    }
+
     needToAdjustDestructionPosition() {
         if (this.connectionPoints.length > 1) {
             if ((this.connectionPoints[this.connectionPoints.length - 1].type != "return-start") &&

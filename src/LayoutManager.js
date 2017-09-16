@@ -92,36 +92,32 @@ class LayoutManager {
         for (let lifeline of lifelines.values()) {
             nextYPosition = Math.max(nextYPosition, lifeline.getFirstConnectionPointPosition().y)
         }
-        for (var i = 0; i < connectors.length; i++) {
-            let connector = connectors[i]
-            let lifeline1 = connector.connectionPoint1.element
-            let lifeline2 = connector.connectionPoint2.element
+        for (let connector of connectors) {
+            let connectionPoint1 = connector.connectionPoint1
+            let connectionPoint2 = connector.connectionPoint2
+            let lifeline1 = connectionPoint1.element
+            let lifeline2 = connectionPoint2.element
             if ((connector.type != "creationmessage") && (connector.type != "destructionmessage")) {
                 if (lifeline1 != lifeline2) {
-                    if (lifeline2.x >= lifeline1.x) {
-                        connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
-                        connector.connectionPoint2.move(lifeline2.getLineTopPosition().x - (lifeline2.getActiveLineWidth() / 2), nextYPosition)
-                    } else {
-                        connector.connectionPoint1.move(lifeline1.getLineTopPosition().x - (lifeline1.getActiveLineWidth() / 2), nextYPosition)
-                        connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition)
-                    }
+                    connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
+                    connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
                     nextYPosition += connector.getHeight()
                 } else {
-                    connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), nextYPosition)
-                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x + (lifeline2.getActiveLineWidth() / 2), nextYPosition + 20)
+                    connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
+                    connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 20)
                     nextYPosition += connector.getHeight()
                 }
             } else if (connector.type == "creationmessage") {
                 lifeline2.move(lifeline2.x, nextYPosition)
                 let y = lifeline2.getCreationConnectionPointPosition().y
-                connector.connectionPoint1.move(lifeline1.getLineTopPosition().x + (lifeline1.getActiveLineWidth() / 2), y)
-                connector.connectionPoint2.move(lifeline2.getCreationConnectionPointPosition().x, y)
+                connectionPoint1.move(lifeline1.getLineTopPosition().x, y)
+                connectionPoint2.move(lifeline2.getCreationConnectionPointPosition().x, y)
                 nextYPosition += 50
             } else if (connector.type == "destructionmessage") {
                 if (lifeline2.needToAdjustDestructionPosition()) {
-                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 25)
+                    connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 25)
                 } else {
-                    connector.connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
+                    connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
                 }
                 nextYPosition += connector.getHeight()
             }
@@ -131,6 +127,39 @@ class LayoutManager {
                 lifeline.doLayout()
                 lifeline.uptodate = false
             }
+        }
+
+        // Do a second pass to adjust the x position based on the width of the 
+        // line which varies because of execution specifications
+        for (let connector of connectors) {
+            let connectionPoint1 = connector.connectionPoint1
+            let connectionPoint2 = connector.connectionPoint2
+            let lifeline1 = connectionPoint1.element
+            let lifeline2 = connectionPoint2.element
+            if (lifeline1 == lifeline2) {
+                let y1 = connectionPoint1.y
+                let x1 = connectionPoint1.x + lifeline1.getHorizontalOffset(y1, "right")
+                connectionPoint1.move(x1, y1)
+                let y2 = connectionPoint2.y
+                let x2 = connectionPoint2.x + lifeline2.getHorizontalOffset(y2, "right")
+                connectionPoint2.move(x2, y2)
+            } else if (lifeline2.x >= lifeline1.x) {
+                let y1 = connectionPoint1.y
+                let x1 = connectionPoint1.x + lifeline1.getHorizontalOffset(y1, "right")
+                connectionPoint1.move(x1, y1)
+                let y2 = connectionPoint2.y
+                let x2 = connectionPoint2.x + lifeline2.getHorizontalOffset(y2, "left")
+                connectionPoint2.move(x2, y2)
+            } else {
+                let y1 = connectionPoint1.y
+                let x1 = connectionPoint1.x + lifeline1.getHorizontalOffset(y1, "left")
+                connectionPoint1.move(x1, y1)
+                let y2 = connectionPoint2.y
+                let x2 = connectionPoint2.x + lifeline2.getHorizontalOffset(y2, "right")
+                connectionPoint2.move(x2, y2)
+
+            }
+            connector.uptodate = false
         }
     }
 
