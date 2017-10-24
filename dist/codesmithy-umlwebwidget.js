@@ -2911,6 +2911,11 @@ class SocketConnector {
 
 
 class ClassTemplate extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
+
+    constructor(svg, id, classTemplateDescription, style) {
+        super(svg, id)
+    }
+
 }
 
 
