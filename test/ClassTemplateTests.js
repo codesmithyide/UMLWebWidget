@@ -12,6 +12,8 @@ module.exports = function(theTestHarness) {
     TestUtils.createDirectory(__dirname + "/output/classtemplatetests")
 
     new tf.FunctionBasedTest("Creation test 1", ClassTemplateCreationTest1, classtemplateSequence)
+
+    new tf.FileComparisonTest("getLayers test 1", ClassTemplateGetLayersTest1, classtemplateSequence)
 }
 
 function ClassTemplateCreationTest1(resolve) {
@@ -26,6 +28,33 @@ function ClassTemplateCreationTest1(resolve) {
             ]
     }
     let style = new UMLWebWidget.Style()
-    let classtemplate = new UMLWebWidget.ClassTemplate(svg, classTemplateDescription.name, classTemplateDescription, false, style)
+    let classtemplate = new UMLWebWidget.ClassTemplate(svg, classTemplateDescription.name, classTemplateDescription, style)
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+function ClassTemplateGetLayersTest1(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let classTemplateDescription = {
+        "name": "MyClassTemplate",
+        "attributes":
+            [
+            ],
+        "operations":
+            [
+            ]
+    }
+    let style = new UMLWebWidget.Style()
+    let classtemplate = new UMLWebWidget.ClassTemplate(svg, classTemplateDescription.name, classTemplateDescription, style)
+
+    let layers = classtemplate.getLayers()
+    layers.layers["shape"].write()
+    layers.layers["text"].write()
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/classtemplatetests/ClassTemplateGetLayersTest1.html", true)
+
+    test.setOutputFilePath(__dirname + "/output/classtemplatetests/ClassTemplateGetLayersTest1.html")
+    test.setReferenceFilePath(__dirname + "/reference/classtemplatetests/ClassTemplateGetLayersTest1.html")
+
     resolve(tf.TestResultOutcome.ePassed)
 }

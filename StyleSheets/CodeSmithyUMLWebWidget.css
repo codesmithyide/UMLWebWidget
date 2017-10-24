@@ -4,6 +4,17 @@
    fill: #f1f4ff;
 }
 
+.CodeSmithyUMLWebWidget .UMLClassTemplate line {
+   stroke: #595959;
+   stroke-width: 1;
+}
+
+.CodeSmithyUMLWebWidget .UMLClassTemplate rect {
+   stroke: #595959;
+   stroke-width: 2;
+   fill: #f1f4ff;
+}
+
 .CodeSmithyUMLWebWidget .UMLClassBox line {
    stroke: #595959;
    stroke-width: 1;
