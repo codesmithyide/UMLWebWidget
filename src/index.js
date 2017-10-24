@@ -11,6 +11,7 @@ import { Connector } from "./Connector.js"
 import { LayoutManager } from "./LayoutManager.js"
 import { LifelineLayout } from "./LifelineLayout.js"
 import { ClassBox } from "./ClassBox.js"
+import { ClassTemplate } from "./ClassTemplate.js"
 import { Lifeline } from "./Lifeline.js"
 import { Actor } from "./Actor.js"
 import { UseCase } from "./UseCase.js"
@@ -33,6 +34,7 @@ export {
     ConnectionPointPosition,
     LayoutManager,
     ClassBox,
+    ClassTemplate,
     Lifeline,
     LifelineLayout,
     Actor,
