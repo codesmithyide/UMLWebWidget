@@ -37,6 +37,7 @@ function ClassTemplateGetLayersTest1(resolve, reject, test) {
 
     let classTemplateDescription = {
         "name": "MyClassTemplate",
+        "parameters": [ "T" ],
         "attributes":
             [
             ],
