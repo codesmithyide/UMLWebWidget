@@ -23,12 +23,13 @@ class Connector extends DiagramElement {
 
     getHeight() {
         if (!this.uptodate) {
-            this.update()
+        //    this.update()
         }
         return this.height
     }
 
     doUpdate() {
+        this.layers.clearEachLayer()
         if (this.type == "inheritance") {
             let lineGroup = this.shapeLayer.group().addClass("UMLInheritanceRelationship")
             drawInheritanceRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
@@ -83,7 +84,20 @@ function drawCompositionOrAggregationRelationship(lineGroup, connectionPoint1, c
 }
 
 function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, text) {
-    if (connectionPoint1.x < connectionPoint2.x) {
+    if ((connectionPoint1.element != null) && (connectionPoint1.element == connectionPoint2.element)) {
+        if ((textGroup != null) && (text != null) && (text != "")) {
+            let textElement = textGroup.text(text)
+            textElement.move(connectionPoint1.x + 8, connectionPoint1.y - textElement.bbox().height - 3)
+        }
+
+        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint1.y)
+        lineGroup.line(connectionPoint1.x + 30, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint2.y)
+        lineGroup.line(connectionPoint1.x + 30, connectionPoint2.y, connectionPoint2.x + 12, connectionPoint2.y)
+        let polygonDescription = "" + connectionPoint2.x + "," + connectionPoint2.y + " " +
+            (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
+            (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
+        lineGroup.polygon(polygonDescription)
+    } else if (connectionPoint1.x < connectionPoint2.x) {
         if ((textGroup != null) && (text != null) && (text != "")) {
             let textElement = textGroup.text(text)
             

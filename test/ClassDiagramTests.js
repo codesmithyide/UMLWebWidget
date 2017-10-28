@@ -26,6 +26,8 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("connector layout test 3", ClassDiagramConnectorLayoutTest3, classDiagramSequence)
     new tf.FileComparisonTest("connector layout test 4", ClassDiagramConnectorLayoutTest4, classDiagramSequence)
     new tf.FileComparisonTest("connector layout test 5", ClassDiagramConnectorLayoutTest5, classDiagramSequence)
+
+    new tf.FileComparisonTest("class template test 1", ClassDiagramClassTemplateTest1, classDiagramSequence)
 }
 
 function ClassDiagramCreationTest1(resolve) {
@@ -946,6 +948,40 @@ function ClassDiagramConnectorLayoutTest5(resolve, reject, test) {
 
     test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramConnectorLayoutTest5.html")
     test.setReferenceFilePath(__dirname + "/reference/classdiagramtests/ClassDiagramConnectorLayoutTest5.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+function ClassDiagramClassTemplateTest1(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let classDiagram = new UMLWebWidget.Diagram()
+    classDiagram.createFromJSON(svg, {
+        "elements":
+            [
+                { 
+                    "classtemplate":
+                        {
+                            "name": "ClassTemplate",
+                            "parameters":
+                                [
+                                    "T"
+                                ], 
+                            "attributes":
+                                [
+                                ],
+                            "operations":
+                                [
+                                ]
+                        }
+                }
+            ]
+    })
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramClassTemplateTest1.html", true)
+
+    test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramClassTemplateTest1.html")
+    test.setReferenceFilePath(__dirname + "/reference/classdiagramtests/ClassDiagramClassTemplateTest1.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }

@@ -924,7 +924,7 @@ function SequenceDiagramCreateFromJSONTest14(resolve, reject, test) {
     let layout = {
         "elements": {
             "Mail Server": { "position": { "x": 1, "y": 1 } },
-            "DNS": { "position": { "x": 150, "y": 1 } }
+            "DNS": { "position": { "x": 200, "y": 1 } }
         }
     }
 

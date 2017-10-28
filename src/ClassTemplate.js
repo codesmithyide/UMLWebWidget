@@ -37,7 +37,7 @@ class ClassTemplate extends DiagramElement {
 
         parametersText.dx(width - (parametersRectWidth / 2))
 
-        let parametersRect = classTemplateGroup.rect(parametersRectWidth, parametersRectHeight).move(borderAdjustment.left + width - (parametersRectWidth / 2), borderAdjustment.top)
+        let parametersRect = classTemplateGroup.rect(parametersRectWidth, parametersRectHeight).move(borderAdjustment.left + width - (parametersRectWidth / 2), borderAdjustment.top).attr("stroke-dasharray", "4, 4")
     }
 
 }

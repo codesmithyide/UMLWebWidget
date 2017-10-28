@@ -5,6 +5,7 @@ import { Settings } from "./Settings.js"
 import { Style } from "./Style.js"
 import { LayoutManager } from "./LayoutManager.js"
 import { ClassBox } from "./ClassBox.js"
+import { ClassTemplate } from "./ClassTemplate.js"
 import { Component } from "./Component.js"
 import { Lifeline } from "./Lifeline.js"
 import { Node } from "./Node.js"
@@ -34,6 +35,10 @@ class Diagram {
         // The list of all UML class boxes present on the
         // diagram
         this.classboxes = new Map()
+
+        // The list of all UML class templates present on the
+        // diagram
+        this.classtemplates = new Map()
 
         // The list of all UML lifelines present on the
         // diagram
@@ -94,6 +99,11 @@ class Diagram {
                 this.classboxes.set(
                     item.class.name,
                     new ClassBox(svg, item.class.name, item.class, this.settings.canMove, style)
+                )
+            } else if (item.classtemplate) {
+                this.classtemplates.set(
+                    item.classtemplate.name,
+                    new ClassTemplate(svg, item.classtemplate.name, item.classtemplate, style)
                 )
             } else if (item.lifeline) {
                 this.lifelines.set(
@@ -182,7 +192,7 @@ class Diagram {
         layoutManager.doLayout(this)
         dolayout(layoutManager, connectors, assemblyconnectors)
 
-        draw(this.classboxes.values(), this.lifelines.values(), this.components.values(), this.nodes.values(), 
+        draw(this.classboxes.values(), this.classtemplates.values(), this.lifelines.values(), this.components.values(), this.nodes.values(), 
             this.actors.values(), this.usecases.values(), connectors, this.messages, assemblyconnectors)
     }
 
@@ -201,11 +211,17 @@ function dolayout(layoutManager, connectors, assemblyconnectors) {
     }
 }
 
-function draw(classboxes, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
+function draw(classboxes, classtemplates, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
     if (classboxes != null) {
         for (let classbox of classboxes) {
             classbox.getLayers().getLayer("shape").write()
             classbox.getLayers().getLayer("text").write()
+        }
+    }
+    if (classtemplates != null) {
+        for (let classtemplate of classtemplates) {
+            classtemplate.getLayers().getLayer("shape").write()
+            classtemplate.getLayers().getLayer("text").write()
         }
     }
     if (lifelines != null) {
