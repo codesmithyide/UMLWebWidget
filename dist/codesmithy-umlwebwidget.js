@@ -681,6 +681,16 @@ class Style {
                 "margin-top": 9,
                 "margin-bottom": 9
             },
+            "classtemplate": {
+                "margin-right": 15,
+                "margin-top": 12
+            },
+            "classtemplateparameters": {
+                "margin-left": 8,
+                "margin-right": 8,
+                "margin-top": 4,
+                "margin-bottom": 4
+            },
             "lifeline": {
                 "execution-specification-bar-width": 8,
                 "execution-specification-bar-overhang": 5,
