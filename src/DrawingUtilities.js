@@ -6,7 +6,7 @@ class DrawingUtilities {
     // of the class box
     static addClassCompartmentText(textLayer, currentDimensions, borderAdjustment, style, items, cssClass) {
         let y = (currentDimensions.height + style.getTopMargin("classbox"))
-        let dimensions = createAttributeOrOperationGroupDef(textLayer, currentDimensions.width, y, borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top, items, cssClass)
+        let dimensions = createAttributeOrOperationGroupDef(borderAdjustment.left + style.getLeftMargin("classbox"), y + borderAdjustment.top, textLayer, items, cssClass)
         dimensions.height += (style.getTopMargin("classbox") + style.getBottomMargin("classbox"))
         return dimensions
     }
@@ -14,13 +14,13 @@ class DrawingUtilities {
 }
 
 // Creates a group with all the attributes or operations
-function createAttributeOrOperationGroupDef(textLayer, x, y, offsetX, offsetY, items, cssClass) {
+function createAttributeOrOperationGroupDef(x, y, textLayer, items, cssClass) {
     let width = 0
     let height = 0
     let itemGroupDef = textLayer.group().addClass(cssClass)
     for (var i = 0; i < items.length; i++) {
         let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i])
-        itemDef.move(offsetX, offsetY + y + height)
+        itemDef.move(x, y + height)
         width = Math.max(width, itemDef.bbox().width)
         height += itemDef.bbox().height
     }
