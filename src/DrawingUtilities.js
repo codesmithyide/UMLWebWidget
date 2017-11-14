@@ -4,25 +4,26 @@ class DrawingUtilities {
 
     // Add an attribute or operation compartment and updates the current dimensions
     // of the class box
-    static addCompartment(textLayer, currentDimensions, borderAdjustment, style, items, cssClass) {
+    static addClassCompartmentText(textLayer, currentDimensions, borderAdjustment, style, items, cssClass) {
         currentDimensions.height += style.getTopMargin("classbox")
-        let compartmentDef = createAttributeOrOperationGroupDef(textLayer, currentDimensions, borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top, items, cssClass)
+        let width = createAttributeOrOperationGroupDef(textLayer, currentDimensions, borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top, items, cssClass)
         currentDimensions.height += style.getBottomMargin("classbox")
-        return compartmentDef
+        return width
     }
 
 }
 
 // Creates a group with all the attributes or operations
 function createAttributeOrOperationGroupDef(textLayer, currentDimensions, offsetX, offsetY, items, cssClass) {
+    let width = 0
     let itemGroupDef = textLayer.group().addClass(cssClass)
     for (var i = 0; i < items.length; i++) {
         let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i])
         itemDef.move(offsetX, offsetY + currentDimensions.height)
-        currentDimensions.width = Math.max(currentDimensions.width, itemDef.bbox().width)
+        width = Math.max(width, itemDef.bbox().width)
         currentDimensions.height += itemDef.bbox().height
     }
-    return itemGroupDef
+    return width
 }
 
 // Creates a single attribute or operation line

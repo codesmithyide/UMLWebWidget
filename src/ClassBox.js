@@ -80,10 +80,12 @@ function createDef(self, classInfo, canMove, style) {
     currentDimensions.height += (className.bbox().height + style.getBottomMargin("classbox"))
 
     var line1YPos = currentDimensions.height
-    let attributeGroupDef = DrawingUtilities.addCompartment(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.attributes, "UMLClassAttributes")
- 
+    let width1 = DrawingUtilities.addClassCompartmentText(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.attributes, "UMLClassAttributes")
+    currentDimensions.width = Math.max(currentDimensions.width, width1)
+
     var line2YPos = currentDimensions.height
-    let operationGroupDef = DrawingUtilities.addCompartment(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.operations, "UMLClassOperations")
+    let width2 = DrawingUtilities.addClassCompartmentText(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.operations, "UMLClassOperations")
+    currentDimensions.width = Math.max(currentDimensions.width, width2)
 
     // According to the UML standard the class name must be
     // centered so center it
