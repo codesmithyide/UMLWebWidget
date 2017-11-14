@@ -8,7 +8,7 @@ class DrawingUtilities {
         currentDimensions.height += style.getTopMargin("classbox")
         let width = createAttributeOrOperationGroupDef(textLayer, currentDimensions, borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top, items, cssClass)
         currentDimensions.height += style.getBottomMargin("classbox")
-        return width
+        return { width: width, height: 0 }
     }
 
 }
