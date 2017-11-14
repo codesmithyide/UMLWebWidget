@@ -82,10 +82,12 @@ function createDef(self, classInfo, canMove, style) {
     var line1YPos = currentDimensions.height
     let attributesCompartmentDimensions = DrawingUtilities.addClassCompartmentText(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.attributes, "UMLClassAttributes")
     currentDimensions.width = Math.max(currentDimensions.width, attributesCompartmentDimensions.width)
+    currentDimensions.height += attributesCompartmentDimensions.height
 
     var line2YPos = currentDimensions.height
     let operationsCompartmentDimensions = DrawingUtilities.addClassCompartmentText(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.operations, "UMLClassOperations")
     currentDimensions.width = Math.max(currentDimensions.width, operationsCompartmentDimensions.width)
+    currentDimensions.height += operationsCompartmentDimensions.height
 
     // According to the UML standard the class name must be
     // centered so center it

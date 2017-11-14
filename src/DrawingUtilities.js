@@ -5,25 +5,26 @@ class DrawingUtilities {
     // Add an attribute or operation compartment and updates the current dimensions
     // of the class box
     static addClassCompartmentText(textLayer, currentDimensions, borderAdjustment, style, items, cssClass) {
-        currentDimensions.height += style.getTopMargin("classbox")
-        let width = createAttributeOrOperationGroupDef(textLayer, currentDimensions, borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top, items, cssClass)
-        currentDimensions.height += style.getBottomMargin("classbox")
-        return { width: width, height: 0 }
+        let y = (currentDimensions.height + style.getTopMargin("classbox"))
+        let dimensions = createAttributeOrOperationGroupDef(textLayer, currentDimensions.width, y, borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top, items, cssClass)
+        dimensions.height += (style.getTopMargin("classbox") + style.getBottomMargin("classbox"))
+        return dimensions
     }
 
 }
 
 // Creates a group with all the attributes or operations
-function createAttributeOrOperationGroupDef(textLayer, currentDimensions, offsetX, offsetY, items, cssClass) {
+function createAttributeOrOperationGroupDef(textLayer, x, y, offsetX, offsetY, items, cssClass) {
     let width = 0
+    let height = 0
     let itemGroupDef = textLayer.group().addClass(cssClass)
     for (var i = 0; i < items.length; i++) {
         let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i])
-        itemDef.move(offsetX, offsetY + currentDimensions.height)
+        itemDef.move(offsetX, offsetY + y + height)
         width = Math.max(width, itemDef.bbox().width)
-        currentDimensions.height += itemDef.bbox().height
+        height += itemDef.bbox().height
     }
-    return width
+    return { width: width, height: height }
 }
 
 // Creates a single attribute or operation line
