@@ -948,6 +948,8 @@ class LayoutManager {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SVGLayerSet_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ConnectionPoint_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__ = __webpack_require__(22);
+
 
 
 
@@ -1084,23 +1086,11 @@ function createAttributeOrOperationGroupDef(textLayer, currentDimensions, offset
 
 // Creates a single attribute or operation line
 function createAttributeOrOperationDef(svg, item) {
-    let text = visibilityStringToSymbol(item.visibility) + item.name
+    let text = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].visibilityStringToSymbol(item.visibility) + item.name
     if (item.return) {
         text += " : " + item.return
     }
     return svg.text(text)
-}
-
-// Converts the visibility from the user string provided
-// in the input to the appropriate UML symbol for
-// visibility
-function visibilityStringToSymbol(visibility) {
-    let stringToSymbolMap = {
-        "public": "+ ",
-        "protected": "# ",
-        "private": "- "
-    }
-    return stringToSymbolMap[visibility]
 }
 
 
@@ -1167,8 +1157,8 @@ class ClassTemplate extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a"
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Component; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BallConnector_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SocketConnector_js__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ConnectionPoint_js__ = __webpack_require__(1);
 
 
@@ -2471,7 +2461,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCase_js__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__Component_js__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__Node_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__Note_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__Note_js__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__SVGLayer_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__SVGLayerSet_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__Log_js__ = __webpack_require__(18);
@@ -2830,6 +2820,33 @@ function draw(classboxes, classtemplates, lifelines, components, nodes, actors, 
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DrawingUtilities; });
+
+
+class DrawingUtilities {
+
+    // Converts the visibility from the user string provided
+    // in the input to the appropriate UML symbol for
+    // visibility
+    static visibilityStringToSymbol(visibility) {
+        let stringToSymbolMap = {
+            "public": "+ ",
+            "protected": "# ",
+            "private": "- "
+        }
+        return stringToSymbolMap[visibility]
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BallConnector; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__ = __webpack_require__(2);
 
@@ -2902,7 +2919,7 @@ class BallConnector {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2981,7 +2998,7 @@ class SocketConnector {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
