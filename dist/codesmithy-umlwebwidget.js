@@ -1031,10 +1031,10 @@ function createDef(self, classInfo, canMove, style) {
     currentDimensions.height += (className.bbox().height + style.getBottomMargin("classbox"))
 
     var line1YPos = currentDimensions.height
-    let attributeGroupDef = addCompartment(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.attributes, "UMLClassAttributes")
+    let attributeGroupDef = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].addCompartment(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.attributes, "UMLClassAttributes")
  
     var line2YPos = currentDimensions.height
-    let operationGroupDef = addCompartment(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.operations, "UMLClassOperations")
+    let operationGroupDef = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].addCompartment(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.operations, "UMLClassOperations")
 
     // According to the UML standard the class name must be
     // centered so center it
@@ -1061,15 +1061,6 @@ function createDef(self, classInfo, canMove, style) {
     }
 
     return classGroup
-}
-
-// Add an attribute or operation compartment and updates the current dimensions
-// of the class box
-function addCompartment(textLayer, currentDimensions, borderAdjustment, style, items, cssClass) {
-    currentDimensions.height += style.getTopMargin("classbox")
-    let compartmentDef = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].createAttributeOrOperationGroupDef(textLayer, currentDimensions, borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top, items, cssClass)
-    currentDimensions.height += style.getBottomMargin("classbox")
-    return compartmentDef
 }
 
 
@@ -2804,18 +2795,27 @@ function draw(classboxes, classtemplates, lifelines, components, nodes, actors, 
 
 class DrawingUtilities {
 
-    // Creates a group with all the attributes or operations
-    static createAttributeOrOperationGroupDef(textLayer, currentDimensions, offsetX, offsetY, items, cssClass) {
-        let itemGroupDef = textLayer.group().addClass(cssClass)
-        for (var i = 0; i < items.length; i++) {
-            let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i])
-            itemDef.move(offsetX, offsetY + currentDimensions.height)
-            currentDimensions.width = Math.max(currentDimensions.width, itemDef.bbox().width)
-            currentDimensions.height += itemDef.bbox().height
-        }
-        return itemGroupDef
+    // Add an attribute or operation compartment and updates the current dimensions
+    // of the class box
+    static addCompartment(textLayer, currentDimensions, borderAdjustment, style, items, cssClass) {
+        currentDimensions.height += style.getTopMargin("classbox")
+        let compartmentDef = createAttributeOrOperationGroupDef(textLayer, currentDimensions, borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top, items, cssClass)
+        currentDimensions.height += style.getBottomMargin("classbox")
+        return compartmentDef
     }
 
+}
+
+// Creates a group with all the attributes or operations
+function createAttributeOrOperationGroupDef(textLayer, currentDimensions, offsetX, offsetY, items, cssClass) {
+    let itemGroupDef = textLayer.group().addClass(cssClass)
+    for (var i = 0; i < items.length; i++) {
+        let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i])
+        itemDef.move(offsetX, offsetY + currentDimensions.height)
+        currentDimensions.width = Math.max(currentDimensions.width, itemDef.bbox().width)
+        currentDimensions.height += itemDef.bbox().height
+    }
+    return itemGroupDef
 }
 
 // Creates a single attribute or operation line
