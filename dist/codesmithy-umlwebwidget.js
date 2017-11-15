@@ -1031,12 +1031,12 @@ function createDef(self, classInfo, canMove, style) {
     currentDimensions.height += (className.bbox().height + style.getBottomMargin("classbox"))
 
     var line1YPos = currentDimensions.height
-    let attributesCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, self.textLayer, currentDimensions, borderAdjustment, style, classInfo.attributes, "UMLClassAttributes")
+    let attributesCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, currentDimensions.height + borderAdjustment.top, self.textLayer, style, classInfo.attributes, "UMLClassAttributes")
     currentDimensions.width = Math.max(currentDimensions.width, attributesCompartmentDimensions.width)
     currentDimensions.height += attributesCompartmentDimensions.height
 
     var line2YPos = currentDimensions.height
-    let operationsCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, self.textLayer, currentDimensions, borderAdjustment, style, classInfo.operations, "UMLClassOperations")
+    let operationsCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, currentDimensions.height + borderAdjustment.top, self.textLayer, style, classInfo.operations, "UMLClassOperations")
     currentDimensions.width = Math.max(currentDimensions.width, operationsCompartmentDimensions.width)
     currentDimensions.height += operationsCompartmentDimensions.height
 
@@ -1082,8 +1082,8 @@ class DrawingUtilities {
 
     // Add an attribute or operation compartment and updates the current dimensions
     // of the class box
-    static addClassCompartmentText(x, textLayer, currentDimensions, borderAdjustment, style, items, cssClass) {
-        let y = (currentDimensions.height + style.getTopMargin("classbox") + borderAdjustment.top)
+    static addClassCompartmentText(x, y, textLayer, style, items, cssClass) {
+        y += style.getTopMargin("classbox")
         let dimensions = createAttributeOrOperationGroupDef(x + style.getLeftMargin("classbox"), y, textLayer, items, cssClass)
         dimensions.height += (style.getTopMargin("classbox") + style.getBottomMargin("classbox"))
         return dimensions

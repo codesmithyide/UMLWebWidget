@@ -4,8 +4,8 @@ class DrawingUtilities {
 
     // Add an attribute or operation compartment and updates the current dimensions
     // of the class box
-    static addClassCompartmentText(x, textLayer, currentDimensions, borderAdjustment, style, items, cssClass) {
-        let y = (currentDimensions.height + style.getTopMargin("classbox") + borderAdjustment.top)
+    static addClassCompartmentText(x, y, textLayer, style, items, cssClass) {
+        y += style.getTopMargin("classbox")
         let dimensions = createAttributeOrOperationGroupDef(x + style.getLeftMargin("classbox"), y, textLayer, items, cssClass)
         dimensions.height += (style.getTopMargin("classbox") + style.getBottomMargin("classbox"))
         return dimensions
