@@ -79,13 +79,15 @@ function createDef(self, classInfo, canMove, style) {
     currentDimensions.width = Math.max(currentDimensions.width, className.bbox().width)
     currentDimensions.height += (className.bbox().height + style.getBottomMargin("classbox"))
 
-    var line1YPos = currentDimensions.height
-    let attributesCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, currentDimensions.height + borderAdjustment.top, self.textLayer, style, classInfo.attributes, "UMLClassAttributes")
+    var line1YPos = (borderAdjustment.top + currentDimensions.height)
+
+    let attributesCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, line1YPos, self.textLayer, style, classInfo.attributes, "UMLClassAttributes")
     currentDimensions.width = Math.max(currentDimensions.width, attributesCompartmentDimensions.width)
     currentDimensions.height += attributesCompartmentDimensions.height
 
-    var line2YPos = currentDimensions.height
-    let operationsCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, currentDimensions.height + borderAdjustment.top, self.textLayer, style, classInfo.operations, "UMLClassOperations")
+    var line2YPos = (borderAdjustment.top + currentDimensions.height)
+
+    let operationsCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, line2YPos, self.textLayer, style, classInfo.operations, "UMLClassOperations")
     currentDimensions.width = Math.max(currentDimensions.width, operationsCompartmentDimensions.width)
     currentDimensions.height += operationsCompartmentDimensions.height
 
@@ -98,8 +100,8 @@ function createDef(self, classInfo, canMove, style) {
     currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
     
     let rect = classGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
-    classGroup.line(borderAdjustment.left, borderAdjustment.top + line1YPos, borderAdjustment.left + currentDimensions.width, borderAdjustment.top + line1YPos)
-    classGroup.line(borderAdjustment.left, borderAdjustment.top + line2YPos, borderAdjustment.left + currentDimensions.width, borderAdjustment.top + line2YPos)
+    classGroup.line(borderAdjustment.left, line1YPos, borderAdjustment.left + currentDimensions.width, line1YPos)
+    classGroup.line(borderAdjustment.left, line2YPos, borderAdjustment.left + currentDimensions.width, line2YPos)
 
     self.connectionPointsRectangle = rect.bbox()
 

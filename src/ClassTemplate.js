@@ -1,6 +1,7 @@
 'use strict'
 
 import { DiagramElement } from "./DiagramElement.js"
+import { DrawingUtilities } from "./DrawingUtilities.js"
 
 class ClassTemplate extends DiagramElement {
 
@@ -15,6 +16,11 @@ class ClassTemplate extends DiagramElement {
     doUpdate() {
         var classTemplateGroup = this.shapeLayer.group().addClass("UMLClassTemplate")
 
+        let currentDimensions = { 
+            width: 0,
+            height: 0
+        }
+
         let borderAdjustment = {
             top: this.y + 1,
             left: this.x + 1
@@ -26,18 +32,26 @@ class ClassTemplate extends DiagramElement {
         let parametersRectHeight = (this.style.getTopMargin("classtemplateparameters") + this.style.getBottomMargin("classtemplateparameters") + parametersText.bbox().height)
 
         let y1 = (borderAdjustment.top + this.style.getTopMargin("classtemplateparameters") + (parametersText.bbox().height / 2))
-        let y2 = (y1 + this.style.getTopMargin("classtemplate")) 
+        let y2 = (y1 + this.style.getTopMargin("classtemplate"))
 
-        var classTemplateNameGroup = this.textLayer.group().addClass("UMLClassName")
-        var classTemplateName = classTemplateNameGroup.text(this.classTemplateDescription.name).move(borderAdjustment.left + this.style.getLeftMargin("classtemplate"), y2)
-        
-        let width = classTemplateName.bbox().width + (this.style.getLeftMargin("classtemplate") + this.style.getRightMargin("classtemplate"))
-        let height = (this.style.getTopMargin("classtemplate") + classTemplateName.bbox().height + this.style.getBottomMargin("classtemplate"))
-        let rect = classTemplateGroup.rect(width, height).move(borderAdjustment.left, y1)
+        let classTemplateNameGroup = this.textLayer.group().addClass("UMLClassName")
+        let classTemplateName = classTemplateNameGroup.text(this.classTemplateDescription.name).move(borderAdjustment.left + this.style.getLeftMargin("classtemplate"), y2)
+        currentDimensions.width = Math.max(currentDimensions.width, classTemplateName.bbox().width)
+        currentDimensions.height = (this.style.getTopMargin("classtemplate") + classTemplateName.bbox().height + this.style.getBottomMargin("classtemplate"))
 
-        parametersText.dx(width - (parametersRectWidth / 2))
+        let line1YPos = (borderAdjustment.top + currentDimensions.height + (parametersText.bbox().height / 2))
 
-        let parametersRect = classTemplateGroup.rect(parametersRectWidth, parametersRectHeight).move(borderAdjustment.left + width - (parametersRectWidth / 2), borderAdjustment.top).attr("stroke-dasharray", "4, 4")
+        let attributesCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, line1YPos, this.textLayer, this.style, this.classTemplateDescription.attributes, "UMLClassAttributes")
+        currentDimensions.width = Math.max(currentDimensions.width, attributesCompartmentDimensions.width)
+        currentDimensions.height += attributesCompartmentDimensions.height
+
+        currentDimensions.width += (this.style.getLeftMargin("classtemplate") + this.style.getRightMargin("classtemplate"))
+        let rect = classTemplateGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, y1)
+        classTemplateGroup.line(borderAdjustment.left, line1YPos, borderAdjustment.left + currentDimensions.width, line1YPos)
+    
+        parametersText.dx(currentDimensions.width - (parametersRectWidth / 2))
+
+        let parametersRect = classTemplateGroup.rect(parametersRectWidth, parametersRectHeight).move(borderAdjustment.left + currentDimensions.width - (parametersRectWidth / 2), borderAdjustment.top).attr("stroke-dasharray", "4, 4")
     }
 
 }

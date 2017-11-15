@@ -1030,13 +1030,15 @@ function createDef(self, classInfo, canMove, style) {
     currentDimensions.width = Math.max(currentDimensions.width, className.bbox().width)
     currentDimensions.height += (className.bbox().height + style.getBottomMargin("classbox"))
 
-    var line1YPos = currentDimensions.height
-    let attributesCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, currentDimensions.height + borderAdjustment.top, self.textLayer, style, classInfo.attributes, "UMLClassAttributes")
+    var line1YPos = (borderAdjustment.top + currentDimensions.height)
+
+    let attributesCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, line1YPos, self.textLayer, style, classInfo.attributes, "UMLClassAttributes")
     currentDimensions.width = Math.max(currentDimensions.width, attributesCompartmentDimensions.width)
     currentDimensions.height += attributesCompartmentDimensions.height
 
-    var line2YPos = currentDimensions.height
-    let operationsCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, currentDimensions.height + borderAdjustment.top, self.textLayer, style, classInfo.operations, "UMLClassOperations")
+    var line2YPos = (borderAdjustment.top + currentDimensions.height)
+
+    let operationsCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, line2YPos, self.textLayer, style, classInfo.operations, "UMLClassOperations")
     currentDimensions.width = Math.max(currentDimensions.width, operationsCompartmentDimensions.width)
     currentDimensions.height += operationsCompartmentDimensions.height
 
@@ -1049,8 +1051,8 @@ function createDef(self, classInfo, canMove, style) {
     currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
     
     let rect = classGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
-    classGroup.line(borderAdjustment.left, borderAdjustment.top + line1YPos, borderAdjustment.left + currentDimensions.width, borderAdjustment.top + line1YPos)
-    classGroup.line(borderAdjustment.left, borderAdjustment.top + line2YPos, borderAdjustment.left + currentDimensions.width, borderAdjustment.top + line2YPos)
+    classGroup.line(borderAdjustment.left, line1YPos, borderAdjustment.left + currentDimensions.width, line1YPos)
+    classGroup.line(borderAdjustment.left, line2YPos, borderAdjustment.left + currentDimensions.width, line2YPos)
 
     self.connectionPointsRectangle = rect.bbox()
 
@@ -1155,6 +1157,11 @@ class ClassTemplate extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a"
     doUpdate() {
         var classTemplateGroup = this.shapeLayer.group().addClass("UMLClassTemplate")
 
+        let currentDimensions = { 
+            width: 0,
+            height: 0
+        }
+
         let borderAdjustment = {
             top: this.y + 1,
             left: this.x + 1
@@ -1168,24 +1175,24 @@ class ClassTemplate extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a"
         let y1 = (borderAdjustment.top + this.style.getTopMargin("classtemplateparameters") + (parametersText.bbox().height / 2))
         let y2 = (y1 + this.style.getTopMargin("classtemplate"))
 
-        let currentMaxWidth = 0
-
         let classTemplateNameGroup = this.textLayer.group().addClass("UMLClassName")
         let classTemplateName = classTemplateNameGroup.text(this.classTemplateDescription.name).move(borderAdjustment.left + this.style.getLeftMargin("classtemplate"), y2)
-        currentMaxWidth = Math.max(currentMaxWidth, classTemplateName.bbox().width)
-        
-        let line1YPos = (y2 + classTemplateName.bbox().height + this.style.getBottomMargin("classtemplate"))
+        currentDimensions.width = Math.max(currentDimensions.width, classTemplateName.bbox().width)
+        currentDimensions.height = (this.style.getTopMargin("classtemplate") + classTemplateName.bbox().height + this.style.getBottomMargin("classtemplate"))
 
-        //let attributeGroupDef = DrawingUtilities.addCompartment(this.textLayer, currentDimensions, borderAdjustment, this.style, this.classTemplateDescription.attributes, "UMLClassAttributes")
- 
-        let width = classTemplateName.bbox().width + (this.style.getLeftMargin("classtemplate") + this.style.getRightMargin("classtemplate"))
-        let height = (this.style.getTopMargin("classtemplate") + classTemplateName.bbox().height + this.style.getBottomMargin("classtemplate"))
-        let rect = classTemplateGroup.rect(width, height).move(borderAdjustment.left, y1)
-        classTemplateGroup.line(borderAdjustment.left, line1YPos, borderAdjustment.left + currentMaxWidth, line1YPos)
+        let line1YPos = (borderAdjustment.top + currentDimensions.height + (parametersText.bbox().height / 2))
+
+        let attributesCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_1__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, line1YPos, this.textLayer, this.style, this.classTemplateDescription.attributes, "UMLClassAttributes")
+        currentDimensions.width = Math.max(currentDimensions.width, attributesCompartmentDimensions.width)
+        currentDimensions.height += attributesCompartmentDimensions.height
+
+        currentDimensions.width += (this.style.getLeftMargin("classtemplate") + this.style.getRightMargin("classtemplate"))
+        let rect = classTemplateGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, y1)
+        classTemplateGroup.line(borderAdjustment.left, line1YPos, borderAdjustment.left + currentDimensions.width, line1YPos)
     
-        parametersText.dx(width - (parametersRectWidth / 2))
+        parametersText.dx(currentDimensions.width - (parametersRectWidth / 2))
 
-        let parametersRect = classTemplateGroup.rect(parametersRectWidth, parametersRectHeight).move(borderAdjustment.left + width - (parametersRectWidth / 2), borderAdjustment.top).attr("stroke-dasharray", "4, 4")
+        let parametersRect = classTemplateGroup.rect(parametersRectWidth, parametersRectHeight).move(borderAdjustment.left + currentDimensions.width - (parametersRectWidth / 2), borderAdjustment.top).attr("stroke-dasharray", "4, 4")
     }
 
 }
