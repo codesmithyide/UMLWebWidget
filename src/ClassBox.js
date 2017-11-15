@@ -80,12 +80,12 @@ function createDef(self, classInfo, canMove, style) {
     currentDimensions.height += (className.bbox().height + style.getBottomMargin("classbox"))
 
     var line1YPos = currentDimensions.height
-    let attributesCompartmentDimensions = DrawingUtilities.addClassCompartmentText(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.attributes, "UMLClassAttributes")
+    let attributesCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, self.textLayer, currentDimensions, borderAdjustment, style, classInfo.attributes, "UMLClassAttributes")
     currentDimensions.width = Math.max(currentDimensions.width, attributesCompartmentDimensions.width)
     currentDimensions.height += attributesCompartmentDimensions.height
 
     var line2YPos = currentDimensions.height
-    let operationsCompartmentDimensions = DrawingUtilities.addClassCompartmentText(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.operations, "UMLClassOperations")
+    let operationsCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, self.textLayer, currentDimensions, borderAdjustment, style, classInfo.operations, "UMLClassOperations")
     currentDimensions.width = Math.max(currentDimensions.width, operationsCompartmentDimensions.width)
     currentDimensions.height += operationsCompartmentDimensions.height
 
