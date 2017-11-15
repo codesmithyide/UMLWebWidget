@@ -1186,10 +1186,17 @@ class ClassTemplate extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a"
         currentDimensions.width = Math.max(currentDimensions.width, attributesCompartmentDimensions.width)
         currentDimensions.height += attributesCompartmentDimensions.height
 
+        let line2YPos = (borderAdjustment.top + currentDimensions.height + (parametersText.bbox().height / 2))
+
+        let operationsCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_1__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, line2YPos, this.textLayer, this.style, this.classTemplateDescription.operations, "UMLClassOperations")
+        currentDimensions.width = Math.max(currentDimensions.width, operationsCompartmentDimensions.width)
+        currentDimensions.height += operationsCompartmentDimensions.height
+
         currentDimensions.width += (this.style.getLeftMargin("classtemplate") + this.style.getRightMargin("classtemplate"))
         let rect = classTemplateGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, y1)
         classTemplateGroup.line(borderAdjustment.left, line1YPos, borderAdjustment.left + currentDimensions.width, line1YPos)
-    
+        classTemplateGroup.line(borderAdjustment.left, line2YPos, borderAdjustment.left + currentDimensions.width, line2YPos)
+
         parametersText.dx(currentDimensions.width - (parametersRectWidth / 2))
 
         let parametersRect = classTemplateGroup.rect(parametersRectWidth, parametersRectHeight).move(borderAdjustment.left + currentDimensions.width - (parametersRectWidth / 2), borderAdjustment.top).attr("stroke-dasharray", "4, 4")
