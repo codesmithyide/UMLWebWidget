@@ -62,16 +62,34 @@ function ClassTemplateGetLayersTest1(resolve, reject, test) {
 }
 
 function ClassTemplateGetLayersTest2(resolve, reject, test) {
-    let svg = SVG(window.document.createElement("div"))
+    let svg = SVG(window.document.createElement("div")).size(400, 400)
 
     let classTemplateDescription = {
         "name": "MyClassTemplate",
         "parameters": [ "T" ],
         "attributes":
             [
+                {
+                    "name": "m_attr1", "visibility": "public" 
+                },
+                {
+                    "name": "m_attr2", "visibility": "protected" 
+                },
+                {
+                    "name": "m_attr3", "visibility": "private" 
+                }
             ],
         "operations":
             [
+                { 
+                    "name": "method1()", "visibility": "public", "return": "int"
+                },
+                { 
+                    "name": "method2()", "visibility": "protected", "return": "void"
+                },
+                { 
+                    "name": "method3()", "visibility": "private", "return": "std::string"
+                }
             ]
     }
     let style = new UMLWebWidget.Style()
