@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 20);
+/******/ 	return __webpack_require__(__webpack_require__.s = 21);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -948,7 +948,7 @@ class LayoutManager {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SVGLayerSet_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ConnectionPoint_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__ = __webpack_require__(10);
 
 
 
@@ -1031,10 +1031,14 @@ function createDef(self, classInfo, canMove, style) {
     currentDimensions.height += (className.bbox().height + style.getBottomMargin("classbox"))
 
     var line1YPos = currentDimensions.height
-    let attributeGroupDef = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].addCompartment(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.attributes, "UMLClassAttributes")
- 
+    let attributesCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, self.textLayer, currentDimensions, borderAdjustment, style, classInfo.attributes, "UMLClassAttributes")
+    currentDimensions.width = Math.max(currentDimensions.width, attributesCompartmentDimensions.width)
+    currentDimensions.height += attributesCompartmentDimensions.height
+
     var line2YPos = currentDimensions.height
-    let operationGroupDef = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].addCompartment(self.textLayer, currentDimensions, borderAdjustment, style, classInfo.operations, "UMLClassOperations")
+    let operationsCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_3__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, self.textLayer, currentDimensions, borderAdjustment, style, classInfo.operations, "UMLClassOperations")
+    currentDimensions.width = Math.max(currentDimensions.width, operationsCompartmentDimensions.width)
+    currentDimensions.height += operationsCompartmentDimensions.height
 
     // According to the UML standard the class name must be
     // centered so center it
@@ -1071,8 +1075,69 @@ function createDef(self, classInfo, canMove, style) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DrawingUtilities; });
+
+
+class DrawingUtilities {
+
+    // Add an attribute or operation compartment and updates the current dimensions
+    // of the class box
+    static addClassCompartmentText(x, textLayer, currentDimensions, borderAdjustment, style, items, cssClass) {
+        let y = (currentDimensions.height + style.getTopMargin("classbox") + borderAdjustment.top)
+        let dimensions = createAttributeOrOperationGroupDef(x + style.getLeftMargin("classbox"), y, textLayer, items, cssClass)
+        dimensions.height += (style.getTopMargin("classbox") + style.getBottomMargin("classbox"))
+        return dimensions
+    }
+
+}
+
+// Creates a group with all the attributes or operations
+function createAttributeOrOperationGroupDef(x, y, textLayer, items, cssClass) {
+    let width = 0
+    let height = 0
+    let itemGroupDef = textLayer.group().addClass(cssClass)
+    for (var i = 0; i < items.length; i++) {
+        let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i])
+        itemDef.move(x, y + height)
+        width = Math.max(width, itemDef.bbox().width)
+        height += itemDef.bbox().height
+    }
+    return { width: width, height: height }
+}
+
+// Creates a single attribute or operation line
+function createAttributeOrOperationDef(svg, item) {
+    let text = visibilityStringToSymbol(item.visibility) + item.name
+    if (item.return) {
+        text += " : " + item.return
+    }
+    return svg.text(text)
+}
+
+// Converts the visibility from the user string provided
+// in the input to the appropriate UML symbol for
+// visibility
+function visibilityStringToSymbol(visibility) {
+    let stringToSymbolMap = {
+        "public": "+ ",
+        "protected": "# ",
+        "private": "- "
+    }
+    return stringToSymbolMap[visibility]
+}
+
+
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ClassTemplate; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__DrawingUtilities_js__ = __webpack_require__(10);
+
 
 
 
@@ -1101,15 +1166,23 @@ class ClassTemplate extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a"
         let parametersRectHeight = (this.style.getTopMargin("classtemplateparameters") + this.style.getBottomMargin("classtemplateparameters") + parametersText.bbox().height)
 
         let y1 = (borderAdjustment.top + this.style.getTopMargin("classtemplateparameters") + (parametersText.bbox().height / 2))
-        let y2 = (y1 + this.style.getTopMargin("classtemplate")) 
+        let y2 = (y1 + this.style.getTopMargin("classtemplate"))
 
-        var classTemplateNameGroup = this.textLayer.group().addClass("UMLClassName")
-        var classTemplateName = classTemplateNameGroup.text(this.classTemplateDescription.name).move(borderAdjustment.left + this.style.getLeftMargin("classtemplate"), y2)
+        let currentMaxWidth = 0
+
+        let classTemplateNameGroup = this.textLayer.group().addClass("UMLClassName")
+        let classTemplateName = classTemplateNameGroup.text(this.classTemplateDescription.name).move(borderAdjustment.left + this.style.getLeftMargin("classtemplate"), y2)
+        currentMaxWidth = Math.max(currentMaxWidth, classTemplateName.bbox().width)
         
+        let line1YPos = (y2 + classTemplateName.bbox().height + this.style.getBottomMargin("classtemplate"))
+
+        //let attributeGroupDef = DrawingUtilities.addCompartment(this.textLayer, currentDimensions, borderAdjustment, this.style, this.classTemplateDescription.attributes, "UMLClassAttributes")
+ 
         let width = classTemplateName.bbox().width + (this.style.getLeftMargin("classtemplate") + this.style.getRightMargin("classtemplate"))
         let height = (this.style.getTopMargin("classtemplate") + classTemplateName.bbox().height + this.style.getBottomMargin("classtemplate"))
         let rect = classTemplateGroup.rect(width, height).move(borderAdjustment.left, y1)
-
+        classTemplateGroup.line(borderAdjustment.left, line1YPos, borderAdjustment.left + currentMaxWidth, line1YPos)
+    
         parametersText.dx(width - (parametersRectWidth / 2))
 
         let parametersRect = classTemplateGroup.rect(parametersRectWidth, parametersRectHeight).move(borderAdjustment.left + width - (parametersRectWidth / 2), borderAdjustment.top).attr("stroke-dasharray", "4, 4")
@@ -1121,7 +1194,7 @@ class ClassTemplate extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a"
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1291,7 +1364,7 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1299,7 +1372,7 @@ class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SVGLayer_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LifelineLayout_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LifelineLayout_js__ = __webpack_require__(14);
 
 
 
@@ -1566,7 +1639,7 @@ function updateLine(self, lifelineGroup, lifelineDescription, depthChanges, styl
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1696,7 +1769,7 @@ function concatenateLevels(depthChanges) {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1766,7 +1839,7 @@ class Node extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diagr
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1820,7 +1893,7 @@ class Actor extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diag
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1870,7 +1943,7 @@ class UseCase extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Di
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2322,7 +2395,7 @@ function getConnectorLineShape2(startPoint, endPoint, orientation) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2387,7 +2460,7 @@ class Log {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2409,7 +2482,7 @@ class Metrics {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2417,25 +2490,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Settings_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Diagram_js__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ConnectionPoint_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ConnectionPointPosition_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Connector_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Connector_js__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__LayoutManager_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__LifelineLayout_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__LifelineLayout_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ClassBox_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ClassTemplate_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__Lifeline_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__Actor_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCase_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__Component_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__Node_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ClassTemplate_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__Lifeline_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__Actor_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCase_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__Component_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__Node_js__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__Note_js__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__SVGLayer_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__SVGLayerSet_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__Log_js__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__Metrics_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__Log_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__Metrics_js__ = __webpack_require__(20);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "UMLWebWidgetError", function() { return __WEBPACK_IMPORTED_MODULE_0__UMLWebWidgetError_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Settings", function() { return __WEBPACK_IMPORTED_MODULE_1__Settings_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Style", function() { return __WEBPACK_IMPORTED_MODULE_2__Style_js__["a"]; });
@@ -2487,7 +2560,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2497,16 +2570,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Style_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LayoutManager_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ClassBox_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ClassTemplate_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Component_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Lifeline_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Node_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__Actor_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__UseCase_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__Connector_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ClassTemplate_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Component_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Lifeline_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Node_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__Actor_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__UseCase_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__Connector_js__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__SVGLayer_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__Log_js__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__Metrics_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__Log_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__Metrics_js__ = __webpack_require__(20);
 
 
 
@@ -2780,63 +2853,6 @@ function draw(classboxes, classtemplates, lifelines, components, nodes, actors, 
             connector.getLayers().getLayer("text").write()
         }
     }
-}
-
-
-
-
-/***/ }),
-/* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DrawingUtilities; });
-
-
-class DrawingUtilities {
-
-    // Add an attribute or operation compartment and updates the current dimensions
-    // of the class box
-    static addCompartment(textLayer, currentDimensions, borderAdjustment, style, items, cssClass) {
-        currentDimensions.height += style.getTopMargin("classbox")
-        let compartmentDef = createAttributeOrOperationGroupDef(textLayer, currentDimensions, borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top, items, cssClass)
-        currentDimensions.height += style.getBottomMargin("classbox")
-        return compartmentDef
-    }
-
-}
-
-// Creates a group with all the attributes or operations
-function createAttributeOrOperationGroupDef(textLayer, currentDimensions, offsetX, offsetY, items, cssClass) {
-    let itemGroupDef = textLayer.group().addClass(cssClass)
-    for (var i = 0; i < items.length; i++) {
-        let itemDef = createAttributeOrOperationDef(itemGroupDef, items[i])
-        itemDef.move(offsetX, offsetY + currentDimensions.height)
-        currentDimensions.width = Math.max(currentDimensions.width, itemDef.bbox().width)
-        currentDimensions.height += itemDef.bbox().height
-    }
-    return itemGroupDef
-}
-
-// Creates a single attribute or operation line
-function createAttributeOrOperationDef(svg, item) {
-    let text = visibilityStringToSymbol(item.visibility) + item.name
-    if (item.return) {
-        text += " : " + item.return
-    }
-    return svg.text(text)
-}
-
-// Converts the visibility from the user string provided
-// in the input to the appropriate UML symbol for
-// visibility
-function visibilityStringToSymbol(visibility) {
-    let stringToSymbolMap = {
-        "public": "+ ",
-        "protected": "# ",
-        "private": "- "
-    }
-    return stringToSymbolMap[visibility]
 }
 
 
