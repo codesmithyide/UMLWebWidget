@@ -28,6 +28,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("connector layout test 5", ClassDiagramConnectorLayoutTest5, classDiagramSequence)
 
     new tf.FileComparisonTest("class template test 1", ClassDiagramClassTemplateTest1, classDiagramSequence)
+    new tf.FileComparisonTest("class template test 2", ClassDiagramClassTemplateTest2, classDiagramSequence)
 }
 
 function ClassDiagramCreationTest1(resolve) {
@@ -982,6 +983,40 @@ function ClassDiagramClassTemplateTest1(resolve, reject, test) {
 
     test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramClassTemplateTest1.html")
     test.setReferenceFilePath(__dirname + "/reference/classdiagramtests/ClassDiagramClassTemplateTest1.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+function ClassDiagramClassTemplateTest2(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let classDiagram = new UMLWebWidget.Diagram()
+    classDiagram.createFromJSON(svg, {
+        "elements":
+            [
+                { 
+                    "classtemplate":
+                        {
+                            "name": "ClassTemplate",
+                            "parameters":
+                                [
+                                    "T"
+                                ], 
+                            "attributes":
+                                [
+                                ],
+                            "operations":
+                                [
+                                ]
+                        }
+                }
+            ]
+    })
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramClassTemplateTest2.html", true)
+
+    test.setOutputFilePath(__dirname + "/output/classdiagramtests/ClassDiagramClassTemplateTest2.html")
+    test.setReferenceFilePath(__dirname + "/reference/classdiagramtests/ClassDiagramClassTemplateTest2.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
