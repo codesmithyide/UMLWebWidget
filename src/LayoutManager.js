@@ -58,7 +58,7 @@ class LayoutManager {
             let bbox2 = connectionPoint2.element.getConnectionPointsRectangle()
             let connectionPositions = this.getConnectionPositions(bbox1, bbox2)
 
-            let connectorId = connectionPoint1.element.classDescription.name + "-" + connectionPoint2.element.classDescription.name + "-" + connector.type
+            let connectorId = connectionPoint1.element.id + "-" + connectionPoint2.element.id + "-" + connector.type
             let layoutOverride = this.layout.elements[connectorId]
             if (layoutOverride) {
                 if (layoutOverride.end) {

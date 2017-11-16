@@ -135,7 +135,13 @@ class Diagram {
                 let classbox2
                 if (item.relationship.type == "inheritance") {
                     classbox1 = this.classboxes.get(item.relationship.derivedclass)
+                    if (classbox1 == null) {
+                        classbox1 = this.classtemplates.get(item.relationship.derivedclass)
+                    }
                     classbox2 = this.classboxes.get(item.relationship.baseclass)
+                    if (classbox2 == null) {
+                        classbox2 = this.classtemplates.get(item.relationship.baseclass)
+                    }
                 } else if ((item.relationship.type == "composition") || (item.relationship.type == "aggregation")) {
                     classbox1 = this.classboxes.get(item.relationship.containedclass)
                     classbox2 = this.classboxes.get(item.relationship.containingclass)

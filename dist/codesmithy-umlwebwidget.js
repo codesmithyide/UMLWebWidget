@@ -807,7 +807,7 @@ class LayoutManager {
             let bbox2 = connectionPoint2.element.getConnectionPointsRectangle()
             let connectionPositions = this.getConnectionPositions(bbox1, bbox2)
 
-            let connectorId = connectionPoint1.element.classDescription.name + "-" + connectionPoint2.element.classDescription.name + "-" + connector.type
+            let connectorId = connectionPoint1.element.id + "-" + connectionPoint2.element.id + "-" + connector.type
             let layoutOverride = this.layout.elements[connectorId]
             if (layoutOverride) {
                 if (layoutOverride.end) {
@@ -1138,7 +1138,9 @@ function visibilityStringToSymbol(visibility) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ClassTemplate; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__DrawingUtilities_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__DrawingUtilities_js__ = __webpack_require__(10);
+
 
 
 
@@ -1152,6 +1154,22 @@ class ClassTemplate extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a"
         this.textLayer = this.layers.createLayer("text")
         this.classTemplateDescription = classTemplateDescription
         this.style = style
+        this.connectionPointsRectangle = null
+
+        // List of connection points that are connected to
+        // this class template
+        this.connectionPoints = [ ]
+    }
+
+    /**
+      Returns a connection point that can be used to connect
+      a connector to this class template. The new connection
+      point is added to this.connectionPoints.
+    */
+    createConnectionPoint(svg) {
+        let newPoint = new __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__["a" /* ConnectionPoint */](svg, this)
+        this.connectionPoints.push(newPoint)
+        return newPoint
     }
 
     doUpdate() {
@@ -1182,13 +1200,13 @@ class ClassTemplate extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a"
 
         let line1YPos = (borderAdjustment.top + currentDimensions.height + (parametersText.bbox().height / 2))
 
-        let attributesCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_1__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, line1YPos, this.textLayer, this.style, this.classTemplateDescription.attributes, "UMLClassAttributes")
+        let attributesCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_2__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, line1YPos, this.textLayer, this.style, this.classTemplateDescription.attributes, "UMLClassAttributes")
         currentDimensions.width = Math.max(currentDimensions.width, attributesCompartmentDimensions.width)
         currentDimensions.height += attributesCompartmentDimensions.height
 
         let line2YPos = (borderAdjustment.top + currentDimensions.height + (parametersText.bbox().height / 2))
 
-        let operationsCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_1__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, line2YPos, this.textLayer, this.style, this.classTemplateDescription.operations, "UMLClassOperations")
+        let operationsCompartmentDimensions = __WEBPACK_IMPORTED_MODULE_2__DrawingUtilities_js__["a" /* DrawingUtilities */].addClassCompartmentText(borderAdjustment.left, line2YPos, this.textLayer, this.style, this.classTemplateDescription.operations, "UMLClassOperations")
         currentDimensions.width = Math.max(currentDimensions.width, operationsCompartmentDimensions.width)
         currentDimensions.height += operationsCompartmentDimensions.height
 
@@ -1206,6 +1224,12 @@ class ClassTemplate extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a"
         parametersText.dx(currentDimensions.width - (parametersRectWidth / 2))
 
         let parametersRect = classTemplateGroup.rect(parametersRectWidth, parametersRectHeight).move(borderAdjustment.left + currentDimensions.width - (parametersRectWidth / 2), borderAdjustment.top).attr("stroke-dasharray", "4, 4")
+
+        this.connectionPointsRectangle = rect.bbox()
+    }
+
+    doGetConnectionPointsRectangle() {
+        return this.connectionPointsRectangle 
     }
 
 }
@@ -2737,7 +2761,13 @@ class Diagram {
                 let classbox2
                 if (item.relationship.type == "inheritance") {
                     classbox1 = this.classboxes.get(item.relationship.derivedclass)
+                    if (classbox1 == null) {
+                        classbox1 = this.classtemplates.get(item.relationship.derivedclass)
+                    }
                     classbox2 = this.classboxes.get(item.relationship.baseclass)
+                    if (classbox2 == null) {
+                        classbox2 = this.classtemplates.get(item.relationship.baseclass)
+                    }
                 } else if ((item.relationship.type == "composition") || (item.relationship.type == "aggregation")) {
                     classbox1 = this.classboxes.get(item.relationship.containedclass)
                     classbox2 = this.classboxes.get(item.relationship.containingclass)

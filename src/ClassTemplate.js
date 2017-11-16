@@ -1,6 +1,7 @@
 'use strict'
 
 import { DiagramElement } from "./DiagramElement.js"
+import { ConnectionPoint } from "./ConnectionPoint.js"
 import { DrawingUtilities } from "./DrawingUtilities.js"
 
 class ClassTemplate extends DiagramElement {
@@ -11,6 +12,22 @@ class ClassTemplate extends DiagramElement {
         this.textLayer = this.layers.createLayer("text")
         this.classTemplateDescription = classTemplateDescription
         this.style = style
+        this.connectionPointsRectangle = null
+
+        // List of connection points that are connected to
+        // this class template
+        this.connectionPoints = [ ]
+    }
+
+    /**
+      Returns a connection point that can be used to connect
+      a connector to this class template. The new connection
+      point is added to this.connectionPoints.
+    */
+    createConnectionPoint(svg) {
+        let newPoint = new ConnectionPoint(svg, this)
+        this.connectionPoints.push(newPoint)
+        return newPoint
     }
 
     doUpdate() {
@@ -65,6 +82,12 @@ class ClassTemplate extends DiagramElement {
         parametersText.dx(currentDimensions.width - (parametersRectWidth / 2))
 
         let parametersRect = classTemplateGroup.rect(parametersRectWidth, parametersRectHeight).move(borderAdjustment.left + currentDimensions.width - (parametersRectWidth / 2), borderAdjustment.top).attr("stroke-dasharray", "4, 4")
+
+        this.connectionPointsRectangle = rect.bbox()
+    }
+
+    doGetConnectionPointsRectangle() {
+        return this.connectionPointsRectangle 
     }
 
 }

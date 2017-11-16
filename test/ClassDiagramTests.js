@@ -990,6 +990,13 @@ function ClassDiagramClassTemplateTest1(resolve, reject, test) {
 function ClassDiagramClassTemplateTest2(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
+    let layout = {
+        "elements": {
+            "ClassTemplate": { "position": { "x": 0, "y": 0 } },
+            "MyClass": { "position": { "x": 175, "y": 16 } }
+        }
+    }
+
     let classDiagram = new UMLWebWidget.Diagram()
     classDiagram.createFromJSON(svg, {
         "elements":
@@ -1009,9 +1016,30 @@ function ClassDiagramClassTemplateTest2(resolve, reject, test) {
                                 [
                                 ]
                         }
+                },
+                { 
+                    "class":
+                        {
+                            "name": "MyClass",
+                             "attributes":
+                                 [
+                                 ],
+                             "operations":
+                                 [
+                                 ]
+                        }
+                },
+                {
+                    "relationship":
+                    {
+                        "type": "inheritance",
+                        "baseclass": "ClassTemplate",
+                        "derivedclass": "MyClass"
+                    }
                 }
             ]
-    })
+    },
+    layout)
 
     TestUtils.exportSVGToHTML(svg, __dirname + "/output/classdiagramtests/ClassDiagramClassTemplateTest2.html", true)
 
