@@ -51,6 +51,12 @@ class ClassTemplate extends DiagramElement {
         currentDimensions.width = Math.max(currentDimensions.width, operationsCompartmentDimensions.width)
         currentDimensions.height += operationsCompartmentDimensions.height
 
+        // According to the UML standard the class name must be
+        // centered so center it
+        if (currentDimensions.width > classTemplateName.bbox().width) {
+            classTemplateName.dx((currentDimensions.width - classTemplateName.bbox().width)/2)
+        }
+
         currentDimensions.width += (this.style.getLeftMargin("classtemplate") + this.style.getRightMargin("classtemplate"))
         let rect = classTemplateGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, y1)
         classTemplateGroup.line(borderAdjustment.left, line1YPos, borderAdjustment.left + currentDimensions.width, line1YPos)
