@@ -190,6 +190,13 @@ function UseCaseDiagramCreateFromJSONTest4(resolve, reject, test) {
                       {
                           "title": "Pay for merchandise"
                       }
+              },
+              {
+                  "association":
+                      {
+                          "actor": "Customer",
+                          "usecase": "Pay for merchandise"
+                      }
               }
           ]
     },
