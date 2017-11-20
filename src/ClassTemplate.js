@@ -7,7 +7,7 @@ import { DrawingUtilities } from "./DrawingUtilities.js"
 class ClassTemplate extends DiagramElement {
 
     constructor(svg, id, classTemplateDescription, style) {
-        super(svg, id)
+        super(svg, "classtemplate", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.classTemplateDescription = classTemplateDescription

@@ -102,7 +102,8 @@ class DiagramElement {
       @param {SVG} svg - The root SVG document.
       @param {string} id - A unique identifier for this element.
     */
-    constructor(svg, id) {
+    constructor(svg, type, id) {
+        this.type = type
         this.id = id
         this.layers = new __WEBPACK_IMPORTED_MODULE_0__SVGLayerSet_js__["a" /* SVGLayerSet */](svg)
         this.uptodate = false
@@ -968,7 +969,7 @@ class LayoutManager {
 class ClassBox extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
     constructor(svg, id, classDescription, canMove, style) {
-        super(svg, id)
+        super(svg, "class", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.classDescription = classDescription
@@ -1149,7 +1150,7 @@ function visibilityStringToSymbol(visibility) {
 class ClassTemplate extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
     constructor(svg, id, classTemplateDescription, style) {
-        super(svg, id)
+        super(svg, "classtemplate", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.classTemplateDescription = classTemplateDescription
@@ -1286,7 +1287,7 @@ class Stereotype {
 class Component extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
     constructor(svg, id, componentDescription, style) {
-        super(svg, id)
+        super(svg, "component", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.svg = svg
@@ -1444,7 +1445,7 @@ class Lifeline extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* D
       @param {SVG} svg - The root SVG document.
     */
     constructor(svg, id, lifelineDescription, style, log) {
-        super(svg, id)
+        super(svg, "lifeline", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.svg = svg
@@ -1831,7 +1832,7 @@ function concatenateLevels(depthChanges) {
 class Node extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
     constructor(svg, id, nodeDescription, style) {
-        super(svg, id)
+        super(svg, "node", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.nodeDescription = nodeDescription
@@ -1903,7 +1904,7 @@ class Node extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diagr
 class Actor extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
     constructor(svg, id, actorDescription) {
-        super(svg, id)
+        super(svg, "actor", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.actorDescription = actorDescription
@@ -1976,7 +1977,7 @@ class Actor extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diag
 class UseCase extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* DiagramElement */] {
 
     constructor(svg, id, useCaseDescription) {
-        super(svg, id)
+        super(svg, "usecase", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.useCaseDescription = useCaseDescription

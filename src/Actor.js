@@ -11,7 +11,7 @@ import { ConnectionPoint } from "./ConnectionPoint.js"
 class Actor extends DiagramElement {
 
     constructor(svg, id, actorDescription) {
-        super(svg, id)
+        super(svg, "actor", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.actorDescription = actorDescription

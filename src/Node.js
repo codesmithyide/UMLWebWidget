@@ -10,7 +10,7 @@ import { DiagramElement } from "./DiagramElement.js"
 class Node extends DiagramElement {
 
     constructor(svg, id, nodeDescription, style) {
-        super(svg, id)
+        super(svg, "node", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.nodeDescription = nodeDescription

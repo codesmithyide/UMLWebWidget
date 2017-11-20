@@ -17,7 +17,7 @@ import { DrawingUtilities } from "./DrawingUtilities.js"
 class ClassBox extends DiagramElement {
 
     constructor(svg, id, classDescription, canMove, style) {
-        super(svg, id)
+        super(svg, "class", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.classDescription = classDescription

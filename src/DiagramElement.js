@@ -20,7 +20,8 @@ class DiagramElement {
       @param {SVG} svg - The root SVG document.
       @param {string} id - A unique identifier for this element.
     */
-    constructor(svg, id) {
+    constructor(svg, type, id) {
+        this.type = type
         this.id = id
         this.layers = new SVGLayerSet(svg)
         this.uptodate = false
