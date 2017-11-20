@@ -56,7 +56,7 @@ class LayoutManager {
             let connectionPoint2 = connector.connectionPoint2
             let bbox1 = connectionPoint1.element.getConnectionPointsRectangle()
             let bbox2 = connectionPoint2.element.getConnectionPointsRectangle()
-            let connectionPositions = this.getConnectionPositions(bbox1, bbox2)
+            let connectionPositions = this.getConnectionPositions(bbox1, bbox2, connector.type)
 
             let connectorId = connectionPoint1.element.id + "-" + connectionPoint2.element.id + "-" + connector.type
             let layoutOverride = this.layout.elements[connectorId]
@@ -163,22 +163,27 @@ class LayoutManager {
         }
     }
 
-    getConnectionPositions(boundingbox1, boundingbox2) {
+    getConnectionPositions(boundingbox1, boundingbox2, type) {
         let result = { 
             start: ConnectionPointPosition.TopCenter,
             end: ConnectionPointPosition.TopCenter
         }
 
-        if ((boundingbox2.y + boundingbox2.height) < boundingbox1.y) {
-            result.start = ConnectionPointPosition.TopCenter
-            result.end = ConnectionPointPosition.BottomCenter
-        } else if ((boundingbox1.y + boundingbox1.height) < boundingbox2.y) {
-            result.start = ConnectionPointPosition.BottomCenter
-            result.end = ConnectionPointPosition.TopCenter
-        } else if ((boundingbox2.x + boundingbox2.width) < boundingbox1.x) {
-            result.start = ConnectionPointPosition.LeftCenter
-            result.end = ConnectionPointPosition.RightCenter
-        } else if ((boundingbox1.x + boundingbox1.width) < boundingbox2.x) {
+        if (type != "usecaseassociation") {
+            if ((boundingbox2.y + boundingbox2.height) < boundingbox1.y) {
+                result.start = ConnectionPointPosition.TopCenter
+                result.end = ConnectionPointPosition.BottomCenter
+            } else if ((boundingbox1.y + boundingbox1.height) < boundingbox2.y) {
+                result.start = ConnectionPointPosition.BottomCenter
+                result.end = ConnectionPointPosition.TopCenter
+            } else if ((boundingbox2.x + boundingbox2.width) < boundingbox1.x) {
+                result.start = ConnectionPointPosition.LeftCenter
+                result.end = ConnectionPointPosition.RightCenter
+            } else if ((boundingbox1.x + boundingbox1.width) < boundingbox2.x) {
+                result.start = ConnectionPointPosition.RightCenter
+                result.end = ConnectionPointPosition.LeftCenter
+            }
+        } else {
             result.start = ConnectionPointPosition.RightCenter
             result.end = ConnectionPointPosition.LeftCenter
         }
