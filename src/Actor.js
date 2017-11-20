@@ -15,6 +15,7 @@ class Actor extends DiagramElement {
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.actorDescription = actorDescription
+        this.connectionPointsRectangle = null
     }
 
     createConnectionPoint(svg) {
@@ -38,7 +39,25 @@ class Actor extends DiagramElement {
         shapeGroup.line(borderAdjustment.left + offset, borderAdjustment.top + 18, borderAdjustment.left + 16 + offset, borderAdjustment.top + 18)
         shapeGroup.line(borderAdjustment.left + 8 + offset, borderAdjustment.top + 26, borderAdjustment.left + offset, borderAdjustment.top + 33)
         shapeGroup.line(borderAdjustment.left + 8 + offset, borderAdjustment.top + 26, borderAdjustment.left + 16 + offset, borderAdjustment.top + 33)
+
+        this.connectionPointsRectangle = {
+            "x": borderAdjustment.left,
+            "y": borderAdjustment.top,
+            "w": width,
+            "width": width,
+            "height": (35 + textDef.bbox().height),
+            "h": (35 + textDef.bbox().height),
+            "x2": (borderAdjustment.left + width),
+            "y2": (borderAdjustment.top + 35 + textDef.bbox().height),
+            "cx": (borderAdjustment.left + (width / 2)),
+            "cy": (borderAdjustment.top + ((35 + textDef.bbox().height) / 2))
+        }
     }
+
+    doGetConnectionPointsRectangle() {
+        return this.connectionPointsRectangle 
+    }
+
 }
 
 export { Actor }

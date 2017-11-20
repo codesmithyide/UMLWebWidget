@@ -190,8 +190,7 @@ class Diagram {
                 let connectionPoint1 = this.actors.get(item.association.actor).createConnectionPoint(svg)
                 let connectionPoint2 = this.usecases.get(item.association.usecase).createConnectionPoint(svg)
                 let newConnector = new Connector(svg, "usecaseassociation", connectionPoint1, connectionPoint2)
-                newConnector.getLayers().getLayer("shape").write()
-                newConnector.getLayers().getLayer("text").write()
+                connectors.push(newConnector)
             }
         }
 

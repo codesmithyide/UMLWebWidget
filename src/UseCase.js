@@ -15,6 +15,7 @@ class UseCase extends DiagramElement {
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.useCaseDescription = useCaseDescription
+        this.connectionPointsRectangle = null
     }
 
     createConnectionPoint(svg) {
@@ -31,8 +32,14 @@ class UseCase extends DiagramElement {
         let shapeGroup = this.shapeLayer.group().addClass("UMLUseCase")
         let textGroup = this.textLayer.group()
         let textDef = textGroup.text(this.useCaseDescription.title)
-        shapeGroup.ellipse(1.2*textDef.bbox().width, 3*textDef.bbox().height).move(borderAdjustment.left + 1, borderAdjustment.top + 1)
+        let ellipse = shapeGroup.ellipse(1.2*textDef.bbox().width, 3*textDef.bbox().height).move(borderAdjustment.left + 1, borderAdjustment.top + 1)
         textDef.move(borderAdjustment.left + 1 + 0.1*textDef.bbox().width, borderAdjustment.top + 1 + textDef.bbox().height)
+
+        this.connectionPointsRectangle = ellipse.bbox()
+    }
+
+    doGetConnectionPointsRectangle() {
+        return this.connectionPointsRectangle 
     }
 
 }

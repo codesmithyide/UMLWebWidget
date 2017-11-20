@@ -1907,6 +1907,7 @@ class Actor extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diag
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.actorDescription = actorDescription
+        this.connectionPointsRectangle = null
     }
 
     createConnectionPoint(svg) {
@@ -1930,7 +1931,25 @@ class Actor extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diag
         shapeGroup.line(borderAdjustment.left + offset, borderAdjustment.top + 18, borderAdjustment.left + 16 + offset, borderAdjustment.top + 18)
         shapeGroup.line(borderAdjustment.left + 8 + offset, borderAdjustment.top + 26, borderAdjustment.left + offset, borderAdjustment.top + 33)
         shapeGroup.line(borderAdjustment.left + 8 + offset, borderAdjustment.top + 26, borderAdjustment.left + 16 + offset, borderAdjustment.top + 33)
+
+        this.connectionPointsRectangle = {
+            "x": borderAdjustment.left,
+            "y": borderAdjustment.top,
+            "w": width,
+            "width": width,
+            "height": (35 + textDef.bbox().height),
+            "h": (35 + textDef.bbox().height),
+            "x2": (borderAdjustment.left + width),
+            "y2": (borderAdjustment.top + 35 + textDef.bbox().height),
+            "cx": (borderAdjustment.left + (width / 2)),
+            "cy": (borderAdjustment.top + ((35 + textDef.bbox().height) / 2))
+        }
     }
+
+    doGetConnectionPointsRectangle() {
+        return this.connectionPointsRectangle 
+    }
+
 }
 
 
@@ -1961,6 +1980,7 @@ class UseCase extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Di
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.useCaseDescription = useCaseDescription
+        this.connectionPointsRectangle = null
     }
 
     createConnectionPoint(svg) {
@@ -1977,8 +1997,14 @@ class UseCase extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Di
         let shapeGroup = this.shapeLayer.group().addClass("UMLUseCase")
         let textGroup = this.textLayer.group()
         let textDef = textGroup.text(this.useCaseDescription.title)
-        shapeGroup.ellipse(1.2*textDef.bbox().width, 3*textDef.bbox().height).move(borderAdjustment.left + 1, borderAdjustment.top + 1)
+        let ellipse = shapeGroup.ellipse(1.2*textDef.bbox().width, 3*textDef.bbox().height).move(borderAdjustment.left + 1, borderAdjustment.top + 1)
         textDef.move(borderAdjustment.left + 1 + 0.1*textDef.bbox().width, borderAdjustment.top + 1 + textDef.bbox().height)
+
+        this.connectionPointsRectangle = ellipse.bbox()
+    }
+
+    doGetConnectionPointsRectangle() {
+        return this.connectionPointsRectangle 
     }
 
 }
@@ -2816,8 +2842,7 @@ class Diagram {
                 let connectionPoint1 = this.actors.get(item.association.actor).createConnectionPoint(svg)
                 let connectionPoint2 = this.usecases.get(item.association.usecase).createConnectionPoint(svg)
                 let newConnector = new __WEBPACK_IMPORTED_MODULE_11__Connector_js__["a" /* Connector */](svg, "usecaseassociation", connectionPoint1, connectionPoint2)
-                newConnector.getLayers().getLayer("shape").write()
-                newConnector.getLayers().getLayer("text").write()
+                connectors.push(newConnector)
             }
         }
 
