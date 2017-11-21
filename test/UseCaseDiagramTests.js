@@ -300,10 +300,11 @@ function UseCaseDiagramCreateFromJSONTest6(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 10, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 1, "y": 75 } },
-            "Till": { "position": { "x": 33, "y": 150 } },
-            "Pay for merchandise": { "position": { "x": 140, "y": 75 } }
+            "Customer": { "position": { "x": 160, "y": 1 } },
+            "Shopkeeper": { "position": { "x": 1, "y": 95 } },
+            "Till": { "position": { "x": 400, "y": 95 } },
+            "Credit Card": { "position": { "x": 160, "y": 230 } },
+            "Pay for merchandise": { "position": { "x": 140, "y": 95 } }
         }
     }
 
@@ -329,6 +330,12 @@ function UseCaseDiagramCreateFromJSONTest6(resolve, reject, test) {
                           "name": "Till"
                       }
               },
+              { 
+                  "actor":
+                      {
+                          "name": "Credit Card"
+                      }
+              },
               {
                   "usecase":
                       {
@@ -340,7 +347,7 @@ function UseCaseDiagramCreateFromJSONTest6(resolve, reject, test) {
     layout)
 
     let elementKeys = Object.keys(useCaseDiagram.diagramDescription)
-    if ((elementKeys.length == 1) && (useCaseDiagram.actors.size == 3) && (useCaseDiagram.usecases.size == 1)) {
+    if ((elementKeys.length == 1) && (useCaseDiagram.actors.size == 4) && (useCaseDiagram.usecases.size == 1)) {
         TestUtils.exportSVGToHTML(svg, __dirname + "/output/usecasediagramtests/UseCaseDiagramCreateFromJSONTest6.html", true)
 
         test.setOutputFilePath(__dirname + "/output/usecasediagramtests/UseCaseDiagramCreateFromJSONTest6.html")
