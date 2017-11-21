@@ -15,6 +15,7 @@ module.exports = function(theTestHarness) {
     new tf.FileComparisonTest("createFromJSON test 2", UseCaseDiagramCreateFromJSONTest2, useCaseDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 3", UseCaseDiagramCreateFromJSONTest3, useCaseDiagramSequence)
     new tf.FileComparisonTest("createFromJSON test 4", UseCaseDiagramCreateFromJSONTest4, useCaseDiagramSequence)
+    new tf.FileComparisonTest("createFromJSON test 5", UseCaseDiagramCreateFromJSONTest5, useCaseDiagramSequence)
 }
 
 function UseCaseDiagramCreateFromJSONTest1(resolve, reject, test) {
@@ -208,6 +209,70 @@ function UseCaseDiagramCreateFromJSONTest4(resolve, reject, test) {
 
         test.setOutputFilePath(__dirname + "/output/usecasediagramtests/UseCaseDiagramCreateFromJSONTest4.html")
         test.setReferenceFilePath(__dirname + "/reference/usecasediagramtests/UseCaseDiagramCreateFromJSONTest4.html")
+
+        resolve(tf.TestResultOutcome.ePassed)
+    } else {
+        resolve(tf.TestResultOutcome.eFailed)
+    }
+}
+
+function UseCaseDiagramCreateFromJSONTest5(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div")).size(600, 300)
+
+    let layout = {
+        "elements": {
+            "Customer": { "position": { "x": 10, "y": 1 } },
+            "Shopkeeper": { "position": { "x": 1, "y": 75 } },
+            "Till": { "position": { "x": 33, "y": 150 } },
+            "Pay for merchandise": { "position": { "x": 140, "y": 75 } }
+        }
+    }
+
+    let useCaseDiagram = new UMLWebWidget.Diagram()
+    useCaseDiagram.createFromJSON(svg, {
+        "elements":
+          [
+              { 
+                  "actor":
+                      {
+                          "name": "Customer"
+                      }
+              },
+              { 
+                  "actor":
+                      {
+                          "name": "Shopkeeper"
+                      }
+              },
+              { 
+                  "actor":
+                      {
+                          "name": "Till"
+                      }
+              },
+              {
+                  "usecase":
+                      {
+                          "title": "Pay for merchandise"
+                      }
+              },
+              {
+                  "association":
+                      {
+                          "actor": "Customer",
+                          "usecase": "Pay for merchandise"
+                      }
+              }
+          ]
+    },
+    layout)
+
+    let elementKeys = Object.keys(useCaseDiagram.diagramDescription)
+    if ((elementKeys.length == 1) && (useCaseDiagram.actors.size == 3) && (useCaseDiagram.usecases.size == 1)) {
+        TestUtils.exportSVGToHTML(svg, __dirname + "/output/usecasediagramtests/UseCaseDiagramCreateFromJSONTest5.html", true)
+
+        test.setOutputFilePath(__dirname + "/output/usecasediagramtests/UseCaseDiagramCreateFromJSONTest5.html")
+        test.setReferenceFilePath(__dirname + "/reference/usecasediagramtests/UseCaseDiagramCreateFromJSONTest5.html")
 
         resolve(tf.TestResultOutcome.ePassed)
     } else {
