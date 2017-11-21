@@ -184,8 +184,19 @@ class LayoutManager {
                 result.end = ConnectionPointPosition.LeftCenter
             }
         } else {
-            result.start = ConnectionPointPosition.RightCenter
-            result.end = ConnectionPointPosition.LeftCenter
+            if (boundingbox1.x < boundingbox2.x) {
+                result.start = ConnectionPointPosition.RightCenter
+                result.end = ConnectionPointPosition.LeftCenter
+            } else if (boundingbox1.x > (boundingbox2.x + boundingbox2.width)) {
+                result.start = ConnectionPointPosition.LeftCenter
+                result.end = ConnectionPointPosition.RightCenter
+            } else if (boundingbox1.y < boundingbox2.y) {
+                result.start = ConnectionPointPosition.BottomCenter
+                result.end = ConnectionPointPosition.TopCenter
+            } else {
+                result.start = ConnectionPointPosition.TopCenter
+                result.end = ConnectionPointPosition.BottomCenter
+            }
         }
 
         return result
