@@ -2146,9 +2146,9 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
             
             let width = (connectionPoint2.x - connectionPoint1.x)
             if (textElement.bbox().width < width) {
-                textElement.move((connectionPoint1.x + ((width - textElement.bbox().width) / 2)), connectionPoint1.y - textElement.bbox().height + 2)
+                textElement.move((connectionPoint1.x + ((width - textElement.bbox().width) / 2)), connectionPoint1.y - textElement.bbox().height - 2)
             } else {
-                textElement.move(connectionPoint1.x + 2, connectionPoint1.y - 6 - textElement.bbox().height + 2)
+                textElement.move(connectionPoint1.x + 2, connectionPoint1.y - 6 - textElement.bbox().height - 2)
             }
         }
 
@@ -2163,9 +2163,9 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
             
             let width = (connectionPoint1.x - connectionPoint2.x)
             if (textElement.bbox().width < width) {
-                textElement.move((connectionPoint2.x + ((width - textElement.bbox().width) / 2)), connectionPoint2.y - textElement.bbox().height + 2)
+                textElement.move((connectionPoint2.x + ((width - textElement.bbox().width) / 2)), connectionPoint2.y - textElement.bbox().height - 2)
             } else {
-                textElement.move(connectionPoint2.x + 2, connectionPoint2.y - 6 - textElement.bbox().height + 2)
+                textElement.move(connectionPoint2.x + 2, connectionPoint2.y - 6 - textElement.bbox().height - 2)
             }
         }
 
