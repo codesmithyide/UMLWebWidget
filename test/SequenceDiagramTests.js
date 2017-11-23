@@ -956,6 +956,13 @@ function SequenceDiagramCreateFromJSONTest14(resolve, reject, test) {
                                     }
                             },
                             {
+                                "returnmessage":
+                                    {
+                                        "caller": "Mail Server",
+                                        "callee": "Mail Server"
+                                    }
+                            },
+                            {
                                 "synchronousmessage":
                                     {
                                         "name": "getMXServers",

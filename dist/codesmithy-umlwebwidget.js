@@ -2086,8 +2086,12 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
             }
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.text)
         } else if (this.type == "returnmessage") {
-            let lineGroup = this.shapeLayer.group().addClass("UMLReturnMessage")
-            drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
+            // If this is return message of a self call draw nothing. It will be indicated on the diagram
+            // by a reduction of the depth of the execution specification (i.e. the width of the lifeline)
+            if ((this.connectionPoint1.element != null) && (this.connectionPoint1.element != this.connectionPoint2.element)) {
+                let lineGroup = this.shapeLayer.group().addClass("UMLReturnMessage")
+                drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
+            }
         } else if (this.type == "creationmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLCreationMessage")
             let textGroup = this.textLayer.group()
