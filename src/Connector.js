@@ -52,6 +52,8 @@ class Connector extends DiagramElement {
             if ((this.connectionPoint1.element != null) && (this.connectionPoint1.element != this.connectionPoint2.element)) {
                 let lineGroup = this.shapeLayer.group().addClass("UMLReturnMessage")
                 this.height = drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
+            } else {
+                this.height = 30
             }
         } else if (this.type == "creationmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLCreationMessage")
