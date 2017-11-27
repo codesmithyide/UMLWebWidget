@@ -22,6 +22,9 @@ class Connector extends DiagramElement {
         if (text != null) {
             this.label = new Label(text)
         }
+        if ((this.label == null) && (type == "creationmessage")) {
+            this.label = new Label("new")
+        }
         this.height = 0
     }
 
@@ -62,7 +65,7 @@ class Connector extends DiagramElement {
         } else if (this.type == "creationmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLCreationMessage")
             let textGroup = this.textLayer.group()
-            this.height = drawCreationMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2)
+            this.height = drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == "destructionmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLDestructionMessage")
             this.height = drawDestructionMessage(lineGroup, this.connectionPoint2)
@@ -168,10 +171,6 @@ function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
         lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y + 6)
     }
     return 30
-}
-
-function drawCreationMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2) {
-    return drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, new Label("new"))
 }
 
 function drawDestructionMessage(lineGroup, connectionPoint2) {

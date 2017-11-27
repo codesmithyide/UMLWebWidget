@@ -2062,6 +2062,9 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         if (text != null) {
             this.label = new __WEBPACK_IMPORTED_MODULE_2__Label_js__["a" /* Label */](text)
         }
+        if ((this.label == null) && (type == "creationmessage")) {
+            this.label = new __WEBPACK_IMPORTED_MODULE_2__Label_js__["a" /* Label */]("new")
+        }
         this.height = 0
     }
 
@@ -2102,7 +2105,7 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         } else if (this.type == "creationmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLCreationMessage")
             let textGroup = this.textLayer.group()
-            this.height = drawCreationMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2)
+            this.height = drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == "destructionmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLDestructionMessage")
             this.height = drawDestructionMessage(lineGroup, this.connectionPoint2)
@@ -2208,10 +2211,6 @@ function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
         lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y + 6)
     }
     return 30
-}
-
-function drawCreationMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2) {
-    return drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, new __WEBPACK_IMPORTED_MODULE_2__Label_js__["a" /* Label */]("new"))
 }
 
 function drawDestructionMessage(lineGroup, connectionPoint2) {
@@ -2854,7 +2853,7 @@ class Diagram {
                         let lifeline2 = this.lifelines.get(message.creationmessage.callee)
                         let connectionPoint1 = lifeline1.createConnectionPoint(svg, "creation-start")
                         let connectionPoint2 = lifeline2.createConnectionPoint(svg, "creation-end")
-                        newConnector = new __WEBPACK_IMPORTED_MODULE_11__Connector_js__["a" /* Connector */](svg, "creationmessage", connectionPoint1, connectionPoint2, "")
+                        newConnector = new __WEBPACK_IMPORTED_MODULE_11__Connector_js__["a" /* Connector */](svg, "creationmessage", connectionPoint1, connectionPoint2, null)
                     } else if (message.destructionmessage) {
                         let lifeline2 = this.lifelines.get(message.destructionmessage.callee)
                         let connectionPoint2 = lifeline2.createConnectionPoint(svg, "destruction-end")
