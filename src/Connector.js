@@ -2,6 +2,7 @@
 
 import { DiagramElement } from "./DiagramElement.js"
 import { ConnectionPointPosition } from "./ConnectionPointPosition.js"
+import { Label } from "./Label.js"
 
 /**
   Represents a connector between elements.
@@ -17,7 +18,10 @@ class Connector extends DiagramElement {
         this.type = type
         this.connectionPoint1 = connectionPoint1
         this.connectionPoint2 = connectionPoint2
-        this.text = text
+        this.label = null
+        if (text != null) {
+            this.label = new Label(text)
+        }
         this.height = 0
     }
 
@@ -42,10 +46,10 @@ class Connector extends DiagramElement {
         } else if (this.type == "synchronousmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLSynchronousMessage")
             let textGroup = null
-            if ((this.text != null) && (this.text != "")) {
+            if ((this.label != null) && (this.label.text != null) && (this.label.text != "")) {
                 textGroup = this.textLayer.group()
             }
-            this.height = drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.text)
+            this.height = drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == "returnmessage") {
             // If this is return message of a self call draw nothing. It will be indicated on the diagram
             // by a reduction of the depth of the execution specification (i.e. the width of the lifeline)
@@ -89,10 +93,10 @@ function drawCompositionOrAggregationRelationship(lineGroup, connectionPoint1, c
     drawDiamond(lineGroup, connectionPoint2, connectorOrientation)
 }
 
-function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, text) {
+function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, label) {
     if ((connectionPoint1.element != null) && (connectionPoint1.element == connectionPoint2.element)) {
-        if ((textGroup != null) && (text != null) && (text != "")) {
-            let textElement = textGroup.text(text)
+        if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
+            let textElement = textGroup.text(label.text)
             textElement.move(connectionPoint1.x + 8, connectionPoint1.y - textElement.bbox().height - 3)
         }
 
@@ -104,8 +108,8 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
         lineGroup.polygon(polygonDescription)
     } else if (connectionPoint1.x < connectionPoint2.x) {
-        if ((textGroup != null) && (text != null) && (text != "")) {
-            let textElement = textGroup.text(text)
+        if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
+            let textElement = textGroup.text(label.text)
             
             let width = (connectionPoint2.x - connectionPoint1.x)
             if (textElement.bbox().width < width) {
@@ -121,8 +125,8 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
             (connectionPoint2.x - 12) + "," + (connectionPoint2.y + 6)
         lineGroup.polygon(polygonDescription)
     } else if (connectionPoint1.x > connectionPoint2.x) {
-        if ((textGroup != null) && (text != null) && (text != "")) {
-            let textElement = textGroup.text(text)
+        if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
+            let textElement = textGroup.text(label.text)
             
             let width = (connectionPoint1.x - connectionPoint2.x)
             if (textElement.bbox().width < width) {
@@ -138,8 +142,8 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
         lineGroup.polygon(polygonDescription)
     } else {
-        if ((textGroup != null) && (text != null) && (text != "")) {
-            let textElement = textGroup.text(text)
+        if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
+            let textElement = textGroup.text(label.text)
             textElement.move(connectionPoint1.x + 8, connectionPoint1.y - textElement.bbox().height - 3)
         }
 
@@ -167,7 +171,7 @@ function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
 }
 
 function drawCreationMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2) {
-    return drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, "new")
+    return drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, new Label("new"))
 }
 
 function drawDestructionMessage(lineGroup, connectionPoint2) {

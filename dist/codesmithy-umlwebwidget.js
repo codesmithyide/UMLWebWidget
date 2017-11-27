@@ -2037,6 +2037,8 @@ class UseCase extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Di
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Connector; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPointPosition_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Label_js__ = __webpack_require__(25);
+
 
 
 
@@ -2056,7 +2058,10 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         this.type = type
         this.connectionPoint1 = connectionPoint1
         this.connectionPoint2 = connectionPoint2
-        this.text = text
+        this.label = null
+        if (text != null) {
+            this.label = new __WEBPACK_IMPORTED_MODULE_2__Label_js__["a" /* Label */](text)
+        }
         this.height = 0
     }
 
@@ -2081,10 +2086,10 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         } else if (this.type == "synchronousmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLSynchronousMessage")
             let textGroup = null
-            if ((this.text != null) && (this.text != "")) {
+            if ((this.label != null) && (this.label.text != null) && (this.label.text != "")) {
                 textGroup = this.textLayer.group()
             }
-            this.height = drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.text)
+            this.height = drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == "returnmessage") {
             // If this is return message of a self call draw nothing. It will be indicated on the diagram
             // by a reduction of the depth of the execution specification (i.e. the width of the lifeline)
@@ -2128,10 +2133,10 @@ function drawCompositionOrAggregationRelationship(lineGroup, connectionPoint1, c
     drawDiamond(lineGroup, connectionPoint2, connectorOrientation)
 }
 
-function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, text) {
+function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, label) {
     if ((connectionPoint1.element != null) && (connectionPoint1.element == connectionPoint2.element)) {
-        if ((textGroup != null) && (text != null) && (text != "")) {
-            let textElement = textGroup.text(text)
+        if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
+            let textElement = textGroup.text(label.text)
             textElement.move(connectionPoint1.x + 8, connectionPoint1.y - textElement.bbox().height - 3)
         }
 
@@ -2143,8 +2148,8 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
         lineGroup.polygon(polygonDescription)
     } else if (connectionPoint1.x < connectionPoint2.x) {
-        if ((textGroup != null) && (text != null) && (text != "")) {
-            let textElement = textGroup.text(text)
+        if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
+            let textElement = textGroup.text(label.text)
             
             let width = (connectionPoint2.x - connectionPoint1.x)
             if (textElement.bbox().width < width) {
@@ -2160,8 +2165,8 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
             (connectionPoint2.x - 12) + "," + (connectionPoint2.y + 6)
         lineGroup.polygon(polygonDescription)
     } else if (connectionPoint1.x > connectionPoint2.x) {
-        if ((textGroup != null) && (text != null) && (text != "")) {
-            let textElement = textGroup.text(text)
+        if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
+            let textElement = textGroup.text(label.text)
             
             let width = (connectionPoint1.x - connectionPoint2.x)
             if (textElement.bbox().width < width) {
@@ -2177,8 +2182,8 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
         lineGroup.polygon(polygonDescription)
     } else {
-        if ((textGroup != null) && (text != null) && (text != "")) {
-            let textElement = textGroup.text(text)
+        if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
+            let textElement = textGroup.text(label.text)
             textElement.move(connectionPoint1.x + 8, connectionPoint1.y - textElement.bbox().height - 3)
         }
 
@@ -2206,7 +2211,7 @@ function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
 }
 
 function drawCreationMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2) {
-    return drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, "new")
+    return drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, new __WEBPACK_IMPORTED_MODULE_2__Label_js__["a" /* Label */]("new"))
 }
 
 function drawDestructionMessage(lineGroup, connectionPoint2) {
@@ -2600,7 +2605,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__UseCase_js__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__Component_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__Node_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__Note_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__Note_js__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__SVGLayer_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__SVGLayerSet_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__Log_js__ = __webpack_require__(19);
@@ -3116,6 +3121,25 @@ class SocketConnector {
 
 /***/ }),
 /* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Label; });
+
+
+class Label {
+
+    constructor(text) {
+        this.text = text
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
