@@ -165,7 +165,7 @@ class Diagram {
                         let lifeline2 = this.lifelines.get(message.returnmessage.caller)
                         let connectionPoint1 = lifeline1.createConnectionPoint(svg, "return-start")
                         let connectionPoint2 = lifeline2.createConnectionPoint(svg, "return-end")
-                        newConnector = new Connector(svg, "returnmessage", connectionPoint1, connectionPoint2, "")
+                        newConnector = new Connector(svg, "returnmessage", connectionPoint1, connectionPoint2, null)
                     } else if (message.creationmessage) {
                         let lifeline1 = this.lifelines.get(message.creationmessage.caller)
                         let lifeline2 = this.lifelines.get(message.creationmessage.callee)

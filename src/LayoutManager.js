@@ -101,7 +101,7 @@ class LayoutManager {
                 if (lifeline1 != lifeline2) {
                     connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
                     connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
-                    nextYPosition += connector.getHeight()
+                    nextYPosition += 30
                 } else {
                     connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
                     connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 20)

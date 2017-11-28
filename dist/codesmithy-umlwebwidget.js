@@ -851,7 +851,7 @@ class LayoutManager {
                 if (lifeline1 != lifeline2) {
                     connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
                     connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
-                    nextYPosition += connector.getHeight()
+                    nextYPosition += 30
                 } else {
                     connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
                     connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 20)
@@ -2847,7 +2847,7 @@ class Diagram {
                         let lifeline2 = this.lifelines.get(message.returnmessage.caller)
                         let connectionPoint1 = lifeline1.createConnectionPoint(svg, "return-start")
                         let connectionPoint2 = lifeline2.createConnectionPoint(svg, "return-end")
-                        newConnector = new __WEBPACK_IMPORTED_MODULE_11__Connector_js__["a" /* Connector */](svg, "returnmessage", connectionPoint1, connectionPoint2, "")
+                        newConnector = new __WEBPACK_IMPORTED_MODULE_11__Connector_js__["a" /* Connector */](svg, "returnmessage", connectionPoint1, connectionPoint2, null)
                     } else if (message.creationmessage) {
                         let lifeline1 = this.lifelines.get(message.creationmessage.caller)
                         let lifeline2 = this.lifelines.get(message.creationmessage.callee)
