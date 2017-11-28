@@ -96,7 +96,7 @@ class LayoutManager {
         for (let connector of connectors) {
             if (firstConnector) {
                 firstConnector = false
-                if (connector.hasNonEmptyLabel()) {
+                if (connector.hasNonEmptyLabel() && (connector.type != "creationmessage")) {
                     currrentYPosition += 10
                 }
             } else {
