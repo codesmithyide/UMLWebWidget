@@ -96,6 +96,9 @@ class LayoutManager {
         for (let connector of connectors) {
             if (firstConnector) {
                 firstConnector = false
+                if (connector.hasNonEmptyLabel()) {
+                    currrentYPosition += 10
+                }
             } else {
                 if (connector.hasNonEmptyLabel()) {
                     currrentYPosition += 16
