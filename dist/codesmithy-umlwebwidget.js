@@ -869,7 +869,7 @@ class LayoutManager {
                 } else {
                     connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
                 }
-                nextYPosition += connector.getHeight()
+                nextYPosition += 30
             }
         }
         if (connectors.length > 0) {
