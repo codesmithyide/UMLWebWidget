@@ -27,6 +27,10 @@ class Connector extends DiagramElement {
         }
     }
 
+    hasNonEmptyLabel() {
+        return ((this.label != null) && !this.label.empty())
+    }
+
     doUpdate() {
         this.layers.clearEachLayer()
         if (this.type == "inheritance") {

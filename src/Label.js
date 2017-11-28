@@ -6,6 +6,10 @@ class Label {
         this.text = text
     }
 
+    empty() {
+        return ((this.text != null) && (this.text != ""))
+    }
+
 }
 
 export { Label }

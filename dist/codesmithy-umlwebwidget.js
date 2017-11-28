@@ -838,38 +838,44 @@ class LayoutManager {
     }
 
     layoutMessages(lifelines, connectors) {
-        let nextYPosition = 0
+        let currrentYPosition = 0
         for (let lifeline of lifelines.values()) {
-            nextYPosition = Math.max(nextYPosition, lifeline.getFirstConnectionPointPosition().y)
+            currrentYPosition = Math.max(currrentYPosition, lifeline.getFirstConnectionPointPosition().y)
         }
+        let firstConnector = true
         for (let connector of connectors) {
+            if (firstConnector) {
+                firstConnector = false
+            } else {
+                currrentYPosition += 20
+            }
             let connectionPoint1 = connector.connectionPoint1
             let connectionPoint2 = connector.connectionPoint2
             let lifeline1 = connectionPoint1.element
             let lifeline2 = connectionPoint2.element
             if ((connector.type != "creationmessage") && (connector.type != "destructionmessage")) {
                 if (lifeline1 != lifeline2) {
-                    connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
-                    connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
-                    nextYPosition += 30
+                    connectionPoint1.move(lifeline1.getLineTopPosition().x, currrentYPosition)
+                    connectionPoint2.move(lifeline2.getLineTopPosition().x, currrentYPosition)
+                    currrentYPosition += 10
                 } else {
-                    connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
-                    connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 20)
-                    nextYPosition += 50
+                    connectionPoint1.move(lifeline1.getLineTopPosition().x, currrentYPosition)
+                    connectionPoint2.move(lifeline2.getLineTopPosition().x, currrentYPosition + 20)
+                    currrentYPosition += 30
                 }
             } else if (connector.type == "creationmessage") {
-                lifeline2.move(lifeline2.x, nextYPosition)
+                lifeline2.move(lifeline2.x, currrentYPosition)
                 let y = lifeline2.getCreationConnectionPointPosition().y
                 connectionPoint1.move(lifeline1.getLineTopPosition().x, y)
                 connectionPoint2.move(lifeline2.getCreationConnectionPointPosition().x, y)
-                nextYPosition += 50
+                currrentYPosition += 30
             } else if (connector.type == "destructionmessage") {
                 if (lifeline2.needToAdjustDestructionPosition()) {
-                    connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 25)
+                    connectionPoint2.move(lifeline2.getLineTopPosition().x, currrentYPosition + 25)
                 } else {
-                    connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition)
+                    connectionPoint2.move(lifeline2.getLineTopPosition().x, currrentYPosition)
                 }
-                nextYPosition += 30
+                currrentYPosition += 10
             }
         }
         if (connectors.length > 0) {
@@ -2067,6 +2073,10 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         }
     }
 
+    hasNonEmptyLabel() {
+        return ((this.label != null) && !this.label.empty())
+    }
+
     doUpdate() {
         this.layers.clearEachLayer()
         if (this.type == "inheritance") {
@@ -3117,6 +3127,10 @@ class Label {
 
     constructor(text) {
         this.text = text
+    }
+
+    empty() {
+        return ((this.text != null) && (this.text != ""))
     }
 
 }
