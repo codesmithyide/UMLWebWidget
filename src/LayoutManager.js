@@ -105,7 +105,7 @@ class LayoutManager {
                 } else {
                     connectionPoint1.move(lifeline1.getLineTopPosition().x, nextYPosition)
                     connectionPoint2.move(lifeline2.getLineTopPosition().x, nextYPosition + 20)
-                    nextYPosition += connector.getHeight()
+                    nextYPosition += 50
                 }
             } else if (connector.type == "creationmessage") {
                 lifeline2.move(lifeline2.x, nextYPosition)
