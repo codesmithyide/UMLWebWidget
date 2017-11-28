@@ -7,7 +7,7 @@ class Label {
     }
 
     empty() {
-        return ((this.text != null) && (this.text != ""))
+        return ((this.text == null) || (this.text == ""))
     }
 
 }

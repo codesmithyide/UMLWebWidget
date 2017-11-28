@@ -97,7 +97,9 @@ class LayoutManager {
             if (firstConnector) {
                 firstConnector = false
             } else {
-                currrentYPosition += 20
+                if (connector.hasNonEmptyLabel()) {
+                    currrentYPosition += 16
+                }
             }
             let connectionPoint1 = connector.connectionPoint1
             let connectionPoint2 = connector.connectionPoint2
@@ -107,25 +109,25 @@ class LayoutManager {
                 if (lifeline1 != lifeline2) {
                     connectionPoint1.move(lifeline1.getLineTopPosition().x, currrentYPosition)
                     connectionPoint2.move(lifeline2.getLineTopPosition().x, currrentYPosition)
-                    currrentYPosition += 10
+                    currrentYPosition += 14
                 } else {
                     connectionPoint1.move(lifeline1.getLineTopPosition().x, currrentYPosition)
                     connectionPoint2.move(lifeline2.getLineTopPosition().x, currrentYPosition + 20)
-                    currrentYPosition += 30
+                    currrentYPosition += 34
                 }
             } else if (connector.type == "creationmessage") {
                 lifeline2.move(lifeline2.x, currrentYPosition)
                 let y = lifeline2.getCreationConnectionPointPosition().y
                 connectionPoint1.move(lifeline1.getLineTopPosition().x, y)
                 connectionPoint2.move(lifeline2.getCreationConnectionPointPosition().x, y)
-                currrentYPosition += 30
+                currrentYPosition += 34
             } else if (connector.type == "destructionmessage") {
                 if (lifeline2.needToAdjustDestructionPosition()) {
                     connectionPoint2.move(lifeline2.getLineTopPosition().x, currrentYPosition + 25)
                 } else {
                     connectionPoint2.move(lifeline2.getLineTopPosition().x, currrentYPosition)
                 }
-                currrentYPosition += 10
+                currrentYPosition += 14
             }
         }
         if (connectors.length > 0) {
