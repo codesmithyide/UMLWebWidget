@@ -866,7 +866,9 @@ class LayoutManager {
                 } else {
                     connectionPoint1.move(lifeline1.getLineTopPosition().x, currrentYPosition)
                     connectionPoint2.move(lifeline2.getLineTopPosition().x, currrentYPosition + 20)
-                    currrentYPosition += 34
+                    if (connector.type != "returnmessage") {
+                        currrentYPosition += 34
+                    }
                 }
             } else if (connector.type == "creationmessage") {
                 lifeline2.move(lifeline2.x, currrentYPosition)
