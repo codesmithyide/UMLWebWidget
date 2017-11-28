@@ -25,14 +25,6 @@ class Connector extends DiagramElement {
         if ((this.label == null) && (type == "creationmessage")) {
             this.label = new Label("new")
         }
-        this.height = 0
-    }
-
-    getHeight() {
-        if (!this.uptodate) {
-            this.update()
-        }
-        return this.height
     }
 
     doUpdate() {
@@ -52,23 +44,21 @@ class Connector extends DiagramElement {
             if ((this.label != null) && (this.label.text != null) && (this.label.text != "")) {
                 textGroup = this.textLayer.group()
             }
-            this.height = drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
+            drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == "returnmessage") {
             // If this is return message of a self call draw nothing. It will be indicated on the diagram
             // by a reduction of the depth of the execution specification (i.e. the width of the lifeline)
             if ((this.connectionPoint1.element != null) && (this.connectionPoint1.element != this.connectionPoint2.element)) {
                 let lineGroup = this.shapeLayer.group().addClass("UMLReturnMessage")
-                this.height = drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
-            } else {
-                this.height = 30
+                drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
             }
         } else if (this.type == "creationmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLCreationMessage")
             let textGroup = this.textLayer.group()
-            this.height = drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
+            drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == "destructionmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLDestructionMessage")
-            this.height = drawDestructionMessage(lineGroup, this.connectionPoint2)
+            drawDestructionMessage(lineGroup, this.connectionPoint2)
         } else if (this.type == "usecaseassociation") {
             let lineGroup = this.shapeLayer.group().addClass("UMLUseCaseAssociation")
             drawUseCaseAssociation(lineGroup, this.connectionPoint1, this.connectionPoint2)
@@ -158,7 +148,6 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
         lineGroup.polygon(polygonDescription)
     }
-    return 30
 }
 
 function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
@@ -170,7 +159,6 @@ function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
         lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y - 6)
         lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y + 6)
     }
-    return 30
 }
 
 function drawDestructionMessage(lineGroup, connectionPoint2) {
@@ -184,7 +172,6 @@ function drawDestructionMessage(lineGroup, connectionPoint2) {
         connectionPoint2.x - halfWidth, connectionPoint2.y + halfHeight,
         connectionPoint2.x + halfWidth, connectionPoint2.y - halfHeight
     )
-    return 30
 }
 
 function drawUseCaseAssociation(lineGroup, connectionPoint1, connectionPoint2) {
