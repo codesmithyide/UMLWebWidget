@@ -207,12 +207,12 @@ function ComponentDiagramCreateFromJSONTest4(resolve, reject, test) {
 }
 
 function ComponentDiagramCreateFromJSONTest5(resolve, reject, test) {
-    let svg = SVG(window.document.createElement("div"))
+    let svg = SVG(window.document.createElement("div")).size(300, 200)
 
     let layout = {
         "elements": {
-            "ControlPanel": { "position": { "x": 10, "y": 1 } },
-            "WebServer": { "position": { "x": 200, "y": 1 } }
+            "ControlPanel": { "position": { "x": 75, "y": 1 } },
+            "WebServer": { "position": { "x": 20, "y": 100 } }
         }
     }
 

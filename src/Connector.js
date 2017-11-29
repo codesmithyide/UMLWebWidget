@@ -183,7 +183,16 @@ function drawUseCaseAssociation(lineGroup, connectionPoint1, connectionPoint2) {
 }
 
 function drawAssemblyConnector(lineGroup, connectionPoint1, connectionPoint2) {
-    lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
+    if (connectionPoint1.x < connectionPoint2.x) {
+        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
+    } else {
+        let middlePoint = (connectionPoint1.y + ((connectionPoint2.y - connectionPoint1.y) / 2))
+        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 25, connectionPoint1.y).attr("stroke-dasharray", "8, 4")
+        lineGroup.line(connectionPoint1.x + 25, connectionPoint1.y, connectionPoint1.x + 25, middlePoint).attr("stroke-dasharray", "8, 4")
+        lineGroup.line(connectionPoint1.x + 25, middlePoint, connectionPoint2.x - 35, middlePoint).attr("stroke-dasharray", "8, 4")
+        lineGroup.line(connectionPoint2.x - 35, middlePoint, connectionPoint2.x - 35, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
+        lineGroup.line(connectionPoint2.x - 35, connectionPoint2.y, connectionPoint2.x, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
+    }
     lineGroup.line(connectionPoint2.x - 13, connectionPoint2.y + 5, connectionPoint2.x, connectionPoint2.y)
     lineGroup.line(connectionPoint2.x - 13, connectionPoint2.y - 5, connectionPoint2.x, connectionPoint2.y)
 }
