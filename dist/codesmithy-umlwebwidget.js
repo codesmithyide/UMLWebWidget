@@ -3030,7 +3030,7 @@ class BallConnector {
     // point is at position (x, y)
     moveConnectionPoint(x, y) {
         this.uptodate = false
-        let connectorOffsetY = this[textDef].bbox().height + 6
+        let connectorOffsetY = this[textDef].bbox().height + 3
         y -= connectorOffsetY
         this.move(x, y)
     }
@@ -3044,7 +3044,7 @@ class BallConnector {
     }
 
     getAssemblyConnectionPoint() {
-        return { x: (this.x + (this.width / 2) - 4), y: this.y + this[textDef].bbox().height + 8 }
+        return { x: (this.x + (this.width / 2) - 4), y: this.y + this[textDef].bbox().height + 5 }
     }
 
 }
