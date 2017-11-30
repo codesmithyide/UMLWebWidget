@@ -1915,6 +1915,8 @@ class Node extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diagr
         let rect = nodeGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top + 10)
 
         this.connectionPointsRectangle = rect.bbox()
+        this.connectionPointsRectangle.cy -= 5
+        this.connectionPointsRectangle.width += 5
     }
 
     doGetConnectionPointsRectangle() {

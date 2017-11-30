@@ -63,6 +63,8 @@ class Node extends DiagramElement {
         let rect = nodeGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top + 10)
 
         this.connectionPointsRectangle = rect.bbox()
+        this.connectionPointsRectangle.cy -= 5
+        this.connectionPointsRectangle.width += 5
     }
 
     doGetConnectionPointsRectangle() {
