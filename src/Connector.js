@@ -69,6 +69,9 @@ class Connector extends DiagramElement {
         } else if (this.type == "assemblyconnector") {
             let lineGroup = this.shapeLayer.group().addClass("UMLAssemblyConnector")
             drawAssemblyConnector(lineGroup, this.connectionPoint1, this.connectionPoint2)
+        } else if (this.type == "communicationpath") {
+            let lineGroup = this.shapeLayer.group().addClass("UMLCommunicationPath")
+            drawCommunicationPath(lineGroup, this.connectionPoint1, this.connectionPoint2)
         }
     }
 
@@ -195,6 +198,10 @@ function drawAssemblyConnector(lineGroup, connectionPoint1, connectionPoint2) {
     }
     lineGroup.line(connectionPoint2.x - 13, connectionPoint2.y + 5, connectionPoint2.x, connectionPoint2.y)
     lineGroup.line(connectionPoint2.x - 13, connectionPoint2.y - 5, connectionPoint2.x, connectionPoint2.y)
+}
+
+function drawCommunicationPath(lineGroup, connectionPoint1, connectionPoint2) {
+    lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y)
 }
 
 // Orientation of the head (e.g. arrow or diamond)

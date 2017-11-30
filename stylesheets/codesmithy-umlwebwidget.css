@@ -175,6 +175,11 @@
    stroke-width: 2;
 }
 
+.CodeSmithyUMLWebWidget .UMLCommunicationPath line {
+   stroke: #454545;
+   stroke-width: 2;
+}
+
 .CodeSmithyUMLWebWidget .TopRightSizingHandle {
    cursor: nesw-resize
 }

@@ -194,6 +194,8 @@ class Diagram {
             } else if (item.communicationpath) {
                 let connectionPoint1 = this.nodes.get(item.communicationpath.firstnode).createConnectionPoint(svg)
                 let connectionPoint2 = this.nodes.get(item.communicationpath.secondnode).createConnectionPoint(svg)
+                let newConnector = new Connector(svg, "communicationpath", connectionPoint1, connectionPoint2)
+                connectors.push(newConnector)
             }
         }
 

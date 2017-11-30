@@ -16,6 +16,7 @@ class Node extends DiagramElement {
         this.textLayer = this.layers.createLayer("text")
         this.nodeDescription = nodeDescription
         this.style = style
+        this.connectionPointsRectangle = null
     }
 
     createConnectionPoint(svg) {
@@ -59,7 +60,13 @@ class Node extends DiagramElement {
         let pt6 = (borderAdjustment.left + currentDimensions.width + 10) + "," + (borderAdjustment.top + currentDimensions.height - 1)
         nodeGroup.polygon(pt2 + " " + pt3 + " " + pt5 + " " + pt6)      
 
-        nodeGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top + 10)
+        let rect = nodeGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top + 10)
+
+        this.connectionPointsRectangle = rect.bbox()
+    }
+
+    doGetConnectionPointsRectangle() {
+        return this.connectionPointsRectangle 
     }
 
 }

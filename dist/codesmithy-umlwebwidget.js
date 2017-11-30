@@ -1868,6 +1868,7 @@ class Node extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diagr
         this.textLayer = this.layers.createLayer("text")
         this.nodeDescription = nodeDescription
         this.style = style
+        this.connectionPointsRectangle = null
     }
 
     createConnectionPoint(svg) {
@@ -1911,7 +1912,13 @@ class Node extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diagr
         let pt6 = (borderAdjustment.left + currentDimensions.width + 10) + "," + (borderAdjustment.top + currentDimensions.height - 1)
         nodeGroup.polygon(pt2 + " " + pt3 + " " + pt5 + " " + pt6)      
 
-        nodeGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top + 10)
+        let rect = nodeGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top + 10)
+
+        this.connectionPointsRectangle = rect.bbox()
+    }
+
+    doGetConnectionPointsRectangle() {
+        return this.connectionPointsRectangle 
     }
 
 }
@@ -2129,6 +2136,9 @@ class Connector extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* 
         } else if (this.type == "assemblyconnector") {
             let lineGroup = this.shapeLayer.group().addClass("UMLAssemblyConnector")
             drawAssemblyConnector(lineGroup, this.connectionPoint1, this.connectionPoint2)
+        } else if (this.type == "communicationpath") {
+            let lineGroup = this.shapeLayer.group().addClass("UMLCommunicationPath")
+            drawCommunicationPath(lineGroup, this.connectionPoint1, this.connectionPoint2)
         }
     }
 
@@ -2255,6 +2265,10 @@ function drawAssemblyConnector(lineGroup, connectionPoint1, connectionPoint2) {
     }
     lineGroup.line(connectionPoint2.x - 13, connectionPoint2.y + 5, connectionPoint2.x, connectionPoint2.y)
     lineGroup.line(connectionPoint2.x - 13, connectionPoint2.y - 5, connectionPoint2.x, connectionPoint2.y)
+}
+
+function drawCommunicationPath(lineGroup, connectionPoint1, connectionPoint2) {
+    lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y)
 }
 
 // Orientation of the head (e.g. arrow or diamond)
@@ -2896,6 +2910,8 @@ class Diagram {
             } else if (item.communicationpath) {
                 let connectionPoint1 = this.nodes.get(item.communicationpath.firstnode).createConnectionPoint(svg)
                 let connectionPoint2 = this.nodes.get(item.communicationpath.secondnode).createConnectionPoint(svg)
+                let newConnector = new __WEBPACK_IMPORTED_MODULE_11__Connector_js__["a" /* Connector */](svg, "communicationpath", connectionPoint1, connectionPoint2)
+                connectors.push(newConnector)
             }
         }
 
