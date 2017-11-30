@@ -110,6 +110,13 @@ function DeploymentDiagramCreateFromJSONTest3(resolve, reject, test) {
                         {
                             "name": "DatabaseServer"
                         }
+                },
+                {
+                    "communicationpath":
+                    {
+                        "firstnode": "WebServer",
+                        "secondnode": "DatabaseServer"
+                    }
                 }
             ]
     },

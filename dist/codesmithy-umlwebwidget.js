@@ -1849,6 +1849,8 @@ function concatenateLevels(depthChanges) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Node; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__ = __webpack_require__(1);
+
 
 
 
@@ -1866,6 +1868,11 @@ class Node extends __WEBPACK_IMPORTED_MODULE_0__DiagramElement_js__["a" /* Diagr
         this.textLayer = this.layers.createLayer("text")
         this.nodeDescription = nodeDescription
         this.style = style
+    }
+
+    createConnectionPoint(svg) {
+        let newPoint = new __WEBPACK_IMPORTED_MODULE_1__ConnectionPoint_js__["a" /* ConnectionPoint */](svg, this)
+        return newPoint
     }
 
     doUpdate() {
@@ -2886,6 +2893,9 @@ class Diagram {
                 let connectionPoint2 = this.usecases.get(item.association.usecase).createConnectionPoint(svg)
                 let newConnector = new __WEBPACK_IMPORTED_MODULE_11__Connector_js__["a" /* Connector */](svg, "usecaseassociation", connectionPoint1, connectionPoint2)
                 connectors.push(newConnector)
+            } else if (item.communicationpath) {
+                let connectionPoint1 = this.nodes.get(item.communicationpath.firstnode).createConnectionPoint(svg)
+                let connectionPoint2 = this.nodes.get(item.communicationpath.secondnode).createConnectionPoint(svg)
             }
         }
 

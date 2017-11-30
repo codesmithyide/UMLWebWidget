@@ -1,6 +1,7 @@
 'use strict'
 
 import { DiagramElement } from "./DiagramElement.js"
+import { ConnectionPoint } from "./ConnectionPoint.js"
 
 /**
   A node on a deployment diagram.
@@ -15,6 +16,11 @@ class Node extends DiagramElement {
         this.textLayer = this.layers.createLayer("text")
         this.nodeDescription = nodeDescription
         this.style = style
+    }
+
+    createConnectionPoint(svg) {
+        let newPoint = new ConnectionPoint(svg, this)
+        return newPoint
     }
 
     doUpdate() {

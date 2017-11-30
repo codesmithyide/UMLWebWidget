@@ -191,6 +191,9 @@ class Diagram {
                 let connectionPoint2 = this.usecases.get(item.association.usecase).createConnectionPoint(svg)
                 let newConnector = new Connector(svg, "usecaseassociation", connectionPoint1, connectionPoint2)
                 connectors.push(newConnector)
+            } else if (item.communicationpath) {
+                let connectionPoint1 = this.nodes.get(item.communicationpath.firstnode).createConnectionPoint(svg)
+                let connectionPoint2 = this.nodes.get(item.communicationpath.secondnode).createConnectionPoint(svg)
             }
         }
 
