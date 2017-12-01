@@ -14,6 +14,7 @@ module.exports = function(theTestHarness) {
     new tf.FunctionBasedTest("Creation test 1", NodeCreationTest1, nodeSequence)
 
     new tf.FileComparisonTest("getLayers test 1", NodeGetLayersTest1, nodeSequence)
+    new tf.FileComparisonTest("getLayers test 2", NodeGetLayersTest2, nodeSequence)
 }
 
 function NodeCreationTest1(resolve) {
@@ -43,6 +44,27 @@ function NodeGetLayersTest1(resolve, reject, test) {
 
     test.setOutputFilePath(__dirname + "/output/nodetests/NodeGetLayersTest1.html")
     test.setReferenceFilePath(__dirname + "/reference/nodetests/NodeGetLayersTest1.html")
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+function NodeGetLayersTest2(resolve, reject, test) {
+    let svg = SVG(window.document.createElement("div"))
+
+    let nodeDescription = {
+        "name": "WebServer"
+    }
+    let style = new UMLWebWidget.Style()
+    let node = new UMLWebWidget.Node(svg, nodeDescription.name, nodeDescription, style)
+
+    let layers = node.getLayers()
+    layers.getLayer("shape").write()
+    layers.getLayer("text").write()
+
+    TestUtils.exportSVGToHTML(svg, __dirname + "/output/nodetests/NodeGetLayersTest2.html", true)
+
+    test.setOutputFilePath(__dirname + "/output/nodetests/NodeGetLayersTest2.html")
+    test.setReferenceFilePath(__dirname + "/reference/nodetests/NodeGetLayersTest2.html")
 
     resolve(tf.TestResultOutcome.ePassed)
 }
