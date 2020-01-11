@@ -1,6 +1,24 @@
-# CodeSmithy UMLWebWidget
+# CodeSmithy - UMLWebWidget
 
 The UMLWebWidget project provides a jQuery widget to display UML diagrams in a web page.
+
+## Contents
+
+## Project Status
+
+This project is in its development phase.
+
+Many of the diagrams are ready to be used but it is likely that you will need to modify the code to suit your needs and
+creating diagrams is fairly cumbersome at the moment since there is no automatic layout.
+
+Also documentation is currently lacking and mostly limited to the samples available in this repository.
+
+## Usage
+
+## Support
+
+For all questions about this project you can [raise an issue](https://github.com/CodeSmithyIDE/UMLWebWidget/issues/new)
+on GitHub.
 
 ## License
 
