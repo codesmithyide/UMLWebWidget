@@ -26,6 +26,7 @@
     "svg.js": "^2.7.1",
     "svgdom": "0.0.21",
     "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "webpack-merge": "^4.2.2"
   }
 }
