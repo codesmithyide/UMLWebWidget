@@ -1,6 +1,6 @@
 'use strict'
 
-var UMLWebWidget = require("../dist/codesmithy-umlwebwidget.js")
+var UMLWebWidget = require("../dist/codesmithy-umlwebwidget.node.dev.js")
 var tf = require("ishiko-test-framework")
 
 module.exports = function(theTestHarness) {
