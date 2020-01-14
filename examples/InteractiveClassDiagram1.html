@@ -3,18 +3,18 @@
   <head>
     <title>Interactive Class Diagram 1</title>
 
-    <script src="../../ThirdParty/jquery-3.2.1.min.js"></script>
-    <script src="../../ThirdParty/svg.min.js"></script>
-    <script src="../../ThirdParty/svg.draggable.js"></script>
-    <script src="../../Source/CodeSmithyUMLWebWidget.js"></script>
+    <script src="../third_party/jquery-3.4.1.slim.min.js"></script>
+    <script src="../third_party/svg.min.js"></script>
+    <script src="../third_party/svg.draggable.js"></script>
+    <script src="../dist/codesmithy-umlwebwidget.js"></script>
 
-    <link rel="stylesheet" href="../../StyleSheets/CodeSmithyUMLWebWidget.css">
+    <link rel="stylesheet" href="../stylesheets/codesmithy-umlwebwidget.css">
   </head>
   <body>
     <p>The following diagram is a class diagram that can be edited online by the user.</p>
     <div id="diagram1" class="CodeSmithyUMLWebWidget">
       { 
-        "classdiagram":
+        "elements":
           [
             { 
               "class":
@@ -85,13 +85,13 @@
       }
     </div>
     <script>
-      var classDiagram = new CodeSmithy.UMLWebWidget.Diagram({ width: 800, height: 400, interactive: { canMove: true } })
+      var classDiagram = new CodeSmithyUMLWebWidget.Diagram({ width: 800, height: 400, interactive: { canMove: true } })
 
       var layout = {
-        "classboxpositions": {
-          "MyBaseClass": { "x": 21, "y": 10 },
-          "MyDerivedClass": { "x": 10, "y": 125 },
-          "MyContainedClass": { "x": 220, "y": 125 },
+        "elements": {
+          "MyBaseClass": { position: { "x": 21, "y": 10 } },
+          "MyDerivedClass": { position: { "x": 10, "y": 125 } },
+          "MyContainedClass": { position: { "x": 220, "y": 125 } }
         }
       }
 

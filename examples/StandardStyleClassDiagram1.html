@@ -3,17 +3,17 @@
   <head>
     <title>Standard Style Class Diagram 1</title>
 
-    <script src="../../ThirdParty/jquery-3.2.1.min.js"></script>
-    <script src="../../ThirdParty/svg.min.js"></script>
-    <script src="../../Source/CodeSmithyUMLWebWidget.js"></script>
+    <script src="../third_party/jquery-3.4.1.slim.min.js"></script>
+    <script src="../third_party/svg.min.js"></script>
+    <script src="../dist/codesmithy-umlwebwidget.js"></script>
 
-    <link rel="stylesheet" href="../../StyleSheets/CodeSmithyUMLWebWidget.css">
+    <link rel="stylesheet" href="../stylesheets/codesmithy-umlwebwidget.css">
   </head>
   <body>
     <p>The following diagram is a class diagram with one class with various attributes and operations.</p>
     <div id="diagram1" class="CodeSmithyUMLWebWidget StandardStyle">
       { 
-        "classdiagram":
+        "elements":
           [
             { 
               "class":
@@ -98,13 +98,13 @@
       }
     </div>
     <script>
-      var classDiagram = new CodeSmithy.UMLWebWidget.Diagram({ height: 350 })
+      var classDiagram = new CodeSmithyUMLWebWidget.Diagram({ height: 350 })
 
       var layout = {
-        "classboxpositions": {
-          "MyBaseClass": { "x": 14, "y": 1 },
-          "MyDerivedClass": { "x": 39, "y": 220 },
-          "MyContainedClass": { "x": 240, "y": 220 }
+        "elements": {
+          "MyBaseClass": { position: { "x": 14, "y": 1 } },
+          "MyDerivedClass": { position: { "x": 39, "y": 220 } },
+          "MyContainedClass": { position: { "x": 240, "y": 220 } }
         }
       }
 
