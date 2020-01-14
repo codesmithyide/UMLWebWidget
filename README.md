@@ -18,9 +18,10 @@ Also documentation is currently lacking and mostly limited to the samples availa
 
 ## Usage
 
-There are 2 bundles in the [dist](./dist) directory:
+There are 3 bundles in the [dist](./dist) directory:
 - codesmithy-umlwebwidget.js is the production bundle to display UML diagrams on a web page,
-- codesmithy-umlwebwidget.dev.js is the development version of the codesmithy-umlwebwidget.js bundle.
+- codesmithy-umlwebwidget.dev.js is the development version of the codesmithy-umlwebwidget.js bundle,
+- codesmithy-umlwebwidget.node.dev.js is targeted at Node.js and is used by the automated tests.
 
 ## Support
 
