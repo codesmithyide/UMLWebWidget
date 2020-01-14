@@ -3,8 +3,8 @@ const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
     target: 'node',
-    mode: 'production',
+    mode: 'development',
     output: {
-        filename: "codesmithy-umlwebwidget.node.js",
+        filename: "codesmithy-umlwebwidget.node.dev.js",
     }
 });
