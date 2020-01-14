@@ -4,6 +4,9 @@ The UMLWebWidget project provides a jQuery widget to display UML diagrams in a w
 
 ## Contents
 
+- [dist](./dist): bundles ready to be used,
+- [stylesheets](./stylesheets): default stylesheets that can be used with the bundles in the [dist](./dist) directory.
+
 ## Project Status
 
 This project is in its development phase.
@@ -14,6 +17,10 @@ creating diagrams is fairly cumbersome at the moment since there is no automatic
 Also documentation is currently lacking and mostly limited to the samples available in this repository.
 
 ## Usage
+
+There are 2 bundles in the [dist](./dist) directory:
+- codesmithy-umlwebwidget.js is the production bundle to display UML diagrams on a web page,
+- codesmithy-umlwebwidget.dev.js is the development version of the codesmithy-umlwebwidget.js bundle.
 
 ## Support
 
