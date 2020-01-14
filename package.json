@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "builddev": "webpack --config webpack.dev.js",
+    "buildnode": "webpack --config webpack.node.js",
     "builddoc": "jsdoc -r src",
     "test": "node test/index.js"
   },
