@@ -4,7 +4,7 @@
   "description": "A web widget to display UML diagrams",
   "main": "dist/codesmithy-umlwebwidget.js",
   "scripts": {
-    "build": "webpack --config webpack.config.js",
+    "build": "webpack --config webpack.prod.js",
     "builddoc": "jsdoc -r src",
     "test": "node test/index.js"
   },
