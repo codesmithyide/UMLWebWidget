@@ -5,7 +5,6 @@ module.exports = {
     output: {
         library: "CodeSmithyUMLWebWidget",
         libraryTarget: "umd",
-        filename: "codesmithy-umlwebwidget.js",
         path: path.resolve(__dirname, "dist")
     },
 }

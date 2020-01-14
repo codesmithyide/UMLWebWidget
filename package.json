@@ -5,6 +5,7 @@
   "main": "dist/codesmithy-umlwebwidget.js",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
+    "builddev": "webpack --config webpack.dev.js",
     "builddoc": "jsdoc -r src",
     "test": "node test/index.js"
   },
