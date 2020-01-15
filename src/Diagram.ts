@@ -21,6 +21,18 @@ import { Metrics } from "./Metrics.js"
   by the CodeSmithy UMLWebWidget.
 */
 class Diagram {
+    settings
+    log
+    metrics
+    diagramDescription
+    classboxes
+    classtemplates
+    lifelines
+    components
+    nodes
+    actors
+    usecases
+    messages
 
     constructor(settings) {
         this.settings = new Settings(settings)
