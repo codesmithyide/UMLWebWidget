@@ -1,7 +1,7 @@
 'use strict'
 
 import { DiagramElement } from "./DiagramElement.js"
-import { BallConnector } from "./BallConnector.js"
+import { BallConnector } from "./BallConnector.ts"
 import { SocketConnector } from "./SocketConnector.js"
 import { ConnectionPoint } from "./ConnectionPoint.js"
 
