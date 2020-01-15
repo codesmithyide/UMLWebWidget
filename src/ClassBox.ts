@@ -15,6 +15,13 @@ import { DrawingUtilities } from "./DrawingUtilities.js"
     class box.
 */
 class ClassBox extends DiagramElement {
+    shapeLayer
+    textLayer
+    classDescription
+    canMove
+    style
+    connectionPointsRectangle
+    connectionPoints
 
     constructor(svg, id, classDescription, canMove, style) {
         super(svg, "class", id)
