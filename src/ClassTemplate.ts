@@ -5,6 +5,12 @@ import { ConnectionPoint } from "./ConnectionPoint.js"
 import { DrawingUtilities } from "./DrawingUtilities.js"
 
 class ClassTemplate extends DiagramElement {
+    shapeLayer
+    textLayer
+    classTemplateDescription
+    style
+    connectionPointsRectangle
+    connectionPoints
 
     constructor(svg, id, classTemplateDescription, style) {
         super(svg, "classtemplate", id)
