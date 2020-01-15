@@ -9,6 +9,10 @@ import { ConnectionPoint } from "./ConnectionPoint.js"
   @extends DiagramElement
 */
 class Actor extends DiagramElement {
+    shapeLayer
+    textLayer
+    actorDescription
+    connectionPointsRectangle
 
     constructor(svg, id, actorDescription) {
         super(svg, "actor", id)
