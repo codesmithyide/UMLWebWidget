@@ -1,7 +1,7 @@
 'use strict'
 
 import { UMLWebWidgetError } from "./UMLWebWidgetError.js"
-import { Settings } from "./Settings.js"
+import { Settings } from "./Settings.ts"
 import { Style } from "./Style.js"
 import { Diagram } from "./Diagram.ts"
 import { ConnectionPoint } from "./ConnectionPoint.ts"

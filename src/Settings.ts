@@ -12,6 +12,12 @@
     diagram and set it back to false afterwards.
 */
 class Settings {
+    width
+    height
+    canMove
+    canResize
+    logLevel
+    debug
 
     /** 
       Creates a new Settings instance with each property
