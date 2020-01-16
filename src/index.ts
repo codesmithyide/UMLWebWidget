@@ -20,7 +20,7 @@ import { Node } from "./Node.js"
 import { Note } from "./Note.js"
 import { SVGLayer } from "./SVGLayer.js"
 import { SVGLayerSet } from "./SVGLayerSet.js"
-import { Log } from "./Log.js"
+import { Log } from "./Log.ts"
 import { Metrics } from "./Metrics.js"
 
 export {

@@ -13,7 +13,7 @@ import { Actor } from "./Actor.ts"
 import { UseCase } from "./UseCase.ts"
 import { Connector } from "./Connector.ts"
 import { SVGLayer } from "./SVGLayer.js"
-import { Log } from "./Log.js"
+import { Log } from "./Log.ts"
 import { Metrics } from "./Metrics.js"
 
 /**
