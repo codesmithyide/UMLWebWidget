@@ -14,7 +14,7 @@ import { UseCase } from "./UseCase.ts"
 import { Connector } from "./Connector.ts"
 import { SVGLayer } from "./SVGLayer.js"
 import { Log } from "./Log.ts"
-import { Metrics } from "./Metrics.js"
+import { Metrics } from "./Metrics.ts"
 
 /**
   This class is the entry point for all the functionality provided
