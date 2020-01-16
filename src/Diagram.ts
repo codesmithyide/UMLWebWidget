@@ -11,7 +11,7 @@ import { Lifeline } from "./Lifeline.js"
 import { Node } from "./Node.js"
 import { Actor } from "./Actor.ts"
 import { UseCase } from "./UseCase.ts"
-import { Connector } from "./Connector.js"
+import { Connector } from "./Connector.ts"
 import { SVGLayer } from "./SVGLayer.js"
 import { Log } from "./Log.js"
 import { Metrics } from "./Metrics.js"
@@ -160,7 +160,7 @@ class Diagram {
                 }
                 let connectionPoint1 = classbox1.createConnectionPoint(svg)
                 let connectionPoint2 = classbox2.createConnectionPoint(svg)
-                let newConnector = new Connector(svg, item.relationship.type, connectionPoint1, connectionPoint2)
+                let newConnector = new Connector(svg, item.relationship.type, connectionPoint1, connectionPoint2, null)
                 connectors.push(newConnector)
             } else if (item.messages) {
                 for (var j = 0; j < item.messages.length; j++) {
@@ -196,17 +196,17 @@ class Diagram {
                 let providerComponent = this.components.get(item.assemblyconnector.provider)
                 let connectionPoint1 = consumerComponent.createDependencyConnectionPoint(svg, item.assemblyconnector.interface)
                 let connectionPoint2 = providerComponent.createInterfaceConnectionPoint(svg, item.assemblyconnector.interface)
-                let newConnector = new Connector(svg, "assemblyconnector", connectionPoint1, connectionPoint2)
+                let newConnector = new Connector(svg, "assemblyconnector", connectionPoint1, connectionPoint2, null)
                 assemblyconnectors.push(newConnector)
             } else if (item.association) {
                 let connectionPoint1 = this.actors.get(item.association.actor).createConnectionPoint(svg)
                 let connectionPoint2 = this.usecases.get(item.association.usecase).createConnectionPoint(svg)
-                let newConnector = new Connector(svg, "usecaseassociation", connectionPoint1, connectionPoint2)
+                let newConnector = new Connector(svg, "usecaseassociation", connectionPoint1, connectionPoint2, null)
                 connectors.push(newConnector)
             } else if (item.communicationpath) {
                 let connectionPoint1 = this.nodes.get(item.communicationpath.firstnode).createConnectionPoint(svg)
                 let connectionPoint2 = this.nodes.get(item.communicationpath.secondnode).createConnectionPoint(svg)
-                let newConnector = new Connector(svg, "communicationpath", connectionPoint1, connectionPoint2)
+                let newConnector = new Connector(svg, "communicationpath", connectionPoint1, connectionPoint2, null)
                 connectors.push(newConnector)
             }
         }

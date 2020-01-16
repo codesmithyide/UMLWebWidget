@@ -10,9 +10,15 @@ import { Label } from "./Label.ts"
   @extends DiagramElement
 */
 class Connector extends DiagramElement {
+    shapeLayer
+    textLayer
+    type
+    connectionPoint1
+    connectionPoint2
+    label
 
     constructor(svg, type, connectionPoint1, connectionPoint2, text) {
-        super(svg)
+        super(svg, null, null)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.type = type
