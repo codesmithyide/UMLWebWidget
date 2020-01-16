@@ -8,12 +8,15 @@ import { DiagramElement } from "./DiagramElement.ts"
   @extends DiagramElement
 */
 class Note extends DiagramElement {
+    shapeLayer
+    textLayer
+    noteDescription
+    style
 
     constructor(svg, id, noteDescription, style) {
-        super(svg)
+        super(svg, null, null)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
-        this.id = id
         this.noteDescription = noteDescription
         this.style = style
     }
