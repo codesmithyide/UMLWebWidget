@@ -1,7 +1,7 @@
 'use strict'
 
 import { DiagramElement } from "./DiagramElement.ts"
-import { ConnectionPoint } from "./ConnectionPoint.js"
+import { ConnectionPoint } from "./ConnectionPoint.ts"
 import { DrawingUtilities } from "./DrawingUtilities.js"
 
 class ClassTemplate extends DiagramElement {

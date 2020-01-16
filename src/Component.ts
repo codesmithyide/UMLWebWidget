@@ -3,7 +3,7 @@
 import { DiagramElement } from "./DiagramElement.ts"
 import { BallConnector } from "./BallConnector.ts"
 import { SocketConnector } from "./SocketConnector.js"
-import { ConnectionPoint } from "./ConnectionPoint.js"
+import { ConnectionPoint } from "./ConnectionPoint.ts"
 
 class Stereotype {
     svgParentGroup

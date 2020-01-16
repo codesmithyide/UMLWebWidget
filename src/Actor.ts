@@ -1,7 +1,7 @@
 'use strict'
 
 import { DiagramElement } from "./DiagramElement.ts"
-import { ConnectionPoint } from "./ConnectionPoint.js"
+import { ConnectionPoint } from "./ConnectionPoint.ts"
 
 /**
   An actor on a use case diagram.
