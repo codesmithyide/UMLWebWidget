@@ -1,7 +1,7 @@
 'use strict'
 
 import { DiagramElement } from "./DiagramElement.ts"
-import { ConnectionPointPosition } from "./ConnectionPointPosition.js"
+import { ConnectionPointPosition } from "./ConnectionPointPosition.ts"
 
 /**
   <p>

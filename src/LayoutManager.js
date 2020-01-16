@@ -1,6 +1,6 @@
 'use strict'
 
-import { ConnectionPointPosition } from "./ConnectionPointPosition.js"
+import { ConnectionPointPosition } from "./ConnectionPointPosition.ts"
 
 /** Sets the position of the elements on the diagram. */
 class LayoutManager {

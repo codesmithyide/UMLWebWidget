@@ -8,6 +8,7 @@
   element.
 */
 class ConnectionPointPosition {
+    type
 
     constructor(type) {
         switch (type) {
