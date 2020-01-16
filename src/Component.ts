@@ -2,7 +2,7 @@
 
 import { DiagramElement } from "./DiagramElement.ts"
 import { BallConnector } from "./BallConnector.ts"
-import { SocketConnector } from "./SocketConnector.js"
+import { SocketConnector } from "./SocketConnector.ts"
 import { ConnectionPoint } from "./ConnectionPoint.ts"
 
 class Stereotype {

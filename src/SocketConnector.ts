@@ -9,6 +9,17 @@ var textDef = Symbol()
   component.
 */
 class SocketConnector {
+    svg
+    layers
+    shapeLayer
+    textLayer
+    uptodate
+    x
+    y
+    component
+    name
+    textGroup
+    width
 
     constructor(svg, component, name) {
         this.svg = svg
