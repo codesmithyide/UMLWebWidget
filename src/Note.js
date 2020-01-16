@@ -1,6 +1,6 @@
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.js"
+import { DiagramElement } from "./DiagramElement.ts"
 
 /**
   A note on a UML diagram.

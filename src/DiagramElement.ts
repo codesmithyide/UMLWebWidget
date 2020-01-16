@@ -13,6 +13,10 @@ var position = Symbol()
     to be updated because of changes to the element.
 */
 class DiagramElement {
+    type
+    id
+    layers
+    uptodate
 
     /**
       Creates a new DiagramElement instance.

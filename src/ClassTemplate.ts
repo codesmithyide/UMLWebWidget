@@ -1,6 +1,6 @@
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.js"
+import { DiagramElement } from "./DiagramElement.ts"
 import { ConnectionPoint } from "./ConnectionPoint.js"
 import { DrawingUtilities } from "./DrawingUtilities.js"
 
