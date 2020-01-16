@@ -6,6 +6,11 @@ import { SocketConnector } from "./SocketConnector.js"
 import { ConnectionPoint } from "./ConnectionPoint.js"
 
 class Stereotype {
+    svgParentGroup
+    x
+    y
+    width
+    height
 
     constructor(svgParentGroup) {
         this.svgParentGroup = svgParentGroup
@@ -35,6 +40,13 @@ class Stereotype {
   @extends DiagramElement
 */
 class Component extends DiagramElement {
+    shapeLayer
+    textLayer
+    svg
+    componentDescription
+    style
+    ballConnectors
+    socketConnectors
 
     constructor(svg, id, componentDescription, style) {
         super(svg, "component", id)
