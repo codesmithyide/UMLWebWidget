@@ -4,6 +4,7 @@ import { ConnectionPointPosition } from "./ConnectionPointPosition.ts"
 
 /** Sets the position of the elements on the diagram. */
 class LayoutManager {
+    layout
 
     constructor(layout) {
         this.layout = layout
