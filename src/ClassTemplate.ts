@@ -2,7 +2,7 @@
 
 import { DiagramElement } from "./DiagramElement.ts"
 import { ConnectionPoint } from "./ConnectionPoint.ts"
-import { DrawingUtilities } from "./DrawingUtilities.js"
+import { DrawingUtilities } from "./DrawingUtilities.ts"
 
 class ClassTemplate extends DiagramElement {
     shapeLayer

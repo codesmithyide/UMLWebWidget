@@ -3,7 +3,7 @@
 import { DiagramElement } from "./DiagramElement.ts"
 import { SVGLayerSet } from "./SVGLayerSet.js"
 import { ConnectionPoint } from "./ConnectionPoint.ts"
-import { DrawingUtilities } from "./DrawingUtilities.js"
+import { DrawingUtilities } from "./DrawingUtilities.ts"
 
 /** 
   A class box. 
