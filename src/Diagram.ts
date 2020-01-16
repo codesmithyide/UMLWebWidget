@@ -2,7 +2,7 @@
 
 import { UMLWebWidgetError } from "./UMLWebWidgetError.js"
 import { Settings } from "./Settings.ts"
-import { Style } from "./Style.js"
+import { Style } from "./Style.ts"
 import { LayoutManager } from "./LayoutManager.ts"
 import { ClassBox } from "./ClassBox.ts"
 import { ClassTemplate } from "./ClassTemplate.ts"

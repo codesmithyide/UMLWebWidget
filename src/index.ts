@@ -2,7 +2,7 @@
 
 import { UMLWebWidgetError } from "./UMLWebWidgetError.js"
 import { Settings } from "./Settings.ts"
-import { Style } from "./Style.js"
+import { Style } from "./Style.ts"
 import { Diagram } from "./Diagram.ts"
 import { ConnectionPoint } from "./ConnectionPoint.ts"
 import { ConnectionPointPosition } from "./ConnectionPointPosition.ts"

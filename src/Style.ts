@@ -2,6 +2,7 @@
 
 /** Style settings. */
 export class Style {
+    style
 
     constructor() {
         this.style = {
