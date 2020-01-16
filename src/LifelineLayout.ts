@@ -6,6 +6,7 @@
   sent.
 */
 class LifelineLayout {
+    depthChanges
 
     /**
       Creates a new LifelineLayout instance.

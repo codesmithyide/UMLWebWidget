@@ -3,7 +3,7 @@
 import { DiagramElement } from "./DiagramElement.ts"
 import { ConnectionPoint } from "./ConnectionPoint.ts"
 import { SVGLayer } from "./SVGLayer.js"
-import { LifelineLayout } from "./LifelineLayout.js"
+import { LifelineLayout } from "./LifelineLayout.ts"
 
 /**
   A lifeline on a sequence diagram.
