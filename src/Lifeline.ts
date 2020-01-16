@@ -11,6 +11,17 @@ import { LifelineLayout } from "./LifelineLayout.js"
   @extends DiagramElement
 */
 class Lifeline extends DiagramElement {
+    shapeLayer
+    textLayer
+    svg
+    lifelineDescription
+    style
+    log
+    lineTopPosition
+    boxHeight
+    connectionPoints
+    adjustmentNeeded
+    lifelineLayout
 
     /**
       <p>Creates a new Lifeline instance.</p>
