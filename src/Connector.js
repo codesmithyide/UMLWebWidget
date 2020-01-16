@@ -2,7 +2,7 @@
 
 import { DiagramElement } from "./DiagramElement.ts"
 import { ConnectionPointPosition } from "./ConnectionPointPosition.js"
-import { Label } from "./Label.js"
+import { Label } from "./Label.ts"
 
 /**
   Represents a connector between elements.

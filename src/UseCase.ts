@@ -9,6 +9,10 @@ import { ConnectionPoint } from "./ConnectionPoint.js"
   @extends DiagramElement
 */
 class UseCase extends DiagramElement {
+    shapeLayer
+    textLayer
+    useCaseDescription
+    connectionPointsRectangle
 
     constructor(svg, id, useCaseDescription) {
         super(svg, "usecase", id)

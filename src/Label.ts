@@ -1,6 +1,7 @@
 'use strict'
 
 class Label {
+    text
 
     constructor(text) {
         this.text = text
