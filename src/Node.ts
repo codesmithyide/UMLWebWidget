@@ -1,7 +1,8 @@
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.js"
-import { ConnectionPoint } from "./ConnectionPoint.js"
+import { DiagramElement } from "./DiagramElement.ts"
+import { ConnectionPoint } from "./ConnectionPoint.ts"
+import { Diagram } from "./Diagram.ts"
 
 /**
   A node on a deployment diagram.
@@ -9,6 +10,11 @@ import { ConnectionPoint } from "./ConnectionPoint.js"
   @extends DiagramElement
 */
 class Node extends DiagramElement {
+    shapeLayer
+    textLayer
+    nodeDescription
+    style
+    connectionPointsRectangle
 
     constructor(svg, id, nodeDescription, style) {
         super(svg, "node", id)
@@ -46,6 +52,12 @@ class Node extends DiagramElement {
 
         if (currentDimensions.width > nodeNameDef.bbox().width) {
             nodeNameDef.dx((currentDimensions.width - nodeNameDef.bbox().width)/2)
+        }
+
+        // A node can contain a sub-diagram inside it
+        if ((this.nodeDescription.elements != null) && (this.nodeDescription.elements.length > 0)) {
+            let diagram = new Diagram(null)
+            diagram.createFromJSON(this.layers.svg, this.nodeDescription, null)
         }
 
         currentDimensions.width += (this.style.getLeftMargin("node") + this.style.getRightMargin("node"))
