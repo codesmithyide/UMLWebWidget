@@ -8,7 +8,7 @@
     "build-dev": "webpack --config webpack.dev.js",
     "build-node-dev": "webpack --config webpack.node.dev.js",
     "build-doc": "jsdoc -r src",
-    "test": "node test/index.js"
+    "test": "node test/index.ts"
   },
   "repository": {
     "type": "git",
