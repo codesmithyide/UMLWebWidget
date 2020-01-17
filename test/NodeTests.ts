@@ -2,7 +2,7 @@
 
 var window = require("svgdom")
 var SVG = require("svg.js")(window)
-var UMLWebWidget = require("../dist/codesmithy-umlwebwidget.js")
+var UMLWebWidget = require("../dist/codesmithy-umlwebwidget.node.dev.js")
 var tf = require("ishiko-test-framework")
 var TestUtils = require("./TestUtils.js")
 
@@ -52,7 +52,12 @@ function NodeGetLayersTest2(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
     let nodeDescription = {
-        "name": "WebServer"
+        "name": "WebServer",
+        "elements": [{
+            "component": {
+                "name": "ControlPanel"
+            }
+        }]
     }
     let style = new UMLWebWidget.Style()
     let node = new UMLWebWidget.Node(svg, nodeDescription.name, nodeDescription, style)
