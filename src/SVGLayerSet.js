@@ -1,6 +1,6 @@
 'use strict'
 
-import { SVGLayer } from "./SVGLayer.js"
+import { SVGLayer } from "./SVGLayer.ts"
 
 /**
   <p>

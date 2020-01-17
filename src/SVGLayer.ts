@@ -16,6 +16,8 @@
   </p>   
 */
 class SVGLayer {
+    svg
+    defs
 
     /**
       Creates a new SVGLayer instance.

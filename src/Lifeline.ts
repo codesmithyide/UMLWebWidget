@@ -2,7 +2,7 @@
 
 import { DiagramElement } from "./DiagramElement.ts"
 import { ConnectionPoint } from "./ConnectionPoint.ts"
-import { SVGLayer } from "./SVGLayer.js"
+import { SVGLayer } from "./SVGLayer.ts"
 import { LifelineLayout } from "./LifelineLayout.ts"
 
 /**
