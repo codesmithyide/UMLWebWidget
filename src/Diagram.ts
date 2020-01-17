@@ -12,7 +12,7 @@ import { Node } from "./Node.ts"
 import { Actor } from "./Actor.ts"
 import { UseCase } from "./UseCase.ts"
 import { Connector } from "./Connector.ts"
-import { SVGLayer } from "./SVGLayer.js"
+import { SVGLayer } from "./SVGLayer.ts"
 import { Log } from "./Log.ts"
 import { Metrics } from "./Metrics.ts"
 

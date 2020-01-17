@@ -19,7 +19,7 @@ import { Component } from "./Component.ts"
 import { Node } from "./Node.ts"
 import { Note } from "./Note.ts"
 import { SVGLayer } from "./SVGLayer.ts"
-import { SVGLayerSet } from "./SVGLayerSet.js"
+import { SVGLayerSet } from "./SVGLayerSet.ts"
 import { Log } from "./Log.ts"
 import { Metrics } from "./Metrics.ts"
 

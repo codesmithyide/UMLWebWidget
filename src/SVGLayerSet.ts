@@ -8,6 +8,8 @@ import { SVGLayer } from "./SVGLayer.ts"
   </p>
 */
 class SVGLayerSet {
+    svg
+    layers
 
     /**
       Creates a new SVGLayerSet instance.

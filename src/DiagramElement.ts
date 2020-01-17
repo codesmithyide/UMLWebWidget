@@ -1,6 +1,6 @@
 'use strict'
 
-import { SVGLayerSet } from "./SVGLayerSet.js"
+import { SVGLayerSet } from "./SVGLayerSet.ts"
 
 var position = Symbol()
 
