@@ -4,7 +4,7 @@ var window = require("svgdom")
 var SVG = require("svg.js")(window)
 var UMLWebWidget = require("../dist/codesmithy-umlwebwidget.node.dev.js")
 var tf = require("ishiko-test-framework")
-var TestUtils = require("./TestUtils.js")
+var TestUtils = require("./TestUtils.ts")
 
 module.exports = function(theTestHarness) {
     let useCaseSequence = theTestHarness.appendTestSequence("UseCase tests")
