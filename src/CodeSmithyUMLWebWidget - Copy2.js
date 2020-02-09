@@ -1,113 +1,9 @@
-// Global namespace for CodeSmithy applications
-var CodeSmithy = CodeSmithy || { }
+function Diagram(settings) {
 
-// The namespace for the UMLWebWidget application
-CodeSmithy.UMLWebWidget = { }
 
-;(function(ns) {
 
-    /////
-    // Start of the CodeSmithy.UMLWebWidget.Diagram class definition
-    //
-    // This class is the entry point for all the functionality provided
-    // by the CodeSmithy UMLWebWidget.
-    ns.Diagram = function(settings) {
 
-        this.Settings = function(settings) {
 
-            this.width = 600
-            this.height = 200
-            this.canMove = false
-            this.canResive = false
-
-            if (settings) {
-                if (settings.width) {
-                    this.width = settings.width
-                }
-                if (settings.height) {
-                    this.height = settings.height
-                }
-                if (settings.interactive) {
-                    if (settings.interactive.canMove) {
-                        this.canMove = settings.interactive.canMove
-                    }
-                }
-            }
-        }
-
-        this.settings = new this.Settings(settings)
-
-        // The description of the UML diagram in JSON
-        // format. This will then be parsed to create
-        // the graphical form.
-        this.diagramDescription = { }
-
-        // The list of all UML class boxes present on the
-        // diagram
-        this.classboxes = { }
-
-        // Create a diagram from a div element in the HTML document.
-        // The div element must contain a JSON object with the UML
-        // diagram information. The contents of the div will be replaced
-        // by the diagram.
-        // - divId: this is the id of the div element to use, it should be the id
-        //   without any '#' prefix.
-        this.createFromDiv = function(divId, layout) {
-            this.diagramDescription = JSON.parse($('#' + divId).text())
-            $('#' + divId).empty()
-            var svg = SVG(divId).size(this.settings.width, this.settings.height)
-            var style = { 
-                "classbox": {
-                    "margin-left": 12,
-                    "margin-right": 12,
-                    "margin-top": 9,
-                    "margin-bottom": 9
-                }
-            }
-            if (this.diagramDescription.classdiagram) {
-                this.drawClassDiagram(svg, this.diagramDescription.classdiagram, style, layout)
-            }
-        }
-
-        this.drawClassDiagram = function(svg, classDiagram, style, layout) {
-            if (layout == null) {
-                layout = { }
-            }
-            if (layout.positions == null) {
-                layout.positions = { }
-            }
-
-            for (var i = 0; i < classDiagram.length; i++) {
-                 let item = classDiagram[i]
-                 if (item.class) {
-                     this.classboxes[item.class.name] = new ns.ClassBox(svg, item.class, this.settings.canMove, style.classbox, layout)
-        this.classboxes[item.class.name].draw(svg)
-                 } else if (item.relationship) {
-                     let classbox1
-                     let classbox2
-                     if (item.relationship.type == "inheritance") {
-                         classbox1 = this.classboxes[item.relationship.baseclass]
-                         classbox2 = this.classboxes[item.relationship.derivedclass] 
-                     } else if (item.relationship.type == "composition") {
-                         classbox1 = this.classboxes[item.relationship.containingclass]
-                         classbox2 = this.classboxes[item.relationship.containedclass]
-                     }
-                     let newConnector = new ns.Connector(svg, item.relationship.type, classbox1, classbox2)
-                     classbox1.connectors.push(newConnector)
-                     classbox2.connectors.push(newConnector)
-                     newConnector.draw()
-                 }
-             }
-        }
-
-    }
-    //
-    // End of the CodeSmithy.UMLWebWidget.Diagram class definition
-    /////
-
-    /////
-    // Start of the CodeSmithy.UMLWebWidget.ClassBox class definition
-    //
     ns.ClassBox = function(svg, classDescription, canMove, classboxStyle, layout) {
         
         this.def = createDef(this, svg.defs(), classDescription, canMove, classboxStyle, layout)
@@ -275,37 +171,34 @@ CodeSmithy.UMLWebWidget = { }
         }
 
     }
-    //
-    // End of the CodeSmithy.UMLWebWidget.ClassBox class definition
-    /////
+    
+function Connector(svg, type, classbox1, classbox2, layout) {
 
-    /////
-    // Start of the CodeSmithy.UMLWebWidget.Connector class definition
-    //
-    ns.Connector = function(svg, type, classbox1, classbox2) {
+    this.type = type
+    this.classbox1 = classbox1
+    this.classbox2 = classbox2
+    this.layout = layout
+    this.svg = svg.group()
+    if (this.type == "inheritance") {
+        this.svg.addClass("UMLInheritanceRelationship")
+    } else if (this.type == "composition") {
+        this.svg.addClass("UMLCompositionRelationship")
+    } else if (this.type == "aggregation") {
+        this.svg.addClass("UMLAggregationRelationship")
+    }
 
-        this.type = type
-        this.classbox1 = classbox1
-        this.classbox2 = classbox2
-        this.svg = svg.group()
+    this.draw = function() {
+        this.svg.clear()
         if (this.type == "inheritance") {
-            this.svg.addClass("UMLInheritanceRelationship")
-        } else if (this.type == "composition") {
-            this.svg.addClass("UMLCompositionRelationship")
+            drawInheritanceRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
+        } else if ((this.type == "composition") || (this.type == "aggregation")) {
+            drawCompositionOrAggregationRelationship(this.svg, this.classbox1, this.classbox2, this.layout)
         }
+    }
 
-        this.draw = function() {
-            this.svg.clear()
-            if (this.type == "inheritance") {
-                drawInheritanceRelationship(this.svg, this.classbox1, this.classbox2)
-            } else if (this.type == "composition") {
-                drawCompositionRelationship(this.svg, this.classbox1, this.classbox2)
-            }
-        }
-
-        this.hide = function() {
-            this.svg.hide()
-        }
+    this.hide = function() {
+        this.svg.hide()
+    }
 
         // Draws an inheritance connector between two classes
         function drawInheritanceRelationship(svg, baseclassbox, derivedclassbox) {
