@@ -1,13 +1,77 @@
-function Diagram(settings) {
+'use strict'
 
-    // The description of the UML diagram in JSON
-    // format. This will then be parsed to create
-    // the graphical form.
-    this.diagramDescription = { }
+import { UMLWebWidgetError } from "./UMLWebWidgetError.js"
+import { Settings } from "./Settings.ts"
+import { Style } from "./Style.ts"
+import { LayoutManager } from "./LayoutManager.ts"
+import { ClassBox } from "./ClassBox.ts"
+import { ClassTemplate } from "./ClassTemplate.ts"
+import { Component } from "./Component.ts"
+import { Lifeline } from "./Lifeline.ts"
+import { Node } from "./Node.ts"
+import { Actor } from "./Actor.ts"
+import { UseCase } from "./UseCase.ts"
+import { Connector } from "./Connector.ts"
+import { SVGLayer } from "./SVGLayer.ts"
+import { Log } from "./Log.ts"
+import { Metrics } from "./Metrics.ts"
 
-    // The list of all UML class boxes present on the
-    // diagram
-    this.classboxes = { }
+/**
+  This class is the entry point for all the functionality provided
+  by the CodeSmithy UMLWebWidget.
+*/
+class Diagram {
+    settings
+    log
+    metrics
+    diagramDescription
+    classboxes
+    classtemplates
+    lifelines
+    components
+    nodes
+    actors
+    usecases
+    messages
+
+    constructor(settings) {
+        this.settings = new Settings(settings)
+        this.log = new Log(this.settings.logLevel)
+        this.metrics = new Metrics()
+        
+        // The description of the UML diagram in JSON
+        // format. This will then be parsed to create
+        // the graphical form.
+        this.diagramDescription = { }
+
+        // The list of all UML class boxes present on the
+        // diagram
+        this.classboxes = new Map()
+
+        // The list of all UML class templates present on the
+        // diagram
+        this.classtemplates = new Map()
+
+        // The list of all UML lifelines present on the
+        // diagram
+        this.lifelines = new Map()
+
+        // The list of all UML components present on the
+        // diagram
+        this.components = new Map()
+
+        this.nodes = new Map()
+
+        // The list of all UML actors present on the
+        // diagram
+        this.actors = new Map()
+
+        // The list of all UML use cases present on the
+        // diagram
+        this.usecases = new Map()
+
+        this.messages = [ ]
+    }
 
     // Create a diagram from a div element in the HTML document.
     // The div element must contain a JSON object with the UML
@@ -15,8 +79,8 @@ function Diagram(settings) {
     // by the diagram.
     // - divId: this is the id of the div element to use, it should be the id
     //   without any '#' prefix.
-    this.createFromDiv = function(divId, layout) {
-        this.diagramDescription = JSON.parse($('#' + divId).text())
+    createFromDiv(divId, layout) {
+        let jsonDiagramDescription = JSON.parse($('#' + divId).text())
         $('#' + divId).empty()
         var svg = SVG(divId).size(this.settings.width, this.settings.height)
         var style = { 
@@ -72,30 +136,46 @@ function Diagram(settings) {
 
 }
     
-function ClassBox(svg, classDescription, canMove, classboxStyle, layout) {
-        
-    this.classDescription = classDescription
+class ClassBox extends DiagramElement {
+    shapeLayer
+    textLayer
+    classDescription
+    canMove
+    style
+    connectionPointsRectangle
+    connectionPoints
+
+    constructor(svg, id, classDescription, canMove, style) {
+        super(svg, "class", id)
+        this.shapeLayer = this.layers.createLayer("shape")
+        this.textLayer = this.layers.createLayer("text")
+        this.classDescription = classDescription
+        this.canMove = canMove
+        this.style = style
+        this.connectionPointsRectangle = null
     this.def = createDef(this, svg.defs(), classDescription, canMove, classboxStyle, layout)
     this.svg = svg.use(this.def)
 
     // List of connectors that are connected to this class box
     this.connectors = [ ]
         
-    this.fire = function(evt) {
+    fire(evt) {
         if (evt == "positionchanged") {
-            for (let i = 0; i < this.connectors.length; i++) {
-                this.connectors[i].draw()        
+            for (let i = 0; i < this.connectionPoints.length; i++) {
+                this.connectionPoints[i].draw()        
             }
         }
     }
 
-    function createDef(self, defs, classInfo, canMove, style, layout) {
-        var classGroup = defs.group().addClass("UMLClass")
-  
-        let currentDimensions = { 
-            width: 0,
-            height: 0
-        }
+}
+
+function createDef(self, classInfo, canMove, style) {
+    var classGroup = self.shapeLayer.group().addClass("UMLClassBox")
+
+    let currentDimensions = { 
+        width: 0,
+        height: 0
+    }
   //  if (interactive) {
     //  classGroup.click(function() {
       //  self.toggle(this)
@@ -136,15 +216,15 @@ function ClassBox(svg, classDescription, canMove, classboxStyle, layout) {
             classGroup.move(layout.classboxpositions[classDescription.name].x, layout.classboxpositions[classDescription.name].y)
         }
 
-        if (canMove) {
-            classGroup.draggable(true)
-            classGroup.on('dragmove.namespace', function(evt) {
-                self.fire('positionchanged')
-            })
-            classGroup.on('dragend.namespace', function(evt) {
-                self.fire('positionchanged')
-            })
-        }
+    if (canMove) {
+        classGroup.draggable(true)
+        classGroup.on('dragmove.namespace', function(evt) {
+            self.fire('positionchanged')
+        })
+        classGroup.on('dragend.namespace', function(evt) {
+            self.fire('positionchanged')
+        })
+    }
 
 /* 
         this.sizingState = 0
