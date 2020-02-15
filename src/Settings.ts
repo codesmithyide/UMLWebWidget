@@ -12,10 +12,10 @@
     diagram and set it back to false afterwards.
 */
 class Settings {
-    width
-    height
-    canMove
-    canResize
+    width: number
+    height: number
+    canMove: boolean
+    canResize: boolean
     logLevel
     debug
 
