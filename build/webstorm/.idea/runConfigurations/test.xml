@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="test" type="js.build_tools.npm">
+    <package-json value="$PROJECT_DIR$/../../package.json" />
+    <command value="test" />
+    <node-interpreter value="project" />
+    <envs />
+    <method v="2">
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="build-node-dev" run_configuration_type="js.build_tools.npm" />
+    </method>
+  </configuration>
+</component>
