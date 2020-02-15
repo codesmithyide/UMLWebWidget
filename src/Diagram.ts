@@ -21,18 +21,18 @@ import { Metrics } from "./Metrics.ts"
   by the CodeSmithy UMLWebWidget.
 */
 class Diagram {
-    settings
+    settings: Settings
     log
     metrics
     diagramDescription
-    classboxes
-    classtemplates
-    lifelines
-    components
-    nodes
-    actors
-    usecases
-    messages
+    classboxes: Map<string, ClassBox>
+    classtemplates: Map<string, ClassTemplate>
+    lifelines: Map<string, Lifeline>
+    components: Map<string, Component>
+    nodes: Map<string, Node>
+    actors: Map<string, Actor>
+    usecases: Map<string, UseCase>
+    messages: Connector[]
 
     constructor(settings) {
         this.settings = new Settings(settings)
