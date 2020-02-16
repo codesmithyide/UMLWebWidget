@@ -87,7 +87,7 @@ class DiagramElement {
     }
 
     /**
-       Implements the getConnectionPointsRectangle method.
+      Implements the getConnectionPointsRectangle method.
 
       @virtual
     */
