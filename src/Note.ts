@@ -1,6 +1,6 @@
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.ts"
+import { DiagramElement } from "./DiagramElement"
 
 /**
   A note on a UML diagram.

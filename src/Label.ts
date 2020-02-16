@@ -1,13 +1,13 @@
 'use strict'
 
 class Label {
-    text
+    text: string
 
-    constructor(text) {
+    constructor(text: string) {
         this.text = text
     }
 
-    empty() {
+    empty(): boolean {
         return ((this.text == null) || (this.text == ""))
     }
 

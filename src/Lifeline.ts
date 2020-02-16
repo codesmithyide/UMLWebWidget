@@ -1,9 +1,9 @@
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.ts"
-import { ConnectionPoint } from "./ConnectionPoint.ts"
-import { SVGLayer } from "./SVGLayer.ts"
-import { LifelineLayout } from "./LifelineLayout.ts"
+import { DiagramElement } from "./DiagramElement"
+import { ConnectionPoint } from "./ConnectionPoint"
+import { SVGLayer } from "./SVGLayer"
+import { LifelineLayout } from "./LifelineLayout"
 
 /**
   A lifeline on a sequence diagram.
@@ -11,8 +11,8 @@ import { LifelineLayout } from "./LifelineLayout.ts"
   @extends DiagramElement
 */
 class Lifeline extends DiagramElement {
-    shapeLayer
-    textLayer
+    shapeLayer: SVGLayer
+    textLayer: SVGLayer
     svg
     lifelineDescription
     style

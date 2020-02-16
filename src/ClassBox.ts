@@ -1,9 +1,10 @@
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.ts"
-import { SVGLayerSet } from "./SVGLayerSet.js"
-import { ConnectionPoint } from "./ConnectionPoint.ts"
-import { DrawingUtilities } from "./DrawingUtilities.ts"
+import { DiagramElement } from "./DiagramElement"
+import { SVGLayer } from "./SVGLayer"
+import { Style } from "./Style"
+import { ConnectionPoint } from "./ConnectionPoint"
+import { DrawingUtilities } from "./DrawingUtilities"
 
 /** 
   A class box. 
@@ -15,15 +16,15 @@ import { DrawingUtilities } from "./DrawingUtilities.ts"
     class box.
 */
 class ClassBox extends DiagramElement {
-    shapeLayer
-    textLayer
+    shapeLayer: SVGLayer
+    textLayer: SVGLayer
     classDescription
-    canMove
-    style
+    canMove: boolean
+    style: Style
     connectionPointsRectangle
     connectionPoints
 
-    constructor(svg, id, classDescription, canMove, style) {
+    constructor(svg, id: string, classDescription, canMove: boolean, style: Style) {
         super(svg, "class", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")

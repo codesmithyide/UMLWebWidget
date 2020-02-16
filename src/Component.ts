@@ -1,16 +1,17 @@
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.ts"
-import { BallConnector } from "./BallConnector.ts"
-import { SocketConnector } from "./SocketConnector.ts"
-import { ConnectionPoint } from "./ConnectionPoint.ts"
+import { DiagramElement } from "./DiagramElement"
+import { SVGLayer} from "./SVGLayer"
+import { BallConnector } from "./BallConnector"
+import { SocketConnector } from "./SocketConnector"
+import { ConnectionPoint } from "./ConnectionPoint"
 
 class Stereotype {
     svgParentGroup
-    x
-    y
-    width
-    height
+    x: number
+    y: number
+    width: number
+    height: number
 
     constructor(svgParentGroup) {
         this.svgParentGroup = svgParentGroup
@@ -20,7 +21,7 @@ class Stereotype {
         this.height = 20
     }
 
-    move(x, y) {
+    move(x: number, y: number) {
         this.x = x
         this.y = y
     }
@@ -40,7 +41,7 @@ class Stereotype {
   @extends DiagramElement
 */
 class Component extends DiagramElement {
-    shapeLayer
+    shapeLayer: SVGLayer
     textLayer
     svg
     componentDescription

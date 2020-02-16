@@ -1,8 +1,9 @@
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.ts"
-import { ConnectionPointPosition } from "./ConnectionPointPosition.ts"
-import { Label } from "./Label.ts"
+import { DiagramElement } from "./DiagramElement"
+import { SVGLayer } from "./SVGLayer"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
+import { Label } from "./Label"
 
 /**
   Represents a connector between elements.
@@ -10,12 +11,12 @@ import { Label } from "./Label.ts"
   @extends DiagramElement
 */
 class Connector extends DiagramElement {
-    shapeLayer
-    textLayer
-    type
+    shapeLayer: SVGLayer
+    textLayer: SVGLayer
+    type: string
     connectionPoint1
     connectionPoint2
-    label
+    label: Label
 
     constructor(svg, type, connectionPoint1, connectionPoint2, text) {
         super(svg, null, null)

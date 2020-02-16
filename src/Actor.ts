@@ -1,7 +1,8 @@
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.ts"
-import { ConnectionPoint } from "./ConnectionPoint.ts"
+import { DiagramElement } from "./DiagramElement"
+import { SVGLayer } from "./SVGLayer"
+import { ConnectionPoint } from "./ConnectionPoint"
 
 /**
   An actor on a use case diagram.
@@ -9,12 +10,12 @@ import { ConnectionPoint } from "./ConnectionPoint.ts"
   @extends DiagramElement
 */
 class Actor extends DiagramElement {
-    shapeLayer
-    textLayer
+    shapeLayer: SVGLayer
+    textLayer: SVGLayer
     actorDescription
     connectionPointsRectangle
 
-    constructor(svg, id, actorDescription) {
+    constructor(svg, id: string, actorDescription) {
         super(svg, "actor", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
