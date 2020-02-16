@@ -1,6 +1,8 @@
 'use strict'
 
 import { DiagramElement } from "./DiagramElement"
+import { SVGLayer } from "./SVGLayer"
+import { Style } from "./Style"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { Diagram } from "./Diagram"
 
@@ -10,13 +12,13 @@ import { Diagram } from "./Diagram"
   @extends DiagramElement
 */
 class Node extends DiagramElement {
-    shapeLayer
-    textLayer
+    shapeLayer: SVGLayer
+    textLayer: SVGLayer
     nodeDescription
-    style
+    style: Style
     connectionPointsRectangle
 
-    constructor(svg, id, nodeDescription, style) {
+    constructor(svg, id: string, nodeDescription, style: Style) {
         super(svg, "node", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")

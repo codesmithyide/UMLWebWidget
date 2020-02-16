@@ -10,18 +10,18 @@ var textDef = Symbol()
 */
 class SocketConnector {
     svg
-    layers
+    layers: SVGLayerSet
     shapeLayer
     textLayer
-    uptodate
+    uptodate: boolean
     x: number
     y: number
     component
-    name
+    name: string
     textGroup
     width: number
 
-    constructor(svg, component, name) {
+    constructor(svg, component, name: string) {
         this.svg = svg
         this.layers = new SVGLayerSet(svg)
         this.shapeLayer = this.layers.createLayer("shape")

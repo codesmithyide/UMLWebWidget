@@ -5,7 +5,7 @@
   for debugging only.
 */
 class Log {
-    level
+    level: number
 
     constructor(level) {
         switch (level) {

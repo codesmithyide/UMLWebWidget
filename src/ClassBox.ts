@@ -2,6 +2,7 @@
 
 import { DiagramElement } from "./DiagramElement"
 import { SVGLayer } from "./SVGLayer"
+import { Style } from "./Style"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { DrawingUtilities } from "./DrawingUtilities"
 
@@ -18,12 +19,12 @@ class ClassBox extends DiagramElement {
     shapeLayer: SVGLayer
     textLayer: SVGLayer
     classDescription
-    canMove
-    style
+    canMove: boolean
+    style: Style
     connectionPointsRectangle
     connectionPoints
 
-    constructor(svg, id, classDescription, canMove, style) {
+    constructor(svg, id: string, classDescription, canMove: boolean, style: Style) {
         super(svg, "class", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
