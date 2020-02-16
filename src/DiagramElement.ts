@@ -1,6 +1,6 @@
 'use strict'
 
-import { SVGLayerSet } from "./SVGLayerSet.ts"
+import { SVGLayerSet } from "./SVGLayerSet"
 
 var position = Symbol()
 
@@ -24,7 +24,7 @@ class DiagramElement {
       @param {SVG} svg - The root SVG document.
       @param {string} id - A unique identifier for this element.
     */
-    constructor(svg, type, id) {
+    constructor(svg, type: string, id: string) {
         this.type = type
         this.id = id
         this.layers = new SVGLayerSet(svg)

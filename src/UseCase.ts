@@ -1,7 +1,7 @@
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.ts"
-import { ConnectionPoint } from "./ConnectionPoint.ts"
+import { DiagramElement } from "./DiagramElement"
+import { ConnectionPoint } from "./ConnectionPoint"
 
 /**
   A use case on a use case diagram.
@@ -14,7 +14,7 @@ class UseCase extends DiagramElement {
     useCaseDescription
     connectionPointsRectangle
 
-    constructor(svg, id, useCaseDescription) {
+    constructor(svg, id: string, useCaseDescription) {
         super(svg, "usecase", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")

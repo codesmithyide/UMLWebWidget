@@ -1,6 +1,6 @@
 'use strict'
 
-import { SVGLayer } from "./SVGLayer.ts"
+import { SVGLayer } from "./SVGLayer"
 
 /**
   <p>
@@ -9,7 +9,7 @@ import { SVGLayer } from "./SVGLayer.ts"
 */
 class SVGLayerSet {
     svg
-    layers
+    layers: object
 
     /**
       Creates a new SVGLayerSet instance.

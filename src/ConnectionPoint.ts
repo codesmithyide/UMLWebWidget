@@ -1,7 +1,7 @@
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.ts"
-import { ConnectionPointPosition } from "./ConnectionPointPosition.ts"
+import { DiagramElement } from "./DiagramElement"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
 
 /**
   <p>
@@ -22,16 +22,17 @@ import { ConnectionPointPosition } from "./ConnectionPointPosition.ts"
     of the connection point relative to the element.
 */
 class ConnectionPoint extends DiagramElement {
-    element
-    position
+    element: DiagramElement
+    position: ConnectionPointPosition
 
-    constructor(svg, element, position = ConnectionPointPosition.BottomCenter) {
+    constructor(svg, element: DiagramElement,
+                position: ConnectionPointPosition = ConnectionPointPosition.BottomCenter) {
         super(svg, null, null)
         this.element = element
         this.position = position
     }
 
-    setPosition(position) {
+    setPosition(position: ConnectionPointPosition) {
         this.position = position
 
         let x = 0
