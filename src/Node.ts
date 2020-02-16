@@ -1,8 +1,8 @@
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.ts"
-import { ConnectionPoint } from "./ConnectionPoint.ts"
-import { Diagram } from "./Diagram.ts"
+import { DiagramElement } from "./DiagramElement"
+import { ConnectionPoint } from "./ConnectionPoint"
+import { Diagram } from "./Diagram"
 
 /**
   A node on a deployment diagram.

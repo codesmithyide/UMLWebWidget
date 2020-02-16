@@ -1,5 +1,6 @@
 'use strict'
 
+import { SVGLayer } from "./SVGLayer"
 import { SVGLayerSet } from "./SVGLayerSet"
 
 var textDef = Symbol()
@@ -10,18 +11,18 @@ var textDef = Symbol()
 */
 class BallConnector {
     svg
-    layers
-    shapeLayer
-    textLayer
+    layers: SVGLayerSet
+    shapeLayer: SVGLayer
+    textLayer: SVGLayer
     uptodate
-    x
-    y
+    x: number
+    y: number
     component
-    name
+    name: string
     textGroup
-    width
+    width: number
 
-    constructor(svg, component, name) {
+    constructor(svg, component, name: string) {
         this.svg = svg
         this.layers = new SVGLayerSet(svg)
         this.shapeLayer = this.layers.createLayer("shape")

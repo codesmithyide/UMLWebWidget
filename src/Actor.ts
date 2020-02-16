@@ -15,7 +15,7 @@ class Actor extends DiagramElement {
     actorDescription
     connectionPointsRectangle
 
-    constructor(svg, id, actorDescription) {
+    constructor(svg, id: string, actorDescription) {
         super(svg, "actor", id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
