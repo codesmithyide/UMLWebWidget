@@ -1,6 +1,6 @@
 'use strict'
 
-import { SVGLayerSet } from "./SVGLayerSet.ts"
+import { SVGLayerSet } from "./SVGLayerSet"
 
 var textDef = Symbol()
 

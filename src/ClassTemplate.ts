@@ -1,8 +1,8 @@
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.ts"
-import { ConnectionPoint } from "./ConnectionPoint.ts"
-import { DrawingUtilities } from "./DrawingUtilities.ts"
+import { DiagramElement } from "./DiagramElement"
+import { ConnectionPoint } from "./ConnectionPoint"
+import { DrawingUtilities } from "./DrawingUtilities"
 
 class ClassTemplate extends DiagramElement {
     shapeLayer

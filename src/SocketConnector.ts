@@ -1,6 +1,6 @@
 'use strict'
 
-import { SVGLayerSet } from "./SVGLayerSet.ts"
+import { SVGLayerSet } from "./SVGLayerSet"
 
 var textDef = Symbol()
 
@@ -14,12 +14,12 @@ class SocketConnector {
     shapeLayer
     textLayer
     uptodate
-    x
-    y
+    x: number
+    y: number
     component
     name
     textGroup
-    width
+    width: number
 
     constructor(svg, component, name) {
         this.svg = svg

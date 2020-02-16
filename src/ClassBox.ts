@@ -1,9 +1,9 @@
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.ts"
-import { SVGLayerSet } from "./SVGLayerSet.js"
-import { ConnectionPoint } from "./ConnectionPoint.ts"
-import { DrawingUtilities } from "./DrawingUtilities.ts"
+import { DiagramElement } from "./DiagramElement"
+import { SVGLayer } from "./SVGLayer"
+import { ConnectionPoint } from "./ConnectionPoint"
+import { DrawingUtilities } from "./DrawingUtilities"
 
 /** 
   A class box. 
@@ -15,8 +15,8 @@ import { DrawingUtilities } from "./DrawingUtilities.ts"
     class box.
 */
 class ClassBox extends DiagramElement {
-    shapeLayer
-    textLayer
+    shapeLayer: SVGLayer
+    textLayer: SVGLayer
     classDescription
     canMove
     style
