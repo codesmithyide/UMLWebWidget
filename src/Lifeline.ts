@@ -266,7 +266,7 @@ function updateLine(self, lifelineGroup, lifelineDescription, depthChanges, styl
             }
         }
         for (let i = 0; i < layers.length; i++) {
-            layers[i].write(lifelineGroup)
+            layers[i].write2(lifelineGroup)
         }
     }
 }
