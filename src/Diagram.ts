@@ -236,61 +236,61 @@ function dolayout(layoutManager, connectors, assemblyconnectors) {
 function draw(classboxes, classtemplates, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
     if (classboxes != null) {
         for (let classbox of classboxes) {
-            classbox.getLayers().getLayer("shape").write2()
-            classbox.getLayers().getLayer("text").write2()
+            classbox.getLayers().getLayer("shape").write()
+            classbox.getLayers().getLayer("text").write()
         }
     }
     if (classtemplates != null) {
         for (let classtemplate of classtemplates) {
-            classtemplate.getLayers().getLayer("shape").write2()
-            classtemplate.getLayers().getLayer("text").write2()
+            classtemplate.getLayers().getLayer("shape").write()
+            classtemplate.getLayers().getLayer("text").write()
         }
     }
     if (lifelines != null) {
         for (let lifeline of lifelines) {
-            lifeline.getLayers().getLayer("shape").write2()
-            lifeline.getLayers().getLayer("text").write2()
+            lifeline.getLayers().getLayer("shape").write()
+            lifeline.getLayers().getLayer("text").write()
         }
     }
     if (components != null) {
         for (let component of components) {
-            component.getLayers().getLayer("shape").write2()
-            component.getLayers().getLayer("text").write2()
+            component.getLayers().getLayer("shape").write()
+            component.getLayers().getLayer("text").write()
         }
     }
     if (nodes != null) {
         for (let node of nodes) {
-            node.getLayers().getLayer("shape").write2()
-            node.getLayers().getLayer("text").write2()
+            node.getLayers().getLayer("shape").write()
+            node.getLayers().getLayer("text").write()
         }
     }
     if (actors != null) {
         for (let actor of actors) {
-            actor.getLayers().getLayer("shape").write2()
-            actor.getLayers().getLayer("text").write2()
+            actor.getLayers().getLayer("shape").write()
+            actor.getLayers().getLayer("text").write()
         }
     }
     if (usecases != null) {
         for (let usecase of usecases) {
-            usecase.getLayers().getLayer("shape").write2()
-            usecase.getLayers().getLayer("text").write2()
+            usecase.getLayers().getLayer("shape").write()
+            usecase.getLayers().getLayer("text").write()
         }
     }
     for (var i = 0; i < connectors.length; i++) {
         let connector = connectors[i]
-        connector.getLayers().getLayer("shape").write2()
-        connector.getLayers().getLayer("text").write2()
+        connector.getLayers().getLayer("shape").write()
+        connector.getLayers().getLayer("text").write()
     }
     for (var i = 0; i < messages.length; i++) {
         let connector = messages[i]
-        connector.getLayers().getLayer("shape").write2()
-        connector.getLayers().getLayer("text").write2()
+        connector.getLayers().getLayer("shape").write()
+        connector.getLayers().getLayer("text").write()
     }
     if (assemblyconnectors != null) {
         for (var i = 0; i < assemblyconnectors.length; i++) {
             let connector = assemblyconnectors[i]
-            connector.getLayers().getLayer("shape").write2()
-            connector.getLayers().getLayer("text").write2()
+            connector.getLayers().getLayer("shape").write()
+            connector.getLayers().getLayer("text").write()
         }
     }
 }
