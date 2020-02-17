@@ -109,8 +109,8 @@ class SVGLayer {
         if (container == null) {
             container = self.svg
         }
-        self.defs.forEach(function(def) {
-            def.move(container)
+        self.defs.forEach(function(element) {
+            container.add(element)
         })
     }
 
