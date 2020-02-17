@@ -5,6 +5,7 @@ import { SVGLayer } from "./SVGLayer"
 import { Style } from "./Style"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { DrawingUtilities } from "./DrawingUtilities"
+import { IdGenerator } from "./IdGenerator"
 
 /** 
   A class box. 
@@ -16,6 +17,7 @@ import { DrawingUtilities } from "./DrawingUtilities"
     class box.
 */
 class ClassBox extends DiagramElement {
+    idGenerator: IdGenerator
     shapeLayer: SVGLayer
     textLayer: SVGLayer
     classDescription
@@ -24,8 +26,9 @@ class ClassBox extends DiagramElement {
     connectionPointsRectangle
     connectionPoints
 
-    constructor(svg, id: string, classDescription, canMove: boolean, style: Style) {
-        super(svg, "class", id)
+    constructor(svg, idGenerator: IdGenerator, classDescription, canMove: boolean, style: Style) {
+        super(svg, "classbox", idGenerator.createId(classDescription.name + "-classbox"))
+        this.idGenerator = idGenerator
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.classDescription = classDescription
@@ -33,8 +36,7 @@ class ClassBox extends DiagramElement {
         this.style = style
         this.connectionPointsRectangle = null
 
-        // List of connection points that are connected to
-        // this class box
+        // List of connection points that are connected to this class box
         this.connectionPoints = [ ]
     }
 
@@ -68,7 +70,7 @@ class ClassBox extends DiagramElement {
 }
 
 function createDef(self, classInfo, canMove, style) {
-    var classGroup = self.shapeLayer.group().addClass("UMLClassBox")
+    var classGroup = self.shapeLayer.group(self.id + "-shape").addClass("UMLClassBox")
 
     let currentDimensions = { 
         width: 0,
@@ -82,8 +84,9 @@ function createDef(self, classInfo, canMove, style) {
     
     currentDimensions.height = style.getTopMargin("classbox")
 
-    var classNameGroup = self.textLayer.group().addClass("UMLClassName")
+    var classNameGroup = self.textLayer.group(self.id + "-name").addClass("UMLClassName")
     var className = classNameGroup.text(classInfo.name).move(borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top + currentDimensions.height)
+    className.id(null)
     currentDimensions.width = Math.max(currentDimensions.width, className.bbox().width)
     currentDimensions.height += (className.bbox().height + style.getBottomMargin("classbox"))
 
@@ -99,8 +102,7 @@ function createDef(self, classInfo, canMove, style) {
     currentDimensions.width = Math.max(currentDimensions.width, operationsCompartmentDimensions.width)
     currentDimensions.height += operationsCompartmentDimensions.height
 
-    // According to the UML standard the class name must be
-    // centered so center it
+    // According to the UML standard the class name must be centered so center it
     if (currentDimensions.width > className.bbox().width) {
         className.dx((currentDimensions.width - className.bbox().width)/2)
     }
@@ -108,8 +110,11 @@ function createDef(self, classInfo, canMove, style) {
     currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
     
     let rect = classGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
+    rect.id(null)
     classGroup.line(borderAdjustment.left, line1YPos, borderAdjustment.left + currentDimensions.width, line1YPos)
+        .id(null)
     classGroup.line(borderAdjustment.left, line2YPos, borderAdjustment.left + currentDimensions.width, line2YPos)
+        .id(null)
 
     self.connectionPointsRectangle = rect.bbox()
 
