@@ -283,14 +283,14 @@ function draw(classboxes, classtemplates, lifelines, components, nodes, actors, 
     }
     for (var i = 0; i < messages.length; i++) {
         let connector = messages[i]
-        connector.getLayers().getLayer("shape").write()
-        connector.getLayers().getLayer("text").write()
+        connector.getLayers().getLayer("shape").write2()
+        connector.getLayers().getLayer("text").write2()
     }
     if (assemblyconnectors != null) {
         for (var i = 0; i < assemblyconnectors.length; i++) {
             let connector = assemblyconnectors[i]
-            connector.getLayers().getLayer("shape").write()
-            connector.getLayers().getLayer("text").write()
+            connector.getLayers().getLayer("shape").write2()
+            connector.getLayers().getLayer("text").write2()
         }
     }
 }
