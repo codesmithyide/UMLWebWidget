@@ -236,8 +236,8 @@ function dolayout(layoutManager, connectors, assemblyconnectors) {
 function draw(classboxes, classtemplates, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
     if (classboxes != null) {
         for (let classbox of classboxes) {
-            classbox.getLayers().getLayer("shape").write()
-            classbox.getLayers().getLayer("text").write()
+            classbox.getLayers().getLayer("shape").write2()
+            classbox.getLayers().getLayer("text").write2()
         }
     }
     if (classtemplates != null) {

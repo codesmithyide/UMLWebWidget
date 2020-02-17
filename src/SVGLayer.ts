@@ -86,9 +86,8 @@ class SVGLayer {
     }
 
     /**
-      Writes the layer to the SVG document. This should be the final
-      action performed on the layer. In the current implementation there
-      is no way to undo the write.
+     * Writes the layer to the SVG document. This should be the final action performed on the layer. In the current
+     * implementation there is no way to undo the write.
     */
     write(container) {
         let self = this
@@ -98,6 +97,20 @@ class SVGLayer {
         self.defs.forEach(function(def) {
             def.clone(container)
             def.remove()
+        })
+    }
+
+    /**
+     * Writes the layer to the SVG document. This should be the final action performed on the layer. In the current
+     * implementation there is no way to undo the write.
+     */
+    write2(container) {
+        let self = this
+        if (container == null) {
+            container = self.svg
+        }
+        self.defs.forEach(function(def) {
+            def.move(container)
         })
     }
 
