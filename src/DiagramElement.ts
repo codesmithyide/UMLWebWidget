@@ -40,20 +40,20 @@ class DiagramElement {
       @returns {SVGLayerSet} The SVG layers to use to draw the
         element.
     */
-    getLayers() {
+    getLayers(): SVGLayerSet {
         this.update()
         return this.layers
     }
 
-    get x() {
+    get x(): number {
         return this[position].x
     }
 
-    get y() {
+    get y(): number {
         return this[position].y
     }
 
-    move(x, y) {
+    move(x, y): void {
         this.uptodate = false
         this[position].x = x
         this[position].y = y

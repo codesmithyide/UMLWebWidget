@@ -3,6 +3,7 @@
 import { DiagramElement } from "./DiagramElement"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { SVGLayer } from "./SVGLayer"
+import { Log } from "./Log"
 import { LifelineLayout } from "./LifelineLayout"
 
 /**
@@ -16,7 +17,7 @@ class Lifeline extends DiagramElement {
     svg
     lifelineDescription
     style
-    log
+    log: Log
     lineTopPosition
     boxHeight
     connectionPoints
