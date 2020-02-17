@@ -254,20 +254,20 @@ function draw(classboxes, classtemplates, lifelines, components, nodes, actors, 
     }
     if (components != null) {
         for (let component of components) {
-            component.getLayers().getLayer("shape").write()
-            component.getLayers().getLayer("text").write()
+            component.getLayers().getLayer("shape").write2()
+            component.getLayers().getLayer("text").write2()
         }
     }
     if (nodes != null) {
         for (let node of nodes) {
-            node.getLayers().getLayer("shape").write()
-            node.getLayers().getLayer("text").write()
+            node.getLayers().getLayer("shape").write2()
+            node.getLayers().getLayer("text").write2()
         }
     }
     if (actors != null) {
         for (let actor of actors) {
-            actor.getLayers().getLayer("shape").write()
-            actor.getLayers().getLayer("text").write()
+            actor.getLayers().getLayer("shape").write2()
+            actor.getLayers().getLayer("text").write2()
         }
     }
     if (usecases != null) {
