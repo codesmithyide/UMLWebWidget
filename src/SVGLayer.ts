@@ -34,8 +34,10 @@ class SVGLayer {
 
       @returns {SVG.G} An SVG.G element as decribed in {@link http://svgjs.com/parents/#svg-g}
     */
-    group() {
+    group(id?: string) {
         let groupDef = this.svg.defs().group()
+        // By default SVG.js will assign an id to every element but setting it to null will remove it
+        groupDef.id(id)
         this.defs.push(groupDef)
         return groupDef
     }
@@ -70,6 +72,7 @@ class SVGLayer {
     */
     rect(width, height) {
         let rectDef = this.svg.defs().rect(width, height)
+        rectDef.id(null)
         this.defs.push(rectDef)
         return rectDef
     }
@@ -81,23 +84,23 @@ class SVGLayer {
     */
     text(str) { 
         let textDef = this.svg.defs().text(str)
+        textDef.id(null)
         this.defs.push(textDef)
         return textDef
     }
 
     /**
-      Writes the layer to the SVG document. This should be the final
-      action performed on the layer. In the current implementation there
-      is no way to undo the write.
-    */
+     * Writes the layer to the SVG document. This should be the final action performed on the layer. In the current
+     * implementation there is no way to undo the write.
+     */
     write(container) {
         let self = this
         if (container == null) {
             container = self.svg
         }
-        self.defs.forEach(function(def) {
-            def.clone(container)
-            def.remove()
+        self.defs.forEach(function(element) {
+            // This will also remove the element from the defs section
+            container.add(element)
         })
     }
 

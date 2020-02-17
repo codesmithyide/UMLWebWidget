@@ -24,6 +24,7 @@ module.exports = function(theTestHarness) {
 
 function ClassBoxCreationTest1(resolve) {
     let svg = SVG(window.document.createElement("div"))
+    let idGenerator = new UMLWebWidget.IdGenerator("ClassBoxCreationTest1")
     let classDescription = {
         "name": "MyClass",
         "attributes":
@@ -34,13 +35,13 @@ function ClassBoxCreationTest1(resolve) {
             ]
     }
     let style = new UMLWebWidget.Style()
-    let classbox = new UMLWebWidget.ClassBox(svg, classDescription.name, classDescription, false, style)
+    let classbox = new UMLWebWidget.ClassBox(svg, idGenerator, classDescription, false, style)
     resolve(tf.TestResultOutcome.ePassed)
 }
 
 function ClassBoxGetLayersTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-
+    let idGenerator = new UMLWebWidget.IdGenerator("ClassBoxGetLayersTest1")
     let classDescription = {
         "name": "MyClass",
         "attributes":
@@ -51,7 +52,7 @@ function ClassBoxGetLayersTest1(resolve, reject, test) {
             ]
     }
     let style = new UMLWebWidget.Style()
-    let classbox = new UMLWebWidget.ClassBox(svg, classDescription.name, classDescription, false, style)
+    let classbox = new UMLWebWidget.ClassBox(svg, idGenerator, classDescription, false, style)
 
     let layers = classbox.getLayers()
     layers.layers["shape"].write()
@@ -67,7 +68,7 @@ function ClassBoxGetLayersTest1(resolve, reject, test) {
 
 function ClassBoxGetLayersTest2(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-
+    let idGenerator = new UMLWebWidget.IdGenerator("ClassBoxGetLayersTest2")
     let classDescription = {
         "name": "MyClass",
         "attributes":
@@ -96,7 +97,7 @@ function ClassBoxGetLayersTest2(resolve, reject, test) {
             ]
     }
     let style = new UMLWebWidget.Style()
-    let classbox = new UMLWebWidget.ClassBox(svg, classDescription.name, classDescription, false, style)
+    let classbox = new UMLWebWidget.ClassBox(svg, idGenerator, classDescription, false, style)
 
     let layers = classbox.getLayers()
     layers.layers["shape"].write()
@@ -112,7 +113,7 @@ function ClassBoxGetLayersTest2(resolve, reject, test) {
 
 function ClassBoxMoveTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-
+    let idGenerator = new UMLWebWidget.IdGenerator("ClassBoxMoveTest1")
     let classDescription = {
         "name": "MyClass",
         "attributes":
@@ -123,7 +124,7 @@ function ClassBoxMoveTest1(resolve, reject, test) {
             ]
     }
     let style = new UMLWebWidget.Style()
-    let classbox = new UMLWebWidget.ClassBox(svg, classDescription.name, classDescription, false, style)
+    let classbox = new UMLWebWidget.ClassBox(svg, idGenerator, classDescription, false, style)
     classbox.move(20, 50)
 
     let layers = classbox.getLayers()
@@ -140,6 +141,7 @@ function ClassBoxMoveTest1(resolve, reject, test) {
 
 function ClassBoxGetConnectionPointsRectangleTest1(resolve) {
     let svg = SVG(window.document.createElement("div"))
+    let idGenerator = new UMLWebWidget.IdGenerator("ClassBoxGetConnectionPointsRectangleTest1")
     let classDescription = {
         "name": "MyClass",
         "attributes":
@@ -150,7 +152,7 @@ function ClassBoxGetConnectionPointsRectangleTest1(resolve) {
             ]
     }
     let style = new UMLWebWidget.Style()
-    let classbox = new UMLWebWidget.ClassBox(svg, classDescription.name, classDescription, false, style)
+    let classbox = new UMLWebWidget.ClassBox(svg, idGenerator, classDescription, false, style)
     
     let rect = classbox.getConnectionPointsRectangle()
     if ((rect.x == 1) && (rect.y == 1) &&

@@ -59,7 +59,7 @@ class Node extends DiagramElement {
         // A node can contain a sub-diagram inside it
         if ((this.nodeDescription.elements != null) && (this.nodeDescription.elements.length > 0)) {
             let diagram = new Diagram(null)
-            diagram.createFromJSON(this.layers.svg, this.nodeDescription, null)
+            diagram.createFromJSON(this.layers.svg, null, this.nodeDescription, null)
         }
 
         currentDimensions.width += (this.style.getLeftMargin("node") + this.style.getRightMargin("node"))

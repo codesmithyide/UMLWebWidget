@@ -1,6 +1,5 @@
 'use strict'
 
-import { UMLWebWidgetError } from "./UMLWebWidgetError"
 import { Settings } from "./Settings"
 import { Style } from "./Style"
 import { LayoutManager } from "./LayoutManager"
@@ -12,9 +11,9 @@ import { Node } from "./Node"
 import { Actor } from "./Actor"
 import { UseCase } from "./UseCase"
 import { Connector } from "./Connector"
-import { SVGLayer } from "./SVGLayer"
 import { Log } from "./Log"
 import { Metrics } from "./Metrics"
+import { IdGenerator} from "./IdGenerator"
 
 /**
   This class is the entry point for all the functionality provided
@@ -22,7 +21,7 @@ import { Metrics } from "./Metrics"
 */
 class Diagram {
     settings: Settings
-    log
+    log: Log
     metrics
     diagramDescription
     classboxes: Map<string, ClassBox>
@@ -83,10 +82,10 @@ class Diagram {
         let jsonDiagramDescription = JSON.parse($('#' + divId).text())
         $('#' + divId).empty()
         var svg = SVG(divId).size(this.settings.width, this.settings.height)
-        this.createFromJSON(svg, jsonDiagramDescription, layout)
+        this.createFromJSON(svg, divId, jsonDiagramDescription, layout)
     }
 
-    createFromJSON(svg, jsonDiagramDescription, layout) {
+    createFromJSON(svg, id: string, jsonDiagramDescription, layout) {
         if (jsonDiagramDescription == null) {
             jsonDiagramDescription = { }
         }
@@ -94,11 +93,12 @@ class Diagram {
         let style = new Style()
 
         if (this.diagramDescription.elements) {
-            this.drawDiagram(svg, this.diagramDescription.elements, style, layout)
+            this.drawDiagram(svg, id, this.diagramDescription.elements, style, layout)
         }
     }
 
-    drawDiagram(svg, description, style, layout) {
+    drawDiagram(svg, id: string, description, style, layout) {
+        let idGenerator = new IdGenerator(id)
         let layoutManager = new LayoutManager(layout)
 
         let connectors = []
@@ -110,7 +110,7 @@ class Diagram {
             if (item.class) {
                 this.classboxes.set(
                     item.class.name,
-                    new ClassBox(svg, item.class.name, item.class, this.settings.canMove, style)
+                    new ClassBox(svg, idGenerator, item.class, this.settings.canMove, style)
                 )
             } else if (item.classtemplate) {
                 this.classtemplates.set(
