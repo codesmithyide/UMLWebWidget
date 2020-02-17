@@ -242,14 +242,14 @@ function draw(classboxes, classtemplates, lifelines, components, nodes, actors, 
     }
     if (classtemplates != null) {
         for (let classtemplate of classtemplates) {
-            classtemplate.getLayers().getLayer("shape").write()
-            classtemplate.getLayers().getLayer("text").write()
+            classtemplate.getLayers().getLayer("shape").write2()
+            classtemplate.getLayers().getLayer("text").write2()
         }
     }
     if (lifelines != null) {
         for (let lifeline of lifelines) {
-            lifeline.getLayers().getLayer("shape").write()
-            lifeline.getLayers().getLayer("text").write()
+            lifeline.getLayers().getLayer("shape").write2()
+            lifeline.getLayers().getLayer("text").write2()
         }
     }
     if (components != null) {
