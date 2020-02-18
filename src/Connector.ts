@@ -238,6 +238,8 @@ function getConnectorHeadOrientationFromPosition(position) {
             return ConnectorHeadOrientation.Up
         case ConnectionPointPosition.LeftCenter:
             return ConnectorHeadOrientation.Right
+        default:
+            throw new Error("Invalid value for ConnectionPointPosition")
     }
 }
 
