@@ -4,6 +4,7 @@ import { DiagramElement } from "./DiagramElement"
 import { SVGLayer } from "./SVGLayer"
 import { Style } from "./Style"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { SVGUtils } from "./SVGUtils"
 import { DrawingUtilities } from "./DrawingUtilities"
 
 /** 
@@ -106,10 +107,12 @@ function createDef(self, classInfo, canMove, style) {
     }
 
     currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
-    
+
     let rect = classGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
-    classGroup.line(borderAdjustment.left, line1YPos, borderAdjustment.left + currentDimensions.width, line1YPos)
-    classGroup.line(borderAdjustment.left, line2YPos, borderAdjustment.left + currentDimensions.width, line2YPos)
+    SVGUtils.Line(classGroup, borderAdjustment.left, line1YPos, borderAdjustment.left + currentDimensions.width,
+        line1YPos)
+    SVGUtils.Line(classGroup, borderAdjustment.left, line2YPos, borderAdjustment.left + currentDimensions.width,
+        line2YPos)
 
     self.connectionPointsRectangle = rect.bbox()
 
