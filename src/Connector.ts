@@ -10,6 +10,7 @@ import { DiagramElement } from "./DiagramElement"
 import { SVGLayer } from "./SVGLayer"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { Label } from "./Label"
+import {ConnectionPoint} from "./ConnectionPoint"
 
 /**
   Represents a connector between elements.
@@ -20,11 +21,11 @@ class Connector extends DiagramElement {
     shapeLayer: SVGLayer
     textLayer: SVGLayer
     type: string
-    connectionPoint1
-    connectionPoint2
-    label: Label
+    connectionPoint1: ConnectionPoint
+    connectionPoint2: ConnectionPoint
+    label: Label | null
 
-    constructor(svg, type, connectionPoint1, connectionPoint2, text) {
+    constructor(svg, type, connectionPoint1: ConnectionPoint, connectionPoint2: ConnectionPoint, text) {
         super(svg, null, null)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")

@@ -51,15 +51,15 @@ class DiagramElement {
         return this.layers
     }
 
-    get x() {
+    get x(): number {
         return this[position].x
     }
 
-    get y() {
+    get y(): number {
         return this[position].y
     }
 
-    move(x, y) {
+    move(x: number, y: number) {
         this.uptodate = false
         this[position].x = x
         this[position].y = y

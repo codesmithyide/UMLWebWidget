@@ -107,8 +107,8 @@ class Diagram {
     drawDiagram(svg, description, style, layout) {
         let layoutManager = new LayoutManager(layout)
 
-        let connectors = []
-        let assemblyconnectors = []
+        let connectors: Connector[] = []
+        let assemblyconnectors: Connector[] = []
 
         // Construct the elements
         for (var i = 0; i < description.length; i++) {
@@ -169,7 +169,7 @@ class Diagram {
                 let newConnector = new Connector(svg, item.relationship.type, connectionPoint1, connectionPoint2, null)
                 connectors.push(newConnector)
             } else if (item.messages) {
-                for (var j = 0; j < item.messages.length; j++) {
+                for (let j = 0; j < item.messages.length; j++) {
                     let message = item.messages[j]
                     let newConnector
                     if (message.synchronousmessage) {

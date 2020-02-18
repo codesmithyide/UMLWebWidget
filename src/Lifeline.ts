@@ -197,8 +197,8 @@ function updateLine(self, lifelineGroup, lifelineDescription, depthChanges, styl
         for (let depthChange of depthChanges) {
             maxDepth = Math.max(maxDepth, depthChange[1])
         }
-        let levelStart = [ ]
-        let layers = [ ]
+        let levelStart: number[] = [ ]
+        let layers: SVGLayer[] = [ ]
         for (let i = 0; i <= maxDepth; i++) {
             levelStart.push(-1)
             layers.push(new SVGLayer(self.svg))
