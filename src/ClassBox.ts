@@ -6,6 +6,7 @@
 
 'use strict'
 
+import { DiagramElementType } from "./DiagramElement"
 import { DiagramElement } from "./DiagramElement"
 import { SVGLayer } from "./SVGLayer"
 import { Style } from "./Style"
@@ -32,7 +33,7 @@ class ClassBox extends DiagramElement {
     connectionPoints
 
     constructor(svg, id: string, classDescription, canMove: boolean, style: Style) {
-        super(svg, "class", id)
+        super(svg, DiagramElementType.ClassBox, id)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.classDescription = classDescription
