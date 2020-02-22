@@ -8,6 +8,7 @@
 
 import { DiagramElement } from "./DiagramElement"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { SVGLayer } from "./SVGLayer"
 import { LifelineLayout } from "./LifelineLayout"
 
@@ -78,7 +79,7 @@ class Lifeline extends DiagramElement {
       @returns {ConnectionPoint}
     */
     createConnectionPoint(svg, type) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter)
         this.connectionPoints.push({ point: newPoint, type: type })
         return newPoint
     }

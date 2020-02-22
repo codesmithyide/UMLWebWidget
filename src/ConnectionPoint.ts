@@ -29,7 +29,7 @@ class ConnectionPoint extends DiagramElement {
     position: ConnectionPointPosition
 
     constructor(svg, element: DiagramElement,
-                position: ConnectionPointPosition = ConnectionPointPosition.BottomCenter) {
+                position: ConnectionPointPosition) {
         super(svg, DiagramElementType.ConnectionPoint, null)
         this.element = element
         this.position = position

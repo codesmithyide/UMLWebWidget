@@ -11,6 +11,7 @@ import { DiagramElement } from "./DiagramElement"
 import { SVGLayer } from "./SVGLayer"
 import { Style } from "./Style"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { SVGUtils } from "./SVGUtils"
 import { DrawingUtilities } from "./DrawingUtilities"
 
@@ -52,7 +53,7 @@ class ClassBox extends DiagramElement {
       point is added to this.connectionPoints.
     */
     createConnectionPoint(svg) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter)
         this.connectionPoints.push(newPoint)
         return newPoint
     }

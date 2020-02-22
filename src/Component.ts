@@ -11,6 +11,7 @@ import { SVGLayer} from "./SVGLayer"
 import { BallConnector } from "./BallConnector"
 import { SocketConnector } from "./SocketConnector"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
 
 class Stereotype {
     svgParentGroup
@@ -98,12 +99,14 @@ class Component extends DiagramElement {
     }
 
     createDependencyConnectionPoint(svg, interfaceName) {
-        let newPoint = new ConnectionPoint(svg, this.getSocketConnector(interfaceName))
+        let newPoint = new ConnectionPoint(svg, this.getSocketConnector(interfaceName),
+            ConnectionPointPosition.BottomCenter)
         return newPoint
     }
 
     createInterfaceConnectionPoint(svg, interfaceName) {
-        let newPoint = new ConnectionPoint(svg, this.getBallConnector(interfaceName))
+        let newPoint = new ConnectionPoint(svg, this.getBallConnector(interfaceName),
+            ConnectionPointPosition.BottomCenter)
         return newPoint
     }
 

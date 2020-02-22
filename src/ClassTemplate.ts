@@ -8,6 +8,7 @@
 
 import { DiagramElement } from "./DiagramElement"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { DrawingUtilities } from "./DrawingUtilities"
 
 class ClassTemplate extends DiagramElement {
@@ -37,7 +38,7 @@ class ClassTemplate extends DiagramElement {
       point is added to this.connectionPoints.
     */
     createConnectionPoint(svg) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter)
         this.connectionPoints.push(newPoint)
         return newPoint
     }

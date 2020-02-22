@@ -8,6 +8,7 @@
 
 import { DiagramElement } from "./DiagramElement"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
 
 /**
   A use case on a use case diagram.
@@ -29,7 +30,7 @@ class UseCase extends DiagramElement {
     }
 
     createConnectionPoint(svg) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter)
         return newPoint
     }
 

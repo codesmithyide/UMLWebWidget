@@ -10,6 +10,7 @@ import { DiagramElement } from "./DiagramElement"
 import { SVGLayer } from "./SVGLayer"
 import { Style } from "./Style"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { Diagram } from "./Diagram"
 
 /**
@@ -34,7 +35,7 @@ class Node extends DiagramElement {
     }
 
     createConnectionPoint(svg) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter)
         return newPoint
     }
 
