@@ -8,9 +8,12 @@
 
 import { DiagramElement } from "./DiagramElement"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { DrawingUtilities } from "./DrawingUtilities"
+import { Errors } from "./Errors"
 
 class ClassTemplate extends DiagramElement {
+    errors: Errors
     shapeLayer
     textLayer
     classTemplateDescription
@@ -18,8 +21,9 @@ class ClassTemplate extends DiagramElement {
     connectionPointsRectangle
     connectionPoints
 
-    constructor(svg, id, classTemplateDescription, style) {
+    constructor(svg, id, classTemplateDescription, style, errors: Errors) {
         super(svg, "classtemplate", id)
+        this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.classTemplateDescription = classTemplateDescription
@@ -37,7 +41,7 @@ class ClassTemplate extends DiagramElement {
       point is added to this.connectionPoints.
     */
     createConnectionPoint(svg) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter, this.errors)
         this.connectionPoints.push(newPoint)
         return newPoint
     }

@@ -6,12 +6,15 @@
 
 'use strict'
 
+import { DiagramElementType } from "./DiagramElement"
 import { DiagramElement } from "./DiagramElement"
 import { SVGLayer } from "./SVGLayer"
 import { Style } from "./Style"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { SVGUtils } from "./SVGUtils"
 import { DrawingUtilities } from "./DrawingUtilities"
+import { Errors } from "./Errors"
 
 /** 
   A class box. 
@@ -23,6 +26,7 @@ import { DrawingUtilities } from "./DrawingUtilities"
     class box.
 */
 class ClassBox extends DiagramElement {
+    errors: Errors
     shapeLayer: SVGLayer
     textLayer: SVGLayer
     classDescription
@@ -31,8 +35,9 @@ class ClassBox extends DiagramElement {
     connectionPointsRectangle
     connectionPoints
 
-    constructor(svg, id: string, classDescription, canMove: boolean, style: Style) {
-        super(svg, "class", id)
+    constructor(svg, id: string, classDescription, canMove: boolean, style: Style, errors: Errors) {
+        super(svg, DiagramElementType.ClassBox, id)
+        this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.classDescription = classDescription
@@ -51,7 +56,7 @@ class ClassBox extends DiagramElement {
       point is added to this.connectionPoints.
     */
     createConnectionPoint(svg) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter, this.errors)
         this.connectionPoints.push(newPoint)
         return newPoint
     }

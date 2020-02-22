@@ -47,7 +47,7 @@ class Settings {
       @param {int} [jsonSettings.height=200] - The height of the diagram.
       @param {boolean} [jsonSettings.debug=false] - Debug mode.
     */
-    constructor(jsonSettings) {
+    constructor(jsonSettings?) {
         this.width = 600
         this.height = 200
         this.canMove = false

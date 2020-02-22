@@ -12,7 +12,7 @@
 class Log {
     level: number
 
-    constructor(level) {
+    constructor(level: string) {
         switch (level) {
             case "none":
                 this.level = 0
@@ -37,6 +37,18 @@ class Log {
             case "trace":
                 this.level = 5
                 break
+        }
+    }
+
+    error(message) {
+        if (this.level >= 1) {
+            console.error(message)
+        }
+    }
+
+    warn(message) {
+        if (this.level >= 2) {
+            console.warn(message)
         }
     }
 

@@ -8,6 +8,8 @@
 
 import { DiagramElement } from "./DiagramElement"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
+import { Errors } from "./Errors"
 
 /**
   A use case on a use case diagram.
@@ -15,13 +17,15 @@ import { ConnectionPoint } from "./ConnectionPoint"
   @extends DiagramElement
 */
 class UseCase extends DiagramElement {
+    errors: Errors
     shapeLayer
     textLayer
     useCaseDescription
     connectionPointsRectangle
 
-    constructor(svg, id: string, useCaseDescription) {
+    constructor(svg, id: string, useCaseDescription, errors: Errors) {
         super(svg, "usecase", id)
+        this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.useCaseDescription = useCaseDescription
@@ -29,7 +33,7 @@ class UseCase extends DiagramElement {
     }
 
     createConnectionPoint(svg) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter, this.errors)
         return newPoint
     }
 

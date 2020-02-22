@@ -8,16 +8,23 @@
 
 import { SVGLayerSet } from "./SVGLayerSet"
 
+/**
+ * A list of built-in element types. An element type is just a string so custom types can be added without adding them
+ * to this list.
+ */
+const enum DiagramElementType {
+  ClassBox = "classbox",
+  ConnectionPoint = "connectionpoint"
+}
+
 var position = Symbol()
 
 /**
-  An element of a diagram.
-
-  @property {SVGLayerSet} this.layers - The various SVG layers
-    to use to render this element.
-  @property {boolean} this.uptodate - Whether the layers need 
-    to be updated because of changes to the element.
-*/
+ * An element of a diagram.
+ *
+ * @property {SVGLayerSet} this.layers - The various SVG layers to use to render this element.
+ * @property {boolean} this.uptodate - Whether the layers need to be updated because of changes to the element.
+ */
 class DiagramElement {
     type: string
     id: string
@@ -51,15 +58,15 @@ class DiagramElement {
         return this.layers
     }
 
-    get x() {
+    get x(): number {
         return this[position].x
     }
 
-    get y() {
+    get y(): number {
         return this[position].y
     }
 
-    move(x, y) {
+    move(x: number, y: number) {
         this.uptodate = false
         this[position].x = x
         this[position].y = y
@@ -84,23 +91,22 @@ class DiagramElement {
     }
 
     /**
-      This function must be called after changes were
-      made to update the contents of the SVG layers.
-
-      @virtual
-    */
+     * This function must be called after changes were made to update the contents of the SVG layers.
+     *
+     * @virtual
+     */
     doUpdate() {
     }
 
     /**
-       Implements the getConnectionPointsRectangle method.
-
-      @virtual
-    */
+     * Implements the getConnectionPointsRectangle method.
+     *
+     * @virtual
+     */
     doGetConnectionPointsRectangle() {
         return null
     }
 
 }
 
-export { DiagramElement }
+export { DiagramElementType, DiagramElement }
