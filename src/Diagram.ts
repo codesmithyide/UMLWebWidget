@@ -19,8 +19,9 @@ import { Actor } from "./Actor"
 import { UseCase } from "./UseCase"
 import { Connector } from "./Connector"
 import { SVGLayer } from "./SVGLayer"
-import { Log } from "./Log"
 import { Metrics } from "./Metrics"
+import { Log } from "./Log"
+import { Errors } from "./Errors"
 
 /**
   This class is the entry point for all the functionality provided
@@ -28,7 +29,8 @@ import { Metrics } from "./Metrics"
 */
 class Diagram {
     settings: Settings
-    log
+    errors: Errors
+    log: Log
     metrics
     diagramDescription
     classboxes: Map<string, ClassBox>
@@ -42,6 +44,7 @@ class Diagram {
 
     constructor(settings) {
         this.settings = new Settings(settings)
+        this.errors = new Errors(this.settings.buildType)
         this.log = new Log(this.settings.logLevel)
         this.metrics = new Metrics()
         
@@ -100,15 +103,15 @@ class Diagram {
         let style = new Style()
 
         if (this.diagramDescription.elements) {
-            this.drawDiagram(svg, this.diagramDescription.elements, style, layout)
+            this.drawDiagram(svg, this.diagramDescription.elements, style, layout, this.errors)
         }
     }
 
-    drawDiagram(svg, description, style, layout) {
+    drawDiagram(svg, description, style, layout, errors: Errors) {
         let layoutManager = new LayoutManager(layout)
 
-        let connectors = []
-        let assemblyconnectors = []
+        let connectors: Connector[] = []
+        let assemblyconnectors: Connector[] = []
 
         // Construct the elements
         for (var i = 0; i < description.length; i++) {
@@ -116,41 +119,41 @@ class Diagram {
             if (item.class) {
                 this.classboxes.set(
                     item.class.name,
-                    new ClassBox(svg, item.class.name, item.class, this.settings.canMove, style)
+                    new ClassBox(svg, item.class.name, item.class, this.settings.canMove, style, errors)
                 )
             } else if (item.classtemplate) {
                 this.classtemplates.set(
                     item.classtemplate.name,
-                    new ClassTemplate(svg, item.classtemplate.name, item.classtemplate, style)
+                    new ClassTemplate(svg, item.classtemplate.name, item.classtemplate, style, errors)
                 )
             } else if (item.lifeline) {
                 this.lifelines.set(
                     item.lifeline.name,
-                    new Lifeline(svg, item.lifeline.name, item.lifeline, style, this.log)
+                    new Lifeline(svg, item.lifeline.name, item.lifeline, style, this.log, errors)
                 )
             } else if (item.component) {
                 this.components.set(
                      item.component.name,
-                     new Component(svg, item.component.name, item.component, style)
+                     new Component(svg, item.component.name, item.component, style, errors)
                 )
             } else if (item.node) {
                 this.nodes.set(
                     item.node.name,
-                    new Node(svg, item.node.name, item.node, style)
+                    new Node(svg, item.node.name, item.node, style, errors)
                 )
             } else if (item.actor) {
                 this.actors.set(
                     item.actor.name,
-                    new Actor(svg, item.actor.name, item.actor)
+                    new Actor(svg, item.actor.name, item.actor, errors)
                 )
             } else if (item.usecase) {
                 this.usecases.set(
                     item.usecase.title,
-                    new UseCase(svg, item.usecase.title, item.usecase)
+                    new UseCase(svg, item.usecase.title, item.usecase, errors)
                 )
             } else if (item.relationship) {
-                let classbox1
-                let classbox2
+                let classbox1: ClassBox | ClassTemplate
+                let classbox2: ClassBox | ClassTemplate
                 if (item.relationship.type == "inheritance") {
                     classbox1 = this.classboxes.get(item.relationship.derivedclass)
                     if (classbox1 == null) {
@@ -169,7 +172,7 @@ class Diagram {
                 let newConnector = new Connector(svg, item.relationship.type, connectionPoint1, connectionPoint2, null)
                 connectors.push(newConnector)
             } else if (item.messages) {
-                for (var j = 0; j < item.messages.length; j++) {
+                for (let j = 0; j < item.messages.length; j++) {
                     let message = item.messages[j]
                     let newConnector
                     if (message.synchronousmessage) {

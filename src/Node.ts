@@ -10,7 +10,10 @@ import { DiagramElement } from "./DiagramElement"
 import { SVGLayer } from "./SVGLayer"
 import { Style } from "./Style"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { Diagram } from "./Diagram"
+import { Errors } from "./Errors"
+import { Settings } from "./Settings"
 
 /**
   A node on a deployment diagram.
@@ -18,14 +21,16 @@ import { Diagram } from "./Diagram"
   @extends DiagramElement
 */
 class Node extends DiagramElement {
+    errors: Errors
     shapeLayer: SVGLayer
     textLayer: SVGLayer
     nodeDescription
     style: Style
     connectionPointsRectangle
 
-    constructor(svg, id: string, nodeDescription, style: Style) {
+    constructor(svg, id: string, nodeDescription, style: Style, errors: Errors) {
         super(svg, "node", id)
+        this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.nodeDescription = nodeDescription
@@ -34,7 +39,7 @@ class Node extends DiagramElement {
     }
 
     createConnectionPoint(svg) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter, this.errors)
         return newPoint
     }
 
@@ -64,7 +69,8 @@ class Node extends DiagramElement {
 
         // A node can contain a sub-diagram inside it
         if ((this.nodeDescription.elements != null) && (this.nodeDescription.elements.length > 0)) {
-            let diagram = new Diagram(null)
+            let settings = new Settings()
+            let diagram = new Diagram(settings)
             diagram.createFromJSON(this.layers.svg, this.nodeDescription, null)
         }
 
