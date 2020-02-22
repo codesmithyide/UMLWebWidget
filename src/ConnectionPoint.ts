@@ -65,7 +65,7 @@ class ConnectionPoint extends DiagramElement {
                     break
             }
         } else {
-            // TODO
+            this.errors.assertDebug(false)
         }
 
         this.move(x, y)
