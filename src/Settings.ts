@@ -6,24 +6,27 @@
 
 'use strict'
 
-/**
-  Diagram settings.
+const enum BuildType {
+    DEBUG,
+    RELEASE
+}
 
-  @property {int} width - The width of the diagram in pixels.
-  @property {height} height - The height of the diagram in pixels.
-  @property {boolean} debug - If debug is true then additional checks
-    and logging will be performed. This is false by default so that
-    diagrams are displayed as well as possible regardless
-    of errors. It is recommended to enable debug mode when updating a
-    diagram and set it back to false afterwards.
-*/
+/**
+ * Diagram settings.
+ *
+ * @property {int} width - The width of the diagram in pixels.
+ * @property {height} height - The height of the diagram in pixels.
+ * @property {boolean} debug - If debug is true then additional checks and logging will be performed. This is false by
+ *     default so that diagrams are displayed as well as possible regardless of errors. It is recommended to enable
+ *     debug mode when updating a diagram and set it back to false afterwards.
+ */
 class Settings {
     width: number
     height: number
     canMove: boolean
     canResize: boolean
     logLevel
-    debug
+    buildType: BuildType
 
     /** 
       Creates a new Settings instance with each property
@@ -40,7 +43,7 @@ class Settings {
         this.canMove = false
         this.canResize = false
         this.logLevel = "none"
-        this.debug = false
+        this.buildType = BuildType.RELEASE
 
         if (jsonSettings) {
             if (jsonSettings.width) {
