@@ -91,19 +91,18 @@ class DiagramElement {
     }
 
     /**
-      This function must be called after changes were
-      made to update the contents of the SVG layers.
-
-      @virtual
-    */
+     * This function must be called after changes were made to update the contents of the SVG layers.
+     *
+     * @virtual
+     */
     doUpdate() {
     }
 
     /**
-       Implements the getConnectionPointsRectangle method.
-
-      @virtual
-    */
+     * Implements the getConnectionPointsRectangle method.
+     *
+     * @virtual
+     */
     doGetConnectionPointsRectangle() {
         return null
     }

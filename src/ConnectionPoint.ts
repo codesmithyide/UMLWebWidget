@@ -38,30 +38,33 @@ class ConnectionPoint extends DiagramElement {
     setPosition(position: ConnectionPointPosition) {
         this.position = position
 
-        let x = 0
-        let y = 0
+        let x: number = 0
+        let y: number = 0
         let boundingbox = this.element.getConnectionPointsRectangle()
+        if (boundingbox != null) {
+            switch (this.position) {
+                case ConnectionPointPosition.TopCenter:
+                    x = boundingbox.cx
+                    y = boundingbox.y
+                    break
 
-        switch (this.position) {
-            case ConnectionPointPosition.TopCenter:
-                x = boundingbox.cx
-                y = boundingbox.y
-                break
+                case ConnectionPointPosition.RightCenter:
+                    x = (boundingbox.x + boundingbox.width)
+                    y = boundingbox.cy
+                    break
 
-            case ConnectionPointPosition.RightCenter:
-                x = (boundingbox.x + boundingbox.width)
-                y = boundingbox.cy
-                break
+                case ConnectionPointPosition.BottomCenter:
+                    x = boundingbox.cx
+                    y = (boundingbox.y + boundingbox.height)
+                    break
 
-            case ConnectionPointPosition.BottomCenter:
-                x = boundingbox.cx
-                y = (boundingbox.y + boundingbox.height)
-                break
-
-            case ConnectionPointPosition.LeftCenter:
-                x = boundingbox.x
-                y = boundingbox.cy
-                break
+                case ConnectionPointPosition.LeftCenter:
+                    x = boundingbox.x
+                    y = boundingbox.cy
+                    break
+            }
+        } else {
+            // TODO
         }
 
         this.move(x, y)
