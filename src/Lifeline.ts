@@ -11,6 +11,7 @@ import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { SVGLayer } from "./SVGLayer"
 import { LifelineLayout } from "./LifelineLayout"
+import { Errors } from "./Errors"
 
 /**
   A lifeline on a sequence diagram.
@@ -18,6 +19,7 @@ import { LifelineLayout } from "./LifelineLayout"
   @extends DiagramElement
 */
 class Lifeline extends DiagramElement {
+    errors: Errors
     shapeLayer: SVGLayer
     textLayer: SVGLayer
     svg
@@ -42,8 +44,9 @@ class Lifeline extends DiagramElement {
 
       @param {SVG} svg - The root SVG document.
     */
-    constructor(svg, id, lifelineDescription, style, log) {
+    constructor(svg, id, lifelineDescription, style, log, errors: Errors) {
         super(svg, "lifeline", id)
+        this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.svg = svg
@@ -79,7 +82,7 @@ class Lifeline extends DiagramElement {
       @returns {ConnectionPoint}
     */
     createConnectionPoint(svg, type) {
-        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter, this.errors)
         this.connectionPoints.push({ point: newPoint, type: type })
         return newPoint
     }

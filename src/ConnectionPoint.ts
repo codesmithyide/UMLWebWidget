@@ -9,7 +9,7 @@
 import { DiagramElementType } from "./DiagramElement"
 import { DiagramElement } from "./DiagramElement"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
-
+import { Errors } from "./Errors"
 /**
  * <p>
  *   The point where an element and a connector meet.
@@ -25,12 +25,13 @@ import { ConnectionPointPosition } from "./ConnectionPointPosition"
  *   @property {ConnectionPointPosition} this.position - The position of the connection point relative to the element.
 */
 class ConnectionPoint extends DiagramElement {
+    errors: Errors
     element: DiagramElement
     position: ConnectionPointPosition
 
-    constructor(svg, element: DiagramElement,
-                position: ConnectionPointPosition) {
+    constructor(svg, element: DiagramElement, position: ConnectionPointPosition, errors: Errors) {
         super(svg, DiagramElementType.ConnectionPoint, null)
+        this.errors = errors
         this.element = element
         this.position = position
     }

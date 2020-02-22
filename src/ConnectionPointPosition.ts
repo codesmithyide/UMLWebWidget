@@ -7,12 +7,9 @@
 'use strict'
 
 /**
-  The position of a connection point. These
-  are not the coordinates of the connection
-  point but a description of where the 
-  connection point should be relative to the
-  element.
-*/
+ * The position of a connection point. These are not the coordinates of the connection point but a description of where
+ * the connection point should be relative to the element.
+ */
 class ConnectionPointPosition {
     type
 
