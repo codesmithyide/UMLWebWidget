@@ -6,8 +6,8 @@
 
 'use strict'
 
-import { UMLWebWidgetError } from "./UMLWebWidgetError"
-import { Settings } from "./Settings"
+import { Errors, UMLWebWidgetError } from "./Errors"
+import { BuildType, Settings } from "./Settings"
 import { Style } from "./Style"
 import { Diagram } from "./Diagram"
 import { ConnectionPoint } from "./ConnectionPoint"
@@ -30,7 +30,9 @@ import { Log } from "./Log"
 import { Metrics } from "./Metrics"
 
 export {
+    Errors,
     UMLWebWidgetError,
+    BuildType,
     Settings,
     Style,
     Diagram,

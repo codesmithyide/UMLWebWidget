@@ -6,8 +6,18 @@
 
 'use strict'
 
+/**
+ * The type of build.
+ */
 const enum BuildType {
+    /**
+     * In debug mode errors are reported via window.alert if supported and considered fatal.
+     */
     DEBUG,
+    /**
+     * In release mode errors are reported to the console but are otherwise ignored unless they can't be recovered
+     * from.
+     */
     RELEASE
 }
 
@@ -62,7 +72,6 @@ class Settings {
             }
         }
     }
-
 }
 
-export { Settings }
+export { BuildType, Settings }

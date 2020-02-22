@@ -6,7 +6,7 @@
 
 'use strict'
 
-import { UMLWebWidgetError } from "./UMLWebWidgetError"
+import { UMLWebWidgetError } from "./Errors"
 import { Settings } from "./Settings"
 import { Style } from "./Style"
 import { LayoutManager } from "./LayoutManager"

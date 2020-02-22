@@ -7,9 +7,8 @@
 'use strict'
 
 /**
-  A class used to log diagram events, mostly useful
-  for debugging only.
-*/
+ * A class used to log diagram events, mostly useful for debugging only.
+ */
 class Log {
     level: number
 
