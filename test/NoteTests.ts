@@ -6,7 +6,7 @@
 
 'use strict'
 
-var window = require("svgdom")
+import window = require("svgdom")
 var SVG = require("svg.js")(window)
 var UMLWebWidget = require("../dist/codesmithy-umlwebwidget.node.dev.js")
 var tf = require("ishiko-test-framework")
@@ -20,6 +20,7 @@ module.exports = function(theTestHarness) {
 function NoteCreationTest1(resolve) {
     let svg = SVG(window.document.createElement("div"))
     let noteDescription = {
+        title: "Note1"
     }
     let style = new UMLWebWidget.Style()
     let note = new UMLWebWidget.Note(svg, noteDescription.title, noteDescription , style)

@@ -28,7 +28,7 @@ var AddUseCaseDiagramTests = require("./UseCaseDiagramTests.ts")
 var AddComponentDiagramTests = require("./ComponentDiagramTests.ts")
 var AddDeploymentDiagramTests = require("./DeploymentDiagramTests.ts")
 var AddNoteTests = require("./NoteTests.ts")
-var TestUtils = require("./TestUtils.ts")
+import { TestUtils } from "./TestUtils"
 var tf = require("ishiko-test-framework")
 
 let theTestHarness = new tf.TestHarness("codesmithy-umlwebwidget")
