@@ -184,36 +184,36 @@
    cursor: nesw-resize
 }
 
-.codesmithy-uml-diagram.StandardStyle .UMLClassBox rect {
+.codesmithy-uml-diagram--standard-theme .UMLClassBox rect {
    stroke: black;
    fill: white;
 }
 
-.codesmithy-uml-diagram.StandardStyle .UMLClassBox line {
+.codesmithy-uml-diagram--standard-theme .UMLClassBox line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram.StandardStyle .UMLInheritanceRelationship line {
+.codesmithy-uml-diagram--standard-theme .UMLInheritanceRelationship line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram.StandardStyle .UMLInheritanceRelationship polygon {
+.ccodesmithy-uml-diagram--standard-theme .UMLInheritanceRelationship polygon {
    stroke: black;
 }
 
-.codesmithy-uml-diagram.StandardStyle .UMLCompositionRelationship line {
+.codesmithy-uml-diagram--standard-theme .UMLCompositionRelationship line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram.StandardStyle .UMLCompositionRelationship polygon {
+.codesmithy-uml-diagram--standard-theme .UMLCompositionRelationship polygon {
    stroke: black;
    fill: black;
 }
 
-.codesmithy-uml-diagram.StandardStyle .UMLAggregationRelationship line {
+.codesmithy-uml-diagram--standard-theme .UMLAggregationRelationship line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram.StandardStyle .UMLAggregationRelationship polygon {
+.codesmithy-uml-diagram--standard-theme .UMLAggregationRelationship polygon {
    stroke: black;
 }
