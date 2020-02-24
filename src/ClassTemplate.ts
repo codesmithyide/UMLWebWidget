@@ -1,10 +1,20 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
 import { DiagramElement } from "./DiagramElement"
+import { CSSClassName } from "./CSSClassNames"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { DrawingUtilities } from "./DrawingUtilities"
+import { Errors } from "./Errors"
 
 class ClassTemplate extends DiagramElement {
+    errors: Errors
     shapeLayer
     textLayer
     classTemplateDescription
@@ -12,8 +22,9 @@ class ClassTemplate extends DiagramElement {
     connectionPointsRectangle
     connectionPoints
 
-    constructor(svg, id, classTemplateDescription, style) {
+    constructor(svg, id, classTemplateDescription, style, errors: Errors) {
         super(svg, "classtemplate", id)
+        this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.classTemplateDescription = classTemplateDescription
@@ -31,13 +42,13 @@ class ClassTemplate extends DiagramElement {
       point is added to this.connectionPoints.
     */
     createConnectionPoint(svg) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter, this.errors)
         this.connectionPoints.push(newPoint)
         return newPoint
     }
 
     doUpdate() {
-        var classTemplateGroup = this.shapeLayer.group().addClass("UMLClassTemplate")
+        var classTemplateGroup = this.shapeLayer.group().addClass(CSSClassName.ClassTemplate)
 
         let currentDimensions = { 
             width: 0,
@@ -55,12 +66,12 @@ class ClassTemplate extends DiagramElement {
         let parametersRectHeight = (this.style.getTopMargin("classtemplateparameters") + this.style.getBottomMargin("classtemplateparameters") + parametersText.bbox().height)
 
         let y1 = (borderAdjustment.top + this.style.getTopMargin("classtemplateparameters") + (parametersText.bbox().height / 2))
-        let y2 = (y1 + this.style.getTopMargin("classtemplate"))
+        let y2 = (y1 + this.style.getTopMargin(CSSClassName.ClassTemplate))
 
         let classTemplateNameGroup = this.textLayer.group().addClass("UMLClassName")
-        let classTemplateName = classTemplateNameGroup.text(this.classTemplateDescription.name).move(borderAdjustment.left + this.style.getLeftMargin("classtemplate"), y2)
+        let classTemplateName = classTemplateNameGroup.text(this.classTemplateDescription.name).move(borderAdjustment.left + this.style.getLeftMargin(CSSClassName.ClassTemplate), y2)
         currentDimensions.width = Math.max(currentDimensions.width, classTemplateName.bbox().width)
-        currentDimensions.height = (this.style.getTopMargin("classtemplate") + classTemplateName.bbox().height + this.style.getBottomMargin("classtemplate"))
+        currentDimensions.height = (this.style.getTopMargin(CSSClassName.ClassTemplate) + classTemplateName.bbox().height + this.style.getBottomMargin(CSSClassName.ClassTemplate))
 
         let line1YPos = (borderAdjustment.top + currentDimensions.height + (parametersText.bbox().height / 2))
 
@@ -80,7 +91,7 @@ class ClassTemplate extends DiagramElement {
             classTemplateName.dx((currentDimensions.width - classTemplateName.bbox().width)/2)
         }
 
-        currentDimensions.width += (this.style.getLeftMargin("classtemplate") + this.style.getRightMargin("classtemplate"))
+        currentDimensions.width += (this.style.getLeftMargin(CSSClassName.ClassTemplate) + this.style.getRightMargin(CSSClassName.ClassTemplate))
         let rect = classTemplateGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, y1)
         classTemplateGroup.line(borderAdjustment.left, line1YPos, borderAdjustment.left + currentDimensions.width, line1YPos)
         classTemplateGroup.line(borderAdjustment.left, line2YPos, borderAdjustment.left + currentDimensions.width, line2YPos)

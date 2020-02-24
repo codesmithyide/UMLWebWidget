@@ -1,12 +1,15 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
 /**
-  The position of a connection point. These
-  are not the coordinates of the connection
-  point but a description of where the 
-  connection point should be relative to the
-  element.
-*/
+ * The position of a connection point. These are not the coordinates of the connection point but a description of where
+ * the connection point should be relative to the element.
+ */
 class ConnectionPointPosition {
     type
 
