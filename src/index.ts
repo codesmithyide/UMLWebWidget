@@ -29,7 +29,6 @@ import { SVGLayer } from "./SVGLayer"
 import { SVGLayerSet } from "./SVGLayerSet"
 import { Log } from "./Log"
 import { Metrics } from "./Metrics"
-import { IdGenerator} from "./IdGenerator"
 
 export {
     Errors,
@@ -56,6 +55,5 @@ export {
     SVGLayer,
     SVGLayerSet,
     Log,
-    Metrics,
-    IdGenerator
+    Metrics
 }

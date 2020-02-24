@@ -15,7 +15,7 @@ import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { SVGUtils } from "./SVGUtils"
 import { DrawingUtilities } from "./DrawingUtilities"
-import { IdGenerator } from "./IdGenerator"
+import { IDGenerator } from "./IDGenerator"
 import { Errors } from "./Errors"
 
 /** 
@@ -28,7 +28,7 @@ import { Errors } from "./Errors"
     class box.
 */
 class ClassBox extends DiagramElement {
-    idGenerator: IdGenerator
+    idGenerator: IDGenerator
     errors: Errors
     shapeLayer: SVGLayer
     textLayer: SVGLayer
@@ -38,8 +38,8 @@ class ClassBox extends DiagramElement {
     connectionPointsRectangle
     connectionPoints
 
-    constructor(svg, idGenerator: IdGenerator, classDescription, canMove: boolean, style: Style, errors: Errors) {
-        super(svg, DiagramElementType.ClassBox, idGenerator.createId(classDescription.name + "-classbox"))
+    constructor(svg, idGenerator: IDGenerator, classDescription, canMove: boolean, style: Style, errors: Errors) {
+        super(svg, DiagramElementType.ClassBox, idGenerator.createID(classDescription.name + "-classbox"))
         this.idGenerator = idGenerator
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
