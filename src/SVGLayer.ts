@@ -54,6 +54,7 @@ class SVGLayer {
 
     circle(radius) {
         let circleDef = this.svg.defs().circle(radius)
+        circleDef.id(null)
         this.defs.push(circleDef)
         return circleDef
     }
@@ -65,12 +66,14 @@ class SVGLayer {
     */
     line(x1, y1, x2, y2) {
         let lineDef = this.svg.defs().line(x1, y1, x2, y2)
+        lineDef.id(null)
         this.defs.push(lineDef)
         return lineDef
     }
 
     polygon(description) {
         let polygonDef = this.svg.defs().polygon(description)
+        polygonDef.id(null)
         this.defs.push(polygonDef)
         return polygonDef
     }
