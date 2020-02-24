@@ -7,6 +7,7 @@
 'use strict'
 
 import { Errors, UMLWebWidgetError } from "./Errors"
+import { IDGenerator } from "./IDGenerator"
 import { BuildType, Settings } from "./Settings"
 import { Style } from "./Style"
 import { Diagram } from "./Diagram"
@@ -33,6 +34,7 @@ import { IdGenerator} from "./IdGenerator"
 export {
     Errors,
     UMLWebWidgetError,
+    IDGenerator,
     BuildType,
     Settings,
     Style,

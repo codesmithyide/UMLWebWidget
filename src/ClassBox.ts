@@ -98,8 +98,7 @@ function createDef(self, classInfo, canMove, style) {
     currentDimensions.height = style.getTopMargin(CSSClassName.ClassBox)
 
     var classNameGroup = self.textLayer.group(self.id + "-name").addClass("UMLClassName")
-    var className = classNameGroup.text(classInfo.name).move(borderAdjustment.left + style.getLeftMargin(CSSClassName.ClassBox), borderAdjustment.top + currentDimensions.height)
-    className.id(null)
+    var className = SVGUtils.Text(classNameGroup, borderAdjustment.left + style.getLeftMargin(CSSClassName.ClassBox), borderAdjustment.top + currentDimensions.height, classInfo.name)
     currentDimensions.width = Math.max(currentDimensions.width, className.bbox().width)
     currentDimensions.height += (className.bbox().height + style.getBottomMargin(CSSClassName.ClassBox))
 

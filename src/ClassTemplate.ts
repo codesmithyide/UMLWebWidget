@@ -10,6 +10,7 @@ import { DiagramElement } from "./DiagramElement"
 import { CSSClassName } from "./CSSClassNames"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
+import { SVGUtils } from "./SVGUtils"
 import { DrawingUtilities } from "./DrawingUtilities"
 import { Errors } from "./Errors"
 
@@ -92,13 +93,13 @@ class ClassTemplate extends DiagramElement {
         }
 
         currentDimensions.width += (this.style.getLeftMargin(CSSClassName.ClassTemplate) + this.style.getRightMargin(CSSClassName.ClassTemplate))
-        let rect = classTemplateGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, y1)
-        classTemplateGroup.line(borderAdjustment.left, line1YPos, borderAdjustment.left + currentDimensions.width, line1YPos)
-        classTemplateGroup.line(borderAdjustment.left, line2YPos, borderAdjustment.left + currentDimensions.width, line2YPos)
+        let rect = SVGUtils.Rectangle(classTemplateGroup, borderAdjustment.left, y1, currentDimensions.width, currentDimensions.height)
+        SVGUtils.Line(classTemplateGroup, borderAdjustment.left, line1YPos, borderAdjustment.left + currentDimensions.width, line1YPos)
+        SVGUtils.Line(classTemplateGroup, borderAdjustment.left, line2YPos, borderAdjustment.left + currentDimensions.width, line2YPos)
 
         parametersText.dx(currentDimensions.width - (parametersRectWidth / 2))
 
-        let parametersRect = classTemplateGroup.rect(parametersRectWidth, parametersRectHeight).move(borderAdjustment.left + currentDimensions.width - (parametersRectWidth / 2), borderAdjustment.top).attr("stroke-dasharray", "4, 4")
+        let parametersRect = SVGUtils.Rectangle(classTemplateGroup, borderAdjustment.left + currentDimensions.width - (parametersRectWidth / 2), borderAdjustment.top, parametersRectWidth, parametersRectHeight).attr("stroke-dasharray", "4, 4")
 
         this.connectionPointsRectangle = rect.bbox()
     }
