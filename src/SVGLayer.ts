@@ -36,12 +36,17 @@ class SVGLayer {
     }
 
     /**
-      Adds a group to the layer.
-
-      @returns {SVG.G} An SVG.G element as decribed in {@link http://svgjs.com/parents/#svg-g}
-    */
-    group() {
+     * Adds a group to the layer.
+     *
+     * @returns {SVG.G} An SVG.G element as decribed in {@link http://svgjs.com/parents/#svg-g}
+     */
+    group(id?: string) {
         let groupDef = this.svg.defs().group()
+        if (id) {
+            groupDef.id(id)
+        } else {
+            groupDef.id(null)
+        }
         this.defs.push(groupDef)
         return groupDef
     }
