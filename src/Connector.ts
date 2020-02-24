@@ -393,9 +393,9 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
 
                 case ConnectorLineShape.HorizontalStep:
                     let middleY = (endPoint.y + ((startPoint.y - endPoint.y)/2))
-                    svg.line(startPoint.x, startPoint.y, startPoint.x, middleY)
-                    svg.line(startPoint.x, middleY, endPoint.x, middleY)
-                    svg.line(endPoint.x, middleY, endPoint.x, endPoint.y)
+                    SVGUtils.Line(svg, startPoint.x, startPoint.y, startPoint.x, middleY)
+                    SVGUtils.Line(svg, startPoint.x, middleY, endPoint.x, middleY)
+                    SVGUtils.Line(svg, endPoint.x, middleY, endPoint.x, endPoint.y)
                     break
             }
             break
