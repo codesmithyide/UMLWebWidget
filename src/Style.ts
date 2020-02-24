@@ -18,7 +18,7 @@ export class Style {
                 "margin-top": 9,
                 "margin-bottom": 9
             },
-            "classtemplate": {
+            "codesmithy-uml-diagram__classtemplate": {
                 "margin-right": 15,
                 "margin-top": 12
             },

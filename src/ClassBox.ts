@@ -93,12 +93,12 @@ function createDef(self, classInfo, canMove, style) {
         left: self.x + 1
     }
     
-    currentDimensions.height = style.getTopMargin("classbox")
+    currentDimensions.height = style.getTopMargin(CSSClassName.ClassBox)
 
     var classNameGroup = self.textLayer.group().addClass("UMLClassName")
-    var className = classNameGroup.text(classInfo.name).move(borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top + currentDimensions.height)
+    var className = classNameGroup.text(classInfo.name).move(borderAdjustment.left + style.getLeftMargin(CSSClassName.ClassBox), borderAdjustment.top + currentDimensions.height)
     currentDimensions.width = Math.max(currentDimensions.width, className.bbox().width)
-    currentDimensions.height += (className.bbox().height + style.getBottomMargin("classbox"))
+    currentDimensions.height += (className.bbox().height + style.getBottomMargin(CSSClassName.ClassBox))
 
     var line1YPos = (borderAdjustment.top + currentDimensions.height)
 
@@ -118,7 +118,7 @@ function createDef(self, classInfo, canMove, style) {
         className.dx((currentDimensions.width - className.bbox().width)/2)
     }
 
-    currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
+    currentDimensions.width += (style.getLeftMargin(CSSClassName.ClassBox) + style.getRightMargin(CSSClassName.ClassBox))
 
     let rect = SVGUtils.Rectangle(classGroup, borderAdjustment.left, borderAdjustment.top, currentDimensions.width,
         currentDimensions.height)
