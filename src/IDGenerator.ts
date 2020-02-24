@@ -13,7 +13,7 @@ class IDGenerator {
         this.prefix = prefix
     }
 
-    createId(type: string): string {
+    createID(type: string): string {
         return (this.prefix + "-" + type)
     }
 }
