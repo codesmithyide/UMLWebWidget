@@ -387,8 +387,8 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
                 case ConnectorLineShape.TopLeftCorner:
                 case ConnectorLineShape.BottomRightCorner:
                 case ConnectorLineShape.BottomLeftCorner:
-                    svg.line(startPoint.x, startPoint.y, endPoint.x, startPoint.y)
-                    svg.line(endPoint.x, startPoint.y, endPoint.x, endPoint.y)
+                    SVGUtils.Line(svg, startPoint.x, startPoint.y, endPoint.x, startPoint.y)
+                    SVGUtils.Line(svg, endPoint.x, startPoint.y, endPoint.x, endPoint.y)
                     break
 
                 case ConnectorLineShape.HorizontalStep:
