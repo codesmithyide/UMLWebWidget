@@ -30,7 +30,7 @@ module.exports = function(theTestHarness) {
 
 function ClassBoxCreationTest1(resolve) {
     let svg = SVG(window.document.createElement("div"))
-    let idGenerator = new UMLWebWidget.IdGenerator("ClassBoxCreationTest1")
+    let idGenerator = new UMLWebWidget.IDGenerator("ClassBoxCreationTest1")
     let classDescription = {
         "name": "MyClass",
         "attributes":
@@ -47,7 +47,7 @@ function ClassBoxCreationTest1(resolve) {
 
 function ClassBoxGetLayersTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-    let idGenerator = new UMLWebWidget.IdGenerator("ClassBoxGetLayersTest1")
+    let idGenerator = new UMLWebWidget.IDGenerator("ClassBoxGetLayersTest1")
     let classDescription = {
         "name": "MyClass",
         "attributes":
@@ -74,7 +74,7 @@ function ClassBoxGetLayersTest1(resolve, reject, test) {
 
 function ClassBoxGetLayersTest2(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-    let idGenerator = new UMLWebWidget.IdGenerator("ClassBoxGetLayersTest2")
+    let idGenerator = new UMLWebWidget.IDGenerator("ClassBoxGetLayersTest2")
     let classDescription = {
         "name": "MyClass",
         "attributes":
@@ -119,7 +119,7 @@ function ClassBoxGetLayersTest2(resolve, reject, test) {
 
 function ClassBoxMoveTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-    let idGenerator = new UMLWebWidget.IdGenerator("ClassBoxMoveTest1")
+    let idGenerator = new UMLWebWidget.IDGenerator("ClassBoxMoveTest1")
     let classDescription = {
         "name": "MyClass",
         "attributes":
@@ -147,7 +147,7 @@ function ClassBoxMoveTest1(resolve, reject, test) {
 
 function ClassBoxGetConnectionPointsRectangleTest1(resolve) {
     let svg = SVG(window.document.createElement("div"))
-    let idGenerator = new UMLWebWidget.IdGenerator("ClassBoxGetConnectionPointsRectangleTest1")
+    let idGenerator = new UMLWebWidget.IDGenerator("ClassBoxGetConnectionPointsRectangleTest1")
     let classDescription = {
         "name": "MyClass",
         "attributes":

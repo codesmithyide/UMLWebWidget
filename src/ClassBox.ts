@@ -15,7 +15,7 @@ import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { SVGUtils } from "./SVGUtils"
 import { DrawingUtilities } from "./DrawingUtilities"
-import { IdGenerator } from "./IdGenerator"
+import { IDGenerator } from "./IDGenerator"
 import { Errors } from "./Errors"
 
 /** 
@@ -28,7 +28,7 @@ import { Errors } from "./Errors"
     class box.
 */
 class ClassBox extends DiagramElement {
-    idGenerator: IdGenerator
+    idGenerator: IDGenerator
     errors: Errors
     shapeLayer: SVGLayer
     textLayer: SVGLayer
@@ -38,8 +38,8 @@ class ClassBox extends DiagramElement {
     connectionPointsRectangle
     connectionPoints
 
-    constructor(svg, idGenerator: IdGenerator, classDescription, canMove: boolean, style: Style, errors: Errors) {
-        super(svg, DiagramElementType.ClassBox, idGenerator.createId(classDescription.name + "-classbox"))
+    constructor(svg, idGenerator: IDGenerator, classDescription, canMove: boolean, style: Style, errors: Errors) {
+        super(svg, DiagramElementType.ClassBox, idGenerator.createID("classbox--" + classDescription.name ))
         this.idGenerator = idGenerator
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
@@ -97,9 +97,8 @@ function createDef(self, classInfo, canMove, style) {
     
     currentDimensions.height = style.getTopMargin(CSSClassName.ClassBox)
 
-    var classNameGroup = self.textLayer.group(self.id + "-name").addClass("UMLClassName")
-    var className = classNameGroup.text(classInfo.name).move(borderAdjustment.left + style.getLeftMargin(CSSClassName.ClassBox), borderAdjustment.top + currentDimensions.height)
-    className.id(null)
+    var classNameGroup = self.textLayer.group().addClass("UMLClassName")
+    var className = SVGUtils.Text(classNameGroup, borderAdjustment.left + style.getLeftMargin(CSSClassName.ClassBox), borderAdjustment.top + currentDimensions.height, classInfo.name)
     currentDimensions.width = Math.max(currentDimensions.width, className.bbox().width)
     currentDimensions.height += (className.bbox().height + style.getBottomMargin(CSSClassName.ClassBox))
 

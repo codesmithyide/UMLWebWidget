@@ -36,14 +36,18 @@ class SVGLayer {
     }
 
     /**
-      Adds a group to the layer.
-
-      @returns {SVG.G} An SVG.G element as decribed in {@link http://svgjs.com/parents/#svg-g}
-    */
+     * Adds a group to the layer.
+     *
+     * @returns {SVG.G} An SVG.G element as decribed in {@link http://svgjs.com/parents/#svg-g}
+     */
     group(id?: string) {
         let groupDef = this.svg.defs().group()
-        // By default SVG.js will assign an id to every element but setting it to null will remove it
-        groupDef.id(id)
+        if (id) {
+            groupDef.id(id)
+        } else {
+            // By default SVG.js will assign an id to every element but setting it to null will remove it
+            groupDef.id(null)
+        }
         this.defs.push(groupDef)
         return groupDef
     }

@@ -19,13 +19,12 @@ import { UseCase } from "./UseCase"
 import { Connector } from "./Connector"
 import { Metrics } from "./Metrics"
 import { Log } from "./Log"
-import { IdGenerator} from "./IdGenerator"
+import { IDGenerator } from "./IDGenerator"
 import { Errors } from "./Errors"
 
 /**
-  This class is the entry point for all the functionality provided
-  by the CodeSmithy UMLWebWidget.
-*/
+ * This class is the entry point for all the functionality provided by the CodeSmithy UMLWebWidget.
+ */
 class Diagram {
     settings: Settings
     errors: Errors
@@ -95,6 +94,7 @@ class Diagram {
     }
 
     createFromJSON(svg, id: string, jsonDiagramDescription, layout) {
+        let idGenerator = new IDGenerator(id)
         if (jsonDiagramDescription == null) {
             jsonDiagramDescription = { }
         }
@@ -102,12 +102,11 @@ class Diagram {
         let style = new Style()
 
         if (this.diagramDescription.elements) {
-            this.drawDiagram(svg, id, this.diagramDescription.elements, style, layout, this.errors)
+            this.drawDiagram(svg, idGenerator, this.diagramDescription.elements, style, layout, this.errors)
         }
     }
 
-    drawDiagram(svg, id: string, description, style, layout, , errors: Errors) {
-        let idGenerator = new IdGenerator(id)
+    drawDiagram(svg, idGenerator: IDGenerator, description, style, layout, errors: Errors) {
         let layoutManager = new LayoutManager(layout)
 
         let connectors: Connector[] = []
@@ -139,7 +138,7 @@ class Diagram {
             } else if (item.node) {
                 this.nodes.set(
                     item.node.name,
-                    new Node(svg, item.node.name, item.node, style, errors)
+                    new Node(svg, idGenerator, item.node, style, errors)
                 )
             } else if (item.actor) {
                 this.actors.set(
