@@ -6,34 +6,35 @@
 
 'use strict'
 
+import { CSSClassName } from "./CSSClassNames"
+
 /** Style settings. */
 export class Style {
     style
 
     constructor() {
-        this.style = {
-            "defaults": {
-                "margin-left": 12,
-                "margin-right": 12,
-                "margin-top": 9,
-                "margin-bottom": 9
-            },
-            "classtemplate": {
-                "margin-right": 15,
-                "margin-top": 12
-            },
-            "classtemplateparameters": {
-                "margin-left": 8,
-                "margin-right": 8,
-                "margin-top": 4,
-                "margin-bottom": 4
-            },
-            "lifeline": {
-                "execution-specification-bar-width": 8,
-                "execution-specification-bar-overhang": 5,
-                "execution-specification-bar-margin": 15
-            }
-        }
+        this.style = new Map()
+        this.style.set("defaults", {
+            "margin-left": 12,
+            "margin-right": 12,
+            "margin-top": 9,
+            "margin-bottom": 9
+        })
+        this.style.set(CSSClassName.ClassTemplate, {
+            "margin-right": 15,
+            "margin-top": 12
+        })
+        this.style.set("classtemplateparameters", {
+            "margin-left": 8,
+            "margin-right": 8,
+            "margin-top": 4,
+            "margin-bottom": 4
+        })
+        this.style.set("lifeline", {
+            "execution-specification-bar-width": 8,
+            "execution-specification-bar-overhang": 5,
+            "execution-specification-bar-margin": 15
+        })
     }
 
     getTopMargin(element) {
@@ -53,22 +54,22 @@ export class Style {
     }
 
     getExecutionSpecificationBarWidth() {
-        return this.style.lifeline["execution-specification-bar-width"]
+        return this.style.get("lifeline")["execution-specification-bar-width"]
     }
 
     getExecutionSpecificationBarOverhang() {
-        return this.style.lifeline["execution-specification-bar-overhang"]
+        return this.style.get("lifeline")["execution-specification-bar-overhang"]
     }
 
     getExecutionSpecificationBarMargin() {
-        return this.style.lifeline["execution-specification-bar-margin"]
+        return this.style.get("lifeline")["execution-specification-bar-margin"]
     }
 
     getValueOrDefault(self, element, style) {
-        if (self.style[element] && self.style[element][style]) {
-            return self.style[element][style]
+        if (self.style.get(element) && self.style.get(element)[style]) {
+            return self.style.get(element)[style]
         } else {
-            return self.style["defaults"][style]
+            return self.style.get("defaults")[style]
         }
     }
 
