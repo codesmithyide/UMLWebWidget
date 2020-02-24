@@ -83,7 +83,7 @@ class ClassBox extends DiagramElement {
 }
 
 function createDef(self, classInfo, canMove, style) {
-    var classGroup = self.shapeLayer.group(self.id + "-shape").addClass(CSSClassName.ClassBox)
+    var classGroup = self.shapeLayer.group().addClass(CSSClassName.ClassBox)
 
     let currentDimensions = { 
         width: 0,
@@ -97,7 +97,7 @@ function createDef(self, classInfo, canMove, style) {
     
     currentDimensions.height = style.getTopMargin(CSSClassName.ClassBox)
 
-    var classNameGroup = self.textLayer.group(self.id + "-name").addClass("UMLClassName")
+    var classNameGroup = self.textLayer.group().addClass("UMLClassName")
     var className = SVGUtils.Text(classNameGroup, borderAdjustment.left + style.getLeftMargin(CSSClassName.ClassBox), borderAdjustment.top + currentDimensions.height, classInfo.name)
     currentDimensions.width = Math.max(currentDimensions.width, className.bbox().width)
     currentDimensions.height += (className.bbox().height + style.getBottomMargin(CSSClassName.ClassBox))
