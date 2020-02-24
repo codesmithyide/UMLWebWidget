@@ -1,8 +1,16 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
 import { DiagramElement } from "./DiagramElement"
 import { SVGLayer } from "./SVGLayer"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
+import { Errors } from "./Errors"
 
 /**
   An actor on a use case diagram.
@@ -10,13 +18,15 @@ import { ConnectionPoint } from "./ConnectionPoint"
   @extends DiagramElement
 */
 class Actor extends DiagramElement {
+    errors: Errors
     shapeLayer: SVGLayer
     textLayer: SVGLayer
     actorDescription
     connectionPointsRectangle
 
-    constructor(svg, id: string, actorDescription) {
+    constructor(svg, id: string, actorDescription, errors: Errors) {
         super(svg, "actor", id)
+        this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.actorDescription = actorDescription
@@ -24,7 +34,7 @@ class Actor extends DiagramElement {
     }
 
     createConnectionPoint(svg) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter, this.errors)
         return newPoint
     }
 

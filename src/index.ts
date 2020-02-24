@@ -1,7 +1,13 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
-import { UMLWebWidgetError } from "./UMLWebWidgetError"
-import { Settings } from "./Settings"
+import { Errors, UMLWebWidgetError } from "./Errors"
+import { BuildType, Settings } from "./Settings"
 import { Style } from "./Style"
 import { Diagram } from "./Diagram"
 import { ConnectionPoint } from "./ConnectionPoint"
@@ -24,7 +30,9 @@ import { Log } from "./Log"
 import { Metrics } from "./Metrics"
 
 export {
+    Errors,
     UMLWebWidgetError,
+    BuildType,
     Settings,
     Style,
     Diagram,
