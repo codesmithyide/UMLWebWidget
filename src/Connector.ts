@@ -7,10 +7,11 @@
 'use strict'
 
 import { DiagramElement } from "./DiagramElement"
-import { SVGLayer } from "./SVGLayer"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { Label } from "./Label"
 import {ConnectionPoint} from "./ConnectionPoint"
+import { SVGLayer } from "./SVGLayer"
+import { SVGUtils } from "./SVGUtils"
 
 /**
   Represents a connector between elements.
@@ -379,7 +380,7 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
             let shape1 = getConnectorLineShape1(startPoint, endPoint, orientation)
             switch (shape1) {
                 case ConnectorLineShape.Straight:
-                    svg.line(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
+                    SVGUtils.Line(svg, startPoint.x, startPoint.y, endPoint.x, endPoint.y)
                     break
 
                 case ConnectorLineShape.TopRightCorner:

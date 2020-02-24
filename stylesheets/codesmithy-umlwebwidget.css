@@ -184,12 +184,12 @@
    cursor: nesw-resize
 }
 
-.codesmithy-uml-diagram--standard-style .UMLClassBox rect {
+.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classbox rect {
    stroke: black;
    fill: white;
 }
 
-.codesmithy-uml-diagram--standard-style .UMLClassBox line {
+.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classbox line {
    stroke: black;
 }
 
