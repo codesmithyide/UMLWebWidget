@@ -92,6 +92,7 @@ class SVGLayer {
     */
     text(str) { 
         let textDef = this.svg.defs().text(str)
+        textDef.id(null)
         this.defs.push(textDef)
         return textDef
     }
