@@ -83,7 +83,7 @@ class ClassBox extends DiagramElement {
 }
 
 function createDef(self, classInfo, canMove, style) {
-    var classGroup = self.shapeLayer.group(self.id + "-shape").addClass(CSSClassName.ClassBox)
+    var classGroup = self.shapeLayer.group().addClass(CSSClassName.ClassBox)
 
     let currentDimensions = { 
         width: 0,
