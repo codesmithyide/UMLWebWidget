@@ -10,6 +10,7 @@ import { DiagramElementType } from "./DiagramElement"
 import { DiagramElement } from "./DiagramElement"
 import { SVGLayer } from "./SVGLayer"
 import { Style } from "./Style"
+import { CSSClassName } from "./CSSClassNames"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { SVGUtils } from "./SVGUtils"
@@ -80,7 +81,7 @@ class ClassBox extends DiagramElement {
 }
 
 function createDef(self, classInfo, canMove, style) {
-    var classGroup = self.shapeLayer.group().addClass("UMLClassBox")
+    var classGroup = self.shapeLayer.group().addClass(CSSClassName.ClassBox)
 
     let currentDimensions = { 
         width: 0,

@@ -1,7 +1,12 @@
-.codesmithy-uml-diagram .UMLClassBox rect {
+.codesmithy-uml-diagram__classbox rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
+}
+
+.codesmithy-uml-diagram__classbox line {
+   stroke: #595959;
+   stroke-width: 1;
 }
 
 .codesmithy-uml-diagram .UMLClassTemplate line {
@@ -13,11 +18,6 @@
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
-}
-
-.codesmithy-uml-diagram .UMLClassBox line {
-   stroke: #595959;
-   stroke-width: 1;
 }
 
 .codesmithy-uml-diagram .UMLComponent rect {
@@ -184,36 +184,36 @@
    cursor: nesw-resize
 }
 
-.codesmithy-uml-diagram--standard-theme .UMLClassBox rect {
+.codesmithy-uml-diagram--standard-style .UMLClassBox rect {
    stroke: black;
    fill: white;
 }
 
-.codesmithy-uml-diagram--standard-theme .UMLClassBox line {
+.codesmithy-uml-diagram--standard-style .UMLClassBox line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-theme .UMLInheritanceRelationship line {
+.codesmithy-uml-diagram--standard-style .UMLInheritanceRelationship line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-theme .UMLInheritanceRelationship polygon {
+.codesmithy-uml-diagram--standard-style .UMLInheritanceRelationship polygon {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-theme .UMLCompositionRelationship line {
+.codesmithy-uml-diagram--standard-style .UMLCompositionRelationship line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-theme .UMLCompositionRelationship polygon {
+.codesmithy-uml-diagram--standard-style .UMLCompositionRelationship polygon {
    stroke: black;
    fill: black;
 }
 
-.codesmithy-uml-diagram--standard-theme .UMLAggregationRelationship line {
+.codesmithy-uml-diagram--standard-style .UMLAggregationRelationship line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-theme .UMLAggregationRelationship polygon {
+.codesmithy-uml-diagram--standard-style .UMLAggregationRelationship polygon {
    stroke: black;
 }
