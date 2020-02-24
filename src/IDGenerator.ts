@@ -14,7 +14,7 @@ class IDGenerator {
     }
 
     createID(type: string): string {
-        return (this.prefix + "-" + type)
+        return (this.prefix + "--" + type)
     }
 }
 

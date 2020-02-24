@@ -30,7 +30,7 @@ class Node extends DiagramElement {
     connectionPointsRectangle
 
     constructor(svg, idGenerator: IDGenerator, nodeDescription, style: Style, errors: Errors) {
-        super(svg, DiagramElementType.Node, idGenerator.createID("node-" + nodeDescription.name))
+        super(svg, DiagramElementType.Node, idGenerator.createID("node--" + nodeDescription.name))
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
