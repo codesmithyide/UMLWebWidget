@@ -13,8 +13,9 @@ import { SVGLayerSet } from "./SVGLayerSet"
  * to this list.
  */
 const enum DiagramElementType {
-  ClassBox = "classbox",
-  ConnectionPoint = "connectionpoint"
+    ClassBox = "classbox",
+    ConnectionPoint = "connectionpoint",
+    Node = "node"
 }
 
 var position = Symbol()

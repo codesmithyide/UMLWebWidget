@@ -27,7 +27,7 @@ module.exports = function(theTestHarness) {
 function ComponentDiagramCreateFromJSONTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
     let componentDiagram = new UMLWebWidget.Diagram()
-    componentDiagram.createFromJSON(svg, {
+    componentDiagram.createFromJSON(svg, "ComponentDiagramCreateFromJSONTest1", {
         "elements":
           [
               { 
@@ -62,7 +62,7 @@ function ComponentDiagramCreateFromJSONTest2(resolve, reject, test) {
     }
 
     let componentDiagram = new UMLWebWidget.Diagram()
-    componentDiagram.createFromJSON(svg, {
+    componentDiagram.createFromJSON(svg, "ComponentDiagramCreateFromJSONTest2", {
         "elements":
           [
               { 
@@ -105,7 +105,7 @@ function ComponentDiagramCreateFromJSONTest3(resolve, reject, test) {
     }
 
     let componentDiagram = new UMLWebWidget.Diagram()
-    componentDiagram.createFromJSON(svg, {
+    componentDiagram.createFromJSON(svg, "ComponentDiagramCreateFromJSONTest3", {
         "elements":
           [
               { 
@@ -160,7 +160,7 @@ function ComponentDiagramCreateFromJSONTest4(resolve, reject, test) {
     }
 
     let componentDiagram = new UMLWebWidget.Diagram()
-    componentDiagram.createFromJSON(svg, {
+    componentDiagram.createFromJSON(svg, "ComponentDiagramCreateFromJSONTest4", {
         "elements":
           [
               { 
@@ -223,7 +223,7 @@ function ComponentDiagramCreateFromJSONTest5(resolve, reject, test) {
     }
 
     let componentDiagram = new UMLWebWidget.Diagram()
-    componentDiagram.createFromJSON(svg, {
+    componentDiagram.createFromJSON(svg, "ComponentDiagramCreateFromJSONTest5", {
         "elements":
           [
               {

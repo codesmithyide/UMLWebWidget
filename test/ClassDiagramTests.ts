@@ -55,7 +55,7 @@ function ClassDiagramCreateFromJSONTest1(resolve) {
 
 function ClassDiagramCreateFromJSONTest2(resolve) {
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(null, {
+    classDiagram.createFromJSON(null, "ClassDiagramCreateFromJSONTest2", {
     })
     let elementKeys = Object.keys(classDiagram.diagramDescription)
     if ((elementKeys.length == 0) && (classDiagram.classboxes.size == 0)) {
@@ -68,7 +68,7 @@ function ClassDiagramCreateFromJSONTest2(resolve) {
 function ClassDiagramCreateFromJSONTest3(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramCreateFromJSONTest3", {
         "elements":
             [
                 { 
@@ -110,7 +110,7 @@ function ClassDiagramCreateFromJSONTest4(resolve, reject, test) {
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramCreateFromJSONTest4", {
         "elements":
             [
                 { 
@@ -166,7 +166,7 @@ function ClassDiagramCreateFromJSONTest5(resolve, reject, test) {
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramCreateFromJSONTest5", {
         "elements":
             [
                 { 
@@ -230,7 +230,7 @@ function ClassDiagramCreateFromJSONTest6(resolve, reject, test) {
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramCreateFromJSONTest6", {
         "elements":
             [
                 { 
@@ -294,7 +294,7 @@ function ClassDiagramCreateFromJSONTest7(resolve, reject, test) {
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramCreateFromJSONTest7", {
         "elements":
             [
                 { 
@@ -360,7 +360,7 @@ function ClassDiagramConnectorLayoutTest1(resolve, reject, test) {
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramConnectorLayoutTest1", {
         "elements":
             [
                 { 
@@ -481,7 +481,7 @@ function ClassDiagramConnectorLayoutTest2(resolve, reject, test) {
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramConnectorLayoutTest2", {
         "elements":
             [
                 { 
@@ -602,7 +602,7 @@ function ClassDiagramConnectorLayoutTest3(resolve, reject, test) {
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramConnectorLayoutTest3", {
         "elements":
             [
                 { 
@@ -727,7 +727,7 @@ function ClassDiagramConnectorLayoutTest4(resolve, reject, test) {
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramConnectorLayoutTest4", {
         "elements":
             [
                 { 
@@ -852,7 +852,7 @@ function ClassDiagramConnectorLayoutTest5(resolve, reject, test) {
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramConnectorLayoutTest5", {
         "elements":
             [
                 { 
@@ -963,7 +963,7 @@ function ClassDiagramClassTemplateTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramClassTemplateTest1", {
         "elements":
             [
                 { 
@@ -1004,7 +1004,7 @@ function ClassDiagramClassTemplateTest2(resolve, reject, test) {
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramClassTemplateTest2", {
         "elements":
             [
                 { 
