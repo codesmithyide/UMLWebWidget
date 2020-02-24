@@ -6,16 +6,16 @@
 
 'use strict'
 
-class IdGenerator {
+class IDGenerator {
     private prefix: string
 
     constructor(prefix: string) {
         this.prefix = prefix
     }
 
-    createId(type: string): string {
+    createID(type: string): string {
         return (this.prefix + "-" + type)
     }
 }
 
-export { IdGenerator }
+export { IDGenerator }
