@@ -25,7 +25,7 @@ module.exports = function(theTestHarness) {
 function DeploymentDiagramCreateFromJSONTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
     let deploymentDiagram = new UMLWebWidget.Diagram()
-    deploymentDiagram.createFromJSON(svg, { 
+    deploymentDiagram.createFromJSON(svg, "DeploymentDiagramCreateFromJSONTest1", {
         "elements":
             [
                 {
@@ -54,13 +54,13 @@ function DeploymentDiagramCreateFromJSONTest2(resolve, reject, test) {
 
     let layout = {
         elements: {
-            WebServer: { "position": { x: 1, y: 1 } },
-            DatabaseServer: { "position": { x:150, y: 1 } }
+            "DeploymentDiagramCreateFromJSONTest2--node--WebServer": { "position": { x: 1, y: 1 } },
+            "DeploymentDiagramCreateFromJSONTest2--node--DatabaseServer": { "position": { x:150, y: 1 } }
         }
     }
 
     let deploymentDiagram = new UMLWebWidget.Diagram()
-    deploymentDiagram.createFromJSON(svg, { 
+    deploymentDiagram.createFromJSON(svg, "DeploymentDiagramCreateFromJSONTest2", {
         "elements":
             [
                 {
@@ -96,13 +96,13 @@ function DeploymentDiagramCreateFromJSONTest3(resolve, reject, test) {
 
     let layout = {
         elements: {
-            WebServer: { "position": { x: 1, y: 1 } },
-            DatabaseServer: { "position": { x: 150, y: 1 } }
+            "DeploymentDiagramCreateFromJSONTest3--node--WebServer": { "position": { x: 1, y: 1 } },
+            "DeploymentDiagramCreateFromJSONTest3--node--DatabaseServer": { "position": { x: 150, y: 1 } }
         }
     }
 
     let deploymentDiagram = new UMLWebWidget.Diagram()
-    deploymentDiagram.createFromJSON(svg, {
+    deploymentDiagram.createFromJSON(svg, "DeploymentDiagramCreateFromJSONTest3", {
         "elements":
             [
                 {

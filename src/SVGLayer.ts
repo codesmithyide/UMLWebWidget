@@ -36,18 +36,25 @@ class SVGLayer {
     }
 
     /**
-      Adds a group to the layer.
-
-      @returns {SVG.G} An SVG.G element as decribed in {@link http://svgjs.com/parents/#svg-g}
-    */
-    group() {
+     * Adds a group to the layer.
+     *
+     * @returns {SVG.G} An SVG.G element as decribed in {@link http://svgjs.com/parents/#svg-g}
+     */
+    group(id?: string) {
         let groupDef = this.svg.defs().group()
+        if (id) {
+            groupDef.id(id)
+        } else {
+            // By default SVG.js will assign an id to every element but setting it to null will remove it
+            groupDef.id(null)
+        }
         this.defs.push(groupDef)
         return groupDef
     }
 
     circle(radius) {
         let circleDef = this.svg.defs().circle(radius)
+        circleDef.id(null)
         this.defs.push(circleDef)
         return circleDef
     }
@@ -59,12 +66,14 @@ class SVGLayer {
     */
     line(x1, y1, x2, y2) {
         let lineDef = this.svg.defs().line(x1, y1, x2, y2)
+        lineDef.id(null)
         this.defs.push(lineDef)
         return lineDef
     }
 
     polygon(description) {
         let polygonDef = this.svg.defs().polygon(description)
+        polygonDef.id(null)
         this.defs.push(polygonDef)
         return polygonDef
     }
@@ -76,6 +85,7 @@ class SVGLayer {
     */
     rect(width, height) {
         let rectDef = this.svg.defs().rect(width, height)
+        rectDef.id(null)
         this.defs.push(rectDef)
         return rectDef
     }
@@ -87,6 +97,7 @@ class SVGLayer {
     */
     text(str) { 
         let textDef = this.svg.defs().text(str)
+        textDef.id(null)
         this.defs.push(textDef)
         return textDef
     }
@@ -101,6 +112,7 @@ class SVGLayer {
             container = self.svg
         }
         self.defs.forEach(function(element) {
+            // This will also remove the element from the defs section
             container.add(element)
         })
     }

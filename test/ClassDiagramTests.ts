@@ -55,7 +55,7 @@ function ClassDiagramCreateFromJSONTest1(resolve) {
 
 function ClassDiagramCreateFromJSONTest2(resolve) {
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(null, {
+    classDiagram.createFromJSON(null, "ClassDiagramCreateFromJSONTest2", {
     })
     let elementKeys = Object.keys(classDiagram.diagramDescription)
     if ((elementKeys.length == 0) && (classDiagram.classboxes.size == 0)) {
@@ -68,7 +68,7 @@ function ClassDiagramCreateFromJSONTest2(resolve) {
 function ClassDiagramCreateFromJSONTest3(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramCreateFromJSONTest3", {
         "elements":
             [
                 { 
@@ -104,13 +104,13 @@ function ClassDiagramCreateFromJSONTest4(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "MyClass1": { "position": { "x": 0, "y": 0 } },
-            "MyClass2": { "position": { "x": 150, "y": 0 } }
+            "ClassDiagramCreateFromJSONTest4--classbox--MyClass1": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramCreateFromJSONTest4--classbox--MyClass2": { "position": { "x": 150, "y": 0 } }
         }
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramCreateFromJSONTest4", {
         "elements":
             [
                 { 
@@ -160,13 +160,13 @@ function ClassDiagramCreateFromJSONTest5(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "MyBaseClass": { "position": { "x": 0, "y": 0 } },
-            "MyDerivedClass": { "position": { "x": 170, "y": 0 } }
+            "ClassDiagramCreateFromJSONTest5--classbox--MyBaseClass": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramCreateFromJSONTest5--classbox--MyDerivedClass": { "position": { "x": 170, "y": 0 } }
         }
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramCreateFromJSONTest5", {
         "elements":
             [
                 { 
@@ -224,13 +224,13 @@ function ClassDiagramCreateFromJSONTest6(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ContainingClass": { "position": { "x": 0, "y": 0 } },
-            "ContainedClass": { "position": { "x": 200, "y": 0 } }
+            "ClassDiagramCreateFromJSONTest6--classbox--ContainingClass": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramCreateFromJSONTest6--classbox--ContainedClass": { "position": { "x": 200, "y": 0 } }
         }
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramCreateFromJSONTest6", {
         "elements":
             [
                 { 
@@ -288,13 +288,13 @@ function ClassDiagramCreateFromJSONTest7(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ContainingClass": { "position": { "x": 0, "y": 0 } },
-            "ContainedClass": { "position": { "x": 200, "y": 0 } }
+            "ClassDiagramCreateFromJSONTest7--classbox--ContainingClass": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramCreateFromJSONTest7--classbox--ContainedClass": { "position": { "x": 200, "y": 0 } }
         }
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramCreateFromJSONTest7", {
         "elements":
             [
                 { 
@@ -351,16 +351,16 @@ function ClassDiagramConnectorLayoutTest1(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Base": { "position": { "x": 150, "y": 125 } },
-            "Derived1": { "position": { "x": 134, "y": 0 } },
-            "Derived2": { "position": { "x": 0, "y": 125 } },
-            "Derived3": { "position": { "x": 260, "y": 125 } },
-            "Derived4": { "position": { "x": 134, "y": 250 } }
+            "ClassDiagramConnectorLayoutTest1--classbox--Base": { "position": { "x": 150, "y": 125 } },
+            "ClassDiagramConnectorLayoutTest1--classbox--Derived1": { "position": { "x": 134, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest1--classbox--Derived2": { "position": { "x": 0, "y": 125 } },
+            "ClassDiagramConnectorLayoutTest1--classbox--Derived3": { "position": { "x": 260, "y": 125 } },
+            "ClassDiagramConnectorLayoutTest1--classbox--Derived4": { "position": { "x": 134, "y": 250 } }
         }
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramConnectorLayoutTest1", {
         "elements":
             [
                 { 
@@ -472,16 +472,16 @@ function ClassDiagramConnectorLayoutTest2(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Base": { "position": { "x": 150, "y": 125 } },
-            "Derived1": { "position": { "x": 0, "y": 0 } },
-            "Derived2": { "position": { "x": 260, "y": 0 } },
-            "Derived3": { "position": { "x": 0, "y": 250 } },
-            "Derived4": { "position": { "x": 260, "y": 250 } }
+            "ClassDiagramConnectorLayoutTest2--classbox--Base": { "position": { "x": 150, "y": 125 } },
+            "ClassDiagramConnectorLayoutTest2--classbox--Derived1": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest2--classbox--Derived2": { "position": { "x": 260, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest2--classbox--Derived3": { "position": { "x": 0, "y": 250 } },
+            "ClassDiagramConnectorLayoutTest2--classbox--Derived4": { "position": { "x": 260, "y": 250 } }
         }
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramConnectorLayoutTest2", {
         "elements":
             [
                 { 
@@ -593,16 +593,16 @@ function ClassDiagramConnectorLayoutTest3(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Base": { "position": { "x": 150, "y": 65 } },
-            "Derived1": { "position": { "x": 0, "y": 0 } },
-            "Derived2": { "position": { "x": 260, "y": 0 } },
-            "Derived3": { "position": { "x": 0, "y": 130 } },
-            "Derived4": { "position": { "x": 260, "y": 130 } }
+            "ClassDiagramConnectorLayoutTest3--classbox--Base": { "position": { "x": 150, "y": 65 } },
+            "ClassDiagramConnectorLayoutTest3--classbox--Derived1": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest3--classbox--Derived2": { "position": { "x": 260, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest3--classbox--Derived3": { "position": { "x": 0, "y": 130 } },
+            "ClassDiagramConnectorLayoutTest3--classbox--Derived4": { "position": { "x": 260, "y": 130 } }
         }
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramConnectorLayoutTest3", {
         "elements":
             [
                 { 
@@ -714,20 +714,20 @@ function ClassDiagramConnectorLayoutTest4(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Base": { "position": { "x": 150, "y": 65 } },
-            "Derived1": { "position": { "x": 0, "y": 0 } },
-            "Derived2": { "position": { "x": 260, "y": 0 } },
-            "Derived3": { "position": { "x": 0, "y": 130 } },
-            "Derived4": { "position": { "x": 260, "y": 130 } },
-            "Derived1-Base-inheritance": { "end": "top-center" },
-            "Derived2-Base-inheritance": { "end": "top-center" },
-            "Derived3-Base-inheritance": { "end": "bottom-center" },
-            "Derived4-Base-inheritance": { "end": "bottom-center" }
+            "ClassDiagramConnectorLayoutTest4--classbox--Base": { "position": { "x": 150, "y": 65 } },
+            "ClassDiagramConnectorLayoutTest4--classbox--Derived1": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest4--classbox--Derived2": { "position": { "x": 260, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest4--classbox--Derived3": { "position": { "x": 0, "y": 130 } },
+            "ClassDiagramConnectorLayoutTest4--classbox--Derived4": { "position": { "x": 260, "y": 130 } },
+            "ClassDiagramConnectorLayoutTest4--classbox--Derived1-ClassDiagramConnectorLayoutTest4--classbox--Base-inheritance": { "end": "top-center" },
+            "ClassDiagramConnectorLayoutTest4--classbox--Derived2-ClassDiagramConnectorLayoutTest4--classbox--Base-inheritance": { "end": "top-center" },
+            "ClassDiagramConnectorLayoutTest4--classbox--Derived3-ClassDiagramConnectorLayoutTest4--classbox--Base-inheritance": { "end": "bottom-center" },
+            "ClassDiagramConnectorLayoutTest4--classbox--Derived4-ClassDiagramConnectorLayoutTest4--classbox--Base-inheritance": { "end": "bottom-center" }
         }
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramConnectorLayoutTest4", {
         "elements":
             [
                 { 
@@ -839,20 +839,20 @@ function ClassDiagramConnectorLayoutTest5(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Base": { "position": { "x": 150, "y": 125 } },
-            "Derived1": { "position": { "x": 0, "y": 0 } },
-            "Derived2": { "position": { "x": 260, "y": 0 } },
-            "Derived3": { "position": { "x": 0, "y": 250 } },
-            "Derived4": { "position": { "x": 260, "y": 250 } },
-            "Derived1-Base-inheritance": { "end": "left-center" },
-            "Derived2-Base-inheritance": { "end": "right-center" },
-            "Derived3-Base-inheritance": { "end": "left-center" },
-            "Derived4-Base-inheritance": { "end": "right-center" }
+            "ClassDiagramConnectorLayoutTest5--classbox--Base": { "position": { "x": 150, "y": 125 } },
+            "ClassDiagramConnectorLayoutTest5--classbox--Derived1": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest5--classbox--Derived2": { "position": { "x": 260, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest5--classbox--Derived3": { "position": { "x": 0, "y": 250 } },
+            "ClassDiagramConnectorLayoutTest5--classbox--Derived4": { "position": { "x": 260, "y": 250 } },
+            "ClassDiagramConnectorLayoutTest5--classbox--Derived1-ClassDiagramConnectorLayoutTest5--classbox--Base-inheritance": { "end": "left-center" },
+            "ClassDiagramConnectorLayoutTest5--classbox--Derived2-ClassDiagramConnectorLayoutTest5--classbox--Base-inheritance": { "end": "right-center" },
+            "ClassDiagramConnectorLayoutTest5--classbox--Derived3-ClassDiagramConnectorLayoutTest5--classbox--Base-inheritance": { "end": "left-center" },
+            "ClassDiagramConnectorLayoutTest5--classbox--Derived4-ClassDiagramConnectorLayoutTest5--classbox--Base-inheritance": { "end": "right-center" }
         }
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramConnectorLayoutTest5", {
         "elements":
             [
                 { 
@@ -963,7 +963,7 @@ function ClassDiagramClassTemplateTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramClassTemplateTest1", {
         "elements":
             [
                 { 
@@ -999,12 +999,12 @@ function ClassDiagramClassTemplateTest2(resolve, reject, test) {
     let layout = {
         "elements": {
             "ClassTemplate": { "position": { "x": 0, "y": 0 } },
-            "MyClass": { "position": { "x": 175, "y": 16 } }
+            "ClassDiagramClassTemplateTest2--classbox--MyClass": { "position": { "x": 175, "y": 16 } }
         }
     }
 
     let classDiagram = new UMLWebWidget.Diagram()
-    classDiagram.createFromJSON(svg, {
+    classDiagram.createFromJSON(svg, "ClassDiagramClassTemplateTest2", {
         "elements":
             [
                 { 

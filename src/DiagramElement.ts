@@ -13,8 +13,9 @@ import { SVGLayerSet } from "./SVGLayerSet"
  * to this list.
  */
 const enum DiagramElementType {
-  ClassBox = "classbox",
-  ConnectionPoint = "connectionpoint"
+    ClassBox = "classbox",
+    ConnectionPoint = "connectionpoint",
+    Node = "node"
 }
 
 var position = Symbol()
@@ -53,7 +54,7 @@ class DiagramElement {
       @returns {SVGLayerSet} The SVG layers to use to draw the
         element.
     */
-    getLayers() {
+    getLayers(): SVGLayerSet {
         this.update()
         return this.layers
     }
@@ -66,7 +67,7 @@ class DiagramElement {
         return this[position].y
     }
 
-    move(x: number, y: number) {
+    move(x: number, y: number): void {
         this.uptodate = false
         this[position].x = x
         this[position].y = y
