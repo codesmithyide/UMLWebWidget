@@ -54,8 +54,8 @@ function DeploymentDiagramCreateFromJSONTest2(resolve, reject, test) {
 
     let layout = {
         elements: {
-            "DeploymentDiagramCreateFromJSONTest2-node-WebServer": { "position": { x: 1, y: 1 } },
-            "DeploymentDiagramCreateFromJSONTest2-node-DatabaseServer": { "position": { x:150, y: 1 } }
+            "DeploymentDiagramCreateFromJSONTest2--node--WebServer": { "position": { x: 1, y: 1 } },
+            "DeploymentDiagramCreateFromJSONTest2--node--DatabaseServer": { "position": { x:150, y: 1 } }
         }
     }
 
@@ -96,8 +96,8 @@ function DeploymentDiagramCreateFromJSONTest3(resolve, reject, test) {
 
     let layout = {
         elements: {
-            "DeploymentDiagramCreateFromJSONTest3-node-WebServer": { "position": { x: 1, y: 1 } },
-            "DeploymentDiagramCreateFromJSONTest3-node-DatabaseServer": { "position": { x: 150, y: 1 } }
+            "DeploymentDiagramCreateFromJSONTest3--node--WebServer": { "position": { x: 1, y: 1 } },
+            "DeploymentDiagramCreateFromJSONTest3--node--DatabaseServer": { "position": { x: 150, y: 1 } }
         }
     }
 

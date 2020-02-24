@@ -39,7 +39,7 @@ class ClassBox extends DiagramElement {
     connectionPoints
 
     constructor(svg, idGenerator: IDGenerator, classDescription, canMove: boolean, style: Style, errors: Errors) {
-        super(svg, DiagramElementType.ClassBox, idGenerator.createID(classDescription.name + "-classbox"))
+        super(svg, DiagramElementType.ClassBox, idGenerator.createID("classbox--" + classDescription.name ))
         this.idGenerator = idGenerator
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
