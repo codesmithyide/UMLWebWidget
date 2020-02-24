@@ -119,7 +119,7 @@ class Diagram {
             if (item.class) {
                 this.classboxes.set(
                     item.class.name,
-                    new ClassBox(svg, item.class.name, item.class, this.settings.canMove, style, errors)
+                    new ClassBox(svg, idGenerator, item.class, this.settings.canMove, style, errors)
                 )
             } else if (item.classtemplate) {
                 this.classtemplates.set(

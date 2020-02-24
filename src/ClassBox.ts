@@ -15,6 +15,7 @@ import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { SVGUtils } from "./SVGUtils"
 import { DrawingUtilities } from "./DrawingUtilities"
+import { IDGenerator } from "./IDGenerator"
 import { Errors } from "./Errors"
 
 /** 
@@ -27,6 +28,7 @@ import { Errors } from "./Errors"
     class box.
 */
 class ClassBox extends DiagramElement {
+    idGenerator: IDGenerator
     errors: Errors
     shapeLayer: SVGLayer
     textLayer: SVGLayer
@@ -36,8 +38,9 @@ class ClassBox extends DiagramElement {
     connectionPointsRectangle
     connectionPoints
 
-    constructor(svg, id: string, classDescription, canMove: boolean, style: Style, errors: Errors) {
-        super(svg, DiagramElementType.ClassBox, id)
+    constructor(svg, idGenerator: IDGenerator, classDescription, canMove: boolean, style: Style, errors: Errors) {
+        super(svg, DiagramElementType.ClassBox, idGenerator.createID("classbox--" + classDescription.name ))
+        this.idGenerator = idGenerator
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
@@ -46,8 +49,7 @@ class ClassBox extends DiagramElement {
         this.style = style
         this.connectionPointsRectangle = null
 
-        // List of connection points that are connected to
-        // this class box
+        // List of connection points that are connected to this class box
         this.connectionPoints = [ ]
     }
 
@@ -112,8 +114,7 @@ function createDef(self, classInfo, canMove, style) {
     currentDimensions.width = Math.max(currentDimensions.width, operationsCompartmentDimensions.width)
     currentDimensions.height += operationsCompartmentDimensions.height
 
-    // According to the UML standard the class name must be
-    // centered so center it
+    // According to the UML standard the class name must be centered so center it
     if (currentDimensions.width > className.bbox().width) {
         className.dx((currentDimensions.width - className.bbox().width)/2)
     }
