@@ -25,22 +25,23 @@ module.exports = function(theTestHarness) {
 
 function NodeCreationTest1(resolve) {
     let svg = SVG(window.document.createElement("div"))
+    let idGenerator = new UMLWebWidget.IDGenerator("NodeCreationTest1")
     let nodeDescription = {
         "name": "WebServer"
     }
     let style = new UMLWebWidget.Style()
-    let node = new UMLWebWidget.Node(svg, nodeDescription.name, nodeDescription, style)
+    let node = new UMLWebWidget.Node(svg, idGenerator, nodeDescription, style)
     resolve(tf.TestResultOutcome.ePassed)
 }
 
 function NodeGetLayersTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-
+    let idGenerator = new UMLWebWidget.IDGenerator("NodeGetLayersTest1")
     let nodeDescription = {
         "name": "WebServer"
     }
     let style = new UMLWebWidget.Style()
-    let node = new UMLWebWidget.Node(svg, nodeDescription.name, nodeDescription, style)
+    let node = new UMLWebWidget.Node(svg, idGenerator, nodeDescription, style)
 
     let layers = node.getLayers()
     layers.getLayer("shape").write()
@@ -56,7 +57,7 @@ function NodeGetLayersTest1(resolve, reject, test) {
 
 function NodeGetLayersTest2(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-
+    let idGenerator = new UMLWebWidget.IDGenerator("NodeGetLayersTest2")
     let nodeDescription = {
         "name": "WebServer",
         "elements": [{
@@ -66,7 +67,7 @@ function NodeGetLayersTest2(resolve, reject, test) {
         }]
     }
     let style = new UMLWebWidget.Style()
-    let node = new UMLWebWidget.Node(svg, nodeDescription.name, nodeDescription, style)
+    let node = new UMLWebWidget.Node(svg, idGenerator, nodeDescription, style)
 
     let layers = node.getLayers()
     layers.getLayer("shape").write()
