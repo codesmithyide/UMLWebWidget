@@ -7,6 +7,7 @@
 'use strict'
 
 import { DiagramElement } from "./DiagramElement"
+import { CSSClassName } from "./CSSClassNames"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { DrawingUtilities } from "./DrawingUtilities"
@@ -47,7 +48,7 @@ class ClassTemplate extends DiagramElement {
     }
 
     doUpdate() {
-        var classTemplateGroup = this.shapeLayer.group().addClass("UMLClassTemplate")
+        var classTemplateGroup = this.shapeLayer.group().addClass(CSSClassName.ClassTemplate)
 
         let currentDimensions = { 
             width: 0,
