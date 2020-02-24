@@ -1,8 +1,14 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
 var AddSVGLayerTests = require("./SVGLayerTests.ts")
 var AddSVGLayerSetTests = require("./SVGLayerSetTests.ts")
-var AddUMLWebWidgetErrorTests = require("./UMLWebWidgetErrorTests.ts")
+var AddErrorsTests = require("./ErrorsTests.ts")
 var AddSettingsTests = require("./SettingsTests.ts")
 var AddStyleTests = require("./StyleTests.ts")
 var AddConnectionPointPositionTests = require("./ConnectionPointPositionTests.ts")
@@ -22,16 +28,16 @@ var AddUseCaseDiagramTests = require("./UseCaseDiagramTests.ts")
 var AddComponentDiagramTests = require("./ComponentDiagramTests.ts")
 var AddDeploymentDiagramTests = require("./DeploymentDiagramTests.ts")
 var AddNoteTests = require("./NoteTests.ts")
-var TestUtils = require("./TestUtils.ts")
+import { TestUtils } from "./TestUtils"
 var tf = require("ishiko-test-framework")
 
 let theTestHarness = new tf.TestHarness("codesmithy-umlwebwidget")
 
 TestUtils.createDirectory(__dirname + "/output")
 
+AddErrorsTests(theTestHarness)
 AddSVGLayerTests(theTestHarness)
 AddSVGLayerSetTests(theTestHarness)
-AddUMLWebWidgetErrorTests(theTestHarness)
 AddSettingsTests(theTestHarness)
 AddStyleTests(theTestHarness)
 AddConnectionPointPositionTests(theTestHarness)

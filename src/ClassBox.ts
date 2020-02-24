@@ -1,11 +1,22 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
+import { DiagramElementType } from "./DiagramElement"
 import { DiagramElement } from "./DiagramElement"
 import { SVGLayer } from "./SVGLayer"
 import { Style } from "./Style"
+import { CSSClassName } from "./CSSClassNames"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
+import { SVGUtils } from "./SVGUtils"
 import { DrawingUtilities } from "./DrawingUtilities"
 import { IdGenerator } from "./IdGenerator"
+import { Errors } from "./Errors"
 
 /** 
   A class box. 
@@ -18,6 +29,7 @@ import { IdGenerator } from "./IdGenerator"
 */
 class ClassBox extends DiagramElement {
     idGenerator: IdGenerator
+    errors: Errors
     shapeLayer: SVGLayer
     textLayer: SVGLayer
     classDescription
@@ -26,9 +38,10 @@ class ClassBox extends DiagramElement {
     connectionPointsRectangle
     connectionPoints
 
-    constructor(svg, idGenerator: IdGenerator, classDescription, canMove: boolean, style: Style) {
-        super(svg, "classbox", idGenerator.createId(classDescription.name + "-classbox"))
+    constructor(svg, idGenerator: IdGenerator, classDescription, canMove: boolean, style: Style, errors: Errors) {
+        super(svg, DiagramElementType.ClassBox, idGenerator.createId(classDescription.name + "-classbox"))
         this.idGenerator = idGenerator
+        this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.classDescription = classDescription
@@ -46,7 +59,7 @@ class ClassBox extends DiagramElement {
       point is added to this.connectionPoints.
     */
     createConnectionPoint(svg) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter, this.errors)
         this.connectionPoints.push(newPoint)
         return newPoint
     }
@@ -70,7 +83,7 @@ class ClassBox extends DiagramElement {
 }
 
 function createDef(self, classInfo, canMove, style) {
-    var classGroup = self.shapeLayer.group(self.id + "-shape").addClass("UMLClassBox")
+    var classGroup = self.shapeLayer.group(self.id + "-shape").addClass(CSSClassName.ClassBox)
 
     let currentDimensions = { 
         width: 0,
@@ -82,13 +95,13 @@ function createDef(self, classInfo, canMove, style) {
         left: self.x + 1
     }
     
-    currentDimensions.height = style.getTopMargin("classbox")
+    currentDimensions.height = style.getTopMargin(CSSClassName.ClassBox)
 
     var classNameGroup = self.textLayer.group(self.id + "-name").addClass("UMLClassName")
-    var className = classNameGroup.text(classInfo.name).move(borderAdjustment.left + style.getLeftMargin("classbox"), borderAdjustment.top + currentDimensions.height)
+    var className = classNameGroup.text(classInfo.name).move(borderAdjustment.left + style.getLeftMargin(CSSClassName.ClassBox), borderAdjustment.top + currentDimensions.height)
     className.id(null)
     currentDimensions.width = Math.max(currentDimensions.width, className.bbox().width)
-    currentDimensions.height += (className.bbox().height + style.getBottomMargin("classbox"))
+    currentDimensions.height += (className.bbox().height + style.getBottomMargin(CSSClassName.ClassBox))
 
     var line1YPos = (borderAdjustment.top + currentDimensions.height)
 
@@ -107,14 +120,14 @@ function createDef(self, classInfo, canMove, style) {
         className.dx((currentDimensions.width - className.bbox().width)/2)
     }
 
-    currentDimensions.width += (style.getLeftMargin("classbox") + style.getRightMargin("classbox"))
-    
-    let rect = classGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
-    rect.id(null)
-    classGroup.line(borderAdjustment.left, line1YPos, borderAdjustment.left + currentDimensions.width, line1YPos)
-        .id(null)
-    classGroup.line(borderAdjustment.left, line2YPos, borderAdjustment.left + currentDimensions.width, line2YPos)
-        .id(null)
+    currentDimensions.width += (style.getLeftMargin(CSSClassName.ClassBox) + style.getRightMargin(CSSClassName.ClassBox))
+
+    let rect = SVGUtils.Rectangle(classGroup, borderAdjustment.left, borderAdjustment.top, currentDimensions.width,
+        currentDimensions.height)
+    SVGUtils.Line(classGroup, borderAdjustment.left, line1YPos, borderAdjustment.left + currentDimensions.width,
+        line1YPos)
+    SVGUtils.Line(classGroup, borderAdjustment.left, line2YPos, borderAdjustment.left + currentDimensions.width,
+        line2YPos)
 
     self.connectionPointsRectangle = rect.bbox()
 

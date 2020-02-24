@@ -1,10 +1,19 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
 import { DiagramElement } from "./DiagramElement"
 import { SVGLayer } from "./SVGLayer"
 import { Style } from "./Style"
 import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { Diagram } from "./Diagram"
+import { Errors } from "./Errors"
+import { Settings } from "./Settings"
 
 /**
   A node on a deployment diagram.
@@ -12,14 +21,16 @@ import { Diagram } from "./Diagram"
   @extends DiagramElement
 */
 class Node extends DiagramElement {
+    errors: Errors
     shapeLayer: SVGLayer
     textLayer: SVGLayer
     nodeDescription
     style: Style
     connectionPointsRectangle
 
-    constructor(svg, id: string, nodeDescription, style: Style) {
+    constructor(svg, id: string, nodeDescription, style: Style, errors: Errors) {
         super(svg, "node", id)
+        this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.nodeDescription = nodeDescription
@@ -28,7 +39,7 @@ class Node extends DiagramElement {
     }
 
     createConnectionPoint(svg) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter, this.errors)
         return newPoint
     }
 
