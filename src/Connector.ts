@@ -405,22 +405,22 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
             let shape2 = getConnectorLineShape2(startPoint, endPoint, orientation)
             switch (shape2) {
                 case ConnectorLineShape.Straight:
-                    svg.line(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
+                    SVGUtils.Line(svg, startPoint.x, startPoint.y, endPoint.x, endPoint.y)
                     break
 
                 case ConnectorLineShape.TopRightCorner:
                 case ConnectorLineShape.TopLeftCorner:
                 case ConnectorLineShape.BottomRightCorner:
                 case ConnectorLineShape.BottomLeftCorner:
-                    svg.line(startPoint.x, startPoint.y, startPoint.x, endPoint.y)
-                    svg.line(startPoint.x, endPoint.y, endPoint.x, endPoint.y)
+                    SVGUtils.Line(svg, startPoint.x, startPoint.y, startPoint.x, endPoint.y)
+                    SVGUtils.Line(svg, startPoint.x, endPoint.y, endPoint.x, endPoint.y)
                     break
 
                 case ConnectorLineShape.VerticalStep:
                     let middleX = (endPoint.x + ((startPoint.x - endPoint.x)/2))
-                    svg.line(startPoint.x, startPoint.y, middleX, startPoint.y)
-                    svg.line(middleX, startPoint.y, middleX, endPoint.y)
-                    svg.line(middleX, endPoint.y, endPoint.x, endPoint.y)
+                    SVGUtils.Line(svg, startPoint.x, startPoint.y, middleX, startPoint.y)
+                    SVGUtils.Line(svg, middleX, startPoint.y, middleX, endPoint.y)
+                    SVGUtils.Line(svg, middleX, endPoint.y, endPoint.x, endPoint.y)
                     break
             }
             break
