@@ -249,8 +249,7 @@ function draw(classboxes, classtemplates, lifelines, components, nodes, actors, 
     }
     if (classtemplates != null) {
         for (let classtemplate of classtemplates) {
-            classtemplate.getLayers().getLayer("shape").write()
-            classtemplate.getLayers().getLayer("text").write()
+            classtemplate.write()
         }
     }
     if (lifelines != null) {

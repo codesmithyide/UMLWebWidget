@@ -37,6 +37,14 @@ class ClassTemplate extends DiagramElement {
         this.connectionPoints = [ ]
     }
 
+    write(): void {
+        this.update()
+        let g = this.layers.svg.group().addClass(CSSClassName.ClassTemplate)
+        g.id(this.id)
+        this.layers.getLayer("shape").write(g)
+        this.layers.getLayer("text").write(g)
+    }
+
     /**
      * Returns a connection point that can be used to connect a connector to this class template. The new connection
      * point is added to this.connectionPoints.
