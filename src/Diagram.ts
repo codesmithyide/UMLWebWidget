@@ -244,9 +244,7 @@ function dolayout(layoutManager, connectors, assemblyconnectors) {
 function draw(classboxes, classtemplates, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
     if (classboxes != null) {
         for (let classbox of classboxes) {
-            let g = classbox.getLayers().svg.group();
-            classbox.getLayers().getLayer("shape").write(g)
-            classbox.getLayers().getLayer("text").write(g)
+            classbox.write()
         }
     }
     if (classtemplates != null) {

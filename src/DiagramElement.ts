@@ -33,11 +33,11 @@ class DiagramElement {
     uptodate: boolean
 
     /**
-      Creates a new DiagramElement instance.
-
-      @param {SVG} svg - The root SVG document.
-      @param {string} id - A unique identifier for this element.
-    */
+     * Creates a new DiagramElement instance.
+     *
+     * @param {SVG} svg - The root SVG document.
+     * @param {string} id - A unique identifier for this element.
+     */
     constructor(svg, type: string, id: string) {
         this.type = type
         this.id = id
@@ -47,13 +47,11 @@ class DiagramElement {
     }
 
     /**
-      Gets the layers of the element. This checks
-      if any changes were made to the element and calls
-      {@link DiagramElement#update} if necessary before
-      returning the layers.
-      @returns {SVGLayerSet} The SVG layers to use to draw the
-        element.
-    */
+     * Gets the layers of the element. This checks if any changes were made to the element and calls
+     * {@link DiagramElement#update} if necessary before returning the layers.
+     *
+     * @returns {SVGLayerSet} The SVG layers to use to draw the element.
+     */
     getLayers(): SVGLayerSet {
         this.update()
         return this.layers
@@ -74,11 +72,9 @@ class DiagramElement {
     }
 
     /**
-      Returns the rectangle on which connection points
-      can be placed. Returns null if no connection points
-      are allowed or where they can be placed can't be
-      expressed as a rectangle.
-    */
+     * Returns the rectangle on which connection point can be placed. Returns null if no connection points are allowed
+     * or where they can be placed can't be expressed as a rectangle.
+     */
     getConnectionPointsRectangle() {
         this.update()
         return this.doGetConnectionPointsRectangle()
