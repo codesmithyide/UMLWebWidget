@@ -1,10 +1,16 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
-var window = require("svgdom")
+import window = require("svgdom")
 var SVG = require("svg.js")(window)
 var UMLWebWidget = require("../dist/codesmithy-umlwebwidget.node.dev.js")
+import { TestUtils } from "./TestUtils"
 var tf = require("ishiko-test-framework")
-var TestUtils = require("./TestUtils.ts")
 
 module.exports = function(theTestHarness) {
     let useCaseDiagramSequence = theTestHarness.appendTestSequence("Use case diagram tests")
@@ -22,7 +28,7 @@ module.exports = function(theTestHarness) {
 function UseCaseDiagramCreateFromJSONTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
     let useCaseDiagram = new UMLWebWidget.Diagram()
-    useCaseDiagram.createFromJSON(svg, {
+    useCaseDiagram.createFromJSON(svg, "UseCaseDiagramCreateFromJSONTest1", {
         "elements":
           [
               { 
@@ -58,7 +64,7 @@ function UseCaseDiagramCreateFromJSONTest2(resolve, reject, test) {
     }
 
     let useCaseDiagram = new UMLWebWidget.Diagram()
-    useCaseDiagram.createFromJSON(svg, {
+    useCaseDiagram.createFromJSON(svg, "UseCaseDiagramCreateFromJSONTest2", {
         "elements":
           [
               { 
@@ -109,7 +115,7 @@ function UseCaseDiagramCreateFromJSONTest3(resolve, reject, test) {
     }
 
     let useCaseDiagram = new UMLWebWidget.Diagram()
-    useCaseDiagram.createFromJSON(svg, {
+    useCaseDiagram.createFromJSON(svg, "UseCaseDiagramCreateFromJSONTest3", {
         "elements":
           [
               { 
@@ -166,7 +172,7 @@ function UseCaseDiagramCreateFromJSONTest4(resolve, reject, test) {
     }
 
     let useCaseDiagram = new UMLWebWidget.Diagram()
-    useCaseDiagram.createFromJSON(svg, {
+    useCaseDiagram.createFromJSON(svg, "UseCaseDiagramCreateFromJSONTest4", {
         "elements":
           [
               { 
@@ -230,7 +236,7 @@ function UseCaseDiagramCreateFromJSONTest5(resolve, reject, test) {
     }
 
     let useCaseDiagram = new UMLWebWidget.Diagram()
-    useCaseDiagram.createFromJSON(svg, {
+    useCaseDiagram.createFromJSON(svg, "UseCaseDiagramCreateFromJSONTest5", {
         "elements":
           [
               { 
@@ -309,7 +315,7 @@ function UseCaseDiagramCreateFromJSONTest6(resolve, reject, test) {
     }
 
     let useCaseDiagram = new UMLWebWidget.Diagram()
-    useCaseDiagram.createFromJSON(svg, {
+    useCaseDiagram.createFromJSON(svg, "UseCaseDiagramCreateFromJSONTest6", {
         "elements":
           [
               { 

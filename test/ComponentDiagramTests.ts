@@ -1,10 +1,16 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
-var window = require("svgdom")
+import window = require("svgdom")
 var SVG = require("svg.js")(window)
 var UMLWebWidget = require("../dist/codesmithy-umlwebwidget.node.dev.js")
+import { TestUtils } from "./TestUtils"
 var tf = require("ishiko-test-framework")
-var TestUtils = require("./TestUtils.ts")
 
 module.exports = function(theTestHarness) {
     let componentDiagramSequence = theTestHarness.appendTestSequence("Component diagram tests")
@@ -21,7 +27,7 @@ module.exports = function(theTestHarness) {
 function ComponentDiagramCreateFromJSONTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
     let componentDiagram = new UMLWebWidget.Diagram()
-    componentDiagram.createFromJSON(svg, {
+    componentDiagram.createFromJSON(svg, "ComponentDiagramCreateFromJSONTest1", {
         "elements":
           [
               { 
@@ -56,7 +62,7 @@ function ComponentDiagramCreateFromJSONTest2(resolve, reject, test) {
     }
 
     let componentDiagram = new UMLWebWidget.Diagram()
-    componentDiagram.createFromJSON(svg, {
+    componentDiagram.createFromJSON(svg, "ComponentDiagramCreateFromJSONTest2", {
         "elements":
           [
               { 
@@ -99,7 +105,7 @@ function ComponentDiagramCreateFromJSONTest3(resolve, reject, test) {
     }
 
     let componentDiagram = new UMLWebWidget.Diagram()
-    componentDiagram.createFromJSON(svg, {
+    componentDiagram.createFromJSON(svg, "ComponentDiagramCreateFromJSONTest3", {
         "elements":
           [
               { 
@@ -154,7 +160,7 @@ function ComponentDiagramCreateFromJSONTest4(resolve, reject, test) {
     }
 
     let componentDiagram = new UMLWebWidget.Diagram()
-    componentDiagram.createFromJSON(svg, {
+    componentDiagram.createFromJSON(svg, "ComponentDiagramCreateFromJSONTest4", {
         "elements":
           [
               { 
@@ -217,7 +223,7 @@ function ComponentDiagramCreateFromJSONTest5(resolve, reject, test) {
     }
 
     let componentDiagram = new UMLWebWidget.Diagram()
-    componentDiagram.createFromJSON(svg, {
+    componentDiagram.createFromJSON(svg, "ComponentDiagramCreateFromJSONTest5", {
         "elements":
           [
               {

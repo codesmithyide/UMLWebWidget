@@ -1,10 +1,16 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
-var window = require("svgdom")
+import window = require("svgdom")
 var SVG = require("svg.js")(window)
 var UMLWebWidget = require("../dist/codesmithy-umlwebwidget.node.dev.js")
+import { TestUtils } from "./TestUtils"
 var tf = require("ishiko-test-framework")
-var TestUtils = require("./TestUtils.ts")
 
 module.exports = function(theTestHarness) {
     let deploymentDiagramSequence = theTestHarness.appendTestSequence("Deployment diagram tests")
@@ -19,7 +25,7 @@ module.exports = function(theTestHarness) {
 function DeploymentDiagramCreateFromJSONTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
     let deploymentDiagram = new UMLWebWidget.Diagram()
-    deploymentDiagram.createFromJSON(svg, { 
+    deploymentDiagram.createFromJSON(svg, "DeploymentDiagramCreateFromJSONTest1", {
         "elements":
             [
                 {
@@ -48,13 +54,13 @@ function DeploymentDiagramCreateFromJSONTest2(resolve, reject, test) {
 
     let layout = {
         elements: {
-            WebServer: { "position": { x: 1, y: 1 } },
-            DatabaseServer: { "position": { x:150, y: 1 } }
+            "DeploymentDiagramCreateFromJSONTest2--node--WebServer": { "position": { x: 1, y: 1 } },
+            "DeploymentDiagramCreateFromJSONTest2--node--DatabaseServer": { "position": { x:150, y: 1 } }
         }
     }
 
     let deploymentDiagram = new UMLWebWidget.Diagram()
-    deploymentDiagram.createFromJSON(svg, { 
+    deploymentDiagram.createFromJSON(svg, "DeploymentDiagramCreateFromJSONTest2", {
         "elements":
             [
                 {
@@ -90,13 +96,13 @@ function DeploymentDiagramCreateFromJSONTest3(resolve, reject, test) {
 
     let layout = {
         elements: {
-            WebServer: { "position": { x: 1, y: 1 } },
-            DatabaseServer: { "position": { x: 150, y: 1 } }
+            "DeploymentDiagramCreateFromJSONTest3--node--WebServer": { "position": { x: 1, y: 1 } },
+            "DeploymentDiagramCreateFromJSONTest3--node--DatabaseServer": { "position": { x: 150, y: 1 } }
         }
     }
 
     let deploymentDiagram = new UMLWebWidget.Diagram()
-    deploymentDiagram.createFromJSON(svg, {
+    deploymentDiagram.createFromJSON(svg, "DeploymentDiagramCreateFromJSONTest3", {
         "elements":
             [
                 {

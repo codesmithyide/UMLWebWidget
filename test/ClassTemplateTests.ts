@@ -1,10 +1,16 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
-var window = require("svgdom")
+import window = require("svgdom")
 var SVG = require("svg.js")(window)
 var UMLWebWidget = require("../dist/codesmithy-umlwebwidget.node.dev.js")
+import { TestUtils } from "./TestUtils"
 var tf = require("ishiko-test-framework")
-var TestUtils = require("./TestUtils.ts")
 
 module.exports = function(theTestHarness) {
     let classtemplateSequence = theTestHarness.appendTestSequence("ClassTemplate tests")
@@ -19,6 +25,7 @@ module.exports = function(theTestHarness) {
 
 function ClassTemplateCreationTest1(resolve) {
     let svg = SVG(window.document.createElement("div"))
+    let idGenerator = new UMLWebWidget.IDGenerator("ClassTemplateCreationTest1")
     let classTemplateDescription = {
         "name": "MyClassTemplate",
         "attributes":
@@ -29,13 +36,13 @@ function ClassTemplateCreationTest1(resolve) {
             ]
     }
     let style = new UMLWebWidget.Style()
-    let classtemplate = new UMLWebWidget.ClassTemplate(svg, classTemplateDescription.name, classTemplateDescription, style)
+    let classtemplate = new UMLWebWidget.ClassTemplate(svg, idGenerator, classTemplateDescription, style)
     resolve(tf.TestResultOutcome.ePassed)
 }
 
 function ClassTemplateGetLayersTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-
+    let idGenerator = new UMLWebWidget.IDGenerator("ClassTemplateGetLayersTest1")
     let classTemplateDescription = {
         "name": "MyClassTemplate",
         "parameters": [ "T" ],
@@ -47,7 +54,7 @@ function ClassTemplateGetLayersTest1(resolve, reject, test) {
             ]
     }
     let style = new UMLWebWidget.Style()
-    let classtemplate = new UMLWebWidget.ClassTemplate(svg, classTemplateDescription.name, classTemplateDescription, style)
+    let classtemplate = new UMLWebWidget.ClassTemplate(svg, idGenerator, classTemplateDescription, style)
 
     let layers = classtemplate.getLayers()
     layers.layers["shape"].write()
@@ -63,7 +70,7 @@ function ClassTemplateGetLayersTest1(resolve, reject, test) {
 
 function ClassTemplateGetLayersTest2(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div")).size(400, 400)
-
+    let idGenerator = new UMLWebWidget.IDGenerator("ClassTemplateGetLayersTest2")
     let classTemplateDescription = {
         "name": "MyClassTemplate",
         "parameters": [ "T" ],
@@ -93,7 +100,7 @@ function ClassTemplateGetLayersTest2(resolve, reject, test) {
             ]
     }
     let style = new UMLWebWidget.Style()
-    let classtemplate = new UMLWebWidget.ClassTemplate(svg, classTemplateDescription.name, classTemplateDescription, style)
+    let classtemplate = new UMLWebWidget.ClassTemplate(svg, idGenerator, classTemplateDescription, style)
 
     let layers = classtemplate.getLayers()
     layers.layers["shape"].write()

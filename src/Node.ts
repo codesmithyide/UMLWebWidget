@@ -1,23 +1,37 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.ts"
-import { ConnectionPoint } from "./ConnectionPoint.ts"
-import { Diagram } from "./Diagram.ts"
+import { DiagramElement, DiagramElementType } from "./DiagramElement"
+import { Style } from "./Style"
+import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
+import { Diagram } from "./Diagram"
+import { SVGLayer } from "./SVGLayer"
+import { IDGenerator } from "./IDGenerator"
+import { Errors } from "./Errors"
+
 
 /**
-  A node on a deployment diagram.
-
-  @extends DiagramElement
-*/
+ * A node on a deployment diagram.
+ *
+ * @extends DiagramElement
+ */
 class Node extends DiagramElement {
-    shapeLayer
-    textLayer
+    errors: Errors
+    shapeLayer: SVGLayer
+    textLayer: SVGLayer
     nodeDescription
-    style
+    style: Style
     connectionPointsRectangle
 
-    constructor(svg, id, nodeDescription, style) {
-        super(svg, "node", id)
+    constructor(svg, idGenerator: IDGenerator, nodeDescription, style: Style, errors: Errors) {
+        super(svg, DiagramElementType.Node, idGenerator.createID("node--" + nodeDescription.name))
+        this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.nodeDescription = nodeDescription
@@ -26,7 +40,7 @@ class Node extends DiagramElement {
     }
 
     createConnectionPoint(svg) {
-        let newPoint = new ConnectionPoint(svg, this)
+        let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter, this.errors)
         return newPoint
     }
 
@@ -57,7 +71,7 @@ class Node extends DiagramElement {
         // A node can contain a sub-diagram inside it
         if ((this.nodeDescription.elements != null) && (this.nodeDescription.elements.length > 0)) {
             let diagram = new Diagram(null)
-            diagram.createFromJSON(this.layers.svg, this.nodeDescription, null)
+            diagram.createFromJSON(this.layers.svg, this.id, this.nodeDescription, null)
         }
 
         currentDimensions.width += (this.style.getLeftMargin("node") + this.style.getRightMargin("node"))

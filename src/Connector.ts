@@ -1,8 +1,17 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.ts"
-import { ConnectionPointPosition } from "./ConnectionPointPosition.ts"
-import { Label } from "./Label.ts"
+import { DiagramElement } from "./DiagramElement"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
+import { Label } from "./Label"
+import { ConnectionPoint } from "./ConnectionPoint"
+import { SVGUtils } from "./SVGUtils"
+import { SVGLayer } from "./SVGLayer"
 
 /**
   Represents a connector between elements.
@@ -10,14 +19,14 @@ import { Label } from "./Label.ts"
   @extends DiagramElement
 */
 class Connector extends DiagramElement {
-    shapeLayer
-    textLayer
-    type
-    connectionPoint1
-    connectionPoint2
-    label
+    shapeLayer: SVGLayer
+    textLayer: SVGLayer
+    type: string
+    connectionPoint1: ConnectionPoint
+    connectionPoint2: ConnectionPoint
+    label: Label | null
 
-    constructor(svg, type, connectionPoint1, connectionPoint2, text) {
+    constructor(svg, type, connectionPoint1: ConnectionPoint, connectionPoint2: ConnectionPoint, text) {
         super(svg, null, null)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
@@ -112,7 +121,7 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
         let polygonDescription = "" + connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
-        lineGroup.polygon(polygonDescription)
+        SVGUtils.Polygon(lineGroup, polygonDescription)
     } else if (connectionPoint1.x < connectionPoint2.x) {
         if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
             let textElement = textGroup.text(label.text)
@@ -129,7 +138,7 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
         let polygonDescription = "" + (connectionPoint2.x - 12) + "," + (connectionPoint2.y - 6) + " " +
             connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x - 12) + "," + (connectionPoint2.y + 6)
-        lineGroup.polygon(polygonDescription)
+        SVGUtils.Polygon(lineGroup, polygonDescription)
     } else if (connectionPoint1.x > connectionPoint2.x) {
         if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
             let textElement = textGroup.text(label.text)
@@ -146,7 +155,7 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
         let polygonDescription = "" + (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
             connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
-        lineGroup.polygon(polygonDescription)
+        SVGUtils.Polygon(lineGroup, polygonDescription)
     } else {
         if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
             let textElement = textGroup.text(label.text)
@@ -159,18 +168,18 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
         let polygonDescription = "" + connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
-        lineGroup.polygon(polygonDescription)
+        SVGUtils.Polygon(lineGroup, polygonDescription)
     }
 }
 
 function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
-    lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint1.y).attr("stroke-dasharray", "4, 4")
+    SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint1.y).attr("stroke-dasharray", "4, 4")
     if (connectionPoint2.x >= connectionPoint1.x) {
-        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x - 10, connectionPoint2.y - 6)
-        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x - 10, connectionPoint2.y + 6)
+        SVGUtils.Line(lineGroup, connectionPoint2.x, connectionPoint1.y, connectionPoint2.x - 10, connectionPoint2.y - 6)
+        SVGUtils.Line(lineGroup, connectionPoint2.x, connectionPoint1.y, connectionPoint2.x - 10, connectionPoint2.y + 6)
     } else {
-        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y - 6)
-        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y + 6)
+        SVGUtils.Line(lineGroup, connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y - 6)
+        SVGUtils.Line(lineGroup, connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y + 6)
     }
 }
 
@@ -231,6 +240,8 @@ function getConnectorHeadOrientationFromPosition(position) {
             return ConnectorHeadOrientation.Up
         case ConnectionPointPosition.LeftCenter:
             return ConnectorHeadOrientation.Right
+        default:
+            throw new Error("Invalid value for ConnectionPointPosition")
     }
 }
 
@@ -295,7 +306,7 @@ function drawInheritanceArrow(svg, position, orientation) {
     let polygonDescription = "" + position.x + "," + position.y + " " +
         secondPoint.x + "," + secondPoint.y + " " +
         thirdPoint.x + "," + thirdPoint.y                
-    svg.polygon(polygonDescription)
+    SVGUtils.Polygon(svg, polygonDescription)
 }
 
 function getDiamondLineConnectionPoint(position, orientation) {
@@ -369,22 +380,22 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
             let shape1 = getConnectorLineShape1(startPoint, endPoint, orientation)
             switch (shape1) {
                 case ConnectorLineShape.Straight:
-                    svg.line(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
+                    SVGUtils.Line(svg, startPoint.x, startPoint.y, endPoint.x, endPoint.y)
                     break
 
                 case ConnectorLineShape.TopRightCorner:
                 case ConnectorLineShape.TopLeftCorner:
                 case ConnectorLineShape.BottomRightCorner:
                 case ConnectorLineShape.BottomLeftCorner:
-                    svg.line(startPoint.x, startPoint.y, endPoint.x, startPoint.y)
-                    svg.line(endPoint.x, startPoint.y, endPoint.x, endPoint.y)
+                    SVGUtils.Line(svg, startPoint.x, startPoint.y, endPoint.x, startPoint.y)
+                    SVGUtils.Line(svg, endPoint.x, startPoint.y, endPoint.x, endPoint.y)
                     break
 
                 case ConnectorLineShape.HorizontalStep:
                     let middleY = (endPoint.y + ((startPoint.y - endPoint.y)/2))
-                    svg.line(startPoint.x, startPoint.y, startPoint.x, middleY)
-                    svg.line(startPoint.x, middleY, endPoint.x, middleY)
-                    svg.line(endPoint.x, middleY, endPoint.x, endPoint.y)
+                    SVGUtils.Line(svg, startPoint.x, startPoint.y, startPoint.x, middleY)
+                    SVGUtils.Line(svg, startPoint.x, middleY, endPoint.x, middleY)
+                    SVGUtils.Line(svg, endPoint.x, middleY, endPoint.x, endPoint.y)
                     break
             }
             break
@@ -394,22 +405,22 @@ function drawConnectorLine(svg, startPoint, endPoint, orientation) {
             let shape2 = getConnectorLineShape2(startPoint, endPoint, orientation)
             switch (shape2) {
                 case ConnectorLineShape.Straight:
-                    svg.line(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
+                    SVGUtils.Line(svg, startPoint.x, startPoint.y, endPoint.x, endPoint.y)
                     break
 
                 case ConnectorLineShape.TopRightCorner:
                 case ConnectorLineShape.TopLeftCorner:
                 case ConnectorLineShape.BottomRightCorner:
                 case ConnectorLineShape.BottomLeftCorner:
-                    svg.line(startPoint.x, startPoint.y, startPoint.x, endPoint.y)
-                    svg.line(startPoint.x, endPoint.y, endPoint.x, endPoint.y)
+                    SVGUtils.Line(svg, startPoint.x, startPoint.y, startPoint.x, endPoint.y)
+                    SVGUtils.Line(svg, startPoint.x, endPoint.y, endPoint.x, endPoint.y)
                     break
 
                 case ConnectorLineShape.VerticalStep:
                     let middleX = (endPoint.x + ((startPoint.x - endPoint.x)/2))
-                    svg.line(startPoint.x, startPoint.y, middleX, startPoint.y)
-                    svg.line(middleX, startPoint.y, middleX, endPoint.y)
-                    svg.line(middleX, endPoint.y, endPoint.x, endPoint.y)
+                    SVGUtils.Line(svg, startPoint.x, startPoint.y, middleX, startPoint.y)
+                    SVGUtils.Line(svg, middleX, startPoint.y, middleX, endPoint.y)
+                    SVGUtils.Line(svg, middleX, endPoint.y, endPoint.x, endPoint.y)
                     break
             }
             break

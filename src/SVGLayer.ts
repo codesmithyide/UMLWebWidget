@@ -1,64 +1,75 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
 /**
-  <p>
-    The SVG specification has no concept of layers. The 
-    order in which elements are added to the image 
-    dictate which ones will be shown over the others.
-    This is impractical so this class attempts to 
-    provide a workaround.
-  </p>
-
-  <p>
-    Drawing will be first done on several layers. The
-    elements in each of the layers will then be added
-    to the SVG document layer per layer.
-  </p>   
+ * <p>
+ *   The SVG specification has no concept of layers. The order in which elements are added to the image dictate which
+ *   ones will be shown over the others. This is impractical so this class attempts to provide a workaround.
+ * </p>
+ *
+ * <p>
+ *   Drawing will be first done on several layers. The elements in each of the layers will then be added to the SVG
+ *   document layer per layer.
+ * </p>
 */
 class SVGLayer {
     svg
     defs
 
     /**
-      Creates a new SVGLayer instance.
-
-      @param {SVG} svg - The root SVG document.
-    */
+     * Creates a new SVGLayer instance.
+     *
+     * @param {SVG} svg - The root SVG document.
+     */
     constructor(svg) {
         this.svg = svg
         this.defs = [ ]
     }
 
     /**
-      Adds a group to the layer.
-
-      @returns {SVG.G} An SVG.G element as decribed in {@link http://svgjs.com/parents/#svg-g}
-    */
-    group() {
+     * Adds a group to the layer.
+     *
+     * @returns {SVG.G} An SVG.G element as decribed in {@link http://svgjs.com/parents/#svg-g}
+     */
+    group(id?: string) {
         let groupDef = this.svg.defs().group()
+        if (id) {
+            groupDef.id(id)
+        } else {
+            // By default SVG.js will assign an id to every element but setting it to null will remove it
+            groupDef.id(null)
+        }
         this.defs.push(groupDef)
         return groupDef
     }
 
     circle(radius) {
         let circleDef = this.svg.defs().circle(radius)
+        circleDef.id(null)
         this.defs.push(circleDef)
         return circleDef
     }
 
     /**
-      Adds a line to the layer.
-
-      @returns {SVG.Line} An SVG.Line element as decribed in {@link http://svgjs.com/elements/#svg-line}
-    */
+     * Adds a line to the layer.
+     *
+     * @returns {SVG.Line} An SVG.Line element as decribed in {@link http://svgjs.com/elements/#svg-line}
+     */
     line(x1, y1, x2, y2) {
         let lineDef = this.svg.defs().line(x1, y1, x2, y2)
+        lineDef.id(null)
         this.defs.push(lineDef)
         return lineDef
     }
 
     polygon(description) {
         let polygonDef = this.svg.defs().polygon(description)
+        polygonDef.id(null)
         this.defs.push(polygonDef)
         return polygonDef
     }
@@ -70,6 +81,7 @@ class SVGLayer {
     */
     rect(width, height) {
         let rectDef = this.svg.defs().rect(width, height)
+        rectDef.id(null)
         this.defs.push(rectDef)
         return rectDef
     }
@@ -81,23 +93,23 @@ class SVGLayer {
     */
     text(str) { 
         let textDef = this.svg.defs().text(str)
+        textDef.id(null)
         this.defs.push(textDef)
         return textDef
     }
 
     /**
-      Writes the layer to the SVG document. This should be the final
-      action performed on the layer. In the current implementation there
-      is no way to undo the write.
-    */
+     * Writes the layer to the SVG document. This should be the final action performed on the layer. In the current
+     * implementation there is no way to undo the write.
+     */
     write(container) {
         let self = this
         if (container == null) {
             container = self.svg
         }
-        self.defs.forEach(function(def) {
-            def.clone(container)
-            def.remove()
+        self.defs.forEach(function(element) {
+            // This will also remove the element from the defs section
+            container.add(element)
         })
     }
 

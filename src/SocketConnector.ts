@@ -1,6 +1,12 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
-import { SVGLayerSet } from "./SVGLayerSet.ts"
+import { SVGLayerSet } from "./SVGLayerSet"
 
 var textDef = Symbol()
 
@@ -10,18 +16,18 @@ var textDef = Symbol()
 */
 class SocketConnector {
     svg
-    layers
+    layers: SVGLayerSet
     shapeLayer
     textLayer
-    uptodate
-    x
-    y
+    uptodate: boolean
+    x: number
+    y: number
     component
-    name
+    name: string
     textGroup
-    width
+    width: number
 
-    constructor(svg, component, name) {
+    constructor(svg, component, name: string) {
         this.svg = svg
         this.layers = new SVGLayerSet(svg)
         this.shapeLayer = this.layers.createLayer("shape")

@@ -1,219 +1,256 @@
-.CodeSmithyUMLWebWidget .UMLClassBox rect {
+.classbox__shape rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.CodeSmithyUMLWebWidget .UMLClassTemplate line {
+.classbox__shape line {
    stroke: #595959;
    stroke-width: 1;
 }
 
-.CodeSmithyUMLWebWidget .UMLClassTemplate rect {
-   stroke: #595959;
-   stroke-width: 2;
-   fill: #f1f4ff;
+.classbox__class-name-compartment text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: bold;
+   fill: #404040;
 }
 
-.CodeSmithyUMLWebWidget .UMLClassBox line {
+.classbox__attributes-compartment text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: normal;
+   fill: #404040;
+}
+
+.classbox__operations-compartment text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: normal;
+   fill: #404040;
+}
+
+.classtemplate__shape line {
    stroke: #595959;
    stroke-width: 1;
 }
 
-.CodeSmithyUMLWebWidget .UMLComponent rect {
+.classtemplate__shape rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.CodeSmithyUMLWebWidget .UMLComponent circle {
+.classtemplate__class-name-compartment text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: bold;
+   fill: #404040;
+}
+
+.classtemplate__attributes-compartment text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: normal;
+   fill: #404040;
+}
+
+.classtemplate__operations-compartment text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: normal;
+   fill: #404040;
+}
+
+.classtemplate__parameters-compartment text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: normal;
+   fill: #404040;
+}
+
+.codesmithy-uml-diagram .UMLComponent rect {
+   stroke: #595959;
+   stroke-width: 2;
+   fill: #f1f4ff;
+}
+
+.codesmithy-uml-diagram .UMLComponent circle {
    stroke: #595959;
    stroke-width: 2;
    fill: white;
 }
 
-.CodeSmithyUMLWebWidget .UMLComponent line {
+.codesmithy-uml-diagram .UMLComponent line {
    stroke: #595959;
    stroke-width: 2;
 }
 
-.CodeSmithyUMLWebWidget .UMLComponentStereotype rect {
+.codesmithy-uml-diagram .UMLComponentStereotype rect {
    stroke: #595959;
    stroke-width: 1;
    fill: #f1f4ff;
 }
 
-.CodeSmithyUMLWebWidget .UMLLifeline rect {
+.codesmithy-uml-diagram .UMLLifeline rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.CodeSmithyUMLWebWidget .UMLLifeline line {
+.codesmithy-uml-diagram .UMLLifeline line {
    stroke: #595959;
    stroke-width: 2;
 }
 
-.CodeSmithyUMLWebWidget .UMLNode rect {
+.codesmithy-uml-diagram .UMLNode rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.CodeSmithyUMLWebWidget .UMLNode polygon {
+.codesmithy-uml-diagram .UMLNode polygon {
    stroke-linejoin: bevel;
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.CodeSmithyUMLWebWidget .UMLActor line {
+.codesmithy-uml-diagram .UMLActor line {
    stroke: #595959;
    stroke-width: 2;
 }
 
-.CodeSmithyUMLWebWidget .UMLActor circle {
+.codesmithy-uml-diagram .UMLActor circle {
    stroke: #595959;
    stroke-width: 2;
    fill: white;
 }
 
-.CodeSmithyUMLWebWidget .UMLUseCase ellipse {
+.codesmithy-uml-diagram .UMLUseCase ellipse {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.CodeSmithyUMLWebWidget .UMLClassName text {
+.codesmithy-uml-diagram .UMLInstanceName text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: bold;
    fill: #404040;
 }
 
-.CodeSmithyUMLWebWidget .UMLClassAttributes text {
-   font-family: 'Verdana', 'Trebuchet MS';
-   font-size: small;
-   font-weight: normal;
-   fill: #404040;
-}
-
-.CodeSmithyUMLWebWidget .UMLClassOperations text {
-   font-family: 'Verdana', 'Trebuchet MS';
-   font-size: small;
-   font-weight: normal;
-   fill: #404040;
-}
-
-.CodeSmithyUMLWebWidget .UMLInstanceName text {
-   font-family: 'Verdana', 'Trebuchet MS';
-   font-size: small;
-   font-weight: bold;
-   fill: #404040;
-}
-
-.CodeSmithyUMLWebWidget .UMLInheritanceRelationship line {
+.codesmithy-uml-diagram .UMLInheritanceRelationship line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.CodeSmithyUMLWebWidget .UMLInheritanceRelationship polygon {
+.codesmithy-uml-diagram .UMLInheritanceRelationship polygon {
    stroke: #454545;
    stroke-width: 2;
    fill: white;
 }
 
-.CodeSmithyUMLWebWidget .UMLCompositionRelationship line {
+.codesmithy-uml-diagram .UMLCompositionRelationship line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.CodeSmithyUMLWebWidget .UMLCompositionRelationship polygon {
+.codesmithy-uml-diagram .UMLCompositionRelationship polygon {
    stroke: #454545;
    stroke-width: 2;
    fill: #454545;
 }
 
-.CodeSmithyUMLWebWidget .UMLAggregationRelationship line {
+.codesmithy-uml-diagram .UMLAggregationRelationship line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.CodeSmithyUMLWebWidget .UMLAggregationRelationship polygon {
+.codesmithy-uml-diagram .UMLAggregationRelationship polygon {
    stroke: #454545;
    stroke-width: 2;
    fill: white;
 }
 
-.CodeSmithyUMLWebWidget .UMLSynchronousMessage line {
+.codesmithy-uml-diagram .UMLSynchronousMessage line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.CodeSmithyUMLWebWidget .UMLReturnMessage line {
+.codesmithy-uml-diagram .UMLReturnMessage line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.CodeSmithyUMLWebWidget .UMLCreationMessage line {
+.codesmithy-uml-diagram .UMLCreationMessage line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.CodeSmithyUMLWebWidget .UMLDestructionMessage line {
+.codesmithy-uml-diagram .UMLDestructionMessage line {
    stroke: #676767;
    stroke-width: 3;
 }
 
-.CodeSmithyUMLWebWidget .UMLUseCaseAssociation line {
+.codesmithy-uml-diagram .UMLUseCaseAssociation line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.CodeSmithyUMLWebWidget .UMLAssemblyConnector line {
+.codesmithy-uml-diagram .UMLAssemblyConnector line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.CodeSmithyUMLWebWidget .UMLCommunicationPath line {
+.codesmithy-uml-diagram .UMLCommunicationPath line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.CodeSmithyUMLWebWidget .TopRightSizingHandle {
+.codesmithy-uml-diagram .TopRightSizingHandle {
    cursor: nesw-resize
 }
 
-.CodeSmithyUMLWebWidget.StandardStyle .UMLClassBox rect {
+.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classbox rect {
    stroke: black;
    fill: white;
 }
 
-.CodeSmithyUMLWebWidget.StandardStyle .UMLClassBox line {
+.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classbox line {
    stroke: black;
 }
 
-.CodeSmithyUMLWebWidget.StandardStyle .UMLInheritanceRelationship line {
+.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classtemplate rect {
+   stroke: black;
+   fill: white;
+}
+
+.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classtemplate line {
    stroke: black;
 }
 
-.CodeSmithyUMLWebWidget.StandardStyle .UMLInheritanceRelationship polygon {
+.codesmithy-uml-diagram--standard-style .UMLInheritanceRelationship line {
    stroke: black;
 }
 
-.CodeSmithyUMLWebWidget.StandardStyle .UMLCompositionRelationship line {
+.codesmithy-uml-diagram--standard-style .UMLInheritanceRelationship polygon {
    stroke: black;
 }
 
-.CodeSmithyUMLWebWidget.StandardStyle .UMLCompositionRelationship polygon {
+.codesmithy-uml-diagram--standard-style .UMLCompositionRelationship line {
+   stroke: black;
+}
+
+.codesmithy-uml-diagram--standard-style .UMLCompositionRelationship polygon {
    stroke: black;
    fill: black;
 }
 
-.CodeSmithyUMLWebWidget.StandardStyle .UMLAggregationRelationship line {
+.codesmithy-uml-diagram--standard-style .UMLAggregationRelationship line {
    stroke: black;
 }
 
-.CodeSmithyUMLWebWidget.StandardStyle .UMLAggregationRelationship polygon {
+.codesmithy-uml-diagram--standard-style .UMLAggregationRelationship polygon {
    stroke: black;
 }

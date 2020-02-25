@@ -1,10 +1,16 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
-var window = require("svgdom")
+import window = require("svgdom")
 var SVG = require("svg.js")(window)
 var UMLWebWidget = require("../dist/codesmithy-umlwebwidget.node.dev.js")
+import { TestUtils } from "./TestUtils"
 var tf = require("ishiko-test-framework")
-var TestUtils = require("./TestUtils.ts")
 
 module.exports = function(theTestHarness) {
     let sequenceDiagramSequence = theTestHarness.appendTestSequence("Sequence diagram tests")
@@ -30,7 +36,7 @@ module.exports = function(theTestHarness) {
 function SequenceDiagramCreateFromJSONTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
     let sequenceDiagram = new UMLWebWidget.Diagram()
-    sequenceDiagram.createFromJSON(svg, {
+    sequenceDiagram.createFromJSON(svg, "SequenceDiagramCreateFromJSONTest1", {
         "elements":
           [
               { 
@@ -65,7 +71,7 @@ function SequenceDiagramCreateFromJSONTest2(resolve, reject, test) {
     }
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
-    sequenceDiagram.createFromJSON(svg, {
+    sequenceDiagram.createFromJSON(svg, "SequenceDiagramCreateFromJSONTest2", {
         "elements":
           [
               { 
@@ -108,7 +114,7 @@ function SequenceDiagramCreateFromJSONTest3(resolve, reject, test) {
     }
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
-    sequenceDiagram.createFromJSON(svg, {
+    sequenceDiagram.createFromJSON(svg, "SequenceDiagramCreateFromJSONTest3", {
         "elements":
             [
                 { 
@@ -165,7 +171,7 @@ function SequenceDiagramCreateFromJSONTest4(resolve, reject, test) {
     }
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
-    sequenceDiagram.createFromJSON(svg, {
+    sequenceDiagram.createFromJSON(svg, "SequenceDiagramCreateFromJSONTest4", {
         "elements":
             [
                 { 
@@ -236,7 +242,7 @@ function SequenceDiagramCreateFromJSONTest5(resolve, reject, test) {
     }
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
-    sequenceDiagram.createFromJSON(svg, {
+    sequenceDiagram.createFromJSON(svg, "SequenceDiagramCreateFromJSONTest5", {
         "elements":
             [
                 { 
@@ -329,7 +335,7 @@ function SequenceDiagramCreateFromJSONTest6(resolve, reject, test) {
     }
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
-    sequenceDiagram.createFromJSON(svg, {
+    sequenceDiagram.createFromJSON(svg, "SequenceDiagramCreateFromJSONTest6", {
         "elements":
             [
                 { 
@@ -385,7 +391,7 @@ function SequenceDiagramCreateFromJSONTest7(resolve, reject, test) {
     }
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
-    sequenceDiagram.createFromJSON(svg, {
+    sequenceDiagram.createFromJSON(svg, "SequenceDiagramCreateFromJSONTest7", {
         "elements":
             [
                 { 
@@ -440,7 +446,7 @@ function SequenceDiagramCreateFromJSONTest7(resolve, reject, test) {
 function SequenceDiagramCreateFromJSONTest8(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
     let sequenceDiagram = new UMLWebWidget.Diagram()
-    sequenceDiagram.createFromJSON(svg, {
+    sequenceDiagram.createFromJSON(svg, "SequenceDiagramCreateFromJSONTest8", {
         "elements":
             [
                 { 
@@ -486,7 +492,7 @@ function SequenceDiagramCreateFromJSONTest9(resolve, reject, test) {
     }
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
-    sequenceDiagram.createFromJSON(svg, {
+    sequenceDiagram.createFromJSON(svg, "SequenceDiagramCreateFromJSONTest9", {
         "elements":
             [
                 { 
@@ -558,7 +564,7 @@ function SequenceDiagramCreateFromJSONTest10(resolve, reject, test) {
     }
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
-    sequenceDiagram.createFromJSON(svg, {
+    sequenceDiagram.createFromJSON(svg, "SequenceDiagramCreateFromJSONTest10", {
         "elements":
             [
                 { 
@@ -651,7 +657,7 @@ function SequenceDiagramCreateFromJSONTest11(resolve, reject, test) {
     }
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
-    sequenceDiagram.createFromJSON(svg, {
+    sequenceDiagram.createFromJSON(svg, "SequenceDiagramCreateFromJSONTest11", {
         "elements":
             [
                 { 
@@ -733,7 +739,7 @@ function SequenceDiagramCreateFromJSONTest12(resolve, reject, test) {
     }
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
-    sequenceDiagram.createFromJSON(svg, {
+    sequenceDiagram.createFromJSON(svg, "SequenceDiagramCreateFromJSONTest12", {
         "elements":
             [
                 { 
@@ -828,7 +834,7 @@ function SequenceDiagramCreateFromJSONTest13(resolve, reject, test) {
     }
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
-    sequenceDiagram.createFromJSON(svg, {
+    sequenceDiagram.createFromJSON(svg, "SequenceDiagramCreateFromJSONTest13", {
         "elements":
             [
                 { 
@@ -929,7 +935,7 @@ function SequenceDiagramCreateFromJSONTest14(resolve, reject, test) {
     }
 
     let sequenceDiagram = new UMLWebWidget.Diagram()
-    sequenceDiagram.createFromJSON(svg, {
+    sequenceDiagram.createFromJSON(svg, "SequenceDiagramCreateFromJSONTest14", {
         "elements":
             [
                 { 

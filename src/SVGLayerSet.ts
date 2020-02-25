@@ -1,6 +1,12 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
-import { SVGLayer } from "./SVGLayer.ts"
+import { SVGLayer } from "./SVGLayer"
 
 /**
   <p>
@@ -9,7 +15,7 @@ import { SVGLayer } from "./SVGLayer.ts"
 */
 class SVGLayerSet {
     svg
-    layers
+    layers: object
 
     /**
       Creates a new SVGLayerSet instance.

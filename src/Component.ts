@@ -1,16 +1,25 @@
+/*
+    Copyright (c) 2020 Xavier Leclercq
+    Released under the MIT License
+    See https://github.com/CodeSmithyIDE/UMLWebWidget/blob/master/LICENSE.txt
+*/
+
 'use strict'
 
-import { DiagramElement } from "./DiagramElement.ts"
-import { BallConnector } from "./BallConnector.ts"
-import { SocketConnector } from "./SocketConnector.ts"
-import { ConnectionPoint } from "./ConnectionPoint.ts"
+import { DiagramElement } from "./DiagramElement"
+import { SVGLayer} from "./SVGLayer"
+import { BallConnector } from "./BallConnector"
+import { SocketConnector } from "./SocketConnector"
+import { ConnectionPoint } from "./ConnectionPoint"
+import { ConnectionPointPosition } from "./ConnectionPointPosition"
+import { Errors } from "./Errors"
 
 class Stereotype {
     svgParentGroup
-    x
-    y
-    width
-    height
+    x: number
+    y: number
+    width: number
+    height: number
 
     constructor(svgParentGroup) {
         this.svgParentGroup = svgParentGroup
@@ -20,7 +29,7 @@ class Stereotype {
         this.height = 20
     }
 
-    move(x, y) {
+    move(x: number, y: number) {
         this.x = x
         this.y = y
     }
@@ -35,12 +44,13 @@ class Stereotype {
 }
 
 /**
-  A component on a component diagram.
-
-  @extends DiagramElement
-*/
+ * A component on a component diagram.
+ *
+ * @extends DiagramElement
+ */
 class Component extends DiagramElement {
-    shapeLayer
+    errors: Errors
+    shapeLayer: SVGLayer
     textLayer
     svg
     componentDescription
@@ -48,8 +58,9 @@ class Component extends DiagramElement {
     ballConnectors
     socketConnectors
 
-    constructor(svg, id, componentDescription, style) {
+    constructor(svg, id, componentDescription, style, errors: Errors) {
         super(svg, "component", id)
+        this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.svg = svg
@@ -91,12 +102,14 @@ class Component extends DiagramElement {
     }
 
     createDependencyConnectionPoint(svg, interfaceName) {
-        let newPoint = new ConnectionPoint(svg, this.getSocketConnector(interfaceName))
+        let newPoint = new ConnectionPoint(svg, this.getSocketConnector(interfaceName),
+            ConnectionPointPosition.BottomCenter, this.errors)
         return newPoint
     }
 
     createInterfaceConnectionPoint(svg, interfaceName) {
-        let newPoint = new ConnectionPoint(svg, this.getBallConnector(interfaceName))
+        let newPoint = new ConnectionPoint(svg, this.getBallConnector(interfaceName),
+            ConnectionPointPosition.BottomCenter, this.errors)
         return newPoint
     }
 
