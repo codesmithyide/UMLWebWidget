@@ -62,6 +62,13 @@
    fill: #404040;
 }
 
+.classtemplate__parameters-compartment text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: normal;
+   fill: #404040;
+}
+
 .codesmithy-uml-diagram .UMLComponent rect {
    stroke: #595959;
    stroke-width: 2;

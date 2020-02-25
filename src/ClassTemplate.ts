@@ -71,12 +71,12 @@ class ClassTemplate extends DiagramElement {
             left: this.x + 1
         }
     
-        var parametersTextGroup = this.textLayer.group().addClass("UMLClassTemplateParameters")
-        var parametersText = SVGUtils.Text(parametersTextGroup, borderAdjustment.left + this.style.getLeftMargin("classtemplateparameters"), borderAdjustment.top + this.style.getTopMargin("classtemplateparameters"), this.classTemplateDescription.parameters[0])
-        let parametersRectWidth = (this.style.getLeftMargin("classtemplateparameters") + this.style.getRightMargin("classtemplateparameters") + parametersText.bbox().width)
-        let parametersRectHeight = (this.style.getTopMargin("classtemplateparameters") + this.style.getBottomMargin("classtemplateparameters") + parametersText.bbox().height)
+        var parametersTextGroup = this.textLayer.group().addClass(CSSClassName.ClassTemplate_ParametersCompartment)
+        var parametersText = SVGUtils.Text(parametersTextGroup, borderAdjustment.left + this.style.getLeftMargin(CSSClassName.ClassTemplate_ParametersCompartment), borderAdjustment.top + this.style.getTopMargin(CSSClassName.ClassTemplate_ParametersCompartment), this.classTemplateDescription.parameters[0])
+        let parametersRectWidth = (this.style.getLeftMargin(CSSClassName.ClassTemplate_ParametersCompartment) + this.style.getRightMargin(CSSClassName.ClassTemplate_ParametersCompartment) + parametersText.bbox().width)
+        let parametersRectHeight = (this.style.getTopMargin(CSSClassName.ClassTemplate_ParametersCompartment) + this.style.getBottomMargin(CSSClassName.ClassTemplate_ParametersCompartment) + parametersText.bbox().height)
 
-        let y1 = (borderAdjustment.top + this.style.getTopMargin("classtemplateparameters") + (parametersText.bbox().height / 2))
+        let y1 = (borderAdjustment.top + this.style.getTopMargin(CSSClassName.ClassTemplate_ParametersCompartment) + (parametersText.bbox().height / 2))
         let y2 = (y1 + this.style.getTopMargin(CSSClassName.ClassTemplate))
 
         let classTemplateNameGroup = this.textLayer.group().addClass(CSSClassName.ClassTemplate_ClassNameCompartment)

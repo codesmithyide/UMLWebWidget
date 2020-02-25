@@ -24,7 +24,7 @@ export class Style {
             "margin-right": 15,
             "margin-top": 12
         })
-        this.style.set("classtemplateparameters", {
+        this.style.set(CSSClassName.ClassTemplate_ParametersCompartment, {
             "margin-left": 8,
             "margin-right": 8,
             "margin-top": 4,
