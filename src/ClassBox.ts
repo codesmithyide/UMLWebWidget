@@ -6,8 +6,7 @@
 
 'use strict'
 
-import { DiagramElementType } from "./DiagramElement"
-import { DiagramElement } from "./DiagramElement"
+import { DiagramElement, DiagramElementType } from "./DiagramElement"
 import { SVGLayer } from "./SVGLayer"
 import { Style } from "./Style"
 import { CSSClassName } from "./CSSClassNames"

@@ -6,12 +6,12 @@
 
 'use strict'
 
-import { DiagramElement } from "./DiagramElement"
+import { DiagramElement, DiagramElementType } from "./DiagramElement"
 import { CSSClassName } from "./CSSClassNames"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
-import { SVGUtils } from "./SVGUtils"
 import { DrawingUtilities } from "./DrawingUtilities"
+import { SVGUtils } from "./SVGUtils"
 import { Errors } from "./Errors"
 
 class ClassTemplate extends DiagramElement {
@@ -24,7 +24,7 @@ class ClassTemplate extends DiagramElement {
     connectionPoints
 
     constructor(svg, id, classTemplateDescription, style, errors: Errors) {
-        super(svg, "classtemplate", id)
+        super(svg, DiagramElementType.ClassTemplate, id)
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
@@ -38,10 +38,9 @@ class ClassTemplate extends DiagramElement {
     }
 
     /**
-      Returns a connection point that can be used to connect
-      a connector to this class template. The new connection
-      point is added to this.connectionPoints.
-    */
+     * Returns a connection point that can be used to connect a connector to this class template. The new connection
+     * point is added to this.connectionPoints.
+     */
     createConnectionPoint(svg) {
         let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter, this.errors)
         this.connectionPoints.push(newPoint)
@@ -62,7 +61,7 @@ class ClassTemplate extends DiagramElement {
         }
     
         var parametersTextGroup = this.textLayer.group().addClass("UMLClassTemplateParameters")
-        var parametersText = parametersTextGroup.text(this.classTemplateDescription.parameters[0]).move(borderAdjustment.left + this.style.getLeftMargin("classtemplateparameters"), borderAdjustment.top + this.style.getTopMargin("classtemplateparameters"))
+        var parametersText = SVGUtils.Text(parametersTextGroup, borderAdjustment.left + this.style.getLeftMargin("classtemplateparameters"), borderAdjustment.top + this.style.getTopMargin("classtemplateparameters"), this.classTemplateDescription.parameters[0])
         let parametersRectWidth = (this.style.getLeftMargin("classtemplateparameters") + this.style.getRightMargin("classtemplateparameters") + parametersText.bbox().width)
         let parametersRectHeight = (this.style.getTopMargin("classtemplateparameters") + this.style.getBottomMargin("classtemplateparameters") + parametersText.bbox().height)
 
@@ -70,7 +69,7 @@ class ClassTemplate extends DiagramElement {
         let y2 = (y1 + this.style.getTopMargin(CSSClassName.ClassTemplate))
 
         let classTemplateNameGroup = this.textLayer.group().addClass("UMLClassName")
-        let classTemplateName = classTemplateNameGroup.text(this.classTemplateDescription.name).move(borderAdjustment.left + this.style.getLeftMargin(CSSClassName.ClassTemplate), y2)
+        let classTemplateName = SVGUtils.Text(classTemplateNameGroup, borderAdjustment.left + this.style.getLeftMargin(CSSClassName.ClassTemplate), y2, this.classTemplateDescription.name)
         currentDimensions.width = Math.max(currentDimensions.width, classTemplateName.bbox().width)
         currentDimensions.height = (this.style.getTopMargin(CSSClassName.ClassTemplate) + classTemplateName.bbox().height + this.style.getBottomMargin(CSSClassName.ClassTemplate))
 
@@ -86,8 +85,7 @@ class ClassTemplate extends DiagramElement {
         currentDimensions.width = Math.max(currentDimensions.width, operationsCompartmentDimensions.width)
         currentDimensions.height += operationsCompartmentDimensions.height
 
-        // According to the UML standard the class name must be
-        // centered so center it
+        // According to the UML standard the class name must be centered so center it
         if (currentDimensions.width > classTemplateName.bbox().width) {
             classTemplateName.dx((currentDimensions.width - classTemplateName.bbox().width)/2)
         }
