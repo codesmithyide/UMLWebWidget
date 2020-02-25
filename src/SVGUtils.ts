@@ -19,6 +19,12 @@ class SVGUtils {
         return line
     }
 
+    static Polygon(parent, description: string) {
+        let polygon = parent.polygon(description)
+        polygon.id(null)
+        return polygon
+    }
+
     static Text(parent, left: number, top: number, str: string) {
         let text = parent.text(str).move(left, top)
         text.id(null)
