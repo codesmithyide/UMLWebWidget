@@ -9,9 +9,9 @@
 import { DiagramElement } from "./DiagramElement"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { Label } from "./Label"
-import {ConnectionPoint} from "./ConnectionPoint"
-import { SVGLayer } from "./SVGLayer"
+import { ConnectionPoint } from "./ConnectionPoint"
 import { SVGUtils } from "./SVGUtils"
+import { SVGLayer } from "./SVGLayer"
 
 /**
   Represents a connector between elements.
@@ -173,13 +173,13 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
 }
 
 function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
-    lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint1.y).attr("stroke-dasharray", "4, 4")
+    SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint1.y).attr("stroke-dasharray", "4, 4")
     if (connectionPoint2.x >= connectionPoint1.x) {
-        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x - 10, connectionPoint2.y - 6)
-        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x - 10, connectionPoint2.y + 6)
+        SVGUtils.Line(lineGroup, connectionPoint2.x, connectionPoint1.y, connectionPoint2.x - 10, connectionPoint2.y - 6)
+        SVGUtils.Line(lineGroup, connectionPoint2.x, connectionPoint1.y, connectionPoint2.x - 10, connectionPoint2.y + 6)
     } else {
-        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y - 6)
-        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y + 6)
+        SVGUtils.Line(lineGroup, connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y - 6)
+        SVGUtils.Line(lineGroup, connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y + 6)
     }
 }
 
