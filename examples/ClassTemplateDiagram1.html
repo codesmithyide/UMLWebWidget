@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Class Template Diagram 1</title>
+
+    <script src="../third_party/jquery-3.4.1.slim.min.js"></script>
+    <script src="../third_party/svg.min.js"></script>
+    <script src="../dist/codesmithy-umlwebwidget.js"></script>
+
+    <link rel="stylesheet" href="../stylesheets/codesmithy-umlwebwidget.css">
+  </head>
+  <body>
+    <p>The following diagram is a class template diagram with one class template with various attributes and operations.</p>
+    <div id="diagram1" class="codesmithy-uml-diagram">
+      {
+        "elements":
+          [
+            {
+              "classtemplate":
+                {
+                  "name": "MyClass",
+                  "parameters": [ "T" ],
+                  "attributes":
+                    [
+                      {
+                        "name": "m_attr1", "visibility": "public" 
+                      },
+                      {
+                        "name": "m_attr2", "visibility": "protected" 
+                      },
+                      {
+                        "name": "m_attr3", "visibility": "private" 
+                      }
+                    ],
+                    "operations":
+                    [
+                      { 
+                        "name": "method1()", "visibility": "public", "return": "int"
+                      },
+                      { 
+                        "name": "method2()", "visibility": "protected", "return": "void"
+                      },
+                      { 
+                        "name": "method3()", "visibility": "private", "return": "std::string"
+                      }
+
+                  ]
+                }
+            }
+          ]
+      }
+    </div>
+    <script>
+      var classDiagram = new CodeSmithyUMLWebWidget.Diagram()
+      classDiagram.createFromDiv("diagram1")
+    </script>
+  </body>
+</html>

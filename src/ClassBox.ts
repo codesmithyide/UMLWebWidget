@@ -6,15 +6,14 @@
 
 'use strict'
 
-import { DiagramElementType } from "./DiagramElement"
-import { DiagramElement } from "./DiagramElement"
-import { SVGLayer } from "./SVGLayer"
+import { DiagramElement, DiagramElementType } from "./DiagramElement"
 import { Style } from "./Style"
 import { CSSClassName } from "./CSSClassNames"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
-import { SVGUtils } from "./SVGUtils"
 import { DrawingUtilities } from "./DrawingUtilities"
+import { SVGUtils } from "./SVGUtils"
+import { SVGLayer } from "./SVGLayer"
 import { IDGenerator } from "./IDGenerator"
 import { Errors } from "./Errors"
 
@@ -28,7 +27,6 @@ import { Errors } from "./Errors"
     class box.
 */
 class ClassBox extends DiagramElement {
-    idGenerator: IDGenerator
     errors: Errors
     shapeLayer: SVGLayer
     textLayer: SVGLayer
@@ -40,7 +38,6 @@ class ClassBox extends DiagramElement {
 
     constructor(svg, idGenerator: IDGenerator, classDescription, canMove: boolean, style: Style, errors: Errors) {
         super(svg, DiagramElementType.ClassBox, idGenerator.createID("classbox--" + classDescription.name ))
-        this.idGenerator = idGenerator
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")

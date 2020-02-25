@@ -7,29 +7,25 @@
 'use strict'
 
 /**
-  <p>
-    The SVG specification has no concept of layers. The 
-    order in which elements are added to the image 
-    dictate which ones will be shown over the others.
-    This is impractical so this class attempts to 
-    provide a workaround.
-  </p>
-
-  <p>
-    Drawing will be first done on several layers. The
-    elements in each of the layers will then be added
-    to the SVG document layer per layer.
-  </p>   
+ * <p>
+ *   The SVG specification has no concept of layers. The order in which elements are added to the image dictate which
+ *   ones will be shown over the others. This is impractical so this class attempts to provide a workaround.
+ * </p>
+ *
+ * <p>
+ *   Drawing will be first done on several layers. The elements in each of the layers will then be added to the SVG
+ *   document layer per layer.
+ * </p>
 */
 class SVGLayer {
     svg
     defs
 
     /**
-      Creates a new SVGLayer instance.
-
-      @param {SVG} svg - The root SVG document.
-    */
+     * Creates a new SVGLayer instance.
+     *
+     * @param {SVG} svg - The root SVG document.
+     */
     constructor(svg) {
         this.svg = svg
         this.defs = [ ]
@@ -60,10 +56,10 @@ class SVGLayer {
     }
 
     /**
-      Adds a line to the layer.
-
-      @returns {SVG.Line} An SVG.Line element as decribed in {@link http://svgjs.com/elements/#svg-line}
-    */
+     * Adds a line to the layer.
+     *
+     * @returns {SVG.Line} An SVG.Line element as decribed in {@link http://svgjs.com/elements/#svg-line}
+     */
     line(x1, y1, x2, y2) {
         let lineDef = this.svg.defs().line(x1, y1, x2, y2)
         lineDef.id(null)
