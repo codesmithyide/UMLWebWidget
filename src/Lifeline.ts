@@ -196,7 +196,7 @@ function updateLine(self, lifelineGroup, lifelineDescription, depthChanges, styl
             SVGUtils.Line(lifelineGroup, self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0])
         }
     } else if (depthChanges.length > 1) {
-        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0] - overhang)
+        SVGUtils.Line(lifelineGroup, self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0] - overhang)
         let maxDepth = 0
         for (let depthChange of depthChanges) {
             maxDepth = Math.max(maxDepth, depthChange[1])
