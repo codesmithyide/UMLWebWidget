@@ -75,12 +75,12 @@ function ClassDiagramCreateFromJSONTest3(resolve, reject, test) {
                     "class":
                         {
                             "name": "MyClass",
-                             "attributes":
-                                 [
-                                 ],
-                             "operations":
-                                 [
-                                 ]
+                            "attributes":
+                                [
+                                ],
+                            "operations":
+                                [
+                                ]
                         }
                 }
             ]
