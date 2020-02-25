@@ -12,19 +12,22 @@ import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { DrawingUtilities } from "./DrawingUtilities"
 import { SVGUtils } from "./SVGUtils"
+import { SVGLayer } from "./SVGLayer"
+import { IDGenerator } from "./IDGenerator"
 import { Errors } from "./Errors"
+
 
 class ClassTemplate extends DiagramElement {
     errors: Errors
-    shapeLayer
-    textLayer
+    shapeLayer: SVGLayer
+    textLayer: SVGLayer
     classTemplateDescription
     style
     connectionPointsRectangle
     connectionPoints
 
-    constructor(svg, id, classTemplateDescription, style, errors: Errors) {
-        super(svg, DiagramElementType.ClassTemplate, id)
+    constructor(svg, idGenerator: IDGenerator, classTemplateDescription, style, errors: Errors) {
+        super(svg, DiagramElementType.ClassTemplate, idGenerator.createID("classtemplate--" + classTemplateDescription.name ))
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")

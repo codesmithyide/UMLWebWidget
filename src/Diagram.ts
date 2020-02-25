@@ -123,7 +123,7 @@ class Diagram {
             } else if (item.classtemplate) {
                 this.classtemplates.set(
                     item.classtemplate.name,
-                    new ClassTemplate(svg, item.classtemplate.name, item.classtemplate, style, errors)
+                    new ClassTemplate(svg, idGenerator, item.classtemplate, style, errors)
                 )
             } else if (item.lifeline) {
                 this.lifelines.set(
