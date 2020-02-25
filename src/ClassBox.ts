@@ -53,11 +53,18 @@ class ClassBox extends DiagramElement {
         this.connectionPoints = [ ]
     }
 
+    write(): void {
+        this.update()
+        let g = this.layers.svg.group().addClass(CSSClassName.ClassBox)
+        g.id(this.id)
+        this.layers.getLayer("shape").write(g)
+        this.layers.getLayer("text").write(g)
+    }
+
     /**
-      Returns a connection point that can be used to connect
-      a connector to this class box. The new connection
-      point is added to this.connectionPoints.
-    */
+     * Returns a connection point that can be used to connect a connector to this class box. The new connection point is
+     * added to this.connectionPoints.
+     */
     createConnectionPoint(svg) {
         let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter, this.errors)
         this.connectionPoints.push(newPoint)
@@ -83,7 +90,7 @@ class ClassBox extends DiagramElement {
 }
 
 function createDef(self, classInfo, canMove, style) {
-    var classGroup = self.shapeLayer.group().addClass(CSSClassName.ClassBox)
+    var classGroup = self.shapeLayer.group().addClass(CSSClassName.ClassBox_Shape)
 
     let currentDimensions = { 
         width: 0,
@@ -97,20 +104,20 @@ function createDef(self, classInfo, canMove, style) {
     
     currentDimensions.height = style.getTopMargin(CSSClassName.ClassBox)
 
-    var classNameGroup = self.textLayer.group().addClass("UMLClassName")
+    var classNameGroup = self.textLayer.group().addClass(CSSClassName.ClassBox_ClassNameCompartment)
     var className = SVGUtils.Text(classNameGroup, borderAdjustment.left + style.getLeftMargin(CSSClassName.ClassBox), borderAdjustment.top + currentDimensions.height, classInfo.name)
     currentDimensions.width = Math.max(currentDimensions.width, className.bbox().width)
     currentDimensions.height += (className.bbox().height + style.getBottomMargin(CSSClassName.ClassBox))
 
     var line1YPos = (borderAdjustment.top + currentDimensions.height)
 
-    let attributesCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, line1YPos, self.textLayer, style, classInfo.attributes, "UMLClassAttributes")
+    let attributesCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, line1YPos, self.textLayer, style, classInfo.attributes, CSSClassName.ClassBox_AttributesCompartment)
     currentDimensions.width = Math.max(currentDimensions.width, attributesCompartmentDimensions.width)
     currentDimensions.height += attributesCompartmentDimensions.height
 
     var line2YPos = (borderAdjustment.top + currentDimensions.height)
 
-    let operationsCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, line2YPos, self.textLayer, style, classInfo.operations, "UMLClassOperations")
+    let operationsCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, line2YPos, self.textLayer, style, classInfo.operations, CSSClassName.ClassBox_OperationsCompartment)
     currentDimensions.width = Math.max(currentDimensions.width, operationsCompartmentDimensions.width)
     currentDimensions.height += operationsCompartmentDimensions.height
 
