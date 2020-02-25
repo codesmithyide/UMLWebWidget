@@ -221,6 +221,15 @@
    stroke: black;
 }
 
+.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classtemplate rect {
+   stroke: black;
+   fill: white;
+}
+
+.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classtemplate line {
+   stroke: black;
+}
+
 .codesmithy-uml-diagram--standard-style .UMLInheritanceRelationship line {
    stroke: black;
 }
