@@ -1,12 +1,33 @@
-.codesmithy-uml-diagram__classbox rect {
+.classbox__shape rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.codesmithy-uml-diagram__classbox line {
+.classbox__shape line {
    stroke: #595959;
    stroke-width: 1;
+}
+
+.classbox__class-name-compartment text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: bold;
+   fill: #404040;
+}
+
+.classbox__attributes text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: normal;
+   fill: #404040;
+}
+
+.classbox__operations text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: normal;
+   fill: #404040;
 }
 
 .codesmithy-uml-diagram .UMLClassTemplate line {
