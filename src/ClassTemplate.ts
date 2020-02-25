@@ -59,7 +59,7 @@ class ClassTemplate extends DiagramElement {
     }
 
     doUpdate() {
-        var classTemplateGroup = this.shapeLayer.group().addClass(CSSClassName.ClassTemplate)
+        var classTemplateGroup = this.shapeLayer.group().addClass(CSSClassName.ClassTemplate_Shape)
 
         let currentDimensions = { 
             width: 0,
@@ -79,20 +79,20 @@ class ClassTemplate extends DiagramElement {
         let y1 = (borderAdjustment.top + this.style.getTopMargin("classtemplateparameters") + (parametersText.bbox().height / 2))
         let y2 = (y1 + this.style.getTopMargin(CSSClassName.ClassTemplate))
 
-        let classTemplateNameGroup = this.textLayer.group().addClass("UMLClassName")
+        let classTemplateNameGroup = this.textLayer.group().addClass(CSSClassName.ClassTemplate_ClassNameCompartment)
         let classTemplateName = SVGUtils.Text(classTemplateNameGroup, borderAdjustment.left + this.style.getLeftMargin(CSSClassName.ClassTemplate), y2, this.classTemplateDescription.name)
         currentDimensions.width = Math.max(currentDimensions.width, classTemplateName.bbox().width)
         currentDimensions.height = (this.style.getTopMargin(CSSClassName.ClassTemplate) + classTemplateName.bbox().height + this.style.getBottomMargin(CSSClassName.ClassTemplate))
 
         let line1YPos = (borderAdjustment.top + currentDimensions.height + (parametersText.bbox().height / 2))
 
-        let attributesCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, line1YPos, this.textLayer, this.style, this.classTemplateDescription.attributes, "UMLClassAttributes")
+        let attributesCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, line1YPos, this.textLayer, this.style, this.classTemplateDescription.attributes, CSSClassName.ClassTemplate_AttributesCompartment)
         currentDimensions.width = Math.max(currentDimensions.width, attributesCompartmentDimensions.width)
         currentDimensions.height += attributesCompartmentDimensions.height
 
         let line2YPos = (borderAdjustment.top + currentDimensions.height + (parametersText.bbox().height / 2))
 
-        let operationsCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, line2YPos, this.textLayer, this.style, this.classTemplateDescription.operations, "UMLClassOperations")
+        let operationsCompartmentDimensions = DrawingUtilities.addClassCompartmentText(borderAdjustment.left, line2YPos, this.textLayer, this.style, this.classTemplateDescription.operations, CSSClassName.ClassTemplate_OperationsCompartment)
         currentDimensions.width = Math.max(currentDimensions.width, operationsCompartmentDimensions.width)
         currentDimensions.height += operationsCompartmentDimensions.height
 
