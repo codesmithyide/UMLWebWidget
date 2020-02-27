@@ -9,9 +9,9 @@
 import { DiagramElement } from "./DiagramElement"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { Label } from "./Label"
-import {ConnectionPoint} from "./ConnectionPoint"
-import { SVGLayer } from "./SVGLayer"
+import { ConnectionPoint } from "./ConnectionPoint"
 import { SVGUtils } from "./SVGUtils"
+import { SVGLayer } from "./SVGLayer"
 
 /**
   Represents a connector between elements.
@@ -121,7 +121,7 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
         let polygonDescription = "" + connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
-        lineGroup.polygon(polygonDescription)
+        SVGUtils.Polygon(lineGroup, polygonDescription)
     } else if (connectionPoint1.x < connectionPoint2.x) {
         if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
             let textElement = textGroup.text(label.text)
@@ -138,7 +138,7 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
         let polygonDescription = "" + (connectionPoint2.x - 12) + "," + (connectionPoint2.y - 6) + " " +
             connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x - 12) + "," + (connectionPoint2.y + 6)
-        lineGroup.polygon(polygonDescription)
+        SVGUtils.Polygon(lineGroup, polygonDescription)
     } else if (connectionPoint1.x > connectionPoint2.x) {
         if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
             let textElement = textGroup.text(label.text)
@@ -155,7 +155,7 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
         let polygonDescription = "" + (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
             connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
-        lineGroup.polygon(polygonDescription)
+        SVGUtils.Polygon(lineGroup, polygonDescription)
     } else {
         if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
             let textElement = textGroup.text(label.text)
@@ -168,18 +168,18 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
         let polygonDescription = "" + connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
-        lineGroup.polygon(polygonDescription)
+        SVGUtils.Polygon(lineGroup, polygonDescription)
     }
 }
 
 function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
-    lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint1.y).attr("stroke-dasharray", "4, 4")
+    SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint1.y).attr("stroke-dasharray", "4, 4")
     if (connectionPoint2.x >= connectionPoint1.x) {
-        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x - 10, connectionPoint2.y - 6)
-        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x - 10, connectionPoint2.y + 6)
+        SVGUtils.Line(lineGroup, connectionPoint2.x, connectionPoint1.y, connectionPoint2.x - 10, connectionPoint2.y - 6)
+        SVGUtils.Line(lineGroup, connectionPoint2.x, connectionPoint1.y, connectionPoint2.x - 10, connectionPoint2.y + 6)
     } else {
-        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y - 6)
-        lineGroup.line(connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y + 6)
+        SVGUtils.Line(lineGroup, connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y - 6)
+        SVGUtils.Line(lineGroup, connectionPoint2.x, connectionPoint1.y, connectionPoint2.x + 10, connectionPoint2.y + 6)
     }
 }
 
@@ -306,7 +306,7 @@ function drawInheritanceArrow(svg, position, orientation) {
     let polygonDescription = "" + position.x + "," + position.y + " " +
         secondPoint.x + "," + secondPoint.y + " " +
         thirdPoint.x + "," + thirdPoint.y                
-    svg.polygon(polygonDescription)
+    SVGUtils.Polygon(svg, polygonDescription)
 }
 
 function getDiamondLineConnectionPoint(position, orientation) {

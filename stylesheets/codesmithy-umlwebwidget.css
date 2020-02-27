@@ -16,29 +16,57 @@
    fill: #404040;
 }
 
-.classbox__attributes text {
+.classbox__attributes-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: normal;
    fill: #404040;
 }
 
-.classbox__operations text {
+.classbox__operations-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: normal;
    fill: #404040;
 }
 
-.codesmithy-uml-diagram .UMLClassTemplate line {
+.classtemplate__shape line {
    stroke: #595959;
    stroke-width: 1;
 }
 
-.codesmithy-uml-diagram .UMLClassTemplate rect {
+.classtemplate__shape rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
+}
+
+.classtemplate__class-name-compartment text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: bold;
+   fill: #404040;
+}
+
+.classtemplate__attributes-compartment text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: normal;
+   fill: #404040;
+}
+
+.classtemplate__operations-compartment text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: normal;
+   fill: #404040;
+}
+
+.classtemplate__parameters-compartment text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: normal;
+   fill: #404040;
 }
 
 .codesmithy-uml-diagram .UMLComponent rect {
@@ -103,27 +131,6 @@
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
-}
-
-.codesmithy-uml-diagram .UMLClassName text {
-   font-family: 'Verdana', 'Trebuchet MS';
-   font-size: small;
-   font-weight: bold;
-   fill: #404040;
-}
-
-.codesmithy-uml-diagram .UMLClassAttributes text {
-   font-family: 'Verdana', 'Trebuchet MS';
-   font-size: small;
-   font-weight: normal;
-   fill: #404040;
-}
-
-.codesmithy-uml-diagram .UMLClassOperations text {
-   font-family: 'Verdana', 'Trebuchet MS';
-   font-size: small;
-   font-weight: normal;
-   fill: #404040;
 }
 
 .codesmithy-uml-diagram .UMLInstanceName text {
@@ -211,6 +218,15 @@
 }
 
 .codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classbox line {
+   stroke: black;
+}
+
+.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classtemplate rect {
+   stroke: black;
+   fill: white;
+}
+
+.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classtemplate line {
    stroke: black;
 }
 

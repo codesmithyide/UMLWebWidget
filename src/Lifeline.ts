@@ -9,9 +9,10 @@
 import { DiagramElement } from "./DiagramElement"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
-import { SVGLayer } from "./SVGLayer"
 import { Log } from "./Log"
 import { LifelineLayout } from "./LifelineLayout"
+import { SVGUtils } from "./SVGUtils"
+import { SVGLayer } from "./SVGLayer"
 import { Errors } from "./Errors"
 
 /**
@@ -34,17 +35,17 @@ class Lifeline extends DiagramElement {
     lifelineLayout
 
     /**
-      <p>Creates a new Lifeline instance.</p>
-
-      <p>
-        At construction time the messages related to this lifeline
-        are not known. They will be added later by calls to 
-        {@link Lifeline#createConnectionPoint}. Layout has to 
-        be performed after all messages have been added.
-      </p>
-
-      @param {SVG} svg - The root SVG document.
-    */
+     * <p>
+     *   Creates a new Lifeline instance.
+     * </p>
+     *
+     * <p>
+     *   At construction time the messages related to this lifeline are not known. They will be added later by calls to
+     *   {@link Lifeline#createConnectionPoint}. Layout has to be performed after all messages have been added.
+     * </p>
+     *
+     * @param {SVG} svg - The root SVG document.
+     */
     constructor(svg, id, lifelineDescription, style, log, errors: Errors) {
         super(svg, "lifeline", id)
         this.errors = errors
@@ -170,7 +171,7 @@ function updateBox(self, lifelineGroup, lifelineDescription, style, lineTopPosit
 
     currentDimensions.width += (style.getLeftMargin("lifeline") + style.getRightMargin("lifeline"))
     
-    lifelineGroup.rect(currentDimensions.width, currentDimensions.height).move(borderAdjustment.left, borderAdjustment.top)
+    SVGUtils.Rectangle(lifelineGroup, borderAdjustment.left, borderAdjustment.top, currentDimensions.width, currentDimensions.height)
     self.boxHeight = currentDimensions.height
 
     lineTopPosition.x = (borderAdjustment.left + (currentDimensions.width / 2))
@@ -189,15 +190,13 @@ function updateLine(self, lifelineGroup, lifelineDescription, depthChanges, styl
 
     if (depthChanges.length == 1) {
         if (depthChanges[0][1] > 0) {
-            lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0] - overhang)
-            lifelineGroup
-                .rect(8, (2 * overhang))
-                .move(self.lineTopPosition.x - 4, depthChanges[0][0] - overhang)
+            SVGUtils.Line(lifelineGroup, self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0] - overhang)
+            SVGUtils.Rectangle(lifelineGroup, self.lineTopPosition.x - 4, depthChanges[0][0] - overhang, 8, (2 * overhang))
         } else {
-             lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0])
+            SVGUtils.Line(lifelineGroup, self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0])
         }
     } else if (depthChanges.length > 1) {
-        lifelineGroup.line(self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0] - overhang)
+        SVGUtils.Line(lifelineGroup, self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0] - overhang)
         let maxDepth = 0
         for (let depthChange of depthChanges) {
             maxDepth = Math.max(maxDepth, depthChange[1])
