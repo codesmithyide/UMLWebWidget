@@ -123,7 +123,7 @@ class Diagram {
             } else if (item.classtemplate) {
                 this.classtemplates.set(
                     item.classtemplate.name,
-                    new ClassTemplate(svg, item.classtemplate.name, item.classtemplate, style, errors)
+                    new ClassTemplate(svg, idGenerator, item.classtemplate, style, errors)
                 )
             } else if (item.lifeline) {
                 this.lifelines.set(
@@ -249,8 +249,7 @@ function draw(classboxes, classtemplates, lifelines, components, nodes, actors, 
     }
     if (classtemplates != null) {
         for (let classtemplate of classtemplates) {
-            classtemplate.getLayers().getLayer("shape").write()
-            classtemplate.getLayers().getLayer("text").write()
+            classtemplate.write()
         }
     }
     if (lifelines != null) {
