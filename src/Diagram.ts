@@ -39,6 +39,7 @@ class Diagram {
     actors: Map<string, Actor>
     usecases: Map<string, UseCase>
     messages: Connector[]
+    layoutManager
 
     constructor(settings) {
         this.settings = new Settings(settings)
@@ -106,8 +107,20 @@ class Diagram {
         }
     }
 
+    onMove(element) {
+        for (var i = 0; i < element.connectionPoints.length; i++) {
+            let connector = element.connectionPoints[i].connector
+            if (connector) {
+                //this.layoutManager.layoutConnector(connector)
+                window.alert("rrr")
+                connector.getLayers().getLayer("shape").write()
+                connector.getLayers().getLayer("text").write()
+            }
+        }
+    }
+
     drawDiagram(svg, idGenerator: IDGenerator, description, style, layout, errors: Errors) {
-        let layoutManager = new LayoutManager(layout)
+        this.layoutManager = new LayoutManager(layout)
 
         let connectors: Connector[] = []
         let assemblyconnectors: Connector[] = []
@@ -116,10 +129,9 @@ class Diagram {
         for (var i = 0; i < description.length; i++) {
             let item = description[i]
             if (item.class) {
-                this.classboxes.set(
-                    item.class.name,
-                    new ClassBox(svg, idGenerator, item.class, this.settings.canMove, style, errors)
-                )
+                let classbox = new ClassBox(svg, idGenerator, item.class, this.settings.canMove, style, errors)
+                classbox.setObserver(this)
+                this.classboxes.set(item.class.name, classbox)
             } else if (item.classtemplate) {
                 this.classtemplates.set(
                     item.classtemplate.name,
@@ -169,6 +181,8 @@ class Diagram {
                 let connectionPoint1 = classbox1.createConnectionPoint(svg)
                 let connectionPoint2 = classbox2.createConnectionPoint(svg)
                 let newConnector = new Connector(svg, item.relationship.type, connectionPoint1, connectionPoint2, null)
+                connectionPoint1.connector = newConnector
+                connectionPoint2.connector = newConnector
                 connectors.push(newConnector)
             } else if (item.messages) {
                 for (let j = 0; j < item.messages.length; j++) {
@@ -219,8 +233,8 @@ class Diagram {
             }
         }
 
-        layoutManager.doLayout(this)
-        dolayout(layoutManager, connectors, assemblyconnectors)
+        this.layoutManager.doLayout(this)
+        dolayout(this.layoutManager, connectors, assemblyconnectors)
 
         draw(this.classboxes.values(), this.classtemplates.values(), this.lifelines.values(), this.components.values(), this.nodes.values(), 
             this.actors.values(), this.usecases.values(), connectors, this.messages, assemblyconnectors)

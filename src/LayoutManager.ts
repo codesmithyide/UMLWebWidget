@@ -94,6 +94,42 @@ class LayoutManager {
         }
     }
 
+    layoutConnector(connector) {
+            let connectionPoint1 = connector.connectionPoint1
+            let connectionPoint2 = connector.connectionPoint2
+            let bbox1 = connectionPoint1.element.getConnectionPointsRectangle()
+            let bbox2 = connectionPoint2.element.getConnectionPointsRectangle()
+            let connectionPositions = this.getConnectionPositions(bbox1, bbox2, connector.type)
+
+            let connectorId = connectionPoint1.element.id + "-" + connectionPoint2.element.id + "-" + connector.type
+            let layoutOverride = this.layout.elements[connectorId]
+            if (layoutOverride) {
+                if (layoutOverride.end) {
+                    switch (layoutOverride.end) {
+                        case "top-center":
+                            connectionPositions.end = ConnectionPointPosition.TopCenter
+                            break
+
+                        case "right-center":
+                            connectionPositions.end = ConnectionPointPosition.RightCenter
+                            break
+
+                        case "bottom-center":
+                            connectionPositions.end = ConnectionPointPosition.BottomCenter
+                            break
+
+                        case "left-center":
+                            connectionPositions.end = ConnectionPointPosition.LeftCenter
+                            break
+                    }
+                }
+            }
+
+            connectionPoint1.setPosition(connectionPositions.start)
+            connectionPoint2.setPosition(connectionPositions.end)
+
+    }
+
     layoutMessages(lifelines, connectors) {
         let currrentYPosition = 0
         for (let lifeline of lifelines.values()) {

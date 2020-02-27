@@ -35,6 +35,7 @@ class ClassBox extends DiagramElement {
     style: Style
     connectionPointsRectangle
     connectionPoints
+    observer
 
     constructor(svg, idGenerator: IDGenerator, classDescription, canMove: boolean, style: Style, errors: Errors) {
         super(svg, DiagramElementType.ClassBox, idGenerator.createID("classbox--" + classDescription.name ))
@@ -50,12 +51,29 @@ class ClassBox extends DiagramElement {
         this.connectionPoints = [ ]
     }
 
+    setObserver(observer): void {
+        this.observer = observer
+    }
+
     write(): void {
         this.update()
         let g = this.layers.svg.group().addClass(CSSClassName.ClassBox)
         g.id(this.id)
         this.layers.getLayer("shape").write(g)
         this.layers.getLayer("text").write(g)
+
+        if (this.canMove) {
+            g.draggable(true)
+           // g.on('dragmove.namespace', function(evt) {
+             //   this.fire('positionchanged')
+            //})
+           // g.on('dragend.namespace', function(evt) {
+             //   this.fire('positionchanged')
+            //})
+            g.on('dragmove', e => {
+                this.observer.onMove(this)
+            })
+        }
     }
 
     /**
@@ -69,7 +87,7 @@ class ClassBox extends DiagramElement {
     }
 
     doUpdate() {
-        createDef(this, this.classDescription, this.canMove, this.style)
+        createDef(this, this.classDescription, this.style)
     }
 
     doGetConnectionPointsRectangle() {
@@ -78,15 +96,14 @@ class ClassBox extends DiagramElement {
         
     fire(evt) {
         if (evt == "positionchanged") {
-            for (let i = 0; i < this.connectionPoints.length; i++) {
-                this.connectionPoints[i].draw()        
-            }
+            window.alert("juju")
+            this.observer.onMove(this)
         }
     }
 
 }
 
-function createDef(self, classInfo, canMove, style) {
+function createDef(self, classInfo, style) {
     var classGroup = self.shapeLayer.group().addClass(CSSClassName.ClassBox_Shape)
 
     let currentDimensions = { 
@@ -133,16 +150,6 @@ function createDef(self, classInfo, canMove, style) {
         line2YPos)
 
     self.connectionPointsRectangle = rect.bbox()
-
-    if (canMove) {
-        classGroup.draggable(true)
-        classGroup.on('dragmove.namespace', function(evt) {
-            self.fire('positionchanged')
-        })
-        classGroup.on('dragend.namespace', function(evt) {
-            self.fire('positionchanged')
-        })
-    }
 
     return classGroup
 }
