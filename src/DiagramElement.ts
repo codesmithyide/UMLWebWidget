@@ -18,6 +18,7 @@ const enum DiagramElementType {
     ConnectionPoint = "connectionpoint",
     InheritanceConnector = "inheritance",
     CompositionConnector = "composition",
+    AggregationConnector = "aggregation",
     Node = "node"
 }
 

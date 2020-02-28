@@ -162,12 +162,12 @@
    fill: #454545;
 }
 
-.codesmithy-uml-diagram .UMLAggregationRelationship line {
+.aggregation-connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.codesmithy-uml-diagram .UMLAggregationRelationship polygon {
+.aggregation-connector__shape polygon {
    stroke: #454545;
    stroke-width: 2;
    fill: white;
@@ -247,10 +247,10 @@
    fill: black;
 }
 
-.codesmithy-uml-diagram--standard-style .UMLAggregationRelationship line {
+.codesmithy-uml-diagram--standard-style .aggregation-connector__shape line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .UMLAggregationRelationship polygon {
+.codesmithy-uml-diagram--standard-style .aggregation-connector__shape polygon {
    stroke: black;
 }

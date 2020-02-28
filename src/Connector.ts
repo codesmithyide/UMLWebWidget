@@ -49,6 +49,7 @@ class Connector extends DiagramElement {
         switch (this.type) {
             case DiagramElementType.InheritanceConnector:
             case DiagramElementType.CompositionConnector:
+            case DiagramElementType.AggregationConnector:
                 let g = this.layers.svg.group().addClass(this.cssShapeLayerClassName)
                 g.id(this.id)
                 this.layers.getLayer("shape").write(g)
@@ -74,8 +75,8 @@ class Connector extends DiagramElement {
         } else if (this.type == DiagramElementType.CompositionConnector) {
             let lineGroup = this.shapeLayer.group().addClass(CSSClassName.CompositionConnector_Shape)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
-        } else if (this.type == "aggregation") {
-            let lineGroup = this.shapeLayer.group().addClass("UMLAggregationRelationship")
+        } else if (this.type == DiagramElementType.AggregationConnector) {
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.AggregationConnector_Shape)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == "synchronousmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLSynchronousMessage")
@@ -118,6 +119,10 @@ class Connector extends DiagramElement {
 
             case DiagramElementType.CompositionConnector:
                 this.cssShapeLayerClassName = CSSClassName.CompositionConnector
+                break;
+
+            case DiagramElementType.AggregationConnector:
+                this.cssShapeLayerClassName = CSSClassName.AggregationConnector
                 break;
         }
     }

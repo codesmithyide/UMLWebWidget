@@ -22,7 +22,9 @@ const enum CSSClassName {
     InheritanceConnector = "codesmithy-uml-diagram__inheritance-connector",
     InheritanceConnector_Shape = "inheritance-connector__shape",
     CompositionConnector = "codesmithy-uml-diagram__composition-connector",
-    CompositionConnector_Shape = "composition-connector__shape"
+    CompositionConnector_Shape = "composition-connector__shape",
+    AggregationConnector = "codesmithy-uml-diagram__aggregation-connector",
+    AggregationConnector_Shape = "aggregation-connector__shape"
 }
 
 export { CSSClassName }
