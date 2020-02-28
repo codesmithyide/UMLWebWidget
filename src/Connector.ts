@@ -44,8 +44,19 @@ class Connector extends DiagramElement {
 
     write(): void {
         this.update()
-        this.layers.getLayer("shape").write()
-        this.layers.getLayer("text").write()
+        switch (this.type) {
+            case DiagramElementType.InheritanceConnector:
+                let g = this.layers.svg.group().addClass(CSSClassName.InheritanceConnector)
+                g.id(this.id)
+                this.layers.getLayer("shape").write(g)
+                this.layers.getLayer("text").write(g)
+                break
+
+            default:
+                this.layers.getLayer("shape").write()
+                this.layers.getLayer("text").write()
+                break
+        }
     }
 
     hasNonEmptyLabel() {
@@ -55,7 +66,7 @@ class Connector extends DiagramElement {
     doUpdate() {
         this.layers.clearEachLayer()
         if (this.type == DiagramElementType.InheritanceConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.InheritanceConnector)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.InheritanceConnector_Shape)
             drawInheritanceRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == "composition") {
             let lineGroup = this.shapeLayer.group().addClass("UMLCompositionRelationship")
