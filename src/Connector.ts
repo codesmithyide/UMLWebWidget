@@ -25,10 +25,12 @@ class Connector extends DiagramElement {
     type: string
     connectionPoint1: ConnectionPoint
     connectionPoint2: ConnectionPoint
+    cssShapeLayerClassName: string
     label: Label | null
 
     constructor(svg, type, connectionPoint1: ConnectionPoint, connectionPoint2: ConnectionPoint, text) {
         super(svg, type, null)
+        this.setType(type)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
         this.connectionPoint1 = connectionPoint1
@@ -46,7 +48,7 @@ class Connector extends DiagramElement {
         this.update()
         switch (this.type) {
             case DiagramElementType.InheritanceConnector:
-                let g = this.layers.svg.group().addClass(CSSClassName.InheritanceConnector)
+                let g = this.layers.svg.group().addClass(this.cssShapeLayerClassName)
                 g.id(this.id)
                 this.layers.getLayer("shape").write(g)
                 this.layers.getLayer("text").write(g)
@@ -107,6 +109,13 @@ class Connector extends DiagramElement {
         }
     }
 
+    setType(type: string) {
+        switch (type) {
+            case DiagramElementType.InheritanceConnector:
+                this.cssShapeLayerClassName = CSSClassName.InheritanceConnector
+                break;
+        }
+    }
 }
 
 // Draws an inheritance connector between two classes
