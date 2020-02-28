@@ -42,6 +42,12 @@ class Connector extends DiagramElement {
         }
     }
 
+    write(): void {
+        this.update()
+        this.layers.getLayer("shape").write()
+        this.layers.getLayer("text").write()
+    }
+
     hasNonEmptyLabel() {
         return ((this.label != null) && !this.label.empty())
     }
