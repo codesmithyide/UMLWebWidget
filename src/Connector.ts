@@ -70,8 +70,8 @@ class Connector extends DiagramElement {
         if (this.type == DiagramElementType.InheritanceConnector) {
             let lineGroup = this.shapeLayer.group().addClass(CSSClassName.InheritanceConnector_Shape)
             drawInheritanceRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
-        } else if (this.type == "composition") {
-            let lineGroup = this.shapeLayer.group().addClass("UMLCompositionRelationship")
+        } else if (this.type == DiagramElementType.CompositionConnector) {
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.CompositionConnector)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == "aggregation") {
             let lineGroup = this.shapeLayer.group().addClass("UMLAggregationRelationship")

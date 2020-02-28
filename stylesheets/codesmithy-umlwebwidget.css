@@ -151,12 +151,12 @@
    fill: white;
 }
 
-.codesmithy-uml-diagram .UMLCompositionRelationship line {
+.codesmithy-uml-diagram__composition-connector line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.codesmithy-uml-diagram .UMLCompositionRelationship polygon {
+.codesmithy-uml-diagram__composition-connector polygon {
    stroke: #454545;
    stroke-width: 2;
    fill: #454545;
@@ -238,11 +238,11 @@
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .UMLCompositionRelationship line {
+.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__composition-connector line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .UMLCompositionRelationship polygon {
+.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__composition-connector polygon {
    stroke: black;
    fill: black;
 }

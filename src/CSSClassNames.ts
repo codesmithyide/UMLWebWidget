@@ -20,7 +20,8 @@ const enum CSSClassName {
     ClassTemplate_OperationsCompartment = "classtemplate__operations-compartment",
     ClassTemplate_ParametersCompartment = "classtemplate__parameters-compartment",
     InheritanceConnector = "codesmithy-uml-diagram__inheritance-connector",
-    InheritanceConnector_Shape = "inheritance-connector__shape"
+    InheritanceConnector_Shape = "inheritance-connector__shape",
+    CompositionConnector = "codesmithy-uml-diagram__composition-connector"
 }
 
 export { CSSClassName }
