@@ -6,12 +6,13 @@
 
 'use strict'
 
-import { DiagramElement } from "./DiagramElement"
+import { DiagramElement, DiagramElementType } from "./DiagramElement"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { Label } from "./Label"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { SVGUtils } from "./SVGUtils"
 import { SVGLayer } from "./SVGLayer"
+import { CSSClassName } from "./CSSClassNames"
 
 /**
   Represents a connector between elements.
@@ -24,13 +25,14 @@ class Connector extends DiagramElement {
     type: string
     connectionPoint1: ConnectionPoint
     connectionPoint2: ConnectionPoint
+    cssShapeLayerClassName: string
     label: Label | null
 
     constructor(svg, type, connectionPoint1: ConnectionPoint, connectionPoint2: ConnectionPoint, text) {
-        super(svg, null, null)
+        super(svg, type, null)
+        this.setType(type)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
-        this.type = type
         this.connectionPoint1 = connectionPoint1
         this.connectionPoint2 = connectionPoint2
         this.label = null
@@ -42,20 +44,39 @@ class Connector extends DiagramElement {
         }
     }
 
+    write(): void {
+        this.update()
+        switch (this.type) {
+            case DiagramElementType.InheritanceConnector:
+            case DiagramElementType.CompositionConnector:
+            case DiagramElementType.AggregationConnector:
+                let g = this.layers.svg.group().addClass(this.cssShapeLayerClassName)
+                g.id(this.id)
+                this.layers.getLayer("shape").write(g)
+                this.layers.getLayer("text").write(g)
+                break
+
+            default:
+                this.layers.getLayer("shape").write()
+                this.layers.getLayer("text").write()
+                break
+        }
+    }
+
     hasNonEmptyLabel() {
         return ((this.label != null) && !this.label.empty())
     }
 
     doUpdate() {
         this.layers.clearEachLayer()
-        if (this.type == "inheritance") {
-            let lineGroup = this.shapeLayer.group().addClass("UMLInheritanceRelationship")
+        if (this.type == DiagramElementType.InheritanceConnector) {
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.InheritanceConnector_Shape)
             drawInheritanceRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
-        } else if (this.type == "composition") {
-            let lineGroup = this.shapeLayer.group().addClass("UMLCompositionRelationship")
+        } else if (this.type == DiagramElementType.CompositionConnector) {
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.CompositionConnector_Shape)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
-        } else if (this.type == "aggregation") {
-            let lineGroup = this.shapeLayer.group().addClass("UMLAggregationRelationship")
+        } else if (this.type == DiagramElementType.AggregationConnector) {
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.AggregationConnector_Shape)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == "synchronousmessage") {
             let lineGroup = this.shapeLayer.group().addClass("UMLSynchronousMessage")
@@ -90,6 +111,21 @@ class Connector extends DiagramElement {
         }
     }
 
+    setType(type: string) {
+        switch (type) {
+            case DiagramElementType.InheritanceConnector:
+                this.cssShapeLayerClassName = CSSClassName.InheritanceConnector
+                break;
+
+            case DiagramElementType.CompositionConnector:
+                this.cssShapeLayerClassName = CSSClassName.CompositionConnector
+                break;
+
+            case DiagramElementType.AggregationConnector:
+                this.cssShapeLayerClassName = CSSClassName.AggregationConnector
+                break;
+        }
+    }
 }
 
 // Draws an inheritance connector between two classes

@@ -140,34 +140,34 @@
    fill: #404040;
 }
 
-.codesmithy-uml-diagram .UMLInheritanceRelationship line {
+.inheritance-connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.codesmithy-uml-diagram .UMLInheritanceRelationship polygon {
+.inheritance-connector__shape polygon {
    stroke: #454545;
    stroke-width: 2;
    fill: white;
 }
 
-.codesmithy-uml-diagram .UMLCompositionRelationship line {
+.composition-connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.codesmithy-uml-diagram .UMLCompositionRelationship polygon {
+.composition-connector__shape polygon {
    stroke: #454545;
    stroke-width: 2;
    fill: #454545;
 }
 
-.codesmithy-uml-diagram .UMLAggregationRelationship line {
+.aggregation-connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.codesmithy-uml-diagram .UMLAggregationRelationship polygon {
+.aggregation-connector__shape polygon {
    stroke: #454545;
    stroke-width: 2;
    fill: white;
@@ -230,27 +230,27 @@
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .UMLInheritanceRelationship line {
+.codesmithy-uml-diagram--standard-style .inheritance-connector__shape line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .UMLInheritanceRelationship polygon {
+.codesmithy-uml-diagram--standard-style .inheritance-connector__shape polygon {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .UMLCompositionRelationship line {
+.codesmithy-uml-diagram--standard-style .composition-connector__shape line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .UMLCompositionRelationship polygon {
+.codesmithy-uml-diagram--standard-style .composition-connector__shape polygon {
    stroke: black;
    fill: black;
 }
 
-.codesmithy-uml-diagram--standard-style .UMLAggregationRelationship line {
+.codesmithy-uml-diagram--standard-style .aggregation-connector__shape line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .UMLAggregationRelationship polygon {
+.codesmithy-uml-diagram--standard-style .aggregation-connector__shape polygon {
    stroke: black;
 }
