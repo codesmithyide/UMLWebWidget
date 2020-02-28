@@ -17,6 +17,7 @@ import { Node } from "./Node"
 import { Actor } from "./Actor"
 import { UseCase } from "./UseCase"
 import { Connector } from "./Connector"
+import { DiagramElementType } from "./DiagramElement"
 import { Metrics } from "./Metrics"
 import { Log } from "./Log"
 import { IDGenerator } from "./IDGenerator"
@@ -153,7 +154,9 @@ class Diagram {
             } else if (item.relationship) {
                 let classbox1: ClassBox | ClassTemplate
                 let classbox2: ClassBox | ClassTemplate
+                let connectorType = item.relationship.type
                 if (item.relationship.type == "inheritance") {
+                    connectorType = DiagramElementType.InheritanceConnector
                     classbox1 = this.classboxes.get(item.relationship.derivedclass)
                     if (classbox1 == null) {
                         classbox1 = this.classtemplates.get(item.relationship.derivedclass)
@@ -163,12 +166,13 @@ class Diagram {
                         classbox2 = this.classtemplates.get(item.relationship.baseclass)
                     }
                 } else if ((item.relationship.type == "composition") || (item.relationship.type == "aggregation")) {
+                    connectorType = item.relationship.type
                     classbox1 = this.classboxes.get(item.relationship.containedclass)
                     classbox2 = this.classboxes.get(item.relationship.containingclass)
                 }
                 let connectionPoint1 = classbox1.createConnectionPoint(svg)
                 let connectionPoint2 = classbox2.createConnectionPoint(svg)
-                let newConnector = new Connector(svg, item.relationship.type, connectionPoint1, connectionPoint2, null)
+                let newConnector = new Connector(svg, connectorType, connectionPoint1, connectionPoint2, null)
                 connectors.push(newConnector)
             } else if (item.messages) {
                 for (let j = 0; j < item.messages.length; j++) {

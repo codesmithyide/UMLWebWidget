@@ -6,7 +6,7 @@
 
 'use strict'
 
-import { DiagramElement } from "./DiagramElement"
+import { DiagramElement, DiagramElementType } from "./DiagramElement"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { Label } from "./Label"
 import { ConnectionPoint } from "./ConnectionPoint"
@@ -27,10 +27,9 @@ class Connector extends DiagramElement {
     label: Label | null
 
     constructor(svg, type, connectionPoint1: ConnectionPoint, connectionPoint2: ConnectionPoint, text) {
-        super(svg, null, null)
+        super(svg, type, null)
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
-        this.type = type
         this.connectionPoint1 = connectionPoint1
         this.connectionPoint2 = connectionPoint2
         this.label = null
@@ -48,7 +47,7 @@ class Connector extends DiagramElement {
 
     doUpdate() {
         this.layers.clearEachLayer()
-        if (this.type == "inheritance") {
+        if (this.type == DiagramElementType.InheritanceConnector) {
             let lineGroup = this.shapeLayer.group().addClass("UMLInheritanceRelationship")
             drawInheritanceRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == "composition") {

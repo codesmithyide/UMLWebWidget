@@ -16,6 +16,7 @@ const enum DiagramElementType {
     ClassBox = "classbox",
     ClassTemplate = "classtemplate",
     ConnectionPoint = "connectionpoint",
+    InheritanceConnector = "inheritance",
     Node = "node"
 }
 
@@ -27,7 +28,7 @@ var position = Symbol()
  * @property {SVGLayerSet} this.layers - The various SVG layers to use to render this element.
  * @property {boolean} this.uptodate - Whether the layers need to be updated because of changes to the element.
  */
-class DiagramElement {
+abstract class DiagramElement {
     type: string
     id: string
     protected layers: SVGLayerSet
