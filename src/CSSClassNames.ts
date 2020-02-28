@@ -21,7 +21,8 @@ const enum CSSClassName {
     ClassTemplate_ParametersCompartment = "classtemplate__parameters-compartment",
     InheritanceConnector = "codesmithy-uml-diagram__inheritance-connector",
     InheritanceConnector_Shape = "inheritance-connector__shape",
-    CompositionConnector = "codesmithy-uml-diagram__composition-connector"
+    CompositionConnector = "codesmithy-uml-diagram__composition-connector",
+    CompositionConnector_Shape = "composition-connector__shape"
 }
 
 export { CSSClassName }

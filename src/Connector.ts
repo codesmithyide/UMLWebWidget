@@ -48,6 +48,7 @@ class Connector extends DiagramElement {
         this.update()
         switch (this.type) {
             case DiagramElementType.InheritanceConnector:
+            case DiagramElementType.CompositionConnector:
                 let g = this.layers.svg.group().addClass(this.cssShapeLayerClassName)
                 g.id(this.id)
                 this.layers.getLayer("shape").write(g)
@@ -71,7 +72,7 @@ class Connector extends DiagramElement {
             let lineGroup = this.shapeLayer.group().addClass(CSSClassName.InheritanceConnector_Shape)
             drawInheritanceRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == DiagramElementType.CompositionConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.CompositionConnector)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.CompositionConnector_Shape)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == "aggregation") {
             let lineGroup = this.shapeLayer.group().addClass("UMLAggregationRelationship")
@@ -113,6 +114,10 @@ class Connector extends DiagramElement {
         switch (type) {
             case DiagramElementType.InheritanceConnector:
                 this.cssShapeLayerClassName = CSSClassName.InheritanceConnector
+                break;
+
+            case DiagramElementType.CompositionConnector:
+                this.cssShapeLayerClassName = CSSClassName.CompositionConnector
                 break;
         }
     }

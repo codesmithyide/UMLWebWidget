@@ -151,12 +151,12 @@
    fill: white;
 }
 
-.codesmithy-uml-diagram__composition-connector line {
+.composition-connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.codesmithy-uml-diagram__composition-connector polygon {
+.composition-connector__shape polygon {
    stroke: #454545;
    stroke-width: 2;
    fill: #454545;
@@ -238,11 +238,11 @@
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__composition-connector line {
+.codesmithy-uml-diagram--standard-style .composition-connector__shape line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__composition-connector polygon {
+.codesmithy-uml-diagram--standard-style .composition-connector__shape polygon {
    stroke: black;
    fill: black;
 }
