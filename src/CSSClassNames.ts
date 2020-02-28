@@ -18,7 +18,13 @@ const enum CSSClassName {
     ClassTemplate_ClassNameCompartment = "classtemplate__class-name-compartment",
     ClassTemplate_AttributesCompartment = "classtemplate__attributes-compartment",
     ClassTemplate_OperationsCompartment = "classtemplate__operations-compartment",
-    ClassTemplate_ParametersCompartment = "classtemplate__parameters-compartment"
+    ClassTemplate_ParametersCompartment = "classtemplate__parameters-compartment",
+    InheritanceConnector = "codesmithy-uml-diagram__inheritance-connector",
+    InheritanceConnector_Shape = "inheritance-connector__shape",
+    CompositionConnector = "codesmithy-uml-diagram__composition-connector",
+    CompositionConnector_Shape = "composition-connector__shape",
+    AggregationConnector = "codesmithy-uml-diagram__aggregation-connector",
+    AggregationConnector_Shape = "aggregation-connector__shape"
 }
 
 export { CSSClassName }
