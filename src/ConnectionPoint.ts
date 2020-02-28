@@ -10,6 +10,7 @@ import { DiagramElementType } from "./DiagramElement"
 import { DiagramElement } from "./DiagramElement"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { Errors } from "./Errors"
+
 /**
  * <p>
  *   The point where an element and a connector meet.

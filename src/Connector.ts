@@ -12,6 +12,7 @@ import { Label } from "./Label"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { SVGUtils } from "./SVGUtils"
 import { SVGLayer } from "./SVGLayer"
+import { CSSClassName } from "./CSSClassNames"
 
 /**
   Represents a connector between elements.
@@ -48,7 +49,7 @@ class Connector extends DiagramElement {
     doUpdate() {
         this.layers.clearEachLayer()
         if (this.type == DiagramElementType.InheritanceConnector) {
-            let lineGroup = this.shapeLayer.group().addClass("UMLInheritanceRelationship")
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.InheritanceConnector)
             drawInheritanceRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == "composition") {
             let lineGroup = this.shapeLayer.group().addClass("UMLCompositionRelationship")

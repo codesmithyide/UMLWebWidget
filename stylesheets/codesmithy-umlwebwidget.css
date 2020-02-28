@@ -140,12 +140,12 @@
    fill: #404040;
 }
 
-.codesmithy-uml-diagram .UMLInheritanceRelationship line {
+.codesmithy-uml-diagram__inheritance-connector line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.codesmithy-uml-diagram .UMLInheritanceRelationship polygon {
+.codesmithy-uml-diagram__inheritance-connector polygon {
    stroke: #454545;
    stroke-width: 2;
    fill: white;
@@ -230,11 +230,11 @@
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .UMLInheritanceRelationship line {
+.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__inheritance-connector line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .UMLInheritanceRelationship polygon {
+.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__inheritance-connector polygon {
    stroke: black;
 }
 
