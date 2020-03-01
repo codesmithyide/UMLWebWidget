@@ -33,6 +33,12 @@ class Actor extends DiagramElement {
         this.connectionPointsRectangle = null
     }
 
+    draw(): void {
+        this.update()
+        this.layers.getLayer("shape").write()
+        this.layers.getLayer("text").write()
+    }
+
     createConnectionPoint(svg) {
         let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter, this.errors)
         return newPoint
