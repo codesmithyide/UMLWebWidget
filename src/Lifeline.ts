@@ -75,8 +75,8 @@ class Lifeline extends DiagramElement {
         let g = this.layers.svg.group().addClass(CSSClassName.Lifeline)
         g.id(this.id)
         this.layers.getLayer("head-shape").write(g)
-        this.layers.getLayer("line-shape").write(g)
         this.layers.getLayer("head-text").write(g)
+        this.layers.getLayer("line-shape").write(g)
     }
 
     /**
@@ -220,9 +220,7 @@ function updateLine(self, lineGroup, lifelineDescription, depthChanges, style) {
             layers.push(new SVGLayer(self.svg))
         }
         for (let i = 1; i < depthChanges.length; i++) {
-
-            // At each iteration we try to process/draw the previous changes in
-            // depth: (i-1)
+            // At each iteration we try to process/draw the previous changes in depth: (i-1)
 
             // The nesting level of the segment we are currently trying to draw
             let currentNestingLevel = depthChanges[i-1][1]
@@ -232,25 +230,22 @@ function updateLine(self, lineGroup, lifelineDescription, depthChanges, style) {
                 + currentNestingLevel + " to " + nextNestingLevel)
 
             if (currentNestingLevel == 0) {
-                // Segments outside any execution specification bar can always
-                // be drawn immediately since there isn't any nesting possible
-                // in that case
+                // Segments outside any execution specification bar can always be drawn immediately since there isn't
+                // any nesting possible in that case
                 self.log.trace("Lifeline " + self.id + ": drawing line")
                 layers[currentNestingLevel].line(self.lineTopPosition.x, depthChanges[i-1][0], self.lineTopPosition.x, depthChanges[i][0])
             } else if (nextNestingLevel > currentNestingLevel) {
-                // If the depth is increasing we need to hold off on drawing the
-                // previous segment since we are going to draw a nested execution
-                // specification bar, we store the start of the deferred segment
-                // for later use
+                // If the depth is increasing we need to hold off on drawing the previous segment since we are going to
+                // draw a nested execution specification bar, we store the start of the deferred segment for later use
                 self.log.trace("Lifeline " + self.id + ": deferring drawing")
                 levelStart[currentNestingLevel] = depthChanges[i-1][0]
             } else if (nextNestingLevel <= currentNestingLevel) {
-                // If the depth stays the same it means we are at the end of the lifeline
-                // (remember we eliminate redundant points so the end of the lifeline is
-                // is the only case where we'd have two adjacent points of same depth)
+                // If the depth stays the same it means we are at the end of the lifeline (remember we eliminate
+                // redundant points so the end of the lifeline is is the only case where we'd have two adjacent points
+                // of same depth)
                 
-                // If the depth is decreasing we can draw the segment since we are
-                // at the end of a nested or non-nested execution specification bar
+                // If the depth is decreasing we can draw the segment since we are at the end of a nested or non-nested
+                // execution specification bar
 
                 self.log.trace("Lifeline " + self.id + ": drawing rectangle")
 
@@ -267,9 +262,8 @@ function updateLine(self, lineGroup, lifelineDescription, depthChanges, style) {
             }
         }
 
-        // If the last change is an increase form 0 to 1 it means we have an
-        // isolated message right at the end of the lifeline which is not a
-        // destruction occurrence.
+        // If the last change is an increase form 0 to 1 it means we have an isolated message right at the end of the
+        // lifeline which is not a destruction occurrence.
         if ((depthChanges[depthChanges.length - 2][1] == 0) &&
             (depthChanges[depthChanges.length - 1][1] > 0)) {
             layers[depthChanges[depthChanges.length - 1][1]]
@@ -277,8 +271,7 @@ function updateLine(self, lineGroup, lifelineDescription, depthChanges, style) {
                 .move(self.lineTopPosition.x - 4, depthChanges[depthChanges.length - 1][0] - overhang)
         }
        
-        // Since we are at the end of the line draw all the segments that are
-        // still deferred
+        // Since we are at the end of the line draw all the segments that are still deferred
         let end = depthChanges[depthChanges.length - 1][0]
         for (let i = 0; i < levelStart.length; i++) {
             if (levelStart[i] != -1) {
