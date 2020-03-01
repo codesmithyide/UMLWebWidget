@@ -72,27 +72,25 @@ class Lifeline extends DiagramElement {
         this.update()
         let g = this.layers.svg.group().addClass(CSSClassName.Lifeline)
         g.id(this.id)
-        this.layers.getLayer("shape").write()
+        this.layers.getLayer("shape").write(g)
         this.layers.getLayer("text").write()
     }
 
     /**
-      <p>
-        Creates a new connection point. Connection points are used
-        to link lifelines and messages.
-      </p>
-
-      <p>
-        Calls to this functions are also used to communicate to
-        the lifeline which messages it receives or sends. The order
-        of the calls therefore matters as the order of the messages
-        is assumed to be the order in which this function is called.
-      </p>
-
-      @param {SVG} svg - The root SVG document.
-      @param {string} type - The type of the message.
-      @returns {ConnectionPoint}
-    */
+     * <p>
+     *   Creates a new connection point. Connection points are used to link lifelines and messages.
+     * </p>
+     *
+     * <p>
+     *   Calls to this functions are also used to communicate to the lifeline which messages it receives or sends. The
+     *   order of the calls therefore matters as the order of the messages is assumed to be the order in which this
+     *   function is called.
+     * </p>
+     *
+     * @param {SVG} svg - The root SVG document.
+     * @param {string} type - The type of the message.
+     * @returns {ConnectionPoint}
+     */
     createConnectionPoint(svg, type) {
         let newPoint = new ConnectionPoint(svg, this, ConnectionPointPosition.BottomCenter, this.errors)
         this.connectionPoints.push({ point: newPoint, type: type })
