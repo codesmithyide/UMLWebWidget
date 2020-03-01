@@ -151,18 +151,19 @@ class Lifeline extends DiagramElement {
     doUpdate() {
         this.log.info("Lifeline " + this.id + ": updating")
         this.layers.clearEachLayer()
-        let lifelineGroup = this.headShapeLayer.group().addClass(CSSClassName.Lifeline_Head_Shape)
+        let headGroup = this.headShapeLayer.group().addClass(CSSClassName.Lifeline_Head_Shape)
+        let lineGroup = this.lineShapeLayer.group().addClass(CSSClassName.Lifeline_Head_Shape)
 
         // The box need to be updated first because the position of the top of the line is computed as part of that
         // update
-        updateBox(this, lifelineGroup, this.lifelineDescription, this.style, this.lineTopPosition)
-        updateLine(this, lifelineGroup, this.lifelineDescription, this.lifelineLayout.depthChanges, this.style)
+        updateBox(this, headGroup, this.lifelineDescription, this.style, this.lineTopPosition)
+        updateLine(this, lineGroup, this.lifelineDescription, this.lifelineLayout.depthChanges, this.style)
     }
 
 }
 
 // Create the box at the top of the lifeline
-function updateBox(self, lifelineGroup, lifelineDescription, style, lineTopPosition) {
+function updateBox(self, headGroup, lifelineDescription, style, lineTopPosition) {
     let currentDimensions = { 
         width: 0,
         height: 0
@@ -182,14 +183,14 @@ function updateBox(self, lifelineGroup, lifelineDescription, style, lineTopPosit
 
     currentDimensions.width += (style.getLeftMargin("lifeline") + style.getRightMargin("lifeline"))
     
-    SVGUtils.Rectangle(lifelineGroup, borderAdjustment.left, borderAdjustment.top, currentDimensions.width, currentDimensions.height)
+    SVGUtils.Rectangle(headGroup, borderAdjustment.left, borderAdjustment.top, currentDimensions.width, currentDimensions.height)
     self.boxHeight = currentDimensions.height
 
     lineTopPosition.x = (borderAdjustment.left + (currentDimensions.width / 2))
     lineTopPosition.y = (borderAdjustment.top + currentDimensions.height)
 }
 
-function updateLine(self, lifelineGroup, lifelineDescription, depthChanges, style) {
+function updateLine(self, lineGroup, lifelineDescription, depthChanges, style) {
     let overhang = style.getExecutionSpecificationBarOverhang()
 
     let debugMessage = "Lifeline " + self.id + ": depth changes: ["
@@ -201,13 +202,13 @@ function updateLine(self, lifelineGroup, lifelineDescription, depthChanges, styl
 
     if (depthChanges.length == 1) {
         if (depthChanges[0][1] > 0) {
-            SVGUtils.Line(lifelineGroup, self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0] - overhang)
-            SVGUtils.Rectangle(lifelineGroup, self.lineTopPosition.x - 4, depthChanges[0][0] - overhang, 8, (2 * overhang))
+            SVGUtils.Line(lineGroup, self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0] - overhang)
+            SVGUtils.Rectangle(lineGroup, self.lineTopPosition.x - 4, depthChanges[0][0] - overhang, 8, (2 * overhang))
         } else {
-            SVGUtils.Line(lifelineGroup, self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0])
+            SVGUtils.Line(lineGroup, self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0])
         }
     } else if (depthChanges.length > 1) {
-        SVGUtils.Line(lifelineGroup, self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0] - overhang)
+        SVGUtils.Line(lineGroup, self.lineTopPosition.x, self.lineTopPosition.y, self.lineTopPosition.x, depthChanges[0][0] - overhang)
         let maxDepth = 0
         for (let depthChange of depthChanges) {
             maxDepth = Math.max(maxDepth, depthChange[1])
@@ -287,7 +288,7 @@ function updateLine(self, lifelineGroup, lifelineDescription, depthChanges, styl
             }
         }
         for (let i = 0; i < layers.length; i++) {
-            layers[i].write(lifelineGroup)
+            layers[i].write(lineGroup)
         }
     }
 }

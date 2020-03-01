@@ -46,8 +46,8 @@ function LifelineGetLayersTest1(resolve, reject, test) {
 
     let layers = lifeline.getLayers()
     layers.getLayer("head-shape").write()
-    layers.getLayer("line-shape").write()
     layers.getLayer("head-text").write()
+    layers.getLayer("line-shape").write()
 
     TestUtils.exportSVGToHTML(svg, __dirname + "/output/lifelinetests/LifelineGetLayersTest1.html", true)
 
