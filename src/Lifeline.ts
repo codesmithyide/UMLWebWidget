@@ -14,6 +14,7 @@ import { Log } from "./Log"
 import { LifelineLayout } from "./LifelineLayout"
 import { SVGUtils } from "./SVGUtils"
 import { SVGLayer } from "./SVGLayer"
+import { IDGenerator } from "./IDGenerator"
 import { Errors } from "./Errors"
 
 /**
@@ -47,8 +48,8 @@ class Lifeline extends DiagramElement {
      *
      * @param {SVG} svg - The root SVG document.
      */
-    constructor(svg, id, lifelineDescription, style, log, errors: Errors) {
-        super(svg, DiagramElementType.Lifeline, id)
+    constructor(svg, idGenerator: IDGenerator, lifelineDescription, style, log, errors: Errors) {
+        super(svg, DiagramElementType.Lifeline, idGenerator.createID("lifeline--" + lifelineDescription.name ))
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")

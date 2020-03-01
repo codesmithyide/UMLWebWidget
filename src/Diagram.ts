@@ -129,7 +129,7 @@ class Diagram {
             } else if (item.lifeline) {
                 this.lifelines.set(
                     item.lifeline.name,
-                    new Lifeline(svg, item.lifeline.name, item.lifeline, style, this.log, errors)
+                    new Lifeline(svg, idGenerator, item.lifeline, style, this.log, errors)
                 )
             } else if (item.component) {
                 this.components.set(
