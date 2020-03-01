@@ -39,7 +39,7 @@ class Connector extends DiagramElement {
         if (text != null) {
             this.label = new Label(text)
         }
-        if ((this.label == null) && (type == "creationmessage")) {
+        if ((this.label == null) && (type == DiagramElementType.CreationMessageConnector)) {
             this.label = new Label("new")
         }
     }
@@ -78,25 +78,25 @@ class Connector extends DiagramElement {
         } else if (this.type == DiagramElementType.AggregationConnector) {
             let lineGroup = this.shapeLayer.group().addClass(CSSClassName.AggregationConnector_Shape)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
-        } else if (this.type == "synchronousmessage") {
+        } else if (this.type == DiagramElementType.SynchronousMessageConnector) {
             let lineGroup = this.shapeLayer.group().addClass("UMLSynchronousMessage")
             let textGroup = null
             if ((this.label != null) && (this.label.text != null) && (this.label.text != "")) {
                 textGroup = this.textLayer.group()
             }
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
-        } else if (this.type == "returnmessage") {
-            // If this is return message of a self call draw nothing. It will be indicated on the diagram
-            // by a reduction of the depth of the execution specification (i.e. the width of the lifeline)
+        } else if (this.type == DiagramElementType.ReturnMessageConnector) {
+            // If this is return message of a self call draw nothing. It will be indicated on the diagram by a reduction
+            // of the depth of the execution specification (i.e. the width of the lifeline)
             if ((this.connectionPoint1.element != null) && (this.connectionPoint1.element != this.connectionPoint2.element)) {
                 let lineGroup = this.shapeLayer.group().addClass("UMLReturnMessage")
                 drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
             }
-        } else if (this.type == "creationmessage") {
+        } else if (this.type == DiagramElementType.CreationMessageConnector) {
             let lineGroup = this.shapeLayer.group().addClass("UMLCreationMessage")
             let textGroup = this.textLayer.group()
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
-        } else if (this.type == "destructionmessage") {
+        } else if (this.type == DiagramElementType.DestructionMessageConnector) {
             let lineGroup = this.shapeLayer.group().addClass("UMLDestructionMessage")
             drawDestructionMessage(lineGroup, this.connectionPoint2)
         } else if (this.type == "usecaseassociation") {
@@ -147,20 +147,20 @@ function drawCompositionOrAggregationRelationship(lineGroup, connectionPoint1, c
 function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, label) {
     if ((connectionPoint1.element != null) && (connectionPoint1.element == connectionPoint2.element)) {
         if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
-            let textElement = textGroup.text(label.text)
+            let textElement = SVGUtils.Text(textGroup, 0, 0, label.text)
             textElement.move(connectionPoint1.x + 8, connectionPoint1.y - textElement.bbox().height - 3)
         }
 
-        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint1.y)
-        lineGroup.line(connectionPoint1.x + 30, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint2.y)
-        lineGroup.line(connectionPoint1.x + 30, connectionPoint2.y, connectionPoint2.x + 12, connectionPoint2.y)
+        SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint1.y)
+        SVGUtils.Line(lineGroup, connectionPoint1.x + 30, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint2.y)
+        SVGUtils.Line(lineGroup,connectionPoint1.x + 30, connectionPoint2.y, connectionPoint2.x + 12, connectionPoint2.y)
         let polygonDescription = "" + connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
         SVGUtils.Polygon(lineGroup, polygonDescription)
     } else if (connectionPoint1.x < connectionPoint2.x) {
         if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
-            let textElement = textGroup.text(label.text)
+            let textElement = SVGUtils.Text(textGroup, 0, 0, label.text)
             
             let width = (connectionPoint2.x - connectionPoint1.x)
             if (textElement.bbox().width < width) {
@@ -170,14 +170,14 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
             }
         }
 
-        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x - 12, connectionPoint2.y)
+        SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint2.x - 12, connectionPoint2.y)
         let polygonDescription = "" + (connectionPoint2.x - 12) + "," + (connectionPoint2.y - 6) + " " +
             connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x - 12) + "," + (connectionPoint2.y + 6)
         SVGUtils.Polygon(lineGroup, polygonDescription)
     } else if (connectionPoint1.x > connectionPoint2.x) {
         if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
-            let textElement = textGroup.text(label.text)
+            let textElement = SVGUtils.Text(textGroup, 0, 0, label.text)
             
             let width = (connectionPoint1.x - connectionPoint2.x)
             if (textElement.bbox().width < width) {
@@ -187,20 +187,20 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
             }
         }
 
-        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x + 12, connectionPoint2.y)
+        SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint2.x + 12, connectionPoint2.y)
         let polygonDescription = "" + (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
             connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
         SVGUtils.Polygon(lineGroup, polygonDescription)
     } else {
         if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
-            let textElement = textGroup.text(label.text)
+            let textElement = SVGUtils.Text(textGroup, 0, 0, label.text)
             textElement.move(connectionPoint1.x + 8, connectionPoint1.y - textElement.bbox().height - 3)
         }
 
-        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint1.y)
-        lineGroup.line(connectionPoint1.x + 30, connectionPoint1.y, connectionPoint2.x + 30, connectionPoint2.y)
-        lineGroup.line(connectionPoint2.x + 30, connectionPoint2.y, connectionPoint2.x + 12, connectionPoint2.y)
+        SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint1.y)
+        SVGUtils.Line(lineGroup,connectionPoint1.x + 30, connectionPoint1.y, connectionPoint2.x + 30, connectionPoint2.y)
+        SVGUtils.Line(lineGroup,connectionPoint2.x + 30, connectionPoint2.y, connectionPoint2.x + 12, connectionPoint2.y)
         let polygonDescription = "" + connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
@@ -222,37 +222,31 @@ function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
 function drawDestructionMessage(lineGroup, connectionPoint2) {
     let halfWidth = 10
     let halfHeight = 10
-    lineGroup.line(
-        connectionPoint2.x - halfWidth, connectionPoint2.y - halfHeight,
-        connectionPoint2.x + halfWidth, connectionPoint2.y + halfHeight
-    )
-    lineGroup.line(
-        connectionPoint2.x - halfWidth, connectionPoint2.y + halfHeight,
-        connectionPoint2.x + halfWidth, connectionPoint2.y - halfHeight
-    )
+    SVGUtils.Line(lineGroup, connectionPoint2.x - halfWidth, connectionPoint2.y - halfHeight, connectionPoint2.x + halfWidth, connectionPoint2.y + halfHeight)
+    SVGUtils.Line(lineGroup, connectionPoint2.x - halfWidth, connectionPoint2.y + halfHeight, connectionPoint2.x + halfWidth, connectionPoint2.y - halfHeight)
 }
 
 function drawUseCaseAssociation(lineGroup, connectionPoint1, connectionPoint2) {
-    lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y)
+    SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y)
 }
 
 function drawAssemblyConnector(lineGroup, connectionPoint1, connectionPoint2) {
     if (connectionPoint1.x < connectionPoint2.x) {
-        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
+        SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
     } else {
         let middlePoint = (connectionPoint1.y + ((connectionPoint2.y - connectionPoint1.y) / 2))
-        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 25, connectionPoint1.y).attr("stroke-dasharray", "8, 4")
-        lineGroup.line(connectionPoint1.x + 25, connectionPoint1.y, connectionPoint1.x + 25, middlePoint).attr("stroke-dasharray", "8, 4")
-        lineGroup.line(connectionPoint1.x + 25, middlePoint, connectionPoint2.x - 35, middlePoint).attr("stroke-dasharray", "8, 4")
-        lineGroup.line(connectionPoint2.x - 35, middlePoint, connectionPoint2.x - 35, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
-        lineGroup.line(connectionPoint2.x - 35, connectionPoint2.y, connectionPoint2.x, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
+        SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 25, connectionPoint1.y).attr("stroke-dasharray", "8, 4")
+        SVGUtils.Line(lineGroup, connectionPoint1.x + 25, connectionPoint1.y, connectionPoint1.x + 25, middlePoint).attr("stroke-dasharray", "8, 4")
+        SVGUtils.Line(lineGroup, connectionPoint1.x + 25, middlePoint, connectionPoint2.x - 35, middlePoint).attr("stroke-dasharray", "8, 4")
+        SVGUtils.Line(lineGroup, connectionPoint2.x - 35, middlePoint, connectionPoint2.x - 35, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
+        SVGUtils.Line(lineGroup, connectionPoint2.x - 35, connectionPoint2.y, connectionPoint2.x, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
     }
-    lineGroup.line(connectionPoint2.x - 13, connectionPoint2.y + 5, connectionPoint2.x, connectionPoint2.y)
-    lineGroup.line(connectionPoint2.x - 13, connectionPoint2.y - 5, connectionPoint2.x, connectionPoint2.y)
+    SVGUtils.Line(lineGroup, connectionPoint2.x - 13, connectionPoint2.y + 5, connectionPoint2.x, connectionPoint2.y)
+    SVGUtils.Line(lineGroup, connectionPoint2.x - 13, connectionPoint2.y - 5, connectionPoint2.x, connectionPoint2.y)
 }
 
 function drawCommunicationPath(lineGroup, connectionPoint1, connectionPoint2) {
-    lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y)
+    SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y)
 }
 
 // Orientation of the head (e.g. arrow or diamond)

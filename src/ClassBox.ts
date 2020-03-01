@@ -17,15 +17,13 @@ import { SVGLayer } from "./SVGLayer"
 import { IDGenerator } from "./IDGenerator"
 import { Errors } from "./Errors"
 
-/** 
-  A class box. 
-
-  @extends DiagramElement
-  @property {ConnectionPoint[]} this.connectionPoints - The class
-    keeps a list of connection points where other elements are 
-    connected so they can be notified of relevant changes to the
-    class box.
-*/
+/**
+ * A class box.
+ *
+ * @extends DiagramElement
+ * @property {ConnectionPoint[]} this.connectionPoints - The class keeps a list of connection points where other
+ * elements are connected so they can be notified of relevant changes to the class box.
+ */
 class ClassBox extends DiagramElement {
     errors: Errors
     shapeLayer: SVGLayer
