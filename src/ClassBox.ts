@@ -50,7 +50,7 @@ class ClassBox extends DiagramElement {
         this.connectionPoints = [ ]
     }
 
-    write(): void {
+    draw(): void {
         this.update()
         let g = this.layers.svg.group().addClass(CSSClassName.ClassBox)
         g.id(this.id)
