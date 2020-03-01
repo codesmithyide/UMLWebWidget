@@ -268,11 +268,10 @@ function draw(classboxes, classtemplates, lifelines, components, nodes, actors, 
         usecase.draw()
     }
     for (let connector of connectors) {
-        connector.write()
+        connector.draw()
     }
     for (let connector of messages) {
-        connector.getLayers().getLayer("shape").write()
-        connector.getLayers().getLayer("text").write()
+        connector.draw()
     }
     for (let connector of assemblyconnectors) {
         connector.getLayers().getLayer("shape").write()

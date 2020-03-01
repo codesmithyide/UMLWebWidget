@@ -44,12 +44,13 @@ class Connector extends DiagramElement {
         }
     }
 
-    write(): void {
+    draw(): void {
         this.update()
         switch (this.type) {
             case DiagramElementType.InheritanceConnector:
             case DiagramElementType.CompositionConnector:
             case DiagramElementType.AggregationConnector:
+            case DiagramElementType.CreationMessageConnector:
                 let g = this.layers.svg.group().addClass(this.cssShapeLayerClassName)
                 g.id(this.id)
                 this.layers.getLayer("shape").write(g)
@@ -124,6 +125,22 @@ class Connector extends DiagramElement {
             case DiagramElementType.AggregationConnector:
                 this.cssShapeLayerClassName = CSSClassName.AggregationConnector
                 break;
+
+            case DiagramElementType.CreationMessageConnector:
+                this.cssShapeLayerClassName = CSSClassName.CreationMessageConnector
+                break
+
+            case DiagramElementType.SynchronousMessageConnector:
+                this.cssShapeLayerClassName = CSSClassName.SynchronousMessageConnector
+                break
+
+            case DiagramElementType.ReturnMessageConnector:
+                this.cssShapeLayerClassName = CSSClassName.ReturnMessageConnector
+                break
+
+            case DiagramElementType.DestructionMessageConnector:
+                this.cssShapeLayerClassName = CSSClassName.DestructionMessageConnector
+                break
         }
     }
 }

@@ -6,6 +6,8 @@
 
 'use strict'
 
+import {DiagramElementType} from "./DiagramElement"
+
 const enum CSSClassName {
     Diagram = "codesmithy-uml-diagram",
     ClassBox = "codesmithy-uml-diagram__classbox",
@@ -29,7 +31,11 @@ const enum CSSClassName {
     CompositionConnector = "codesmithy-uml-diagram__composition-connector",
     CompositionConnector_Shape = "composition-connector__shape",
     AggregationConnector = "codesmithy-uml-diagram__aggregation-connector",
-    AggregationConnector_Shape = "aggregation-connector__shape"
+    AggregationConnector_Shape = "aggregation-connector__shape",
+    CreationMessageConnector = "codesmithy-uml-diagram__creation-message-connector",
+    SynchronousMessageConnector = "codesmithy-uml-diagram__synchronous-message-connector",
+    ReturnMessageConnector = "codesmithy-uml-diagram__return-message-connector",
+    DestructionMessageConnector = "codesmithy-uml-diagram__destruction-message-connector",
 }
 
 export { CSSClassName }
