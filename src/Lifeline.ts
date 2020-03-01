@@ -14,12 +14,13 @@ import { LifelineLayout } from "./LifelineLayout"
 import { SVGUtils } from "./SVGUtils"
 import { SVGLayer } from "./SVGLayer"
 import { Errors } from "./Errors"
+import {CSSClassName} from "./CSSClassNames"
 
 /**
-  A lifeline on a sequence diagram.
-
-  @extends DiagramElement
-*/
+ * A lifeline on a sequence diagram.
+ *
+ * @extends DiagramElement
+ */
 class Lifeline extends DiagramElement {
     errors: Errors
     shapeLayer: SVGLayer
@@ -64,6 +65,12 @@ class Lifeline extends DiagramElement {
         this.connectionPoints = [ ]
         this.adjustmentNeeded = false
         this.lifelineLayout = new LifelineLayout()
+    }
+
+    draw(): void {
+        this.update()
+        this.layers.getLayer("shape").write()
+        this.layers.getLayer("text").write()
     }
 
     /**

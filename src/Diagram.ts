@@ -253,24 +253,19 @@ function draw(classboxes, classtemplates, lifelines, components, nodes, actors, 
         classtemplate.draw()
     }
     for (let lifeline of lifelines) {
-        lifeline.getLayers().getLayer("shape").write()
-        lifeline.getLayers().getLayer("text").write()
+        lifeline.draw()
     }
     for (let component of components) {
-        component.getLayers().getLayer("shape").write()
-        component.getLayers().getLayer("text").write()
+        component.draw()
     }
     for (let node of nodes) {
-        node.getLayers().getLayer("shape").write()
-        node.getLayers().getLayer("text").write()
+        node.draw()
     }
     for (let actor of actors) {
-        actor.getLayers().getLayer("shape").write()
-        actor.getLayers().getLayer("text").write()
+        actor.draw()
     }
     for (let usecase of usecases) {
-        usecase.getLayers().getLayer("shape").write()
-        usecase.getLayers().getLayer("text").write()
+        usecase.draw()
     }
     for (let connector of connectors) {
         connector.write()

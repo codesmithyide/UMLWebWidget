@@ -83,6 +83,12 @@ class Component extends DiagramElement {
         }
     }
 
+    draw(): void {
+        this.update()
+        this.layers.getLayer("shape").write()
+        this.layers.getLayer("text").write()
+    }
+
     getSocketConnector(name) {
         for (var i = 0; i < this.socketConnectors.length; i++) {
             if (this.socketConnectors[i].name == name) {
