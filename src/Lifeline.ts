@@ -76,7 +76,7 @@ class Lifeline extends DiagramElement {
         g.id(this.id)
         this.layers.getLayer("head-shape").write(g)
         this.layers.getLayer("line-shape").write(g)
-        this.layers.getLayer("head-text").write()
+        this.layers.getLayer("head-text").write(g)
     }
 
     /**
