@@ -103,6 +103,13 @@
    stroke-width: 2;
 }
 
+.lifeline-head__text text {
+   font-family: 'Verdana', 'Trebuchet MS';
+   font-size: small;
+   font-weight: bold;
+   fill: #404040;
+}
+
 .lifeline-line__shape rect {
    stroke: #595959;
    stroke-width: 2;
@@ -142,13 +149,6 @@
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
-}
-
-.codesmithy-uml-diagram .UMLInstanceName text {
-   font-family: 'Verdana', 'Trebuchet MS';
-   font-size: small;
-   font-weight: bold;
-   fill: #404040;
 }
 
 .inheritance-connector__shape line {

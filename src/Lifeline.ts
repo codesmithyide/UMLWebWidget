@@ -63,8 +63,7 @@ class Lifeline extends DiagramElement {
         this.lineTopPosition = { x: 0, y: 0 }
         this.boxHeight = 0
 
-        // List of connection points that are connected to
-        // this lifeline
+        // List of connection points that are connected to this lifeline
         this.connectionPoints = [ ]
         this.adjustmentNeeded = false
         this.lifelineLayout = new LifelineLayout()
@@ -176,7 +175,7 @@ function updateBox(self, headGroup, lifelineDescription, style, lineTopPosition)
 
     currentDimensions.height = style.getTopMargin("lifeline")
 
-    var instanceNameGroup = self.headTextLayer.group().addClass("UMLInstanceName")
+    var instanceNameGroup = self.headTextLayer.group().addClass(CSSClassName.Lifeline_Head_Text)
     var instanceNameDef = SVGUtils.Text(instanceNameGroup, borderAdjustment.left + style.getLeftMargin("lifeline"), borderAdjustment.top + currentDimensions.height, ":" + lifelineDescription.name)
     currentDimensions.width = Math.max(currentDimensions.width, instanceNameDef.bbox().width)
     currentDimensions.height += (instanceNameDef.bbox().height + style.getBottomMargin("lifeline"))
