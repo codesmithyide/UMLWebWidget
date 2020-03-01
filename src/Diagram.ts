@@ -247,10 +247,10 @@ function dolayout(layoutManager, connectors, assemblyconnectors) {
 
 function draw(classboxes, classtemplates, lifelines, components, nodes, actors, usecases, connectors, messages, assemblyconnectors) {
     for (let classbox of classboxes) {
-        classbox.write()
+        classbox.draw()
     }
     for (let classtemplate of classtemplates) {
-        classtemplate.write()
+        classtemplate.draw()
     }
     for (let lifeline of lifelines) {
         lifeline.getLayers().getLayer("shape").write()
