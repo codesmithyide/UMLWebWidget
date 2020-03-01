@@ -39,7 +39,7 @@ class Connector extends DiagramElement {
         if (text != null) {
             this.label = new Label(text)
         }
-        if ((this.label == null) && (type == "creationmessage")) {
+        if ((this.label == null) && (type == DiagramElementType.CreationMessageConnector)) {
             this.label = new Label("new")
         }
     }
@@ -78,25 +78,25 @@ class Connector extends DiagramElement {
         } else if (this.type == DiagramElementType.AggregationConnector) {
             let lineGroup = this.shapeLayer.group().addClass(CSSClassName.AggregationConnector_Shape)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
-        } else if (this.type == "synchronousmessage") {
+        } else if (this.type == DiagramElementType.SynchronousMessageConnector) {
             let lineGroup = this.shapeLayer.group().addClass("UMLSynchronousMessage")
             let textGroup = null
             if ((this.label != null) && (this.label.text != null) && (this.label.text != "")) {
                 textGroup = this.textLayer.group()
             }
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
-        } else if (this.type == "returnmessage") {
+        } else if (this.type == DiagramElementType.ReturnMessageConnector) {
             // If this is return message of a self call draw nothing. It will be indicated on the diagram
             // by a reduction of the depth of the execution specification (i.e. the width of the lifeline)
             if ((this.connectionPoint1.element != null) && (this.connectionPoint1.element != this.connectionPoint2.element)) {
                 let lineGroup = this.shapeLayer.group().addClass("UMLReturnMessage")
                 drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
             }
-        } else if (this.type == "creationmessage") {
+        } else if (this.type == DiagramElementType.CreationMessageConnector) {
             let lineGroup = this.shapeLayer.group().addClass("UMLCreationMessage")
             let textGroup = this.textLayer.group()
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
-        } else if (this.type == "destructionmessage") {
+        } else if (this.type == DiagramElementType.DestructionMessageConnector) {
             let lineGroup = this.shapeLayer.group().addClass("UMLDestructionMessage")
             drawDestructionMessage(lineGroup, this.connectionPoint2)
         } else if (this.type == "usecaseassociation") {

@@ -19,6 +19,10 @@ const enum DiagramElementType {
     InheritanceConnector = "inheritance",
     CompositionConnector = "composition",
     AggregationConnector = "aggregation",
+    CreationMessageConnector = "creationmessage",
+    SynchronousMessageConnector = "synchronousmessage",
+    ReturnMessageConnector = "returnmessage",
+    DestructionMessageConnector = "destructionmessage",
     Node = "node"
 }
 
