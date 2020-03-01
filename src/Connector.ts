@@ -170,7 +170,7 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
             }
         }
 
-        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x - 12, connectionPoint2.y)
+        SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint2.x - 12, connectionPoint2.y)
         let polygonDescription = "" + (connectionPoint2.x - 12) + "," + (connectionPoint2.y - 6) + " " +
             connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x - 12) + "," + (connectionPoint2.y + 6)
@@ -187,7 +187,7 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
             }
         }
 
-        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x + 12, connectionPoint2.y)
+        SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint2.x + 12, connectionPoint2.y)
         let polygonDescription = "" + (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
             connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
@@ -222,37 +222,31 @@ function drawReturnMessage(lineGroup, connectionPoint1, connectionPoint2) {
 function drawDestructionMessage(lineGroup, connectionPoint2) {
     let halfWidth = 10
     let halfHeight = 10
-    lineGroup.line(
-        connectionPoint2.x - halfWidth, connectionPoint2.y - halfHeight,
-        connectionPoint2.x + halfWidth, connectionPoint2.y + halfHeight
-    )
-    lineGroup.line(
-        connectionPoint2.x - halfWidth, connectionPoint2.y + halfHeight,
-        connectionPoint2.x + halfWidth, connectionPoint2.y - halfHeight
-    )
+    SVGUtils.Line(lineGroup, connectionPoint2.x - halfWidth, connectionPoint2.y - halfHeight, connectionPoint2.x + halfWidth, connectionPoint2.y + halfHeight)
+    SVGUtils.Line(lineGroup, connectionPoint2.x - halfWidth, connectionPoint2.y + halfHeight, connectionPoint2.x + halfWidth, connectionPoint2.y - halfHeight)
 }
 
 function drawUseCaseAssociation(lineGroup, connectionPoint1, connectionPoint2) {
-    lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y)
+    SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y)
 }
 
 function drawAssemblyConnector(lineGroup, connectionPoint1, connectionPoint2) {
     if (connectionPoint1.x < connectionPoint2.x) {
-        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
+        SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
     } else {
         let middlePoint = (connectionPoint1.y + ((connectionPoint2.y - connectionPoint1.y) / 2))
-        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 25, connectionPoint1.y).attr("stroke-dasharray", "8, 4")
-        lineGroup.line(connectionPoint1.x + 25, connectionPoint1.y, connectionPoint1.x + 25, middlePoint).attr("stroke-dasharray", "8, 4")
-        lineGroup.line(connectionPoint1.x + 25, middlePoint, connectionPoint2.x - 35, middlePoint).attr("stroke-dasharray", "8, 4")
-        lineGroup.line(connectionPoint2.x - 35, middlePoint, connectionPoint2.x - 35, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
-        lineGroup.line(connectionPoint2.x - 35, connectionPoint2.y, connectionPoint2.x, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
+        SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 25, connectionPoint1.y).attr("stroke-dasharray", "8, 4")
+        SVGUtils.Line(lineGroup, connectionPoint1.x + 25, connectionPoint1.y, connectionPoint1.x + 25, middlePoint).attr("stroke-dasharray", "8, 4")
+        SVGUtils.Line(lineGroup, connectionPoint1.x + 25, middlePoint, connectionPoint2.x - 35, middlePoint).attr("stroke-dasharray", "8, 4")
+        SVGUtils.Line(lineGroup, connectionPoint2.x - 35, middlePoint, connectionPoint2.x - 35, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
+        SVGUtils.Line(lineGroup, connectionPoint2.x - 35, connectionPoint2.y, connectionPoint2.x, connectionPoint2.y).attr("stroke-dasharray", "8, 4")
     }
-    lineGroup.line(connectionPoint2.x - 13, connectionPoint2.y + 5, connectionPoint2.x, connectionPoint2.y)
-    lineGroup.line(connectionPoint2.x - 13, connectionPoint2.y - 5, connectionPoint2.x, connectionPoint2.y)
+    SVGUtils.Line(lineGroup, connectionPoint2.x - 13, connectionPoint2.y + 5, connectionPoint2.x, connectionPoint2.y)
+    SVGUtils.Line(lineGroup, connectionPoint2.x - 13, connectionPoint2.y - 5, connectionPoint2.x, connectionPoint2.y)
 }
 
 function drawCommunicationPath(lineGroup, connectionPoint1, connectionPoint2) {
-    lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y)
+    SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint2.x, connectionPoint2.y)
 }
 
 // Orientation of the head (e.g. arrow or diamond)
