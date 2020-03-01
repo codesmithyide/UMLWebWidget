@@ -45,8 +45,9 @@ function LifelineGetLayersTest1(resolve, reject, test) {
     let lifeline = new UMLWebWidget.Lifeline(svg, idGenerator, lifelineDescription, style, log)
 
     let layers = lifeline.getLayers()
-    layers.getLayer("shape").write()
-    layers.getLayer("text").write()
+    layers.getLayer("head-shape").write()
+    layers.getLayer("line-shape").write()
+    layers.getLayer("head-text").write()
 
     TestUtils.exportSVGToHTML(svg, __dirname + "/output/lifelinetests/LifelineGetLayersTest1.html", true)
 

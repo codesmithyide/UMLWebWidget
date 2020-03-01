@@ -24,8 +24,9 @@ import { Errors } from "./Errors"
  */
 class Lifeline extends DiagramElement {
     errors: Errors
-    shapeLayer: SVGLayer
-    textLayer: SVGLayer
+    headShapeLayer: SVGLayer
+    headTextLayer: SVGLayer
+    lineShapeLayer: SVGLayer
     svg
     lifelineDescription
     style
@@ -51,8 +52,9 @@ class Lifeline extends DiagramElement {
     constructor(svg, idGenerator: IDGenerator, lifelineDescription, style, log, errors: Errors) {
         super(svg, DiagramElementType.Lifeline, idGenerator.createID("lifeline--" + lifelineDescription.name ))
         this.errors = errors
-        this.shapeLayer = this.layers.createLayer("shape")
-        this.textLayer = this.layers.createLayer("text")
+        this.headShapeLayer = this.layers.createLayer("head-shape")
+        this.headTextLayer = this.layers.createLayer("head-text")
+        this.lineShapeLayer = this.layers.createLayer("line-shape")
         this.svg = svg
         this.lifelineDescription = lifelineDescription
         this.style = style
@@ -72,8 +74,9 @@ class Lifeline extends DiagramElement {
         this.update()
         let g = this.layers.svg.group().addClass(CSSClassName.Lifeline)
         g.id(this.id)
-        this.layers.getLayer("shape").write(g)
-        this.layers.getLayer("text").write()
+        this.layers.getLayer("head-shape").write(g)
+        this.layers.getLayer("line-shape").write(g)
+        this.layers.getLayer("head-text").write()
     }
 
     /**
@@ -148,7 +151,7 @@ class Lifeline extends DiagramElement {
     doUpdate() {
         this.log.info("Lifeline " + this.id + ": updating")
         this.layers.clearEachLayer()
-        let lifelineGroup = this.shapeLayer.group().addClass(CSSClassName.Lifeline_Head_Shape)
+        let lifelineGroup = this.headShapeLayer.group().addClass(CSSClassName.Lifeline_Head_Shape)
 
         // The box need to be updated first because the position of the top of the line is computed as part of that
         // update
@@ -172,7 +175,7 @@ function updateBox(self, lifelineGroup, lifelineDescription, style, lineTopPosit
 
     currentDimensions.height = style.getTopMargin("lifeline")
 
-    var instanceNameGroup = self.textLayer.group().addClass("UMLInstanceName")
+    var instanceNameGroup = self.headTextLayer.group().addClass("UMLInstanceName")
     var instanceNameDef = instanceNameGroup.text(":" + lifelineDescription.name).move(borderAdjustment.left + style.getLeftMargin("lifeline"), borderAdjustment.top + currentDimensions.height)
     currentDimensions.width = Math.max(currentDimensions.width, instanceNameDef.bbox().width)
     currentDimensions.height += (instanceNameDef.bbox().height + style.getBottomMargin("lifeline"))
