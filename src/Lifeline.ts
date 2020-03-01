@@ -152,7 +152,7 @@ class Lifeline extends DiagramElement {
         this.log.info("Lifeline " + this.id + ": updating")
         this.layers.clearEachLayer()
         let headGroup = this.headShapeLayer.group().addClass(CSSClassName.Lifeline_Head_Shape)
-        let lineGroup = this.lineShapeLayer.group().addClass(CSSClassName.Lifeline_Head_Shape)
+        let lineGroup = this.lineShapeLayer.group().addClass(CSSClassName.Lifeline_Line_Shape)
 
         // The box need to be updated first because the position of the top of the line is computed as part of that
         // update
@@ -177,7 +177,7 @@ function updateBox(self, headGroup, lifelineDescription, style, lineTopPosition)
     currentDimensions.height = style.getTopMargin("lifeline")
 
     var instanceNameGroup = self.headTextLayer.group().addClass("UMLInstanceName")
-    var instanceNameDef = instanceNameGroup.text(":" + lifelineDescription.name).move(borderAdjustment.left + style.getLeftMargin("lifeline"), borderAdjustment.top + currentDimensions.height)
+    var instanceNameDef = SVGUtils.Text(instanceNameGroup, borderAdjustment.left + style.getLeftMargin("lifeline"), borderAdjustment.top + currentDimensions.height, ":" + lifelineDescription.name)
     currentDimensions.width = Math.max(currentDimensions.width, instanceNameDef.bbox().width)
     currentDimensions.height += (instanceNameDef.bbox().height + style.getBottomMargin("lifeline"))
 
