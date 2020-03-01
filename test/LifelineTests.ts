@@ -24,29 +24,30 @@ module.exports = function(theTestHarness) {
 
 function LifelineCreationTest1(resolve) {
     let svg = SVG(window.document.createElement("div"))
+    let idGenerator = new UMLWebWidget.IDGenerator("LifelineCreationTest1")
     let lifelineDescription = {
         "name": "MyClass"
     }
     let style = new UMLWebWidget.Style()
     let log = new UMLWebWidget.Log("none")
-    let lifeline = new UMLWebWidget.Lifeline(svg, lifelineDescription.name, lifelineDescription, style, log)
+    let lifeline = new UMLWebWidget.Lifeline(svg, idGenerator, lifelineDescription, style, log)
     resolve(tf.TestResultOutcome.ePassed)
 }
 
 function LifelineGetLayersTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-
+    let idGenerator = new UMLWebWidget.IDGenerator("LifelineGetLayersTest1")
     let lifelineDescription = {
         "name": "MyClass"
     }
-
     let style = new UMLWebWidget.Style()
     let log = new UMLWebWidget.Log("none")
-    let lifeline = new UMLWebWidget.Lifeline(svg, lifelineDescription.name, lifelineDescription, style, log)
+    let lifeline = new UMLWebWidget.Lifeline(svg, idGenerator, lifelineDescription, style, log)
 
     let layers = lifeline.getLayers()
-    layers.getLayer("shape").write()
-    layers.getLayer("text").write()
+    layers.getLayer("head-shape").write()
+    layers.getLayer("head-text").write()
+    layers.getLayer("line").write()
 
     TestUtils.exportSVGToHTML(svg, __dirname + "/output/lifelinetests/LifelineGetLayersTest1.html", true)
 

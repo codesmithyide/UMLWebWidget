@@ -7,6 +7,12 @@
 'use strict'
 
 class SVGUtils {
+    static Group(parent) {
+        let group = parent.group()
+        group.id(null)
+        return group
+    }
+
     static Rectangle(parent, left: number, top: number, width: number, height: number) {
         let rect = parent.rect(width, height).move(left, top)
         rect.id(null)

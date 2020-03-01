@@ -65,8 +65,8 @@ function SequenceDiagramCreateFromJSONTest2(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 1, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 150, "y": 1 } }
+            "SequenceDiagramCreateFromJSONTest2--lifeline--Customer": { "position": { "x": 1, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest2--lifeline--Shopkeeper": { "position": { "x": 150, "y": 1 } }
         }
     }
 
@@ -108,8 +108,8 @@ function SequenceDiagramCreateFromJSONTest3(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 1, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 150, "y": 1 } }
+            "SequenceDiagramCreateFromJSONTest3--lifeline--Customer": { "position": { "x": 1, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest3--lifeline--Shopkeeper": { "position": { "x": 150, "y": 1 } }
         }
     }
 
@@ -164,9 +164,9 @@ function SequenceDiagramCreateFromJSONTest4(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 1, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 150, "y": 1 } },
-            "Till": { "position": { "x": 320, "y": 1 } }
+            "SequenceDiagramCreateFromJSONTest4--lifeline--Customer": { "position": { "x": 1, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest4--lifeline--Shopkeeper": { "position": { "x": 150, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest4--lifeline--Till": { "position": { "x": 320, "y": 1 } }
         }
     }
 
@@ -235,9 +235,9 @@ function SequenceDiagramCreateFromJSONTest5(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 1, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 150, "y": 1 } },
-            "Till": { "position": { "x": 320, "y": 1 } }
+            "SequenceDiagramCreateFromJSONTest5--lifeline--Customer": { "position": { "x": 1, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest5--lifeline--Shopkeeper": { "position": { "x": 150, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest5--lifeline--Till": { "position": { "x": 320, "y": 1 } }
         }
     }
 
@@ -329,8 +329,8 @@ function SequenceDiagramCreateFromJSONTest6(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Author": { "position": { "x": 1, "y": 1 } },
-            "Book": { "position": { "x": 150, "y": 1 } }
+            "SequenceDiagramCreateFromJSONTest6--lifeline--Author": { "position": { "x": 1, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest6--lifeline--Book": { "position": { "x": 150, "y": 1 } }
         }
     }
 
@@ -385,8 +385,8 @@ function SequenceDiagramCreateFromJSONTest7(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Author": { "position": { "x": 1, "y": 1 } },
-            "Book": { "position": { "x": 150, "y": 1 } }
+            "SequenceDiagramCreateFromJSONTest7--lifeline--Author": { "position": { "x": 1, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest7--lifeline--Book": { "position": { "x": 150, "y": 1 } }
         }
     }
 
@@ -486,8 +486,8 @@ function SequenceDiagramCreateFromJSONTest9(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Author": { "position": { "x": 1, "y": 1 } },
-            "Book": { "position": { "x": 150, "y": 1 } }
+            "SequenceDiagramCreateFromJSONTest9--lifeline--Author": { "position": { "x": 1, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest9--lifeline--Book": { "position": { "x": 150, "y": 1 } }
         }
     }
 
@@ -557,9 +557,9 @@ function SequenceDiagramCreateFromJSONTest10(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 320, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 150, "y": 1 } },
-            "Till": { "position": { "x": 1, "y": 1 } }
+            "SequenceDiagramCreateFromJSONTest10--lifeline--Customer": { "position": { "x": 320, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest10--lifeline--Shopkeeper": { "position": { "x": 150, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest10--lifeline--Till": { "position": { "x": 1, "y": 1 } }
         }
     }
 
@@ -651,8 +651,8 @@ function SequenceDiagramCreateFromJSONTest11(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 1, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 150, "y": 1 } }
+            "SequenceDiagramCreateFromJSONTest11--lifeline--Customer": { "position": { "x": 1, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest11--lifeline--Shopkeeper": { "position": { "x": 150, "y": 1 } }
         }
     }
 
@@ -733,8 +733,8 @@ function SequenceDiagramCreateFromJSONTest12(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 1, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 150, "y": 1 } }
+            "SequenceDiagramCreateFromJSONTest12--lifeline--Customer": { "position": { "x": 1, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest12--lifeline--Shopkeeper": { "position": { "x": 150, "y": 1 } }
         }
     }
 
@@ -828,8 +828,8 @@ function SequenceDiagramCreateFromJSONTest13(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 1, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 150, "y": 1 } }
+            "SequenceDiagramCreateFromJSONTest13--lifeline--Customer": { "position": { "x": 1, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest13--lifeline--Shopkeeper": { "position": { "x": 150, "y": 1 } }
         }
     }
 
@@ -929,8 +929,8 @@ function SequenceDiagramCreateFromJSONTest14(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Mail Server": { "position": { "x": 1, "y": 1 } },
-            "DNS": { "position": { "x": 200, "y": 1 } }
+            "SequenceDiagramCreateFromJSONTest14--lifeline--Mail Server": { "position": { "x": 1, "y": 1 } },
+            "SequenceDiagramCreateFromJSONTest14--lifeline--DNS": { "position": { "x": 200, "y": 1 } }
         }
     }
 

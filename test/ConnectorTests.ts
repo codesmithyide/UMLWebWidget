@@ -300,11 +300,22 @@ function ConnectorGetLayersTest12(resolve, reject, test) {
 
 function ConnectorGetLayersTest13(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
+    let idGenerator = new UMLWebWidget.IDGenerator("ConnectorGetLayersTest13")
 
-    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, new UMLWebWidget.Lifeline())
+    let lifelineDescription1 = {
+        "name": "MyClass1"
+    }
+    let lifeline1 = new UMLWebWidget.Lifeline(svg, idGenerator, lifelineDescription1);
+    let connectionPoint1 = new UMLWebWidget.ConnectionPoint(svg, lifeline1)
     connectionPoint1.move(20, 20)
-    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, new UMLWebWidget.Lifeline())
+
+    let lifelineDescription2 = {
+        "name": "MyClass2"
+    }
+    let lifeline2 = new UMLWebWidget.Lifeline(svg, idGenerator, lifelineDescription2);
+    let connectionPoint2 = new UMLWebWidget.ConnectionPoint(svg, lifeline2)
     connectionPoint2.move(60, 20)
+
     let connector = new UMLWebWidget.Connector(svg, "returnmessage", connectionPoint1, connectionPoint2)
 
     let layers = connector.getLayers()
