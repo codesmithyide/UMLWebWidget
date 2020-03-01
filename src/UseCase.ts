@@ -12,10 +12,10 @@ import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { Errors } from "./Errors"
 
 /**
-  A use case on a use case diagram.
-
-  @extends DiagramElement
-*/
+ * A use case on a use case diagram.
+ *
+ * @extends DiagramElement
+ */
 class UseCase extends DiagramElement {
     errors: Errors
     shapeLayer
@@ -30,6 +30,12 @@ class UseCase extends DiagramElement {
         this.textLayer = this.layers.createLayer("text")
         this.useCaseDescription = useCaseDescription
         this.connectionPointsRectangle = null
+    }
+
+    draw(): void {
+        this.update()
+        this.layers.getLayer("shape").write()
+        this.layers.getLayer("text").write()
     }
 
     createConnectionPoint(svg) {
