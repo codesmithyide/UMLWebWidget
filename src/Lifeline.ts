@@ -73,8 +73,9 @@ class Lifeline extends DiagramElement {
         this.update()
         let g = this.layers.svg.group().addClass(CSSClassName.Lifeline)
         g.id(this.id)
-        this.layers.getLayer("head-shape").write(g)
-        this.layers.getLayer("head-text").write(g)
+        let headGroup = SVGUtils.Group(g).addClass(CSSClassName.Lifeline_Head)
+        this.layers.getLayer("head-shape").write(headGroup)
+        this.layers.getLayer("head-text").write(headGroup)
         this.layers.getLayer("line-shape").write(g)
     }
 
@@ -254,9 +255,7 @@ function updateLine(self, lineGroup, lifelineDescription, depthChanges, style) {
                 }
 
                 let offset = ((currentNestingLevel - 1) * 5)
-                layers[currentNestingLevel]
-                    .rect(8, (depthChanges[i][0] - start + (2 * overhang)))
-                    .move(self.lineTopPosition.x - 4 + offset, start - overhang)
+                SVGUtils.Rectangle(layers[currentNestingLevel], self.lineTopPosition.x - 4 + offset, start - overhang, 8, (depthChanges[i][0] - start + (2 * overhang)))
                 levelStart[currentNestingLevel] = -1
             }
         }
