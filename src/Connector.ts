@@ -147,20 +147,20 @@ function drawCompositionOrAggregationRelationship(lineGroup, connectionPoint1, c
 function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connectionPoint2, label) {
     if ((connectionPoint1.element != null) && (connectionPoint1.element == connectionPoint2.element)) {
         if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
-            let textElement = textGroup.text(label.text)
+            let textElement = SVGUtils.Text(textGroup, 0, 0, label.text)
             textElement.move(connectionPoint1.x + 8, connectionPoint1.y - textElement.bbox().height - 3)
         }
 
-        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint1.y)
-        lineGroup.line(connectionPoint1.x + 30, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint2.y)
-        lineGroup.line(connectionPoint1.x + 30, connectionPoint2.y, connectionPoint2.x + 12, connectionPoint2.y)
+        SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint1.y)
+        SVGUtils.Line(lineGroup, connectionPoint1.x + 30, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint2.y)
+        SVGUtils.Line(lineGroup,connectionPoint1.x + 30, connectionPoint2.y, connectionPoint2.x + 12, connectionPoint2.y)
         let polygonDescription = "" + connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)
         SVGUtils.Polygon(lineGroup, polygonDescription)
     } else if (connectionPoint1.x < connectionPoint2.x) {
         if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
-            let textElement = textGroup.text(label.text)
+            let textElement = SVGUtils.Text(textGroup, 0, 0, label.text)
             
             let width = (connectionPoint2.x - connectionPoint1.x)
             if (textElement.bbox().width < width) {
@@ -177,7 +177,7 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
         SVGUtils.Polygon(lineGroup, polygonDescription)
     } else if (connectionPoint1.x > connectionPoint2.x) {
         if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
-            let textElement = textGroup.text(label.text)
+            let textElement = SVGUtils.Text(textGroup, 0, 0, label.text)
             
             let width = (connectionPoint1.x - connectionPoint2.x)
             if (textElement.bbox().width < width) {
@@ -194,13 +194,13 @@ function drawSynchronousMessage(lineGroup, textGroup, connectionPoint1, connecti
         SVGUtils.Polygon(lineGroup, polygonDescription)
     } else {
         if ((textGroup != null) && (label != null) && (label.text != null) && (label.text != "")) {
-            let textElement = textGroup.text(label.text)
+            let textElement = SVGUtils.Text(textGroup, 0, 0, label.text)
             textElement.move(connectionPoint1.x + 8, connectionPoint1.y - textElement.bbox().height - 3)
         }
 
-        lineGroup.line(connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint1.y)
-        lineGroup.line(connectionPoint1.x + 30, connectionPoint1.y, connectionPoint2.x + 30, connectionPoint2.y)
-        lineGroup.line(connectionPoint2.x + 30, connectionPoint2.y, connectionPoint2.x + 12, connectionPoint2.y)
+        SVGUtils.Line(lineGroup, connectionPoint1.x, connectionPoint1.y, connectionPoint1.x + 30, connectionPoint1.y)
+        SVGUtils.Line(lineGroup,connectionPoint1.x + 30, connectionPoint1.y, connectionPoint2.x + 30, connectionPoint2.y)
+        SVGUtils.Line(lineGroup,connectionPoint2.x + 30, connectionPoint2.y, connectionPoint2.x + 12, connectionPoint2.y)
         let polygonDescription = "" + connectionPoint2.x + "," + connectionPoint2.y + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y - 6) + " " +
             (connectionPoint2.x + 12) + "," + (connectionPoint2.y + 6)

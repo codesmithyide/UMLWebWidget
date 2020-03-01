@@ -69,6 +69,8 @@ class Lifeline extends DiagramElement {
 
     draw(): void {
         this.update()
+        let g = this.layers.svg.group().addClass(CSSClassName.Lifeline)
+        g.id(this.id)
         this.layers.getLayer("shape").write()
         this.layers.getLayer("text").write()
     }
