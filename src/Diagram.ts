@@ -112,8 +112,9 @@ class Diagram {
         for (var i = 0; i < element.connectionPoints.length; i++) {
             let connector = element.connectionPoints[i].connector
             if (connector) {
-                //this.layoutManager.layoutConnector(connector)
-                window.alert("rrr")
+                connector.erase()
+                this.layoutManager.layoutConnector(connector)
+                connector.uptodate = false
                 connector.getLayers().getLayer("shape").write()
                 connector.getLayers().getLayer("text").write()
             }

@@ -27,6 +27,7 @@ class Connector extends DiagramElement {
     connectionPoint2: ConnectionPoint
     cssShapeLayerClassName: string
     label: Label | null
+    svgRootElement
 
     constructor(svg, type, connectionPoint1: ConnectionPoint, connectionPoint2: ConnectionPoint, text) {
         super(svg, type, null)
@@ -50,10 +51,10 @@ class Connector extends DiagramElement {
             case DiagramElementType.InheritanceConnector:
             case DiagramElementType.CompositionConnector:
             case DiagramElementType.AggregationConnector:
-                let g = this.layers.svg.group().addClass(this.cssShapeLayerClassName)
-                g.id(this.id)
-                this.layers.getLayer("shape").write(g)
-                this.layers.getLayer("text").write(g)
+                this.svgRootElement = this.layers.svg.group().addClass(this.cssShapeLayerClassName)
+                this.svgRootElement.id(this.id)
+                this.layers.getLayer("shape").write(this.svgRootElement)
+                this.layers.getLayer("text").write(this.svgRootElement)
                 break
 
             default:
@@ -62,6 +63,13 @@ class Connector extends DiagramElement {
                 break
         }
     }
+
+    erase(): void {
+        if (this.svgRootElement) {
+            this.svgRootElement.remove()
+        }
+    }
+
 
     hasNonEmptyLabel() {
         return ((this.label != null) && !this.label.empty())

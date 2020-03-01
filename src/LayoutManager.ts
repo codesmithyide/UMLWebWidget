@@ -127,7 +127,6 @@ class LayoutManager {
 
             connectionPoint1.setPosition(connectionPositions.start)
             connectionPoint2.setPosition(connectionPositions.end)
-
     }
 
     layoutMessages(lifelines, connectors) {
