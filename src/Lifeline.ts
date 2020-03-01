@@ -26,7 +26,7 @@ class Lifeline extends DiagramElement {
     errors: Errors
     headShapeLayer: SVGLayer
     headTextLayer: SVGLayer
-    lineShapeLayer: SVGLayer
+    lineLayer: SVGLayer
     svg
     lifelineDescription
     style
@@ -54,7 +54,7 @@ class Lifeline extends DiagramElement {
         this.errors = errors
         this.headShapeLayer = this.layers.createLayer("head-shape")
         this.headTextLayer = this.layers.createLayer("head-text")
-        this.lineShapeLayer = this.layers.createLayer("line-shape")
+        this.lineLayer = this.layers.createLayer("line")
         this.svg = svg
         this.lifelineDescription = lifelineDescription
         this.style = style
@@ -76,7 +76,7 @@ class Lifeline extends DiagramElement {
         let headGroup = SVGUtils.Group(g).addClass(CSSClassName.Lifeline_Head)
         this.layers.getLayer("head-shape").write(headGroup)
         this.layers.getLayer("head-text").write(headGroup)
-        this.layers.getLayer("line-shape").write(g)
+        this.layers.getLayer("line").write(g)
     }
 
     /**
@@ -152,7 +152,7 @@ class Lifeline extends DiagramElement {
         this.log.info("Lifeline " + this.id + ": updating")
         this.layers.clearEachLayer()
         let headGroup = this.headShapeLayer.group().addClass(CSSClassName.Lifeline_Head_Shape)
-        let lineGroup = this.lineShapeLayer.group().addClass(CSSClassName.Lifeline_Line_Shape)
+        let lineGroup = this.lineLayer.group().addClass(CSSClassName.Lifeline_Line)
 
         // The box need to be updated first because the position of the top of the line is computed as part of that
         // update

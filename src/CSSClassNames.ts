@@ -24,7 +24,6 @@ const enum CSSClassName {
     Lifeline_Head_Shape = "lifeline-head__shape",
     Lifeline_Head_Text = "lifeline-head__text",
     Lifeline_Line = "lifeline__lifeline-line",
-    Lifeline_Line_Shape = "lifeline-line__shape",
     InheritanceConnector = "codesmithy-uml-diagram__inheritance-connector",
     InheritanceConnector_Shape = "inheritance-connector__shape",
     CompositionConnector = "codesmithy-uml-diagram__composition-connector",

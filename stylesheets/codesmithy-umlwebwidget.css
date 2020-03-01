@@ -110,13 +110,13 @@
    fill: #404040;
 }
 
-.lifeline-line__shape rect {
+.lifeline__lifeline-line rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.lifeline-line__shape line {
+.lifeline__lifeline-line line {
    stroke: #595959;
    stroke-width: 2;
 }
