@@ -103,6 +103,17 @@
    stroke-width: 2;
 }
 
+.lifeline-line__shape rect {
+   stroke: #595959;
+   stroke-width: 2;
+   fill: #f1f4ff;
+}
+
+.lifeline-line__shape line {
+   stroke: #595959;
+   stroke-width: 2;
+}
+
 .codesmithy-uml-diagram .UMLNode rect {
    stroke: #595959;
    stroke-width: 2;
