@@ -92,13 +92,13 @@
    fill: #f1f4ff;
 }
 
-.codesmithy-uml-diagram .UMLLifeline rect {
+.lifeline-head__shape rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.codesmithy-uml-diagram .UMLLifeline line {
+.lifeline-head__shape line {
    stroke: #595959;
    stroke-width: 2;
 }

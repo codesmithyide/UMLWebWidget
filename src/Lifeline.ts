@@ -6,7 +6,8 @@
 
 'use strict'
 
-import { DiagramElement } from "./DiagramElement"
+import { DiagramElement, DiagramElementType } from "./DiagramElement"
+import { CSSClassName } from "./CSSClassNames"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { Log } from "./Log"
@@ -14,7 +15,6 @@ import { LifelineLayout } from "./LifelineLayout"
 import { SVGUtils } from "./SVGUtils"
 import { SVGLayer } from "./SVGLayer"
 import { Errors } from "./Errors"
-import {CSSClassName} from "./CSSClassNames"
 
 /**
  * A lifeline on a sequence diagram.
@@ -48,7 +48,7 @@ class Lifeline extends DiagramElement {
      * @param {SVG} svg - The root SVG document.
      */
     constructor(svg, id, lifelineDescription, style, log, errors: Errors) {
-        super(svg, "lifeline", id)
+        super(svg, DiagramElementType.Lifeline, id)
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
@@ -147,10 +147,10 @@ class Lifeline extends DiagramElement {
     doUpdate() {
         this.log.info("Lifeline " + this.id + ": updating")
         this.layers.clearEachLayer()
-        let lifelineGroup = this.shapeLayer.group().addClass("UMLLifeline")
+        let lifelineGroup = this.shapeLayer.group().addClass(CSSClassName.Lifeline_Head_Shape)
 
-        // The box need to be updated first because the position of the top of
-        // the line is computed as part of that update
+        // The box need to be updated first because the position of the top of the line is computed as part of that
+        // update
         updateBox(this, lifelineGroup, this.lifelineDescription, this.style, this.lineTopPosition)
         updateLine(this, lifelineGroup, this.lifelineDescription, this.lifelineLayout.depthChanges, this.style)
     }

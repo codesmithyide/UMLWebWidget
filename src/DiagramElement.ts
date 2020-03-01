@@ -15,6 +15,7 @@ import { SVGLayerSet } from "./SVGLayerSet"
 const enum DiagramElementType {
     ClassBox = "classbox",
     ClassTemplate = "classtemplate",
+    Lifeline = "lifeline",
     ConnectionPoint = "connectionpoint",
     InheritanceConnector = "inheritance",
     CompositionConnector = "composition",
