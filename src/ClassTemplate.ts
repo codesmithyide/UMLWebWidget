@@ -40,7 +40,7 @@ class ClassTemplate extends DiagramElement {
         this.connectionPoints = [ ]
     }
 
-    write(): void {
+    draw(): void {
         this.update()
         let g = this.layers.svg.group().addClass(CSSClassName.ClassTemplate)
         g.id(this.id)
