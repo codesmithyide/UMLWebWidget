@@ -19,7 +19,7 @@ const enum CSSClassName {
     ClassTemplate_AttributesCompartment = "class-template__attributes-compartment",
     ClassTemplate_OperationsCompartment = "class-template__operations-compartment",
     ClassTemplate_ParametersCompartment = "class-template__parameters-compartment",
-    Lifeline = "codesmithy-uml-diagram__lifeline",
+    Lifeline = "lifeline",
     Lifeline_Head = "lifeline__lifeline-head",
     Lifeline_Head_Shape = "lifeline-head__shape",
     Lifeline_Head_Text = "lifeline-head__text",
