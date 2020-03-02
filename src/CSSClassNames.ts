@@ -6,8 +6,6 @@
 
 'use strict'
 
-import {DiagramElementType} from "./DiagramElement"
-
 const enum CSSClassName {
     Diagram = "codesmithy-uml-diagram",
     ClassBox = "codesmithy-uml-diagram__classbox",
