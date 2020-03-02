@@ -70,13 +70,13 @@ class Connector extends DiagramElement {
     doUpdate() {
         this.layers.clearEachLayer()
         if (this.type == DiagramElementType.InheritanceConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.InheritanceConnector_Shape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             drawInheritanceRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == DiagramElementType.CompositionConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.CompositionConnector_Shape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == DiagramElementType.AggregationConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.AggregationConnector_Shape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == DiagramElementType.SynchronousMessageConnector) {
             let lineGroup = this.shapeLayer.group().addClass("UMLSynchronousMessage")
