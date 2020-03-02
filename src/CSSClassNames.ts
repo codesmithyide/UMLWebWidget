@@ -24,12 +24,11 @@ const enum CSSClassName {
     Lifeline_Head_Shape = "lifeline-head__shape",
     Lifeline_Head_Text = "lifeline-head__text",
     Lifeline_Line = "lifeline__lifeline-line",
-    InheritanceConnector = "codesmithy-uml-diagram__inheritance-connector",
-    InheritanceConnector_Shape = "inheritance-connector__shape",
-    CompositionConnector = "codesmithy-uml-diagram__composition-connector",
-    CompositionConnector_Shape = "composition-connector__shape",
-    AggregationConnector = "codesmithy-uml-diagram__aggregation-connector",
-    AggregationConnector_Shape = "aggregation-connector__shape"
+    Connector = "connector",
+    InheritanceConnector = "connector connector--inheritance",
+    CompositionConnector = "connector connector--composition",
+    AggregationConnector = "connector connector--aggregation",
+    ConnectorShape = "connector__shape"
 }
 
 export { CSSClassName }
