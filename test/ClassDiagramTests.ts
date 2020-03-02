@@ -104,8 +104,8 @@ function ClassDiagramCreateFromJSONTest4(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ClassDiagramCreateFromJSONTest4--classbox--MyClass1": { "position": { "x": 0, "y": 0 } },
-            "ClassDiagramCreateFromJSONTest4--classbox--MyClass2": { "position": { "x": 150, "y": 0 } }
+            "ClassDiagramCreateFromJSONTest4--class-box--MyClass1": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramCreateFromJSONTest4--class-box--MyClass2": { "position": { "x": 150, "y": 0 } }
         }
     }
 
@@ -160,8 +160,8 @@ function ClassDiagramCreateFromJSONTest5(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ClassDiagramCreateFromJSONTest5--classbox--MyBaseClass": { "position": { "x": 0, "y": 0 } },
-            "ClassDiagramCreateFromJSONTest5--classbox--MyDerivedClass": { "position": { "x": 170, "y": 0 } }
+            "ClassDiagramCreateFromJSONTest5--class-box--MyBaseClass": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramCreateFromJSONTest5--class-box--MyDerivedClass": { "position": { "x": 170, "y": 0 } }
         }
     }
 
@@ -224,8 +224,8 @@ function ClassDiagramCreateFromJSONTest6(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ClassDiagramCreateFromJSONTest6--classbox--ContainingClass": { "position": { "x": 0, "y": 0 } },
-            "ClassDiagramCreateFromJSONTest6--classbox--ContainedClass": { "position": { "x": 200, "y": 0 } }
+            "ClassDiagramCreateFromJSONTest6--class-box--ContainingClass": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramCreateFromJSONTest6--class-box--ContainedClass": { "position": { "x": 200, "y": 0 } }
         }
     }
 
@@ -288,8 +288,8 @@ function ClassDiagramCreateFromJSONTest7(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ClassDiagramCreateFromJSONTest7--classbox--ContainingClass": { "position": { "x": 0, "y": 0 } },
-            "ClassDiagramCreateFromJSONTest7--classbox--ContainedClass": { "position": { "x": 200, "y": 0 } }
+            "ClassDiagramCreateFromJSONTest7--class-box--ContainingClass": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramCreateFromJSONTest7--class-box--ContainedClass": { "position": { "x": 200, "y": 0 } }
         }
     }
 
@@ -351,11 +351,11 @@ function ClassDiagramConnectorLayoutTest1(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ClassDiagramConnectorLayoutTest1--classbox--Base": { "position": { "x": 150, "y": 125 } },
-            "ClassDiagramConnectorLayoutTest1--classbox--Derived1": { "position": { "x": 134, "y": 0 } },
-            "ClassDiagramConnectorLayoutTest1--classbox--Derived2": { "position": { "x": 0, "y": 125 } },
-            "ClassDiagramConnectorLayoutTest1--classbox--Derived3": { "position": { "x": 260, "y": 125 } },
-            "ClassDiagramConnectorLayoutTest1--classbox--Derived4": { "position": { "x": 134, "y": 250 } }
+            "ClassDiagramConnectorLayoutTest1--class-box--Base": { "position": { "x": 150, "y": 125 } },
+            "ClassDiagramConnectorLayoutTest1--class-box--Derived1": { "position": { "x": 134, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest1--class-box--Derived2": { "position": { "x": 0, "y": 125 } },
+            "ClassDiagramConnectorLayoutTest1--class-box--Derived3": { "position": { "x": 260, "y": 125 } },
+            "ClassDiagramConnectorLayoutTest1--class-box--Derived4": { "position": { "x": 134, "y": 250 } }
         }
     }
 
@@ -472,11 +472,11 @@ function ClassDiagramConnectorLayoutTest2(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ClassDiagramConnectorLayoutTest2--classbox--Base": { "position": { "x": 150, "y": 125 } },
-            "ClassDiagramConnectorLayoutTest2--classbox--Derived1": { "position": { "x": 0, "y": 0 } },
-            "ClassDiagramConnectorLayoutTest2--classbox--Derived2": { "position": { "x": 260, "y": 0 } },
-            "ClassDiagramConnectorLayoutTest2--classbox--Derived3": { "position": { "x": 0, "y": 250 } },
-            "ClassDiagramConnectorLayoutTest2--classbox--Derived4": { "position": { "x": 260, "y": 250 } }
+            "ClassDiagramConnectorLayoutTest2--class-box--Base": { "position": { "x": 150, "y": 125 } },
+            "ClassDiagramConnectorLayoutTest2--class-box--Derived1": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest2--class-box--Derived2": { "position": { "x": 260, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest2--class-box--Derived3": { "position": { "x": 0, "y": 250 } },
+            "ClassDiagramConnectorLayoutTest2--class-box--Derived4": { "position": { "x": 260, "y": 250 } }
         }
     }
 
@@ -593,11 +593,11 @@ function ClassDiagramConnectorLayoutTest3(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ClassDiagramConnectorLayoutTest3--classbox--Base": { "position": { "x": 150, "y": 65 } },
-            "ClassDiagramConnectorLayoutTest3--classbox--Derived1": { "position": { "x": 0, "y": 0 } },
-            "ClassDiagramConnectorLayoutTest3--classbox--Derived2": { "position": { "x": 260, "y": 0 } },
-            "ClassDiagramConnectorLayoutTest3--classbox--Derived3": { "position": { "x": 0, "y": 130 } },
-            "ClassDiagramConnectorLayoutTest3--classbox--Derived4": { "position": { "x": 260, "y": 130 } }
+            "ClassDiagramConnectorLayoutTest3--class-box--Base": { "position": { "x": 150, "y": 65 } },
+            "ClassDiagramConnectorLayoutTest3--class-box--Derived1": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest3--class-box--Derived2": { "position": { "x": 260, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest3--class-box--Derived3": { "position": { "x": 0, "y": 130 } },
+            "ClassDiagramConnectorLayoutTest3--class-box--Derived4": { "position": { "x": 260, "y": 130 } }
         }
     }
 
@@ -714,15 +714,15 @@ function ClassDiagramConnectorLayoutTest4(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ClassDiagramConnectorLayoutTest4--classbox--Base": { "position": { "x": 150, "y": 65 } },
-            "ClassDiagramConnectorLayoutTest4--classbox--Derived1": { "position": { "x": 0, "y": 0 } },
-            "ClassDiagramConnectorLayoutTest4--classbox--Derived2": { "position": { "x": 260, "y": 0 } },
-            "ClassDiagramConnectorLayoutTest4--classbox--Derived3": { "position": { "x": 0, "y": 130 } },
-            "ClassDiagramConnectorLayoutTest4--classbox--Derived4": { "position": { "x": 260, "y": 130 } },
-            "ClassDiagramConnectorLayoutTest4--classbox--Derived1-ClassDiagramConnectorLayoutTest4--classbox--Base-inheritance": { "end": "top-center" },
-            "ClassDiagramConnectorLayoutTest4--classbox--Derived2-ClassDiagramConnectorLayoutTest4--classbox--Base-inheritance": { "end": "top-center" },
-            "ClassDiagramConnectorLayoutTest4--classbox--Derived3-ClassDiagramConnectorLayoutTest4--classbox--Base-inheritance": { "end": "bottom-center" },
-            "ClassDiagramConnectorLayoutTest4--classbox--Derived4-ClassDiagramConnectorLayoutTest4--classbox--Base-inheritance": { "end": "bottom-center" }
+            "ClassDiagramConnectorLayoutTest4--class-box--Base": { "position": { "x": 150, "y": 65 } },
+            "ClassDiagramConnectorLayoutTest4--class-box--Derived1": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest4--class-box--Derived2": { "position": { "x": 260, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest4--class-box--Derived3": { "position": { "x": 0, "y": 130 } },
+            "ClassDiagramConnectorLayoutTest4--class-box--Derived4": { "position": { "x": 260, "y": 130 } },
+            "ClassDiagramConnectorLayoutTest4--class-box--Derived1-ClassDiagramConnectorLayoutTest4--class-box--Base-inheritance": { "end": "top-center" },
+            "ClassDiagramConnectorLayoutTest4--class-box--Derived2-ClassDiagramConnectorLayoutTest4--class-box--Base-inheritance": { "end": "top-center" },
+            "ClassDiagramConnectorLayoutTest4--class-box--Derived3-ClassDiagramConnectorLayoutTest4--class-box--Base-inheritance": { "end": "bottom-center" },
+            "ClassDiagramConnectorLayoutTest4--class-box--Derived4-ClassDiagramConnectorLayoutTest4--class-box--Base-inheritance": { "end": "bottom-center" }
         }
     }
 
@@ -839,15 +839,15 @@ function ClassDiagramConnectorLayoutTest5(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ClassDiagramConnectorLayoutTest5--classbox--Base": { "position": { "x": 150, "y": 125 } },
-            "ClassDiagramConnectorLayoutTest5--classbox--Derived1": { "position": { "x": 0, "y": 0 } },
-            "ClassDiagramConnectorLayoutTest5--classbox--Derived2": { "position": { "x": 260, "y": 0 } },
-            "ClassDiagramConnectorLayoutTest5--classbox--Derived3": { "position": { "x": 0, "y": 250 } },
-            "ClassDiagramConnectorLayoutTest5--classbox--Derived4": { "position": { "x": 260, "y": 250 } },
-            "ClassDiagramConnectorLayoutTest5--classbox--Derived1-ClassDiagramConnectorLayoutTest5--classbox--Base-inheritance": { "end": "left-center" },
-            "ClassDiagramConnectorLayoutTest5--classbox--Derived2-ClassDiagramConnectorLayoutTest5--classbox--Base-inheritance": { "end": "right-center" },
-            "ClassDiagramConnectorLayoutTest5--classbox--Derived3-ClassDiagramConnectorLayoutTest5--classbox--Base-inheritance": { "end": "left-center" },
-            "ClassDiagramConnectorLayoutTest5--classbox--Derived4-ClassDiagramConnectorLayoutTest5--classbox--Base-inheritance": { "end": "right-center" }
+            "ClassDiagramConnectorLayoutTest5--class-box--Base": { "position": { "x": 150, "y": 125 } },
+            "ClassDiagramConnectorLayoutTest5--class-box--Derived1": { "position": { "x": 0, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest5--class-box--Derived2": { "position": { "x": 260, "y": 0 } },
+            "ClassDiagramConnectorLayoutTest5--class-box--Derived3": { "position": { "x": 0, "y": 250 } },
+            "ClassDiagramConnectorLayoutTest5--class-box--Derived4": { "position": { "x": 260, "y": 250 } },
+            "ClassDiagramConnectorLayoutTest5--class-box--Derived1-ClassDiagramConnectorLayoutTest5--class-box--Base-inheritance": { "end": "left-center" },
+            "ClassDiagramConnectorLayoutTest5--class-box--Derived2-ClassDiagramConnectorLayoutTest5--class-box--Base-inheritance": { "end": "right-center" },
+            "ClassDiagramConnectorLayoutTest5--class-box--Derived3-ClassDiagramConnectorLayoutTest5--class-box--Base-inheritance": { "end": "left-center" },
+            "ClassDiagramConnectorLayoutTest5--class-box--Derived4-ClassDiagramConnectorLayoutTest5--class-box--Base-inheritance": { "end": "right-center" }
         }
     }
 
@@ -999,7 +999,7 @@ function ClassDiagramClassTemplateTest2(resolve, reject, test) {
     let layout = {
         "elements": {
             "ClassTemplate": { "position": { "x": 0, "y": 0 } },
-            "ClassDiagramClassTemplateTest2--classbox--MyClass": { "position": { "x": 175, "y": 16 } }
+            "ClassDiagramClassTemplateTest2--class-box--MyClass": { "position": { "x": 175, "y": 16 } }
         }
     }
 
