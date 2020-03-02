@@ -230,27 +230,15 @@
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .inheritance-connector__shape line {
+.codesmithy-uml-diagram--standard-style .connector__shape line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .inheritance-connector__shape polygon {
+.codesmithy-uml-diagram--standard-style .connector__shape polygon {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .composition-connector__shape line {
-   stroke: black;
-}
-
-.codesmithy-uml-diagram--standard-style .composition-connector__shape polygon {
+.codesmithy-uml-diagram--standard-style .connector--composition .connector__shape polygon {
    stroke: black;
    fill: black;
-}
-
-.codesmithy-uml-diagram--standard-style .aggregation-connector__shape line {
-   stroke: black;
-}
-
-.codesmithy-uml-diagram--standard-style .aggregation-connector__shape polygon {
-   stroke: black;
 }
