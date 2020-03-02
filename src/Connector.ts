@@ -93,7 +93,7 @@ class Connector extends DiagramElement {
             // If this is return message of a self call draw nothing. It will be indicated on the diagram by a reduction
             // of the depth of the execution specification (i.e. the width of the lifeline)
             if ((this.connectionPoint1.element != null) && (this.connectionPoint1.element != this.connectionPoint2.element)) {
-                let lineGroup = this.shapeLayer.group().addClass("UMLReturnMessage")
+                let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ReturnMessageConnector_Shape)
                 drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
             }
         } else if (this.type == DiagramElementType.CreationMessageConnector) {

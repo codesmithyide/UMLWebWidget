@@ -194,7 +194,7 @@
    stroke-width: 2;
 }
 
-.codesmithy-uml-diagram .UMLReturnMessage line {
+.return-message-connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }

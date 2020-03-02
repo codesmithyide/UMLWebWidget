@@ -35,6 +35,7 @@ const enum CSSClassName {
     SynchronousMessageConnector = "codesmithy-uml-diagram__synchronous-message-connector",
     SynchronousMessageConnector_Shape = "synchronous-message-connector__shape",
     ReturnMessageConnector = "codesmithy-uml-diagram__return-message-connector",
+    ReturnMessageConnector_Shape = "return-message-connector__shape",
     DestructionMessageConnector = "codesmithy-uml-diagram__destruction-message-connector",
 }
 
