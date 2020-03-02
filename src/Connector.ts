@@ -25,7 +25,7 @@ class Connector extends DiagramElement {
     type: string
     connectionPoint1: ConnectionPoint
     connectionPoint2: ConnectionPoint
-    cssShapeLayerClassName: string
+    cssParentGroupClass: string
     label: Label | null
 
     constructor(svg, type, connectionPoint1: ConnectionPoint, connectionPoint2: ConnectionPoint, text) {
@@ -44,13 +44,13 @@ class Connector extends DiagramElement {
         }
     }
 
-    write(): void {
+    draw(): void {
         this.update()
         switch (this.type) {
             case DiagramElementType.InheritanceConnector:
             case DiagramElementType.CompositionConnector:
             case DiagramElementType.AggregationConnector:
-                let g = this.layers.svg.group().addClass(this.cssShapeLayerClassName)
+                let g = this.layers.svg.group().addClass(this.cssParentGroupClass)
                 g.id(this.id)
                 this.layers.getLayer("shape").write(g)
                 this.layers.getLayer("text").write(g)
@@ -114,15 +114,15 @@ class Connector extends DiagramElement {
     setType(type: string) {
         switch (type) {
             case DiagramElementType.InheritanceConnector:
-                this.cssShapeLayerClassName = CSSClassName.InheritanceConnector
+                this.cssParentGroupClass = CSSClassName.InheritanceConnector
                 break;
 
             case DiagramElementType.CompositionConnector:
-                this.cssShapeLayerClassName = CSSClassName.CompositionConnector
+                this.cssParentGroupClass = CSSClassName.CompositionConnector
                 break;
 
             case DiagramElementType.AggregationConnector:
-                this.cssShapeLayerClassName = CSSClassName.AggregationConnector
+                this.cssParentGroupClass = CSSClassName.AggregationConnector
                 break;
         }
     }
