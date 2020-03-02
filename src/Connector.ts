@@ -97,7 +97,7 @@ class Connector extends DiagramElement {
                 drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
             }
         } else if (this.type == DiagramElementType.CreationMessageConnector) {
-            let lineGroup = this.shapeLayer.group().addClass("UMLCreationMessage")
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.CreationMessageConnector_Shape)
             let textGroup = this.textLayer.group()
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == DiagramElementType.DestructionMessageConnector) {

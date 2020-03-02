@@ -184,17 +184,17 @@
    fill: white;
 }
 
+.creation-message-connector__shape line {
+   stroke: #454545;
+   stroke-width: 2;
+}
+
 .synchronous-message-connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }
 
 .codesmithy-uml-diagram .UMLReturnMessage line {
-   stroke: #454545;
-   stroke-width: 2;
-}
-
-.codesmithy-uml-diagram .UMLCreationMessage line {
    stroke: #454545;
    stroke-width: 2;
 }
