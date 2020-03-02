@@ -25,7 +25,7 @@ class Connector extends DiagramElement {
     type: string
     connectionPoint1: ConnectionPoint
     connectionPoint2: ConnectionPoint
-    cssShapeLayerClassName: string
+    cssParentGroupClass: string
     label: Label | null
 
     constructor(svg, type, connectionPoint1: ConnectionPoint, connectionPoint2: ConnectionPoint, text) {
@@ -54,7 +54,7 @@ class Connector extends DiagramElement {
             case DiagramElementType.SynchronousMessageConnector:
             case DiagramElementType.ReturnMessageConnector:
             case DiagramElementType.DestructionMessageConnector:
-                let g = this.layers.svg.group().addClass(this.cssShapeLayerClassName)
+                let g = this.layers.svg.group().addClass(this.cssParentGroupClass)
                 g.id(this.id)
                 this.layers.getLayer("shape").write(g)
                 this.layers.getLayer("text").write(g)
@@ -74,16 +74,16 @@ class Connector extends DiagramElement {
     doUpdate() {
         this.layers.clearEachLayer()
         if (this.type == DiagramElementType.InheritanceConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.InheritanceConnector_Shape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             drawInheritanceRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == DiagramElementType.CompositionConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.CompositionConnector_Shape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == DiagramElementType.AggregationConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.AggregationConnector_Shape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == DiagramElementType.SynchronousMessageConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.SynchronousMessageConnector_Shape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             let textGroup = null
             if ((this.label != null) && (this.label.text != null) && (this.label.text != "")) {
                 textGroup = this.textLayer.group()
@@ -93,15 +93,15 @@ class Connector extends DiagramElement {
             // If this is return message of a self call draw nothing. It will be indicated on the diagram by a reduction
             // of the depth of the execution specification (i.e. the width of the lifeline)
             if ((this.connectionPoint1.element != null) && (this.connectionPoint1.element != this.connectionPoint2.element)) {
-                let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ReturnMessageConnector_Shape)
+                let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
                 drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
             }
         } else if (this.type == DiagramElementType.CreationMessageConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.CreationMessageConnector_Shape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             let textGroup = this.textLayer.group()
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == DiagramElementType.DestructionMessageConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.DestructionMessageConnector_Shape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             drawDestructionMessage(lineGroup, this.connectionPoint2)
         } else if (this.type == "usecaseassociation") {
             let lineGroup = this.shapeLayer.group().addClass("UMLUseCaseAssociation")
@@ -118,31 +118,31 @@ class Connector extends DiagramElement {
     setType(type: string) {
         switch (type) {
             case DiagramElementType.InheritanceConnector:
-                this.cssShapeLayerClassName = CSSClassName.InheritanceConnector
+                this.cssParentGroupClass = CSSClassName.InheritanceConnector
                 break;
 
             case DiagramElementType.CompositionConnector:
-                this.cssShapeLayerClassName = CSSClassName.CompositionConnector
+                this.cssParentGroupClass = CSSClassName.CompositionConnector
                 break;
 
             case DiagramElementType.AggregationConnector:
-                this.cssShapeLayerClassName = CSSClassName.AggregationConnector
+                this.cssParentGroupClass = CSSClassName.AggregationConnector
                 break;
 
             case DiagramElementType.CreationMessageConnector:
-                this.cssShapeLayerClassName = CSSClassName.CreationMessageConnector
+                this.cssParentGroupClass = CSSClassName.CreationMessageConnector
                 break
 
             case DiagramElementType.SynchronousMessageConnector:
-                this.cssShapeLayerClassName = CSSClassName.SynchronousMessageConnector
+                this.cssParentGroupClass = CSSClassName.SynchronousMessageConnector
                 break
 
             case DiagramElementType.ReturnMessageConnector:
-                this.cssShapeLayerClassName = CSSClassName.ReturnMessageConnector
+                this.cssParentGroupClass = CSSClassName.ReturnMessageConnector
                 break
 
             case DiagramElementType.DestructionMessageConnector:
-                this.cssShapeLayerClassName = CSSClassName.DestructionMessageConnector
+                this.cssParentGroupClass = CSSClassName.DestructionMessageConnector
                 break
         }
     }
