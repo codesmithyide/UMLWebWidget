@@ -101,7 +101,7 @@ class Connector extends DiagramElement {
             let textGroup = this.textLayer.group()
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == DiagramElementType.DestructionMessageConnector) {
-            let lineGroup = this.shapeLayer.group().addClass("UMLDestructionMessage")
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.DestructionMessageConnector_Shape)
             drawDestructionMessage(lineGroup, this.connectionPoint2)
         } else if (this.type == "usecaseassociation") {
             let lineGroup = this.shapeLayer.group().addClass("UMLUseCaseAssociation")

@@ -199,7 +199,7 @@
    stroke-width: 2;
 }
 
-.codesmithy-uml-diagram .UMLDestructionMessage line {
+.destruction-message-connector__shape line {
    stroke: #676767;
    stroke-width: 3;
 }

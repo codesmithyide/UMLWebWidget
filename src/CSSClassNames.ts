@@ -37,6 +37,7 @@ const enum CSSClassName {
     ReturnMessageConnector = "codesmithy-uml-diagram__return-message-connector",
     ReturnMessageConnector_Shape = "return-message-connector__shape",
     DestructionMessageConnector = "codesmithy-uml-diagram__destruction-message-connector",
+    DestructionMessageConnector_Shape = "destruction-message-connector__shape"
 }
 
 export { CSSClassName }
