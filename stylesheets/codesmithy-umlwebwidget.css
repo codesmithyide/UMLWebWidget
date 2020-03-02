@@ -165,25 +165,11 @@
    fill: white;
 }
 
-.codesmithy-uml-diagram .composition-connector__shape line {
-   stroke: #454545;
-   stroke-width: 2;
-}
-
-.codesmithy-uml-diagram .composition-connector__shape polygon {
-   stroke: #454545;
-   stroke-width: 2;
+.codesmithy-uml-diagram .connector--composition .connector__shape polygon {
    fill: #454545;
 }
 
-.codesmithy-uml-diagram .aggregation-connector__shape line {
-   stroke: #454545;
-   stroke-width: 2;
-}
-
-.codesmithy-uml-diagram .aggregation-connector__shape polygon {
-   stroke: #454545;
-   stroke-width: 2;
+.codesmithy-uml-diagram .connector--aggregation .connector__shape polygon {
    fill: white;
 }
 
