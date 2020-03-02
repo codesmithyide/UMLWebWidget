@@ -1,68 +1,68 @@
-.classbox__shape rect {
+.codesmithy-uml-diagram .classbox__shape rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.classbox__shape line {
+.codesmithy-uml-diagram .classbox__shape line {
    stroke: #595959;
    stroke-width: 1;
 }
 
-.classbox__class-name-compartment text {
+.codesmithy-uml-diagram .classbox__class-name-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: bold;
    fill: #404040;
 }
 
-.classbox__attributes-compartment text {
+.codesmithy-uml-diagram .classbox__attributes-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: normal;
    fill: #404040;
 }
 
-.classbox__operations-compartment text {
+.codesmithy-uml-diagram .classbox__operations-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: normal;
    fill: #404040;
 }
 
-.classtemplate__shape line {
+.codesmithy-uml-diagram .classtemplate__shape line {
    stroke: #595959;
    stroke-width: 1;
 }
 
-.classtemplate__shape rect {
+.codesmithy-uml-diagram .classtemplate__shape rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.classtemplate__class-name-compartment text {
+.codesmithy-uml-diagram .classtemplate__class-name-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: bold;
    fill: #404040;
 }
 
-.classtemplate__attributes-compartment text {
+.codesmithy-uml-diagram .classtemplate__attributes-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: normal;
    fill: #404040;
 }
 
-.classtemplate__operations-compartment text {
+.codesmithy-uml-diagram .classtemplate__operations-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: normal;
    fill: #404040;
 }
 
-.classtemplate__parameters-compartment text {
+.codesmithy-uml-diagram .classtemplate__parameters-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: normal;
@@ -92,31 +92,31 @@
    fill: #f1f4ff;
 }
 
-.lifeline-head__shape rect {
+.codesmithy-uml-diagram .lifeline-head__shape rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.lifeline-head__shape line {
+.codesmithy-uml-diagram .lifeline-head__shape line {
    stroke: #595959;
    stroke-width: 2;
 }
 
-.lifeline-head__text text {
+.codesmithy-uml-diagram .lifeline-head__text text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: bold;
    fill: #404040;
 }
 
-.lifeline__lifeline-line rect {
+.codesmithy-uml-diagram .lifeline__lifeline-line rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.lifeline__lifeline-line line {
+.codesmithy-uml-diagram .lifeline__lifeline-line line {
    stroke: #595959;
    stroke-width: 2;
 }
@@ -151,55 +151,55 @@
    fill: #f1f4ff;
 }
 
-.inheritance-connector__shape line {
+.codesmithy-uml-diagram .inheritance-connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.inheritance-connector__shape polygon {
+.codesmithy-uml-diagram .inheritance-connector__shape polygon {
    stroke: #454545;
    stroke-width: 2;
    fill: white;
 }
 
-.composition-connector__shape line {
+.codesmithy-uml-diagram .composition-connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.composition-connector__shape polygon {
+.codesmithy-uml-diagram .composition-connector__shape polygon {
    stroke: #454545;
    stroke-width: 2;
    fill: #454545;
 }
 
-.aggregation-connector__shape line {
+.codesmithy-uml-diagram .aggregation-connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.aggregation-connector__shape polygon {
+.codesmithy-uml-diagram .aggregation-connector__shape polygon {
    stroke: #454545;
    stroke-width: 2;
    fill: white;
 }
 
-.creation-message-connector__shape line {
+.codesmithy-uml-diagram .creation-message-connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.synchronous-message-connector__shape line {
+.codesmithy-uml-diagram .synchronous-message-connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.return-message-connector__shape line {
+.codesmithy-uml-diagram .return-message-connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.destruction-message-connector__shape line {
+.codesmithy-uml-diagram .destruction-message-connector__shape line {
    stroke: #676767;
    stroke-width: 3;
 }
