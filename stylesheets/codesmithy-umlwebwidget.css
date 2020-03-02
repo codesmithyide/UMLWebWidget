@@ -92,31 +92,31 @@
    fill: #f1f4ff;
 }
 
-.lifeline-head__shape rect {
+.codesmithy-uml-diagram .lifeline-head__shape rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.lifeline-head__shape line {
+.codesmithy-uml-diagram .lifeline-head__shape line {
    stroke: #595959;
    stroke-width: 2;
 }
 
-.lifeline-head__text text {
+.codesmithy-uml-diagram .lifeline-head__text text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: bold;
    fill: #404040;
 }
 
-.lifeline__lifeline-line rect {
+.codesmithy-uml-diagram .lifeline__lifeline-line rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.lifeline__lifeline-line line {
+.codesmithy-uml-diagram .lifeline__lifeline-line line {
    stroke: #595959;
    stroke-width: 2;
 }
@@ -223,21 +223,21 @@
    cursor: nesw-resize
 }
 
-.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classbox rect {
+.codesmithy-uml-diagram--standard-style .class-box__shape rect {
    stroke: black;
    fill: white;
 }
 
-.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classbox line {
+.codesmithy-uml-diagram--standard-style .class-box__shape line {
    stroke: black;
 }
 
-.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classtemplate rect {
+.codesmithy-uml-diagram--standard-style .class-template__shape rect {
    stroke: black;
    fill: white;
 }
 
-.codesmithy-uml-diagram--standard-style .codesmithy-uml-diagram__classtemplate line {
+.codesmithy-uml-diagram--standard-style .class-template__shape line {
    stroke: black;
 }
 
