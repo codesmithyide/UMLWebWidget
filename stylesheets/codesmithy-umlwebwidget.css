@@ -151,14 +151,17 @@
    fill: #f1f4ff;
 }
 
-.codesmithy-uml-diagram .inheritance-connector__shape line {
+.codesmithy-uml-diagram .connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }
 
-.codesmithy-uml-diagram .inheritance-connector__shape polygon {
+.codesmithy-uml-diagram .connector__shape polygon {
    stroke: #454545;
    stroke-width: 2;
+}
+
+.codesmithy-uml-diagram .connector--inheritance .connector__shape polygon {
    fill: white;
 }
 
