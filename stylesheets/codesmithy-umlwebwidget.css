@@ -184,7 +184,7 @@
    fill: white;
 }
 
-.codesmithy-uml-diagram .UMLSynchronousMessage line {
+.synchronous-message-connector__shape line {
    stroke: #454545;
    stroke-width: 2;
 }
