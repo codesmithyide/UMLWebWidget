@@ -27,7 +27,7 @@ class ClassTemplate extends DiagramElement {
     connectionPoints
 
     constructor(svg, idGenerator: IDGenerator, classTemplateDescription, style, errors: Errors) {
-        super(svg, DiagramElementType.ClassTemplate, idGenerator.createID("classtemplate--" + classTemplateDescription.name ))
+        super(svg, DiagramElementType.ClassTemplate, idGenerator.createID("class-template--" + classTemplateDescription.name ))
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")

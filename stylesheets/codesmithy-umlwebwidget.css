@@ -1,68 +1,68 @@
-.classbox__shape rect {
+.codesmithy-uml-diagram .class-box__shape rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.classbox__shape line {
+.codesmithy-uml-diagram .class-box__shape line {
    stroke: #595959;
    stroke-width: 1;
 }
 
-.classbox__class-name-compartment text {
+.codesmithy-uml-diagram .class-box__class-name-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: bold;
    fill: #404040;
 }
 
-.classbox__attributes-compartment text {
+.codesmithy-uml-diagram .class-box__attributes-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: normal;
    fill: #404040;
 }
 
-.classbox__operations-compartment text {
+.codesmithy-uml-diagram .class-box__operations-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: normal;
    fill: #404040;
 }
 
-.classtemplate__shape line {
+.codesmithy-uml-diagram .class-template__shape line {
    stroke: #595959;
    stroke-width: 1;
 }
 
-.classtemplate__shape rect {
+.codesmithy-uml-diagram .class-template__shape rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.classtemplate__class-name-compartment text {
+.codesmithy-uml-diagram .class-template__class-name-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: bold;
    fill: #404040;
 }
 
-.classtemplate__attributes-compartment text {
+.codesmithy-uml-diagram .class-template__attributes-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: normal;
    fill: #404040;
 }
 
-.classtemplate__operations-compartment text {
+.codesmithy-uml-diagram .class-template__operations-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: normal;
    fill: #404040;
 }
 
-.classtemplate__parameters-compartment text {
+.codesmithy-uml-diagram .class-template__parameters-compartment text {
    font-family: 'Verdana', 'Trebuchet MS';
    font-size: small;
    font-weight: normal;
