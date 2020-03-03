@@ -30,6 +30,8 @@ const enum CSSClassName {
     AggregationConnector = "connector connector--aggregation",
     CreationMessageConnector = "connector connector--creation-message",
     SynchronousMessageConnector = "connector connector--synchronous-message",
+    ReturnMessageConnector = "connector connector--return-message",
+    DestructionMessageConnector = "connector connector--destruction-message",
     ConnectorShape = "connector__shape"
 }
 

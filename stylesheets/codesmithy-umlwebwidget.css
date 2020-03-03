@@ -161,44 +161,24 @@
    stroke-width: 2;
 }
 
-.codesmithy-uml-diagram .connector--inheritance .connector__shape line {
-}
-
 .codesmithy-uml-diagram .connector--inheritance .connector__shape polygon {
    fill: white;
-}
-
-.codesmithy-uml-diagram .connector--composition .connector__shape line {
 }
 
 .codesmithy-uml-diagram .connector--composition .connector__shape polygon {
    fill: #454545;
 }
 
-.codesmithy-uml-diagram .connector--aggregation .connector__shape line {
-}
-
 .codesmithy-uml-diagram .connector--aggregation .connector__shape polygon {
    fill: white;
-}
-
-.codesmithy-uml-diagram .connector--creation-message .connector__shape line {
 }
 
 .codesmithy-uml-diagram .connector--creation-message .connector__shape polygon {
    stroke-width: 1;
 }
 
-.codesmithy-uml-diagram .connector--synchronous-message .connector__shape line {
-}
-
 .codesmithy-uml-diagram .connector--synchronous-message .connector__shape polygon {
    stroke-width: 1;
-}
-
-.codesmithy-uml-diagram .UMLReturnMessage line {
-   stroke: #454545;
-   stroke-width: 2;
 }
 
 .codesmithy-uml-diagram .UMLDestructionMessage line {

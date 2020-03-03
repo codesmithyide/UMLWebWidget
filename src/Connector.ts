@@ -52,6 +52,7 @@ class Connector extends DiagramElement {
             case DiagramElementType.AggregationConnector:
             case DiagramElementType.CreationMessageConnector:
             case DiagramElementType.SynchronousMessageConnector:
+            case DiagramElementType.ReturnMessageConnector:
                 let g = this.layers.svg.group().addClass(this.cssParentGroupClass)
                 g.id(this.id)
                 this.layers.getLayer("shape").write(g)
@@ -91,7 +92,7 @@ class Connector extends DiagramElement {
             // If this is return message of a self call draw nothing. It will be indicated on the diagram by a reduction
             // of the depth of the execution specification (i.e. the width of the lifeline)
             if ((this.connectionPoint1.element != null) && (this.connectionPoint1.element != this.connectionPoint2.element)) {
-                let lineGroup = this.shapeLayer.group().addClass("UMLReturnMessage")
+                let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
                 drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
             }
         } else if (this.type == DiagramElementType.CreationMessageConnector) {
@@ -133,6 +134,10 @@ class Connector extends DiagramElement {
 
             case DiagramElementType.SynchronousMessageConnector:
                 this.cssParentGroupClass = CSSClassName.SynchronousMessageConnector
+                break
+
+            case DiagramElementType.ReturnMessageConnector:
+                this.cssParentGroupClass = CSSClassName.ReturnMessageConnector
                 break
         }
     }
