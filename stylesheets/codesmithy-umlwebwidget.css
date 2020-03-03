@@ -173,22 +173,15 @@
    fill: white;
 }
 
-.codesmithy-uml-diagram .UMLSynchronousMessage line {
-   stroke: #454545;
-   stroke-width: 2;
+.codesmithy-uml-diagram .connector--creation-message .connector__shape polygon {
+   stroke-width: 1;
 }
 
-.codesmithy-uml-diagram .UMLReturnMessage line {
-   stroke: #454545;
-   stroke-width: 2;
+.codesmithy-uml-diagram .connector--synchronous-message .connector__shape polygon {
+   stroke-width: 1;
 }
 
-.codesmithy-uml-diagram .UMLCreationMessage line {
-   stroke: #454545;
-   stroke-width: 2;
-}
-
-.codesmithy-uml-diagram .UMLDestructionMessage line {
+.codesmithy-uml-diagram .connector--destruction-message .connector__shape line {
    stroke: #676767;
    stroke-width: 3;
 }
