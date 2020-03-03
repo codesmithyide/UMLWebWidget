@@ -119,15 +119,15 @@ class Connector extends DiagramElement {
         switch (type) {
             case DiagramElementType.InheritanceConnector:
                 this.cssParentGroupClass = CSSClassName.InheritanceConnector
-                break;
+                break
 
             case DiagramElementType.CompositionConnector:
                 this.cssParentGroupClass = CSSClassName.CompositionConnector
-                break;
+                break
 
             case DiagramElementType.AggregationConnector:
                 this.cssParentGroupClass = CSSClassName.AggregationConnector
-                break;
+                break
 
             case DiagramElementType.CreationMessageConnector:
                 this.cssParentGroupClass = CSSClassName.CreationMessageConnector
