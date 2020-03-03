@@ -50,6 +50,7 @@ class Connector extends DiagramElement {
             case DiagramElementType.InheritanceConnector:
             case DiagramElementType.CompositionConnector:
             case DiagramElementType.AggregationConnector:
+            case DiagramElementType.SynchronousMessageConnector:
                 let g = this.layers.svg.group().addClass(this.cssParentGroupClass)
                 g.id(this.id)
                 this.layers.getLayer("shape").write(g)

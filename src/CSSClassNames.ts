@@ -28,6 +28,7 @@ const enum CSSClassName {
     InheritanceConnector = "connector connector--inheritance",
     CompositionConnector = "connector connector--composition",
     AggregationConnector = "connector connector--aggregation",
+    SynchronousMessageConnector = "connector connector--synchronous-message",
     ConnectorShape = "connector__shape"
 }
 
