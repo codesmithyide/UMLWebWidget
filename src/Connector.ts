@@ -50,6 +50,7 @@ class Connector extends DiagramElement {
             case DiagramElementType.InheritanceConnector:
             case DiagramElementType.CompositionConnector:
             case DiagramElementType.AggregationConnector:
+            case DiagramElementType.CreationMessageConnector:
             case DiagramElementType.SynchronousMessageConnector:
                 let g = this.layers.svg.group().addClass(this.cssParentGroupClass)
                 g.id(this.id)
@@ -94,7 +95,7 @@ class Connector extends DiagramElement {
                 drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
             }
         } else if (this.type == DiagramElementType.CreationMessageConnector) {
-            let lineGroup = this.shapeLayer.group().addClass("UMLCreationMessage")
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             let textGroup = this.textLayer.group()
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == DiagramElementType.DestructionMessageConnector) {
@@ -124,6 +125,10 @@ class Connector extends DiagramElement {
 
             case DiagramElementType.AggregationConnector:
                 this.cssParentGroupClass = CSSClassName.AggregationConnector
+                break
+
+            case DiagramElementType.CreationMessageConnector:
+                this.cssParentGroupClass = CSSClassName.CreationMessageConnector
                 break
 
             case DiagramElementType.SynchronousMessageConnector:
