@@ -86,7 +86,7 @@ class Connector extends DiagramElement {
             let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             let textGroup = null
             if ((this.label != null) && (this.label.text != null) && (this.label.text != "")) {
-                textGroup = this.textLayer.group()
+                textGroup = this.textLayer.group().addClass(CSSClassName.ConnectorLabel)
             }
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == DiagramElementType.ReturnMessageConnector) {
@@ -98,7 +98,7 @@ class Connector extends DiagramElement {
             }
         } else if (this.type == DiagramElementType.CreationMessageConnector) {
             let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
-            let textGroup = this.textLayer.group()
+            let textGroup = this.textLayer.group().addClass(CSSClassName.ConnectorLabel)
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == DiagramElementType.DestructionMessageConnector) {
             let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
