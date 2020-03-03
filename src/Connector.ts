@@ -80,7 +80,7 @@ class Connector extends DiagramElement {
             let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == DiagramElementType.SynchronousMessageConnector) {
-            let lineGroup = this.shapeLayer.group().addClass("UMLSynchronousMessage")
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             let textGroup = null
             if ((this.label != null) && (this.label.text != null) && (this.label.text != "")) {
                 textGroup = this.textLayer.group()
@@ -116,15 +116,19 @@ class Connector extends DiagramElement {
         switch (type) {
             case DiagramElementType.InheritanceConnector:
                 this.cssParentGroupClass = CSSClassName.InheritanceConnector
-                break;
+                break
 
             case DiagramElementType.CompositionConnector:
                 this.cssParentGroupClass = CSSClassName.CompositionConnector
-                break;
+                break
 
             case DiagramElementType.AggregationConnector:
                 this.cssParentGroupClass = CSSClassName.AggregationConnector
-                break;
+                break
+
+            case DiagramElementType.SynchronousMessageConnector:
+                this.cssParentGroupClass = CSSClassName.SynchronousMessageConnector
+                break
         }
     }
 }
