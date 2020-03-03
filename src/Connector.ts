@@ -53,6 +53,7 @@ class Connector extends DiagramElement {
             case DiagramElementType.CreationMessageConnector:
             case DiagramElementType.SynchronousMessageConnector:
             case DiagramElementType.ReturnMessageConnector:
+            case DiagramElementType.DestructionMessageConnector:
                 let g = this.layers.svg.group().addClass(this.cssParentGroupClass)
                 g.id(this.id)
                 this.layers.getLayer("shape").write(g)
@@ -100,7 +101,7 @@ class Connector extends DiagramElement {
             let textGroup = this.textLayer.group()
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == DiagramElementType.DestructionMessageConnector) {
-            let lineGroup = this.shapeLayer.group().addClass("UMLDestructionMessage")
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             drawDestructionMessage(lineGroup, this.connectionPoint2)
         } else if (this.type == "usecaseassociation") {
             let lineGroup = this.shapeLayer.group().addClass("UMLUseCaseAssociation")
@@ -138,6 +139,10 @@ class Connector extends DiagramElement {
 
             case DiagramElementType.ReturnMessageConnector:
                 this.cssParentGroupClass = CSSClassName.ReturnMessageConnector
+                break
+
+            case DiagramElementType.DestructionMessageConnector:
+                this.cssParentGroupClass = CSSClassName.DestructionMessageConnector
                 break
         }
     }
