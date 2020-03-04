@@ -33,6 +33,7 @@ const enum CSSClassName {
     ReturnMessageConnector = "connector connector--return-message",
     DestructionMessageConnector = "connector connector--destruction-message",
     UseCaseAssociationConnector = "connector connector--use-case-association",
+    AssemblyConnector = "connector connector--assembly",
     ConnectorShape = "connector__shape",
     ConnectorLabel = "connector__label"
 }

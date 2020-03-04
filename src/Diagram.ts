@@ -208,12 +208,12 @@ class Diagram {
                 let providerComponent = this.components.get(item.assemblyconnector.provider)
                 let connectionPoint1 = consumerComponent.createDependencyConnectionPoint(svg, item.assemblyconnector.interface)
                 let connectionPoint2 = providerComponent.createInterfaceConnectionPoint(svg, item.assemblyconnector.interface)
-                let newConnector = new Connector(svg, "assemblyconnector", connectionPoint1, connectionPoint2, null)
+                let newConnector = new Connector(svg, DiagramElementType.AssemblyConnector, connectionPoint1, connectionPoint2, null)
                 assemblyconnectors.push(newConnector)
             } else if (item.association) {
                 let connectionPoint1 = this.actors.get(item.association.actor).createConnectionPoint(svg)
                 let connectionPoint2 = this.usecases.get(item.association.usecase).createConnectionPoint(svg)
-                let newConnector = new Connector(svg, "usecaseassociation", connectionPoint1, connectionPoint2, null)
+                let newConnector = new Connector(svg, DiagramElementType.UseCaseAssociationConnector, connectionPoint1, connectionPoint2, null)
                 connectors.push(newConnector)
             } else if (item.communicationpath) {
                 let connectionPoint1 = this.nodes.get(item.communicationpath.firstnode).createConnectionPoint(svg)
@@ -274,8 +274,7 @@ function draw(classboxes, classtemplates, lifelines, components, nodes, actors, 
         connector.draw()
     }
     for (let connector of assemblyconnectors) {
-        connector.getLayers().getLayer("shape").write()
-        connector.getLayers().getLayer("text").write()
+        connector.draw()
     }
 }
 

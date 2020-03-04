@@ -186,11 +186,6 @@
    stroke-width: 3;
 }
 
-.codesmithy-uml-diagram .UMLAssemblyConnector line {
-   stroke: #454545;
-   stroke-width: 2;
-}
-
 .codesmithy-uml-diagram .UMLCommunicationPath line {
    stroke: #454545;
    stroke-width: 2;
