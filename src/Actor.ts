@@ -7,9 +7,10 @@
 'use strict'
 
 import { DiagramElement } from "./DiagramElement"
-import { SVGLayer } from "./SVGLayer"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
+import { SVGUtils } from "./SVGUtils"
+import { SVGLayer } from "./SVGLayer"
 import { Errors } from "./Errors"
 
 /**
@@ -55,11 +56,11 @@ class Actor extends DiagramElement {
         let textDef = textGroup.text(this.actorDescription.name).move(borderAdjustment.left, borderAdjustment.top + 35)
         let width = textDef.bbox().width
         let offset = ((width - 16) / 2)
-        shapeGroup.circle(12).move(borderAdjustment.left + 2 + offset, borderAdjustment.top + 1)
-        shapeGroup.line(borderAdjustment.left + 8 + offset, borderAdjustment.top + 13, borderAdjustment.left + 8 + offset, borderAdjustment.top + 26)
-        shapeGroup.line(borderAdjustment.left + offset, borderAdjustment.top + 18, borderAdjustment.left + 16 + offset, borderAdjustment.top + 18)
-        shapeGroup.line(borderAdjustment.left + 8 + offset, borderAdjustment.top + 26, borderAdjustment.left + offset, borderAdjustment.top + 33)
-        shapeGroup.line(borderAdjustment.left + 8 + offset, borderAdjustment.top + 26, borderAdjustment.left + 16 + offset, borderAdjustment.top + 33)
+        SVGUtils.Circle(shapeGroup, borderAdjustment.left + 2 + offset, borderAdjustment.top + 1, 12)
+        SVGUtils.Line(shapeGroup, borderAdjustment.left + 8 + offset, borderAdjustment.top + 13, borderAdjustment.left + 8 + offset, borderAdjustment.top + 26)
+        SVGUtils.Line(shapeGroup, borderAdjustment.left + offset, borderAdjustment.top + 18, borderAdjustment.left + 16 + offset, borderAdjustment.top + 18)
+        SVGUtils.Line(shapeGroup, borderAdjustment.left + 8 + offset, borderAdjustment.top + 26, borderAdjustment.left + offset, borderAdjustment.top + 33)
+        SVGUtils.Line(shapeGroup, borderAdjustment.left + 8 + offset, borderAdjustment.top + 26, borderAdjustment.left + 16 + offset, borderAdjustment.top + 33)
 
         this.connectionPointsRectangle = {
             "x": borderAdjustment.left,
