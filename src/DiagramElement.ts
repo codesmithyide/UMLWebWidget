@@ -24,6 +24,7 @@ const enum DiagramElementType {
     SynchronousMessageConnector = "synchronousmessage",
     ReturnMessageConnector = "returnmessage",
     DestructionMessageConnector = "destructionmessage",
+    UseCaseAssociationConnector = "usecaseassociation",
     Node = "node"
 }
 
