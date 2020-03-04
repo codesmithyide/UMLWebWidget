@@ -54,6 +54,8 @@ class Connector extends DiagramElement {
             case DiagramElementType.SynchronousMessageConnector:
             case DiagramElementType.ReturnMessageConnector:
             case DiagramElementType.DestructionMessageConnector:
+            case DiagramElementType.UseCaseAssociationConnector:
+            case DiagramElementType.AssemblyConnector:
                 let g = this.layers.svg.group().addClass(this.cssParentGroupClass)
                 g.id(this.id)
                 this.layers.getLayer("shape").write(g)
@@ -86,7 +88,7 @@ class Connector extends DiagramElement {
             let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             let textGroup = null
             if ((this.label != null) && (this.label.text != null) && (this.label.text != "")) {
-                textGroup = this.textLayer.group()
+                textGroup = this.textLayer.group().addClass(CSSClassName.ConnectorLabel)
             }
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == DiagramElementType.ReturnMessageConnector) {
@@ -98,16 +100,16 @@ class Connector extends DiagramElement {
             }
         } else if (this.type == DiagramElementType.CreationMessageConnector) {
             let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
-            let textGroup = this.textLayer.group()
+            let textGroup = this.textLayer.group().addClass(CSSClassName.ConnectorLabel)
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == DiagramElementType.DestructionMessageConnector) {
             let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             drawDestructionMessage(lineGroup, this.connectionPoint2)
-        } else if (this.type == "usecaseassociation") {
-            let lineGroup = this.shapeLayer.group().addClass("UMLUseCaseAssociation")
+        } else if (this.type == DiagramElementType.UseCaseAssociationConnector) {
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             drawUseCaseAssociation(lineGroup, this.connectionPoint1, this.connectionPoint2)
-        } else if (this.type == "assemblyconnector") {
-            let lineGroup = this.shapeLayer.group().addClass("UMLAssemblyConnector")
+        } else if (this.type == DiagramElementType.AssemblyConnector) {
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             drawAssemblyConnector(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == "communicationpath") {
             let lineGroup = this.shapeLayer.group().addClass("UMLCommunicationPath")
@@ -143,6 +145,14 @@ class Connector extends DiagramElement {
 
             case DiagramElementType.DestructionMessageConnector:
                 this.cssParentGroupClass = CSSClassName.DestructionMessageConnector
+                break
+
+            case DiagramElementType.UseCaseAssociationConnector:
+                this.cssParentGroupClass = CSSClassName.UseCaseAssociationConnector
+                break
+
+            case DiagramElementType.AssemblyConnector:
+                this.cssParentGroupClass = CSSClassName.AssemblyConnector
                 break
         }
     }

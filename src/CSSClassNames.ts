@@ -32,7 +32,10 @@ const enum CSSClassName {
     SynchronousMessageConnector = "connector connector--synchronous-message",
     ReturnMessageConnector = "connector connector--return-message",
     DestructionMessageConnector = "connector connector--destruction-message",
-    ConnectorShape = "connector__shape"
+    UseCaseAssociationConnector = "connector connector--use-case-association",
+    AssemblyConnector = "connector connector--assembly",
+    ConnectorShape = "connector__shape",
+    ConnectorLabel = "connector__label"
 }
 
 export { CSSClassName }

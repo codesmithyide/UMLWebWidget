@@ -7,11 +7,12 @@
 'use strict'
 
 import { DiagramElement } from "./DiagramElement"
-import { SVGLayer} from "./SVGLayer"
 import { BallConnector } from "./BallConnector"
 import { SocketConnector } from "./SocketConnector"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
+import { SVGUtils } from "./SVGUtils"
+import { SVGLayer} from "./SVGLayer"
 import { Errors } from "./Errors"
 
 class Stereotype {
@@ -36,11 +37,10 @@ class Stereotype {
 
     draw() {
         let stereoTypeGroup = this.svgParentGroup.group().addClass("UMLComponentStereotype")
-        stereoTypeGroup.rect(11, 15).move(4 + this.x, this.y)
-        stereoTypeGroup.rect(8, 3).move(this.x, this.y + 3)
-        stereoTypeGroup.rect(8, 3).move(this.x, this.y + 9)
+        SVGUtils.Rectangle(stereoTypeGroup, 4 + this.x, this.y, 11, 15)
+        SVGUtils.Rectangle(stereoTypeGroup, this.x, this.y + 3, 8, 3)
+        SVGUtils.Rectangle(stereoTypeGroup, this.x, this.y + 9, 8, 3)
     }
-
 }
 
 /**
@@ -151,7 +151,7 @@ class Component extends DiagramElement {
 
         currentDimensions.width += (this.style.getLeftMargin("component") + this.style.getRightMargin("component"))
     
-        componentGroup.rect(currentDimensions.width, currentDimensions.height).move(position.x + offset, position.y)
+        SVGUtils.Rectangle(componentGroup, position.x + offset, position.y, currentDimensions.width, currentDimensions.height)
         stereotype.move(position.x + offset + (currentDimensions.width - this.style.getRightMargin("component") - stereotype.width), position.y + this.style.getTopMargin("component"))
         stereotype.draw()
         
