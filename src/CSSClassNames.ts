@@ -9,6 +9,8 @@
 const enum CSSClassName {
     Diagram = "codesmithy-uml-diagram",
     Actor = "actor",
+    Actor_Shape = "actor__shape",
+    Actor_Name = "actor__name",
     ClassBox = "class-box",
     ClassBox_Shape = "class-box__shape",
     ClassBox_ClassNameCompartment = "class-box__class-name-compartment",

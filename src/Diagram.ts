@@ -144,7 +144,7 @@ class Diagram {
             } else if (item.actor) {
                 this.actors.set(
                     item.actor.name,
-                    new Actor(svg, item.actor.name, item.actor, errors)
+                    new Actor(svg, idGenerator, item.actor, errors)
                 )
             } else if (item.usecase) {
                 this.usecases.set(

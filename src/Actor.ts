@@ -12,6 +12,7 @@ import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { SVGUtils } from "./SVGUtils"
 import { SVGLayer } from "./SVGLayer"
+import { IDGenerator } from "./IDGenerator"
 import { Errors } from "./Errors"
 
 /**
@@ -26,8 +27,8 @@ class Actor extends DiagramElement {
     actorDescription
     connectionPointsRectangle
 
-    constructor(svg, id: string, actorDescription, errors: Errors) {
-        super(svg, DiagramElementType.Actor, id)
+    constructor(svg, idGenerator: IDGenerator, actorDescription, errors: Errors) {
+        super(svg, DiagramElementType.Actor, idGenerator.createID("actor--" + actorDescription.name))
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
@@ -54,9 +55,9 @@ class Actor extends DiagramElement {
             left: this.x
         }
         
-        let shapeGroup = this.shapeLayer.group().addClass("UMLActor")
-        let textGroup = this.textLayer.group()
-        let textDef = textGroup.text(this.actorDescription.name).move(borderAdjustment.left, borderAdjustment.top + 35)
+        let shapeGroup = this.shapeLayer.group().addClass(CSSClassName.Actor_Shape)
+        let textGroup = this.textLayer.group().addClass(CSSClassName.Actor_Name)
+        let textDef = SVGUtils.Text(textGroup, borderAdjustment.left, borderAdjustment.top + 35, this.actorDescription.name)
         let width = textDef.bbox().width
         let offset = ((width - 16) / 2)
         SVGUtils.Circle(shapeGroup, borderAdjustment.left + 2 + offset, borderAdjustment.top + 1, 12)
