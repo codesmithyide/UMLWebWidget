@@ -145,7 +145,7 @@ class Component extends DiagramElement {
         currentDimensions.height += stereotype.height
 
         var componentNameGroup = this.textLayer.group().addClass("UMLComponentName")
-        var componentNameDef = componentNameGroup.text(this.componentDescription.name).addClass("UMLComponentName").move(position.x + offset + this.style.getLeftMargin("component"), position.y + currentDimensions.height)
+        var componentNameDef = SVGUtils.Text(componentNameGroup, position.x + offset + this.style.getLeftMargin("component"), position.y + currentDimensions.height, this.componentDescription.name).addClass("UMLComponentName")
         currentDimensions.width = Math.max(currentDimensions.width, componentNameDef.bbox().width)
         currentDimensions.height += (componentNameDef.bbox().height + this.style.getBottomMargin("component"))
 
