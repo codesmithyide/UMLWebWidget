@@ -7,6 +7,7 @@
 'use strict'
 
 import { DiagramElement, DiagramElementType } from "./DiagramElement"
+import { CSSClassName } from "./CSSClassNames"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { SVGUtils } from "./SVGUtils"
@@ -36,8 +37,10 @@ class Actor extends DiagramElement {
 
     draw(): void {
         this.update()
-        this.layers.getLayer("shape").write()
-        this.layers.getLayer("text").write()
+        let g = this.layers.svg.group().addClass(CSSClassName.Actor)
+        g.id(this.id)
+        this.layers.getLayer("shape").write(g)
+        this.layers.getLayer("text").write(g)
     }
 
     createConnectionPoint(svg) {
