@@ -6,7 +6,7 @@
 
 'use strict'
 
-import { DiagramElement } from "./DiagramElement"
+import { DiagramElement, DiagramElementType } from "./DiagramElement"
 import { BallConnector } from "./BallConnector"
 import { SocketConnector } from "./SocketConnector"
 import { ConnectionPoint } from "./ConnectionPoint"
@@ -59,7 +59,7 @@ class Component extends DiagramElement {
     socketConnectors
 
     constructor(svg, id, componentDescription, style, errors: Errors) {
-        super(svg, "component", id)
+        super(svg, DiagramElementType.Component, id)
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")

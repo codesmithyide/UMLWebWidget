@@ -6,7 +6,7 @@
 
 'use strict'
 
-import { DiagramElement } from "./DiagramElement"
+import { DiagramElement, DiagramElementType } from "./DiagramElement"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { SVGUtils } from "./SVGUtils"
@@ -26,7 +26,7 @@ class Actor extends DiagramElement {
     connectionPointsRectangle
 
     constructor(svg, id: string, actorDescription, errors: Errors) {
-        super(svg, "actor", id)
+        super(svg, DiagramElementType.Actor, id)
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")

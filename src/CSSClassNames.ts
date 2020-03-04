@@ -34,6 +34,7 @@ const enum CSSClassName {
     DestructionMessageConnector = "connector connector--destruction-message",
     UseCaseAssociationConnector = "connector connector--use-case-association",
     AssemblyConnector = "connector connector--assembly",
+    CommunicationPathConnector = "connector connector--communication-path",
     ConnectorShape = "connector__shape",
     ConnectorLabel = "connector__label"
 }

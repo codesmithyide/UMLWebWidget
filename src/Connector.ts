@@ -46,27 +46,10 @@ class Connector extends DiagramElement {
 
     draw(): void {
         this.update()
-        switch (this.type) {
-            case DiagramElementType.InheritanceConnector:
-            case DiagramElementType.CompositionConnector:
-            case DiagramElementType.AggregationConnector:
-            case DiagramElementType.CreationMessageConnector:
-            case DiagramElementType.SynchronousMessageConnector:
-            case DiagramElementType.ReturnMessageConnector:
-            case DiagramElementType.DestructionMessageConnector:
-            case DiagramElementType.UseCaseAssociationConnector:
-            case DiagramElementType.AssemblyConnector:
-                let g = this.layers.svg.group().addClass(this.cssParentGroupClass)
-                g.id(this.id)
-                this.layers.getLayer("shape").write(g)
-                this.layers.getLayer("text").write(g)
-                break
-
-            default:
-                this.layers.getLayer("shape").write()
-                this.layers.getLayer("text").write()
-                break
-        }
+        let g = this.layers.svg.group().addClass(this.cssParentGroupClass)
+        g.id(this.id)
+        this.layers.getLayer("shape").write(g)
+        this.layers.getLayer("text").write(g)
     }
 
     hasNonEmptyLabel() {
@@ -111,8 +94,8 @@ class Connector extends DiagramElement {
         } else if (this.type == DiagramElementType.AssemblyConnector) {
             let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             drawAssemblyConnector(lineGroup, this.connectionPoint1, this.connectionPoint2)
-        } else if (this.type == "communicationpath") {
-            let lineGroup = this.shapeLayer.group().addClass("UMLCommunicationPath")
+        } else if (this.type == DiagramElementType.CommunicationPathConnector) {
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
             drawCommunicationPath(lineGroup, this.connectionPoint1, this.connectionPoint2)
         }
     }
@@ -153,6 +136,10 @@ class Connector extends DiagramElement {
 
             case DiagramElementType.AssemblyConnector:
                 this.cssParentGroupClass = CSSClassName.AssemblyConnector
+                break
+
+            case DiagramElementType.CommunicationPathConnector:
+                this.cssParentGroupClass = CSSClassName.CommunicationPathConnector
                 break
         }
     }
