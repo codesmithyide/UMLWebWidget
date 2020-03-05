@@ -13,9 +13,13 @@ import { SVGLayerSet } from "./SVGLayerSet"
  * to this list.
  */
 const enum DiagramElementType {
+    Actor = "actor",
     ClassBox = "class-box",
     ClassTemplate = "class-template",
+    Component = "component",
     Lifeline = "lifeline",
+    Node = "node",
+    UseCase = "usecase",
     ConnectionPoint = "connectionpoint",
     InheritanceConnector = "inheritance",
     CompositionConnector = "composition",
@@ -26,7 +30,7 @@ const enum DiagramElementType {
     DestructionMessageConnector = "destructionmessage",
     UseCaseAssociationConnector = "usecaseassociation",
     AssemblyConnector = "assemblyconnector",
-    Node = "node"
+    CommunicationPathConnector = "communicationpath"
 }
 
 var position = Symbol()

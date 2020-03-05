@@ -6,6 +6,7 @@
 
 'use strict'
 
+import { CSSClassName } from "./CSSClassNames"
 import { SVGLayerSet } from "./SVGLayerSet"
 
 var textDef = Symbol()
@@ -70,7 +71,7 @@ class SocketConnector {
     update() {
         this.shapeLayer.clear()
         this[textDef].move(this.x + 5, this.y)
-        let lineGroup = this.shapeLayer.group().addClass("UMLComponent")
+        let lineGroup = this.shapeLayer.group().addClass(CSSClassName.SocketConnector_Shape)
         lineGroup.line(this.x, this.y + this[textDef].bbox().height + 8, this.x + (this.width / 2), this.y + this[textDef].bbox().height + 8)
         let clippath = this.svg.clip()
         clippath.rect(10, 17).move(this.x + (this.width / 2) - 1, this.y + this[textDef].bbox().height, 0)

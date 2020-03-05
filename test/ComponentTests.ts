@@ -27,24 +27,25 @@ module.exports = function(theTestHarness) {
 
 function ComponentCreationTest1(resolve) {
     let svg = SVG(window.document.createElement("div"))
+    let idGenerator = new UMLWebWidget.IDGenerator("ComponentCreationTest1")
     let componentDescription = {
         "name": "ControlPanel"
     }
     let style = new UMLWebWidget.Style()
-    let component = new UMLWebWidget.Component(svg, componentDescription.name, componentDescription, style)
+    let component = new UMLWebWidget.Component(svg, idGenerator, componentDescription, style)
     resolve(tf.TestResultOutcome.ePassed)
 }
 
 // Test a component without any interfaces or dependencies
 function ComponentGetLayersTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-
+    let idGenerator = new UMLWebWidget.IDGenerator("ComponentGetLayersTest1")
     let componentDescription = {
         "name": "ControlPanel"
     }
 
     let style = new UMLWebWidget.Style()
-    let component = new UMLWebWidget.Component(svg, componentDescription.name, componentDescription, style)
+    let component = new UMLWebWidget.Component(svg, idGenerator, componentDescription, style)
 
     let layers = component.getLayers()
     layers.getLayer("shape").write()
@@ -61,7 +62,7 @@ function ComponentGetLayersTest1(resolve, reject, test) {
 // Test a component with a single dependency and no interfaces
 function ComponentGetLayersTest2(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-
+    let idGenerator = new UMLWebWidget.IDGenerator("ComponentGetLayersTest2")
     let componentDescription = {
         "name": "ControlPanel",
         "dependencies":
@@ -71,7 +72,7 @@ function ComponentGetLayersTest2(resolve, reject, test) {
     }
 
     let style = new UMLWebWidget.Style()
-    let component = new UMLWebWidget.Component(svg, componentDescription.name, componentDescription, style)
+    let component = new UMLWebWidget.Component(svg, idGenerator, componentDescription, style)
 
     let layers = component.getLayers()
     layers.getLayer("shape").write()
@@ -88,7 +89,7 @@ function ComponentGetLayersTest2(resolve, reject, test) {
 // Test a component with a single interface and no dependencies
 function ComponentGetLayersTest3(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-
+    let idGenerator = new UMLWebWidget.IDGenerator("ComponentGetLayersTest3")
     let componentDescription = {
         "name": "ControlPanel",
         "interfaces":
@@ -98,7 +99,7 @@ function ComponentGetLayersTest3(resolve, reject, test) {
     }
 
     let style = new UMLWebWidget.Style()
-    let component = new UMLWebWidget.Component(svg, componentDescription.name, componentDescription, style)
+    let component = new UMLWebWidget.Component(svg, idGenerator, componentDescription, style)
 
     let layers = component.getLayers()
     layers.getLayer("shape").write()
@@ -115,7 +116,7 @@ function ComponentGetLayersTest3(resolve, reject, test) {
 // Test a component with a single interface and a single dependency
 function ComponentGetLayersTest4(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-
+    let idGenerator = new UMLWebWidget.IDGenerator("ComponentGetLayersTest4")
     let componentDescription = {
         "name": "WebServer",
             "dependencies":
@@ -129,7 +130,7 @@ function ComponentGetLayersTest4(resolve, reject, test) {
     }
 
     let style = new UMLWebWidget.Style()
-    let component = new UMLWebWidget.Component(svg, componentDescription.name, componentDescription, style)
+    let component = new UMLWebWidget.Component(svg, idGenerator, componentDescription, style)
 
     let layers = component.getLayers()
     layers.getLayer("shape").write()

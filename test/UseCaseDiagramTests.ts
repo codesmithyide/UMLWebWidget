@@ -57,9 +57,9 @@ function UseCaseDiagramCreateFromJSONTest2(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 10, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 1, "y": 75 } },
-            "Till": { "position": { "x": 33, "y": 150 } }
+            "UseCaseDiagramCreateFromJSONTest2--actor--Customer": { "position": { "x": 10, "y": 1 } },
+            "UseCaseDiagramCreateFromJSONTest2--actor--Shopkeeper": { "position": { "x": 1, "y": 75 } },
+            "UseCaseDiagramCreateFromJSONTest2--actor--Till": { "position": { "x": 33, "y": 150 } }
         }
     }
 
@@ -107,9 +107,9 @@ function UseCaseDiagramCreateFromJSONTest3(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 10, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 1, "y": 75 } },
-            "Till": { "position": { "x": 33, "y": 150 } },
+            "UseCaseDiagramCreateFromJSONTest3--actor--Customer": { "position": { "x": 10, "y": 1 } },
+            "UseCaseDiagramCreateFromJSONTest3--actor--Shopkeeper": { "position": { "x": 1, "y": 75 } },
+            "UseCaseDiagramCreateFromJSONTest3--actor--Till": { "position": { "x": 33, "y": 150 } },
             "Pay for merchandise": { "position": { "x": 140, "y": 75 } }
         }
     }
@@ -164,9 +164,9 @@ function UseCaseDiagramCreateFromJSONTest4(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 10, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 1, "y": 75 } },
-            "Till": { "position": { "x": 33, "y": 150 } },
+            "UseCaseDiagramCreateFromJSONTest4--actor--Customer": { "position": { "x": 10, "y": 1 } },
+            "UseCaseDiagramCreateFromJSONTest4--actor--Shopkeeper": { "position": { "x": 1, "y": 75 } },
+            "UseCaseDiagramCreateFromJSONTest4--actor--Till": { "position": { "x": 33, "y": 150 } },
             "Pay for merchandise": { "position": { "x": 140, "y": 75 } }
         }
     }
@@ -228,9 +228,9 @@ function UseCaseDiagramCreateFromJSONTest5(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 10, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 1, "y": 75 } },
-            "Till": { "position": { "x": 33, "y": 150 } },
+            "UseCaseDiagramCreateFromJSONTest5--actor--Customer": { "position": { "x": 10, "y": 1 } },
+            "UseCaseDiagramCreateFromJSONTest5--actor--Shopkeeper": { "position": { "x": 1, "y": 75 } },
+            "UseCaseDiagramCreateFromJSONTest5--actor--Till": { "position": { "x": 33, "y": 150 } },
             "Pay for merchandise": { "position": { "x": 140, "y": 75 } }
         }
     }
@@ -306,10 +306,10 @@ function UseCaseDiagramCreateFromJSONTest6(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "Customer": { "position": { "x": 160, "y": 1 } },
-            "Shopkeeper": { "position": { "x": 1, "y": 95 } },
-            "Till": { "position": { "x": 400, "y": 95 } },
-            "Credit Card": { "position": { "x": 160, "y": 230 } },
+            "UseCaseDiagramCreateFromJSONTest6--actor--Customer": { "position": { "x": 160, "y": 1 } },
+            "UseCaseDiagramCreateFromJSONTest6--actor--Shopkeeper": { "position": { "x": 1, "y": 95 } },
+            "UseCaseDiagramCreateFromJSONTest6--actor--Till": { "position": { "x": 400, "y": 95 } },
+            "UseCaseDiagramCreateFromJSONTest6--actor--Credit Card": { "position": { "x": 160, "y": 230 } },
             "Pay for merchandise": { "position": { "x": 140, "y": 95 } }
         }
     }

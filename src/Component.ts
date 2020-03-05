@@ -6,13 +6,15 @@
 
 'use strict'
 
-import { DiagramElement } from "./DiagramElement"
+import { DiagramElement, DiagramElementType } from "./DiagramElement"
+import { CSSClassName } from "./CSSClassNames"
 import { BallConnector } from "./BallConnector"
 import { SocketConnector } from "./SocketConnector"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { SVGUtils } from "./SVGUtils"
 import { SVGLayer} from "./SVGLayer"
+import { IDGenerator } from "./IDGenerator"
 import { Errors } from "./Errors"
 
 class Stereotype {
@@ -36,7 +38,7 @@ class Stereotype {
     }
 
     draw() {
-        let stereoTypeGroup = this.svgParentGroup.group().addClass("UMLComponentStereotype")
+        let stereoTypeGroup = SVGUtils.Group(this.svgParentGroup).addClass(CSSClassName.Component_Stereotype)
         SVGUtils.Rectangle(stereoTypeGroup, 4 + this.x, this.y, 11, 15)
         SVGUtils.Rectangle(stereoTypeGroup, this.x, this.y + 3, 8, 3)
         SVGUtils.Rectangle(stereoTypeGroup, this.x, this.y + 9, 8, 3)
@@ -51,15 +53,15 @@ class Stereotype {
 class Component extends DiagramElement {
     errors: Errors
     shapeLayer: SVGLayer
-    textLayer
+    textLayer: SVGLayer
     svg
     componentDescription
     style
     ballConnectors
     socketConnectors
 
-    constructor(svg, id, componentDescription, style, errors: Errors) {
-        super(svg, "component", id)
+    constructor(svg, idGenerator: IDGenerator, componentDescription, style, errors: Errors) {
+        super(svg, DiagramElementType.Component, idGenerator.createID("component--" + componentDescription.name))
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
@@ -85,8 +87,10 @@ class Component extends DiagramElement {
 
     draw(): void {
         this.update()
-        this.layers.getLayer("shape").write()
-        this.layers.getLayer("text").write()
+        let g = this.layers.svg.group().addClass(CSSClassName.Component)
+        g.id(this.id)
+        this.layers.getLayer("shape").write(g)
+        this.layers.getLayer("text").write(g)
     }
 
     getSocketConnector(name) {
@@ -122,7 +126,7 @@ class Component extends DiagramElement {
     doUpdate() {
         this.layers.clearEachLayer()
 
-        var componentGroup = this.shapeLayer.group().addClass("UMLComponent")
+        var componentGroup = this.shapeLayer.group().addClass(CSSClassName.Component_Shape)
 
         let offset = 0
         for (let i = 0; i < this.ballConnectors.length; i++) {
@@ -144,8 +148,8 @@ class Component extends DiagramElement {
         let stereotype = new Stereotype(componentGroup)
         currentDimensions.height += stereotype.height
 
-        var componentNameGroup = this.textLayer.group().addClass("UMLComponentName")
-        var componentNameDef = componentNameGroup.text(this.componentDescription.name).addClass("UMLComponentName").move(position.x + offset + this.style.getLeftMargin("component"), position.y + currentDimensions.height)
+        var componentNameGroup = this.textLayer.group().addClass(CSSClassName.Component_Name)
+        var componentNameDef = SVGUtils.Text(componentNameGroup, position.x + offset + this.style.getLeftMargin("component"), position.y + currentDimensions.height, this.componentDescription.name).addClass("UMLComponentName")
         currentDimensions.width = Math.max(currentDimensions.width, componentNameDef.bbox().width)
         currentDimensions.height += (componentNameDef.bbox().height + this.style.getBottomMargin("component"))
 
