@@ -9,6 +9,17 @@
    fill: white;
 }
 
+.codesmithy-uml-diagram .ball-connector__shape circle {
+   stroke: #595959;
+   stroke-width: 2;
+   fill: white;
+}
+
+.codesmithy-uml-diagram .ball-connector__shape line {
+   stroke: #595959;
+   stroke-width: 2;
+}
+
 .codesmithy-uml-diagram .class-box__shape rect {
    stroke: #595959;
    stroke-width: 2;
@@ -80,21 +91,10 @@
    fill: #404040;
 }
 
-.codesmithy-uml-diagram .UMLComponent rect {
+.codesmithy-uml-diagram .component__shape rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
-}
-
-.codesmithy-uml-diagram .UMLComponent circle {
-   stroke: #595959;
-   stroke-width: 2;
-   fill: white;
-}
-
-.codesmithy-uml-diagram .UMLComponent line {
-   stroke: #595959;
-   stroke-width: 2;
 }
 
 .codesmithy-uml-diagram .component__stereotype rect {
@@ -128,6 +128,17 @@
 }
 
 .codesmithy-uml-diagram .lifeline__lifeline-line line {
+   stroke: #595959;
+   stroke-width: 2;
+}
+
+.codesmithy-uml-diagram .socket-connector__shape circle {
+   stroke: #595959;
+   stroke-width: 2;
+   fill: white;
+}
+
+.codesmithy-uml-diagram .socket-connector__shape line {
    stroke: #595959;
    stroke-width: 2;
 }

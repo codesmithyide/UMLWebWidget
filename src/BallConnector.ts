@@ -6,6 +6,7 @@
 
 'use strict'
 
+import { CSSClassName } from "./CSSClassNames"
 import { SVGLayer } from "./SVGLayer"
 import { SVGLayerSet } from "./SVGLayerSet"
 
@@ -71,7 +72,7 @@ class BallConnector {
     update() {
         this.shapeLayer.clear()
         this[textDef].move(this.x, this.y)
-        let lineGroup = this.shapeLayer.group().addClass("UMLComponent")
+        let lineGroup = this.shapeLayer.group().addClass(CSSClassName.BallConnector_Shape)
         lineGroup.circle(10).move(this.x + (this.width)/2 - 5, this.y + 22)
         lineGroup.line(this.x + 10 + (this.width)/2 - 5, this.y + 27, this.x + (this.width), this.y + 27)
     }

@@ -126,7 +126,7 @@ class Component extends DiagramElement {
     doUpdate() {
         this.layers.clearEachLayer()
 
-        var componentGroup = this.shapeLayer.group().addClass("UMLComponent")
+        var componentGroup = this.shapeLayer.group().addClass(CSSClassName.Component_Shape)
 
         let offset = 0
         for (let i = 0; i < this.ballConnectors.length; i++) {
@@ -148,7 +148,7 @@ class Component extends DiagramElement {
         let stereotype = new Stereotype(componentGroup)
         currentDimensions.height += stereotype.height
 
-        var componentNameGroup = this.textLayer.group().addClass("UMLComponentName")
+        var componentNameGroup = this.textLayer.group().addClass(CSSClassName.Component_Name)
         var componentNameDef = SVGUtils.Text(componentNameGroup, position.x + offset + this.style.getLeftMargin("component"), position.y + currentDimensions.height, this.componentDescription.name).addClass("UMLComponentName")
         currentDimensions.width = Math.max(currentDimensions.width, componentNameDef.bbox().width)
         currentDimensions.height += (componentNameDef.bbox().height + this.style.getBottomMargin("component"))

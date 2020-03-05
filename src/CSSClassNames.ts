@@ -11,6 +11,9 @@ const enum CSSClassName {
     Actor = "actor",
     Actor_Shape = "actor__shape",
     Actor_Name = "actor__name",
+    BallConnector = "ball-connector",
+    BallConnector_Shape = "ball-connector__shape",
+    BallConnector_Label = "ball-connector__label",
     ClassBox = "class-box",
     ClassBox_Shape = "class-box__shape",
     ClassBox_ClassNameCompartment = "class-box__class-name-compartment",
@@ -23,13 +26,20 @@ const enum CSSClassName {
     ClassTemplate_OperationsCompartment = "class-template__operations-compartment",
     ClassTemplate_ParametersCompartment = "class-template__parameters-compartment",
     Component = "component",
+    Component_Shape = "component__shape",
+    Component_Name = "component__name",
     Component_Stereotype = "component__stereotype",
     Lifeline = "lifeline",
     Lifeline_Head = "lifeline__lifeline-head",
     Lifeline_Head_Shape = "lifeline-head__shape",
     Lifeline_Head_Text = "lifeline-head__text",
     Lifeline_Line = "lifeline__lifeline-line",
+    SocketConnector = "socket-connector",
+    SocketConnector_Shape = "socket-connector__shape",
+    SocketConnector_Label = "socket-connector__label",
     Connector = "connector",
+    Connector_Shape = "connector__shape",
+    Connector_Label = "connector__label",
     InheritanceConnector = "connector connector--inheritance",
     CompositionConnector = "connector connector--composition",
     AggregationConnector = "connector connector--aggregation",
@@ -39,9 +49,7 @@ const enum CSSClassName {
     DestructionMessageConnector = "connector connector--destruction-message",
     UseCaseAssociationConnector = "connector connector--use-case-association",
     AssemblyConnector = "connector connector--assembly",
-    CommunicationPathConnector = "connector connector--communication-path",
-    ConnectorShape = "connector__shape",
-    ConnectorLabel = "connector__label"
+    CommunicationPathConnector = "connector connector--communication-path"
 }
 
 export { CSSClassName }
