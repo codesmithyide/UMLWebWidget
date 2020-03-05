@@ -23,6 +23,7 @@ const enum CSSClassName {
     ClassTemplate_OperationsCompartment = "class-template__operations-compartment",
     ClassTemplate_ParametersCompartment = "class-template__parameters-compartment",
     Component = "component",
+    Component_Stereotype = "component__stereotype",
     Lifeline = "lifeline",
     Lifeline_Head = "lifeline__lifeline-head",
     Lifeline_Head_Shape = "lifeline-head__shape",

@@ -97,7 +97,7 @@
    stroke-width: 2;
 }
 
-.codesmithy-uml-diagram .UMLComponentStereotype rect {
+.codesmithy-uml-diagram .component__stereotype rect {
    stroke: #595959;
    stroke-width: 1;
    fill: #f1f4ff;

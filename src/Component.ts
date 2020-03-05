@@ -38,7 +38,7 @@ class Stereotype {
     }
 
     draw() {
-        let stereoTypeGroup = this.svgParentGroup.group().addClass("UMLComponentStereotype")
+        let stereoTypeGroup = SVGUtils.Group(this.svgParentGroup).addClass(CSSClassName.Component_Stereotype)
         SVGUtils.Rectangle(stereoTypeGroup, 4 + this.x, this.y, 11, 15)
         SVGUtils.Rectangle(stereoTypeGroup, this.x, this.y + 3, 8, 3)
         SVGUtils.Rectangle(stereoTypeGroup, this.x, this.y + 9, 8, 3)
