@@ -134,7 +134,7 @@ class Diagram {
             } else if (item.component) {
                 this.components.set(
                      item.component.name,
-                     new Component(svg, item.component.name, item.component, style, errors)
+                     new Component(svg, idGenerator, item.component, style, errors)
                 )
             } else if (item.node) {
                 this.nodes.set(

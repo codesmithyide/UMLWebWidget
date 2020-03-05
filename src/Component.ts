@@ -14,6 +14,7 @@ import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { SVGUtils } from "./SVGUtils"
 import { SVGLayer} from "./SVGLayer"
+import { IDGenerator } from "./IDGenerator"
 import { Errors } from "./Errors"
 
 class Stereotype {
@@ -52,15 +53,15 @@ class Stereotype {
 class Component extends DiagramElement {
     errors: Errors
     shapeLayer: SVGLayer
-    textLayer
+    textLayer: SVGLayer
     svg
     componentDescription
     style
     ballConnectors
     socketConnectors
 
-    constructor(svg, id, componentDescription, style, errors: Errors) {
-        super(svg, DiagramElementType.Component, id)
+    constructor(svg, idGenerator: IDGenerator, componentDescription, style, errors: Errors) {
+        super(svg, DiagramElementType.Component, idGenerator.createID("component--" + componentDescription.name))
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")
