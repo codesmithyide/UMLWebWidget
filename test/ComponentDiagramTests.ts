@@ -56,8 +56,8 @@ function ComponentDiagramCreateFromJSONTest2(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ControlPanel": { "position": { "x": 10, "y": 1 } },
-            "WebServer": { "position": { "x": 200, "y": 1 } }
+            "ComponentDiagramCreateFromJSONTest2--component--ControlPanel": { "position": { "x": 10, "y": 1 } },
+            "ComponentDiagramCreateFromJSONTest2--component--WebServer": { "position": { "x": 200, "y": 1 } }
         }
     }
 
@@ -99,8 +99,8 @@ function ComponentDiagramCreateFromJSONTest3(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ControlPanel": { "position": { "x": 10, "y": 1 } },
-            "WebServer": { "position": { "x": 200, "y": 1 } }
+            "ComponentDiagramCreateFromJSONTest3--component--ControlPanel": { "position": { "x": 10, "y": 1 } },
+            "ComponentDiagramCreateFromJSONTest3--component--WebServer": { "position": { "x": 200, "y": 1 } }
         }
     }
 
@@ -154,8 +154,8 @@ function ComponentDiagramCreateFromJSONTest4(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ControlPanel": { "position": { "x": 10, "y": 1 } },
-            "WebServer": { "position": { "x": 200, "y": 1 } }
+            "ComponentDiagramCreateFromJSONTest4--component--ControlPanel": { "position": { "x": 10, "y": 1 } },
+            "ComponentDiagramCreateFromJSONTest4--component--WebServer": { "position": { "x": 200, "y": 1 } }
         }
     }
 
@@ -217,8 +217,8 @@ function ComponentDiagramCreateFromJSONTest5(resolve, reject, test) {
 
     let layout = {
         "elements": {
-            "ControlPanel": { "position": { "x": 75, "y": 1 } },
-            "WebServer": { "position": { "x": 20, "y": 100 } }
+            "ComponentDiagramCreateFromJSONTest5--component--ControlPanel": { "position": { "x": 75, "y": 1 } },
+            "ComponentDiagramCreateFromJSONTest5--component--WebServer": { "position": { "x": 20, "y": 100 } }
         }
     }
 
