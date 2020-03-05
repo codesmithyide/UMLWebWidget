@@ -24,21 +24,22 @@ module.exports = function(theTestHarness) {
 
 function ActorCreationTest1(resolve) {
     let svg = SVG(window.document.createElement("div"))
+    let idGenerator = new UMLWebWidget.IDGenerator("ActorCreationTest1")
     let actorDescription = {
         "name": "Customer"
     }
-    let actor = new UMLWebWidget.Actor(svg, actorDescription.name, actorDescription)
+    let actor = new UMLWebWidget.Actor(svg, idGenerator, actorDescription)
     resolve(tf.TestResultOutcome.ePassed)
 }
 
 function ActorGetLayersTest1(resolve, reject, test) {
     let svg = SVG(window.document.createElement("div"))
-
+    let idGenerator = new UMLWebWidget.IDGenerator("ActorGetLayersTest1")
     let actorDescription = {
         "name": "Customer"
     }
 
-    let actor = new UMLWebWidget.Actor(svg, actorDescription.name, actorDescription)
+    let actor = new UMLWebWidget.Actor(svg, idGenerator, actorDescription)
 
     let layers = actor.getLayers()
     layers.getLayer("shape").write()

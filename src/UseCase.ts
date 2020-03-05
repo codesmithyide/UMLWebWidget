@@ -6,7 +6,7 @@
 
 'use strict'
 
-import { DiagramElement } from "./DiagramElement"
+import { DiagramElement, DiagramElementType } from "./DiagramElement"
 import { ConnectionPoint } from "./ConnectionPoint"
 import { ConnectionPointPosition } from "./ConnectionPointPosition"
 import { Errors } from "./Errors"
@@ -24,7 +24,7 @@ class UseCase extends DiagramElement {
     connectionPointsRectangle
 
     constructor(svg, id: string, useCaseDescription, errors: Errors) {
-        super(svg, "usecase", id)
+        super(svg, DiagramElementType.UseCase, id)
         this.errors = errors
         this.shapeLayer = this.layers.createLayer("shape")
         this.textLayer = this.layers.createLayer("text")

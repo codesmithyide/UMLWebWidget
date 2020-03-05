@@ -1,3 +1,25 @@
+.codesmithy-uml-diagram .actor__shape line {
+   stroke: #595959;
+   stroke-width: 2;
+}
+
+.codesmithy-uml-diagram .actor__shape circle {
+   stroke: #595959;
+   stroke-width: 2;
+   fill: white;
+}
+
+.codesmithy-uml-diagram .ball-connector__shape circle {
+   stroke: #595959;
+   stroke-width: 2;
+   fill: white;
+}
+
+.codesmithy-uml-diagram .ball-connector__shape line {
+   stroke: #595959;
+   stroke-width: 2;
+}
+
 .codesmithy-uml-diagram .class-box__shape rect {
    stroke: #595959;
    stroke-width: 2;
@@ -69,24 +91,13 @@
    fill: #404040;
 }
 
-.codesmithy-uml-diagram .UMLComponent rect {
+.codesmithy-uml-diagram .component__shape rect {
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
 }
 
-.codesmithy-uml-diagram .UMLComponent circle {
-   stroke: #595959;
-   stroke-width: 2;
-   fill: white;
-}
-
-.codesmithy-uml-diagram .UMLComponent line {
-   stroke: #595959;
-   stroke-width: 2;
-}
-
-.codesmithy-uml-diagram .UMLComponentStereotype rect {
+.codesmithy-uml-diagram .component__stereotype rect {
    stroke: #595959;
    stroke-width: 1;
    fill: #f1f4ff;
@@ -121,6 +132,17 @@
    stroke-width: 2;
 }
 
+.codesmithy-uml-diagram .socket-connector__shape circle {
+   stroke: #595959;
+   stroke-width: 2;
+   fill: white;
+}
+
+.codesmithy-uml-diagram .socket-connector__shape line {
+   stroke: #595959;
+   stroke-width: 2;
+}
+
 .codesmithy-uml-diagram .UMLNode rect {
    stroke: #595959;
    stroke-width: 2;
@@ -132,17 +154,6 @@
    stroke: #595959;
    stroke-width: 2;
    fill: #f1f4ff;
-}
-
-.codesmithy-uml-diagram .UMLActor line {
-   stroke: #595959;
-   stroke-width: 2;
-}
-
-.codesmithy-uml-diagram .UMLActor circle {
-   stroke: #595959;
-   stroke-width: 2;
-   fill: white;
 }
 
 .codesmithy-uml-diagram .UMLUseCase ellipse {

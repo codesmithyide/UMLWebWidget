@@ -46,27 +46,10 @@ class Connector extends DiagramElement {
 
     draw(): void {
         this.update()
-        switch (this.type) {
-            case DiagramElementType.InheritanceConnector:
-            case DiagramElementType.CompositionConnector:
-            case DiagramElementType.AggregationConnector:
-            case DiagramElementType.CreationMessageConnector:
-            case DiagramElementType.SynchronousMessageConnector:
-            case DiagramElementType.ReturnMessageConnector:
-            case DiagramElementType.DestructionMessageConnector:
-            case DiagramElementType.UseCaseAssociationConnector:
-            case DiagramElementType.AssemblyConnector:
-                let g = this.layers.svg.group().addClass(this.cssParentGroupClass)
-                g.id(this.id)
-                this.layers.getLayer("shape").write(g)
-                this.layers.getLayer("text").write(g)
-                break
-
-            default:
-                this.layers.getLayer("shape").write()
-                this.layers.getLayer("text").write()
-                break
-        }
+        let g = this.layers.svg.group().addClass(this.cssParentGroupClass)
+        g.id(this.id)
+        this.layers.getLayer("shape").write(g)
+        this.layers.getLayer("text").write(g)
     }
 
     hasNonEmptyLabel() {
@@ -76,43 +59,43 @@ class Connector extends DiagramElement {
     doUpdate() {
         this.layers.clearEachLayer()
         if (this.type == DiagramElementType.InheritanceConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.Connector_Shape)
             drawInheritanceRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == DiagramElementType.CompositionConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.Connector_Shape)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == DiagramElementType.AggregationConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.Connector_Shape)
             drawCompositionOrAggregationRelationship(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == DiagramElementType.SynchronousMessageConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.Connector_Shape)
             let textGroup = null
             if ((this.label != null) && (this.label.text != null) && (this.label.text != "")) {
-                textGroup = this.textLayer.group().addClass(CSSClassName.ConnectorLabel)
+                textGroup = this.textLayer.group().addClass(CSSClassName.Connector_Label)
             }
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == DiagramElementType.ReturnMessageConnector) {
             // If this is return message of a self call draw nothing. It will be indicated on the diagram by a reduction
             // of the depth of the execution specification (i.e. the width of the lifeline)
             if ((this.connectionPoint1.element != null) && (this.connectionPoint1.element != this.connectionPoint2.element)) {
-                let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
+                let lineGroup = this.shapeLayer.group().addClass(CSSClassName.Connector_Shape)
                 drawReturnMessage(lineGroup, this.connectionPoint1, this.connectionPoint2)
             }
         } else if (this.type == DiagramElementType.CreationMessageConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
-            let textGroup = this.textLayer.group().addClass(CSSClassName.ConnectorLabel)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.Connector_Shape)
+            let textGroup = this.textLayer.group().addClass(CSSClassName.Connector_Label)
             drawSynchronousMessage(lineGroup, textGroup, this.connectionPoint1, this.connectionPoint2, this.label)
         } else if (this.type == DiagramElementType.DestructionMessageConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.Connector_Shape)
             drawDestructionMessage(lineGroup, this.connectionPoint2)
         } else if (this.type == DiagramElementType.UseCaseAssociationConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.Connector_Shape)
             drawUseCaseAssociation(lineGroup, this.connectionPoint1, this.connectionPoint2)
         } else if (this.type == DiagramElementType.AssemblyConnector) {
-            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.ConnectorShape)
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.Connector_Shape)
             drawAssemblyConnector(lineGroup, this.connectionPoint1, this.connectionPoint2)
-        } else if (this.type == "communicationpath") {
-            let lineGroup = this.shapeLayer.group().addClass("UMLCommunicationPath")
+        } else if (this.type == DiagramElementType.CommunicationPathConnector) {
+            let lineGroup = this.shapeLayer.group().addClass(CSSClassName.Connector_Shape)
             drawCommunicationPath(lineGroup, this.connectionPoint1, this.connectionPoint2)
         }
     }
@@ -153,6 +136,10 @@ class Connector extends DiagramElement {
 
             case DiagramElementType.AssemblyConnector:
                 this.cssParentGroupClass = CSSClassName.AssemblyConnector
+                break
+
+            case DiagramElementType.CommunicationPathConnector:
+                this.cssParentGroupClass = CSSClassName.CommunicationPathConnector
                 break
         }
     }
