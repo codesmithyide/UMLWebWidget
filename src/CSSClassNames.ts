@@ -34,6 +34,7 @@ const enum CSSClassName {
     Lifeline_Head_Shape = "lifeline-head__shape",
     Lifeline_Head_Text = "lifeline-head__text",
     Lifeline_Line = "lifeline__lifeline-line",
+    Node = "node",
     SocketConnector = "socket-connector",
     SocketConnector_Shape = "socket-connector__shape",
     SocketConnector_Label = "socket-connector__label",
